@@ -1,0 +1,49 @@
+<div>
+    {if !empty($cardpic)}
+    <h4>{if $attest['type'] == 1}身份证{else}营业执照{/if}:</h4>
+    {loop $cardpic $cpi}
+    <img class="newmater" data-url="{$cpi}" style="width:150px;height:150px;" src="{$cpi}" />
+    {/loop}
+    {/if}
+</div>
+{loop $info $key $in}
+<div>
+    {if $in['type'] == 'text' || $in['type'] == 'number'}
+    <h4>{$key}:{$in['value']}</h4>
+    {else if $in['type'] == 'pic'}
+    <h4>{$key}:</h4>
+    <img class="newmater" data-url="{$in['value']}" style="width:150px;height:150px;" src="{$in['value']}" />
+    {else if $in['type'] == 'pics'}
+    <h4>{$key}:</h4>
+    {loop $in['value'] $pi}
+    <img class="newmater" data-url="{$pi}" style="width:150px;height:150px;" src="{$pi}" />
+    {/loop}
+    {/if}
+
+    {if $in['id'] == 'img'}
+    <h4>{$in['title']}{if $in['att_show']>0}(隐藏){/if}:</h4>
+        {loop $in['data'] $pi}
+        <img class="newmater" data-url="{$pi}" style="width:150px;height:150px;" src="{$pi}" />
+        {/loop}
+    {else if $in['id'] == 'datetime'}
+    <h4>{$in['title']}{if $in['att_show']>0}(隐藏){/if}:{$in['data'][0]} - {$in['data'][1]}</h4>
+    {else if $in['id'] == 'city'}
+    <h4>{$in['title']}{if $in['att_show']>0}(隐藏){/if}:{$in['data'][0]} - {$in['data'][1]} - {$in['data'][2]}</h4>
+    {else if $in['id'] == 'checkbox'}
+    <h4>{$in['title']}{if $in['att_show']>0}(隐藏){/if}:</h4>
+    {loop $in['data'] $pi}
+    <span class="label label-danger">{$pi}</span>
+    {/loop}
+    {else}
+    <h4>{$in['title']}{if $in['att_show']>0}(隐藏){/if}:{$in['data']}</h4>
+    {/if}
+</div>
+{/loop}
+
+<script>
+    $(".newmater").on('click',function () {
+        let _this = $(this),
+            link = _this.data("url");
+        window.open(link,"_blank");
+    });
+</script>

@@ -1,0 +1,84 @@
+{php include wl_template('common/header');}
+<ul class="nav nav-tabs">
+    <li class="active"><a href="javascript:;">编辑活动</a></li>
+</ul>
+<div class="app-content">
+    <div class="app-form">
+        <form action="" method="post" class="form-horizontal form form-validate">
+            <div class="form-group-title">活动信息</div>
+            <div class="form-group">
+                <label class="col-sm-2 control-label">排序</label>
+                <div class="col-sm-9">
+                    <input type="number" name="item[sort]" class="form-control" value="{$item['sort']}" placeholder="排序" >
+                    <div class="help-block">排序由大到小，数值越大，顺序越靠前</div>
+                </div>
+            </div>
+            <div class="form-group">
+                <label class="col-sm-2 control-label"><span class="form-must">*</span>活动名称</label>
+                <div class="col-sm-9">
+                    <input type="text" name="item[title]" maxlength="16" class="form-control" value="{$item['title']}" placeholder="请输入活动名称" required>
+                </div>
+            </div>
+            <div class="form-group">
+                <label class="col-sm-2 control-label"><span class="form-must">*</span>满减规则</label>
+                <div class="col-sm-9">
+                    <div class="alert alert-warning">
+                        <b>金额设置最多保留两位小数。</b><br/>
+                        <b>规则示例：设置的两条规则为：100,20和50,5。当订单金额大于等于100元时，订单会减免20元；当订单金额大于等于50元时，订单会减免5元。</b>
+                    </div>
+                    <div id="datas" class="sms-template-1" style="display:block;">
+                        {if !empty($item['rules'])}
+                            {loop $item['rules'] $data}
+                            {php include wl_template('fullreduce/rules');}
+                            {/loop}
+                        {/if}
+                    </div>
+                    <div class="form-group sms-template-1" style="display:block;">
+                        <div style="margin-top: 10px;">
+                            <a class="btn btn-default btn-add-type" href="javascript:;" onclick="addType();">
+                                <i class="fa fa-plus" title=""></i>增加一条规则</a>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <div class="form-group">
+                <label class="col-sm-2 control-label"><span class="form-must">*</span>活动状态</label>
+                <div class="col-sm-9">
+                    <label class="radio-inline">
+                        <input type="radio" name="item[status]" value="1" {if !empty($item['status'])}checked{/if}> 启用
+                    </label>
+                    <label class="radio-inline">
+                        <input type="radio" name="item[status]" value="0" {if empty($item['status'])} checked{/if}> 禁用
+                    </label>
+                </div>
+            </div>
+            <div class="form-group">
+                <label class="col-sm-2 control-label"></label>
+                <div class="col-sm-9">
+                    <input type="submit" name="submit" value="提交" class="btn btn-primary min-width" />
+                    <input type="hidden" name="token" value="{$_W['token']}" />
+                    <input type="hidden" name="id" value="{$item['id']}" />
+                </div>
+            </div>
+        </form>
+    </div>
+</div>
+<script>
+    //添加与删除规则
+    var kw = 1;
+    function addType() {
+        $.ajax({
+            url: "{php echo web_url('fullreduce/fullreduce/rules')}&kw="+kw,
+            cache: false
+        }).done(function (html) {
+            $("#datas").append(html);
+        });
+        kw++;
+    }
+    $(document).on('click', '.data-item-delete', function () {
+        $(this).closest('.data-item').remove();
+    });
+</script>
+
+
+{php include wl_template('common/footer');}

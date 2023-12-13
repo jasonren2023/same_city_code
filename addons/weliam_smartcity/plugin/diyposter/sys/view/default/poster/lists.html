@@ -1,0 +1,146 @@
+{php include wl_template('common/header');}
+<ul class="nav nav-tabs">
+	<li class="active"><a href="javascript:;">海报列表</a></li>
+</ul>
+<div class="app-content">
+	<div class="app-filter">
+		<div class="filter-action">
+			<a href="{php echo web_url('diyposter/poster/post')}" class="btn btn-primary">添加海报</a>
+			<a href="{php echo web_url('diyposter/poster/clear')}" class="btn btn-default" data-toggle='ajaxPost'>清除海报缓存</a>
+		</div>
+		<div class="filter-list">
+			<form action="./cityagent.php" method="get" class="form-horizontal" role="form">
+				<input type="hidden" name="p" value="diyposter" />
+				<input type="hidden" name="ac" value="poster" />
+				<input type="hidden" name="do" value="lists" />
+				<div class="form-group max-with-all">
+					<label class="col-md-2 control-label">类型</label>
+					<div class="col-sm-9">
+						<div class="btn-group">
+							<a href="{php echo filter_url('type:0');}" class="btn {if $_GPC['type'] == 0}btn-primary{else}btn-default{/if}">不限</a>
+							<a href="{php echo filter_url('type:1');}" class="btn {if $_GPC['type'] == 1}btn-primary{else}btn-default{/if}">商家海报</a>
+							{if p('rush')}
+							<a href="{php echo filter_url('type:2');}" class="btn {if $_GPC['type'] == 2}btn-primary{else}btn-default{/if}">抢购海报</a>
+							{/if}
+							{if p('wlcoupon')}
+							<a href="{php echo filter_url('type:3');}" class="btn {if $_GPC['type'] == 3}btn-primary{else}btn-default{/if}">卡券海报</a>
+							{/if}
+							{if p('distribution')}
+							<a href="{php echo filter_url('type:4');}" class="btn {if $_GPC['type'] == 4}btn-primary{else}btn-default{/if}">分销海报</a>
+							{/if}
+							{if p('groupon')}
+							<a href="{php echo filter_url('type:5');}" class="btn {if $_GPC['type'] == 5}btn-primary{else}btn-default{/if}">团购海报</a>
+							{/if}
+							{if p('wlfightgroup')}
+							<a href="{php echo filter_url('type:6');}" class="btn {if $_GPC['type'] == 6}btn-primary{else}btn-default{/if}">拼团海报</a>
+							{/if}
+							{if p('bargain')}
+							<a href="{php echo filter_url('type:7');}" class="btn {if $_GPC['type'] == 7}btn-primary{else}btn-default{/if}">砍价海报</a>
+							{/if}
+							{if p('activity')}
+							<a href="{php echo filter_url('type:14');}" class="btn {if $_GPC['type'] == 14}btn-primary{else}btn-default{/if}">活动海报</a>
+							{/if}
+<!--						<a href="{php echo filter_url('type:8');}" class="btn {if $_GPC['type'] == 8}btn-primary{else}btn-default{/if}">业务员海报</a>-->
+							{if p('consumption')}
+							<a href="{php echo filter_url('type:9');}" class="btn {if $_GPC['type'] == 9}btn-primary{else}btn-default{/if}">积分商城海报</a>
+							{/if}
+<!--						<a href="{php echo filter_url('type:10');}" class="btn {if $_GPC['type'] == 10}btn-primary{else}btn-default{/if}">名片海报</a>-->
+							{if p('subposter')}
+							<a href="{php echo filter_url('type:11');}" class="btn {if $_GPC['type'] == 11}btn-primary{else}btn-default{/if}">倡议海报</a>
+							{/if}
+							{if p('dating')}
+								<a href="{php echo filter_url('type:15');}" class="btn {if $_GPC['type'] == 15}btn-primary{else}btn-default{/if}">红娘海报</a>
+							{/if}
+							{if p('housekeep')}
+							<a href="{php echo filter_url('type:16');}" class="btn {if $_GPC['type'] == 16}btn-primary{else}btn-default{/if}">家政海报</a>
+							{/if}
+							{if Customized::init('redpack527') > 0}
+							<a href="{php echo filter_url('type:17');}" class="btn {if $_GPC['type'] == 17}btn-primary{else}btn-default{/if}">红包海报</a>
+							{/if}
+							
+						</div>
+					</div>
+				</div>
+			</form>
+		</div>
+	</div>
+	<div class="app-table-list">
+		<div class="table-responsive">
+			<table class="table table-hover table-responsive">
+				<thead>
+				<tr>
+					<th>海报名称</th>
+					<th>海报类型</th>
+					<th>状态</th>
+					<th>最近修改时间</th>
+					<th>操作</th>
+				</tr>
+				</thead>
+				<tbody>
+				{loop $list $row}
+				<tr>
+					<td>{$row['title']}</td>
+					<td>
+						{if $row['type']==1}
+						<label class='label label-primary'>商家海报</label>
+						{elseif $row['type']==2}
+						<label class='label label-success'>抢购海报</label>
+						{elseif $row['type']==3}
+						<label class='label label-warning'>卡券海报</label>
+						{elseif $row['type']==4}
+						<label class='label label-danger'>分销海报</label>
+						{elseif $row['type']==5}
+						<label class='label label-info'>团购海报</label>
+						{elseif $row['type']==6}
+						<label class='label label-default'>拼团海报</label>
+						{elseif $row['type']==7}
+						<label class='label label-primary'>砍价海报</label>
+						{elseif $row['type']==8}
+						<label class='label label-success'>业务员海报</label>
+						{elseif $row['type']==9}
+						<label class='label label-success'>积分商城海报</label>
+						{elseif $row['type']==10}
+						<label class='label label-success'>名片海报</label>
+						{elseif $row['type']==11}
+						<label class='label label-primary'>倡议海报</label>
+						{elseif $row['type']==14}
+						<label class='label label-primary'>活动海报</label>
+						{elseif $row['type']==15}
+						<label class='label label-primary'>红娘海报</label>
+						{elseif $row['type']==16}
+						<label class='label label-success'>家政海报</label>
+						{elseif $row['type']==17}
+						<label class='label label-success'>红包海报</label>
+						{/if}
+					</td>
+					<td>
+						{if $row['status']==1}
+						<label class='label label-success'>使用中</label>
+						{else}
+						<label class='label label-default'>未使用</label>
+						{/if}
+					</td>
+					<td>{php echo date('Y-m-d H:i:s', $row['createtime'])}</td>
+					<td>
+						<a class='btn btn-primary btn-sm btn-op btn-operation' href="{php echo web_url('diyposter/poster/post', array('id' => $row['id']))}">编辑
+						</a>
+						<a class='btn btn-danger btn-sm btn-op btn-operation' data-toggle='ajaxRemove'  href="{php echo web_url('diyposter/poster/delete', array('id' => $row['id']))}" data-confirm="确认删除此海报吗？">
+							删除
+						</a>
+					</td>
+				</tr>
+				{/loop}
+				</tbody>
+			</table>
+		</div>
+		<div class="app-table-foot clearfix">
+			<div class="pull-left">
+				
+			</div>
+			<div class="pull-right">
+				{$pager}
+			</div>
+		</div>
+	</div>
+</div>
+{php include wl_template('common/footer');}

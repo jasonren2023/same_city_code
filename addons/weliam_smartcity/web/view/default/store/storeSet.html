@@ -1,0 +1,242 @@
+{php include wl_template('common/header');}
+<ul class="nav nav-tabs" id="myTab">
+	<li class="active"><a href="#tab_basic">基本设置</a></li>
+	<li><a href="#tab_merlist">列表分享</a></li>
+	<li><a href="#tab_merdetail">商户分享</a></li>
+</ul>
+<div class="app-content">
+	<div class="app-form">
+			<form action="" method="post" class="form-horizontal form-validate" id="setting-form">
+				<div class="panel panel-default">
+					<div class="panel-heading">商户设置</div>
+					<div class="panel-body">
+						<div class="tab-content">
+							<div class="tab-pane active" id="tab_basic">
+<!--								<div class="form-group">-->
+<!--									<label class="col-sm-2 control-label">评论审核设置</label>-->
+<!--									<div class="col-sm-9">-->
+<!--										<label class="radio-inline"><input type="radio" name="store_set[comment_check]" value="0" {if $storeSet['comment_check']==0 || empty($storeSet['comment_check']) }checked="checked"{/if}> 商家可审核</label>-->
+<!--										<label class="radio-inline"><input type="radio" name="store_set[comment_check]" value="1" {if $storeSet['comment_check']==1}checked="checked"{/if}> 商家不可审核</label>-->
+<!--									</div>-->
+<!--								</div>-->
+								<div class="form-group">
+									<label class="col-sm-2 control-label">前端店员绑定方式</label>
+									<div class="col-sm-9">
+										<label class="radio-inline"><input type="radio" name="store_set[admin_apply]" value="0" {if $storeSet['admin_apply']==0 || empty($storeSet['admin_apply']) }checked="checked"{/if}> 绑定二维码</label>
+										<label class="radio-inline"><input type="radio" name="store_set[admin_apply]" value="1" {if $storeSet['admin_apply']==1}checked="checked"{/if}> 推广码申请</label>
+										<div class="help-block">绑定二维码：面对面添加店员,一人一码;推广码申请：任何人都可以扫码提交绑定信息，推广码不会过期，可能产生无效数据。</div>
+									</div>
+								</div>
+
+								<div class="form-group">
+									<label class="col-sm-2 control-label">商户手机端入驻</label>
+									<div class="col-sm-9">
+										<label class="radio-inline"><input type="radio" name="store_set[storeSetted]" value="0" {if $storeSet['storeSetted']==0 || empty($storeSet['storeSetted']) }checked="checked"{/if}> 开启</label>
+										<label class="radio-inline"><input type="radio" name="store_set[storeSetted]" value="1" {if $storeSet['storeSetted']==1}checked="checked"{/if}> 关闭</label>
+									</div>
+								</div>
+
+								<div class="form-group">
+									<label class="col-sm-2 control-label">评论免审核</label>
+									<div class="col-sm-9">
+										<label class="radio-inline"><input type="radio" name="store_set[comexamine]" value="0" {if $storeSet['comexamine']==0 || empty($storeSet['comexamine']) }checked="checked"{/if}> 关闭</label>
+										<label class="radio-inline"><input type="radio" name="store_set[comexamine]" value="1" {if $storeSet['comexamine']==1}checked="checked"{/if}> 开启</label>
+										<div class="help-block">开启后，对商品和商家的评论将不需要审核就会显示。</div>
+									</div>
+								</div>
+								<div class="form-group">
+									<label class="col-sm-2 control-label">入驻顶部图片</label>
+									<div class="col-sm-9">
+										{php echo attachment_select('store_set[top_img]',$storeSet['top_img']);}
+										<div class="help-block">不上传图片则使用默认图片。推荐图片比例：750*350</div>
+									</div>
+								</div>
+								<div class="form-group">
+									<label class="col-sm-2 control-label">顶部图片链接</label>
+									<div class="col-sm-9">
+										<div class="input-group" style="margin: 0;">
+											<input type="text" name="store_set[top_link]" class="form-control" value="{$storeSet['top_link']}" readonly="readonly" name="link" placeholder="" id="advlink">
+											<span data-input="#advlink" data-toggle="selectUrl" class="input-group-addon btn btn-default">选择链接</span>
+											<span class="input-group-addon btn btn-default clearinput">X</span>
+										</div>
+										<div class="help-block">设置后点击入驻图片会进行跳转。</div>
+									</div>
+								</div>
+								<div class="form-group">
+									<label class="col-sm-2 control-label">商品详情页显示</label>
+									<div class="col-sm-9">
+										<label class="radio-inline"><input type="radio" name="store_set[goodshide]" value="0" {if $storeSet['goodshide']==0 || empty($storeSet['goodshide']) }checked="checked"{/if}> 开启</label>
+										<label class="radio-inline"><input type="radio" name="store_set[goodshide]" value="1" {if $storeSet['goodshide']==1}checked="checked"{/if}> 关闭</label>
+										<div class="help-block">关闭后，商品详情页面不再会显示商户信息。</div>
+									</div>
+								</div>
+								<div class="form-group">
+									<label class="col-sm-2 control-label">选项卡设置</label>
+									<div class="col-sm-9">
+										<table class="table table-hover">
+											<thead class="bannerbar-inner">
+												<tr>
+													<th style="width:33%;text-align: center;">选项名称</th>
+													<th style="width:33%;text-align: center;">排序(数字越大越靠前)</th>
+													<th style="width:33%;text-align: center;">开关</th>
+												</tr>
+											</thead>
+											<tbody>
+												<tr>
+													<td style="text-align: center;">商品</td>
+													<td style="text-align: center;"><input class="form-control" type="number"  name="order[sporder]"  value="{$order['sporder']}"/></td>
+													<td style="text-align: center;">
+														<input type="checkbox" class="js-switch" name="order[spstatus]" value="1" {if $order['spstatus']}checked="checked" {/if}>
+													</td>
+												</tr>
+												<tr>
+													<td style="text-align: center;">详情</td>
+													<td style="text-align: center;"><input class="form-control" type="number"  name="order[xqorder]"  value="{$order['xqorder']}"/></td>
+													<td style="text-align: center;">
+														<input type="checkbox" class="js-switch" name="order[xqstatus]" value="1" {if $order['xqstatus']}checked="checked" {/if}>
+													</td>
+												</tr>
+												<tr>
+													<td style="text-align: center;">动态</td>
+													<td style="text-align: center;"><input class="form-control" type="number"  name="order[dtorder]"  value="{$order['dtorder']}"/></td>
+													<td style="text-align: center;">
+														<input type="checkbox" class="js-switch" name="order[dtstatus]" value="1" {if $order['dtstatus']}checked="checked" {/if}>
+													</td>
+												</tr>
+												<tr>
+													<td style="text-align: center;">评论</td>
+													<td style="text-align: center;"><input class="form-control" type="number"  name="order[plorder]"  value="{$order['plorder']}"/></td>
+													<td style="text-align: center;">
+														<input type="checkbox" class="js-switch" name="order[plstatus]" value="1" {if $order['plstatus']}checked="checked" {/if}>
+													</td>
+												</tr>
+												<tr>
+													<td style="text-align: center;">相册</td>
+													<td style="text-align: center;"><input class="form-control" type="number"  name="order[xcorder]"  value="{$order['xcorder']}"/></td>
+													<td style="text-align: center;">
+														<input type="checkbox" class="js-switch" name="order[xcstatus]" value="1" {if $order['xcstatus']}checked="checked" {/if}>
+													</td>
+												</tr>
+												{if p('wxapp')}
+												<tr>
+													<td style="text-align: center;">小程序码</td>
+													<td style="text-align: center;"><input class="form-control" type="number"  name="order[xcxmorder]"  value="{$order['xcxmorder']}"/></td>
+													<td style="text-align: center;">
+														<input type="checkbox" class="js-switch" name="order[xcxmstatus]" value="1" {if $order['xcxmstatus']}checked="checked" {/if}>
+													</td>
+												</tr>
+												{/if}
+												{if p('attestation')}
+												<tr>
+													<td style="text-align: center;">商家资质</td>
+													<td style="text-align: center;"><input class="form-control" type="number"  name="order[sjzzorder]"  value="{$order['sjzzorder']}"/></td>
+													<td style="text-align: center;">
+														<input type="checkbox" class="js-switch" name="order[sjzzstatus]" value="1" {if $order['sjzzstatus']}checked="checked" {/if}>
+													</td>
+												</tr>
+												{/if}
+												{if p('attestation')}
+												<tr>
+													<td style="text-align: center;">招聘</td>
+													<td style="text-align: center;"><input class="form-control" type="number"  name="order[zporder]"  value="{$order['zporder']}"/></td>
+													<td style="text-align: center;">
+														<input type="checkbox" class="js-switch" name="order[zpstatus]" value="1" {if $order['zpstatus']}checked="checked" {/if}>
+													</td>
+												</tr>
+												{/if}
+											</tbody>
+										</table>
+										<div class="help-block">商户详情页面展示内容还会根据具体的商户信息情况自适应。</div>
+									</div>
+								</div>
+								{if p('wxapp')}
+								<div class="form-group">
+									<label class="col-sm-2 control-label">流量主banner广告ID</label>
+									<div class="col-sm-9">
+										<input type="text" name="store_set[bannerid]" class="form-control" value="{$storeSet['bannerid']}" />
+									</div>
+								</div>
+								<div class="form-group">
+									<label class="col-sm-2 control-label">广告位置</label>
+									<div class="col-sm-9">
+										<label class="radio-inline"><input type="radio" name="store_set[banposition]" value="1" {if $storeSet['banposition']==1 || empty($storeSet['banposition']) }checked="checked"{/if}> 顶部</label>
+										<label class="radio-inline"><input type="radio" name="store_set[banposition]" value="2" {if $storeSet['banposition']==2}checked="checked"{/if}> 中间</label>
+										<label class="radio-inline"><input type="radio" name="store_set[banposition]" value="3" {if $storeSet['banposition']==3}checked="checked"{/if}> 底部</label>
+									</div>
+								</div>
+								{/if}
+							</div>
+							<div class="tab-pane" id="tab_merlist">
+								<div class="alert alert-info">
+									<b>适用模板变量：[昵称] [时间] [系统名称]</b>
+								</div>
+								<div class="form-group">
+									<label class="col-sm-2 control-label">分享标题</label>
+									<div class="col-sm-9">
+										<input type="text" name="store_set[merlist_title]" class="form-control" value="{$storeSet['merlist_title']}" />
+									</div>
+								</div>
+								<div class="form-group">
+									<label class="col-sm-2 control-label">分享图片</label>
+									<div class="col-sm-9">
+										{php echo attachment_select('store_set[merlist_image]', $storeSet['merlist_image']);}
+									</div>
+								</div>
+								<div class="form-group">
+									<label class="col-sm-2 control-label">分享描述</label>
+									<div class="col-sm-9">
+										<input type="text" name="store_set[merlist_desc]" class="form-control" value="{$storeSet['merlist_desc']}" />
+									</div>
+								</div>
+							</div>
+							<div class="tab-pane" id="tab_merdetail">
+								<div class="alert alert-info">
+									<b>适用模板变量：[昵称] [时间] [商户名称] [商户电话]</b>
+								</div>
+								<div class="form-group">
+									<label class="col-sm-2 control-label">分享标题</label>
+									<div class="col-sm-9">
+										<input type="text" name="store_set[merdetail_title]" class="form-control" value="{$storeSet['merdetail_title']}" />
+									</div>
+								</div>
+								<div class="form-group">
+									<label class="col-sm-2 control-label">分享图片</label>
+									<div class="col-sm-9">
+										{php echo attachment_select('store_set[merdetail_image]', $storeSet['merdetail_image']);}
+										<span class="help-block">不填默认为商户logo</span>
+									</div>
+								</div>
+								<div class="form-group">
+									<label class="col-sm-2 control-label">分享描述</label>
+									<div class="col-sm-9">
+										<input type="text" name="store_set[merdetail_desc]" class="form-control" value="{$storeSet['merdetail_desc']}" />
+									</div>
+								</div>
+							</div>
+						</div>
+					</div>
+				</div>
+				<div class="form-group">
+					<label class="col-sm-2 control-label"></label>
+					<div class="col-sm-9">
+						<input type="submit" name="submit" value="提交" class="btn btn-primary min-width" />
+						<input type="hidden" name="token" value="{$_W['token']}" />
+					</div>
+				</div>
+			</form>
+	</div>
+</div>
+<script>
+	$(function() {
+		window.optionchanged = false;
+		$('#myTab a').click(function(e) {
+			e.preventDefault(); //阻止a链接的跳转行为
+			$(this).tab('show'); //显示当前选中的链接及关联的content
+		})
+	});
+
+	$("#setting-form").on('click','.clearinput',function () {
+		$(this).prev().prev().val('');
+	});
+</script>
+{php include wl_template('common/footer');}

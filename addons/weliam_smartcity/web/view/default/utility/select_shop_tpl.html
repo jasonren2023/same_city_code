@@ -1,0 +1,17 @@
+{loop $list $key $val}
+<tr class="text-center">
+    <td class="shopAvatar">
+        <img src="{php echo tomedia($val['logo'])}" />
+    </td>
+    <td>{$val['storename']}</td>
+    <td>{$val['mobile']}</td>
+    <td>{$val['address']}</td>
+    <td>
+        <a href="javascript:;" class="btn btn-sm btn-warning determineSelectShop"
+           data-shop_id="{$val['id']}"
+           data-storename="{$val['storename']}"
+           data-logo="{php echo tomedia($val['logo'])}"
+        >选择</a>
+    </td>
+</tr>
+{/loop}

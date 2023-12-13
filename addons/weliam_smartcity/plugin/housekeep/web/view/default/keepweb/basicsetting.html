@@ -1,0 +1,357 @@
+{php include wl_template('common/header');}
+<div class="app-content">
+    <ul class="nav nav-tabs" id="myTab">
+        <li class="active"><a href="#tab_basic">基本设置</a></li>
+        <li><a href="#tab_pay">付费设置</a></li>
+        <li><a href="#tab_share">分享设置</a></li>
+    </ul>
+    <div class="app-form">
+        <form action="" method="post" class="form-horizontal form form-validate">
+            <div class="panel panel-default">
+                <div class="panel-heading">家政设置</div>
+                <div class="panel-body">
+                    <div class="tab-content">
+                        <div class="tab-pane active" id="tab_basic">
+                            <div class="form-group">
+                                <label class="col-sm-2 control-label">家政服务</label>
+                                <div class="col-sm-9">
+                                    <label class="radio-inline">
+                                        <input type="radio" value="1" name="data[status]" {if $data['status']==1} checked {/if}>启用
+                                    </label>
+                                    <label class="radio-inline">
+                                        <input type="radio" value="0" name="data[status]" {if $data['status']==0} checked {/if}>禁用
+                                    </label>
+                                </div>
+                            </div>
+                            <div class="form-group">
+                                <label class="col-sm-2 control-label">商户完成订单</label>
+                                <div class="col-sm-9">
+                                    <label class="radio-inline">
+                                        <input type="radio" value="1" name="data[storefish]" {if $data['storefish']==1} checked {/if}>禁用
+                                    </label>
+                                    <label class="radio-inline">
+                                        <input type="radio" value="0" name="data[storefish]" {if $data['storefish']==0} checked {/if}>启用
+                                    </label>
+                                    <span class="help-block">禁用后，商户无法主动完成业务订单，只能由用户或联系后台管理员完成。</span>
+                                </div>
+                            </div>
+                            <div class="form-group">
+                                <label class="col-sm-2 control-label">发布需求审核</label>
+                                <div class="col-sm-9">
+                                    <label class="radio-inline">
+                                        <input type="radio" value="1" name="data[demandpass]" {if $data['demandpass']==1} checked {/if}>免审核
+                                    </label>
+                                    {if p('attestation')}
+                                    <label class="radio-inline">
+                                        <input type="radio" value="2" name="data[demandpass]" {if $data['demandpass']==2} checked {/if}>认证后免审核
+                                    </label>
+                                    {/if}
+                                    <label class="radio-inline">
+                                        <input type="radio" value="0" name="data[demandpass]" {if $data['demandpass']==0 || empty($data['demandpass'])} checked {/if}>需要审核
+                                    </label>
+                                    <span class="help-block">开启后用户发布需求是否需要审核</span>
+                                </div>
+                            </div>
+                            <div class="form-group">
+                                <label class="col-sm-2 control-label">个人服务项目发布审核</label>
+                                <div class="col-sm-9">
+                                    <label class="radio-inline">
+                                        <input type="radio" value="1" name="data[servicepass]" {if $data['servicepass']==1} checked {/if}>免审核
+                                    </label>
+                                    {if p('attestation')}
+                                    <label class="radio-inline">
+                                        <input type="radio" value="2" name="data[servicepass]" {if $data['servicepass']==2} checked {/if}>认证后免审核
+                                    </label>
+                                    {/if}
+                                    <label class="radio-inline">
+                                        <input type="radio" value="0" name="data[servicepass]" {if $data['servicepass']==0 || empty($data['servicepass'])} checked {/if}>需要审核
+                                    </label>
+                                    <span class="help-block">开启后用户发布需求是否需要审核</span>
+                                </div>
+                            </div>
+                            <div class="form-group">
+                                <label class="col-sm-2 control-label">评价留言</label>
+                                <div class="col-sm-9">
+                                    <label class="radio-inline">
+                                        <input type="radio" value="1" name="data[replystatus]" {if $data['replystatus']==1} checked {/if}>启用
+                                    </label>
+                                    <label class="radio-inline">
+                                        <input type="radio" value="0" name="data[replystatus]" {if $data['replystatus']==0} checked {/if}>禁用
+                                    </label>
+                                    <span class="help-block">开启后其他客户可以对用户发布评价留言</span>
+                                </div>
+                            </div>
+                            <div class="form-group">
+                                <label class="col-sm-2 control-label">入驻类型</label>
+                                <div class="col-sm-9">
+                                    <label class="radio-inline">
+                                        <input type="radio" value="1" name="data[intostatus]" {if $data['intostatus']==1} checked {/if}>仅个人
+                                    </label>
+                                    <label class="radio-inline">
+                                        <input type="radio" value="2" name="data[intostatus]" {if $data['intostatus']==2} checked {/if}>仅商户
+                                    </label>
+                                    <label class="radio-inline">
+                                        <input type="radio" value="0" name="data[intostatus]" {if $data['intostatus']==0 || empty($data['intostatus'])} checked {/if}>个人和商户
+                                    </label>
+                                </div>
+                            </div>
+                            <div class="form-group">
+                                <label class="col-sm-2 control-label">联系需求用户</label>
+                                <div class="col-sm-9">
+                                    <label class="radio-inline">
+                                        <input type="radio" value="0" name="data[contact]" {if $data['contact']==0 || empty($data['contact'])} checked {/if}>所有用户
+                                    </label>
+                                    <label class="radio-inline">
+                                        <input type="radio" value="1" name="data[contact]" {if $data['contact']==1} checked {/if}>仅入驻服务者
+                                    </label>
+                                    <span class="help-block">设置可以联系服务需求发布人的群体。</span>
+                                </div>
+                            </div>
+                            <div class="form-group">
+                                <label class="col-sm-2 control-label">会员特权</label>
+                                <div class="col-sm-9">
+                                    <label class="checkbox-inline">
+                                        <input type="checkbox" value="demand" name="data[halfRight][]" {if in_array('demand',$data['halfRight'])} checked {/if}>发布需求
+                                    </label>
+                                    <label class="checkbox-inline">
+                                        <input type="checkbox" value="contact" name="data[halfRight][]" {if in_array('contact',$data['halfRight'])} checked {/if}>联系服务商与下单
+                                    </label>
+                                    <span class="help-block">勾选后的项目只有会员拥有权限,未勾选的项目所有用户均拥有权限。</span>
+                                </div>
+                            </div>
+                            {if p('attestation')}
+                            <div class="form-group">
+                                <label class="col-sm-2 control-label">认证特权</label>
+                                <div class="col-sm-9">
+                                    <label class="checkbox-inline">
+                                        <input type="checkbox" value="service" name="data[attestationRight][]" {if in_array('service',$data['attestationRight'])} checked {/if}>发布服务
+                                    </label>
+                                    <label class="checkbox-inline">
+                                        <input type="checkbox" value="demand" name="data[attestationRight][]" {if in_array('demand',$data['attestationRight'])} checked {/if}>发布需求
+                                    </label>
+                                    <label class="checkbox-inline">
+                                        <input type="checkbox" value="artificer" name="data[attestationRight][]" {if in_array('artificer',$data['attestationRight'])} checked {/if}>入驻成为个人服务者
+                                    </label>
+                                    <label class="checkbox-inline">
+                                        <input type="checkbox" value="reply" name="data[attestationRight][]" {if in_array('reply',$data['attestationRight'])} checked {/if}>评价留言
+                                    </label>
+                                    <span class="help-block">认证过后的商户或服务者特权,勾选后的项目只有认证用户拥有权限,未勾选的项目所有用户均拥有权限。</span>
+                                </div>
+                            </div>
+                            {/if}
+                        </div>
+                        <div class="tab-pane" id="tab_pay">
+                            <div class="form-group">
+                                <label class="col-sm-2 control-label">需求付费发布</label>
+                                <div class="col-sm-9">
+                                    <label class="radio-inline">
+                                        <input type="radio" value="1" onclick="$('#paydiv').show()" name="data[paystatus]" {if $data['paystatus']==1} checked {/if}>启用
+                                    </label>
+                                    <label class="radio-inline">
+                                        <input type="radio" value="0" onclick="$('#paydiv').hide()" name="data[paystatus]" {if $data['paystatus']==0} checked {/if}>禁用
+                                    </label>
+                                </div>
+                            </div>
+                            <div id="paydiv" {if $data['paystatus'] != 1} style="display:none;" {/if}>
+                                <div class="form-group">
+                                    <label class="col-sm-2 control-label">付费金额</label>
+                                    <div class="col-sm-9">
+                                        <div style="margin-top: 10px;">
+                                            <div class="input-group data-item">
+                                                <span class="input-group-addon">[普通用户]</span>
+                                                <input type="hidden" name="vipleid[]" class="form-control" value="N">
+                                                <input type="number" min="0" name="vipprice[]" class="form-control" value="{$viparray['N']}">
+                                                <span class="input-group-addon">元(最多保留两位小数)</span>
+                                            </div>
+                                        </div>
+                                        <div style="margin-top: 10px;">
+                                            <div class="input-group data-item">
+                                                <span class="input-group-addon">[{$_W['wlsetting']['halflevel']['name']}]</span>
+                                                <input type="hidden" name="vipleid[]" class="form-control" value="0">
+                                                <input type="number" min="0" name="vipprice[]" class="form-control" value="{$viparray[0]}">
+                                                <span class="input-group-addon">元(最多保留两位小数)</span>
+                                            </div>
+                                        </div>
+                                        {loop $levels $lpr}
+                                        <div style="margin-top: 10px;">
+                                            <div class="input-group data-item">
+                                                <span class="input-group-addon">[{$lpr['name']}]</span>
+                                                <input type="hidden" name="vipleid[]" class="form-control" value="{$lpr['id']}">
+                                                <input type="number" min="0" name="vipprice[]" class="form-control" value="{$viparray[$lpr['id']]}">
+                                                <span class="input-group-addon">元(最多保留两位小数)</span>
+                                            </div>
+                                        </div>
+                                        {/loop}
+                                        <span class="help-block">金额不填或填0则免费发布。</span>
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="form-group">
+                                <label class="col-sm-2 control-label">需求付费置顶</label>
+                                <div class="col-sm-9">
+                                    <label class="radio-inline">
+                                        <input type="radio" value="1" onclick="$('#toppaydiv').show()" name="data[paytopstatus]" {if $data['paytopstatus']==1} checked {/if}>启用
+                                    </label>
+                                    <label class="radio-inline">
+                                        <input type="radio" value="0" onclick="$('#toppaydiv').hide()" name="data[paytopstatus]" {if $data['paytopstatus']==0} checked {/if}>禁用
+                                    </label>
+                                </div>
+                            </div>
+                            <div id="toppaydiv" {if $data['paytopstatus'] != 1} style="display:none;" {/if}>
+                                <div class="form-group">
+                                    <label class="col-sm-2 control-label">置顶数量</label>
+                                    <div class="col-sm-9">
+                                        <div class="input-group">
+                                            <input type="number" min="0" name="data[topnumber]" class="form-control" value="{$data['topnumber']}" />
+                                            <span class="input-group-addon">个</span>
+                                        </div>
+                                        <span class="help-block">置顶需求的数量，不填或填0则无限制。</span>
+                                    </div>
+                                </div>
+                                <div class="form-group">
+                                    <label class="col-sm-2 control-label">置顶价格</label>
+                                    <div class="col-sm-9">
+                                        <div id="datas">
+                                            {if empty($data['topprice'])}
+                                            {php include wl_template('keepweb/dayandprice');}
+                                            {else}
+                                            {loop $data['topprice'] $ba}
+                                            {php include wl_template('keepweb/dayandprice');}
+                                            {/loop}
+                                            {/if}
+                                        </div>
+                                        <span class="help-block">时间请填入整数，价格保留两位小数，置顶金额不能为0。</span>
+                                    </div>
+                                </div>
+                                <div class="form-group">
+                                    <label class="col-sm-2 control-label"></label>
+                                    <div class="col-sm-9">
+                                        <a class="btn btn-info btn-add-type" href="javascript:;" onclick="addType();">
+                                            <i class="fa fa-plus" title=""></i>增加一种置顶规则
+                                        </a>
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="form-group">
+                                <label class="col-sm-2 control-label">需求刷新功能</label>
+                                <div class="col-sm-9">
+                                    <label class="radio-inline">
+                                        <input type="radio" value="1" onclick="$('#refpaydiv').show()" name="data[payrefstatus]" {if $data['payrefstatus']==1} checked {/if}>启用
+                                    </label>
+                                    <label class="radio-inline">
+                                        <input type="radio" value="0" onclick="$('#refpaydiv').hide()" name="data[payrefstatus]" {if $data['payrefstatus']==0} checked {/if}>禁用
+                                    </label>
+                                </div>
+                            </div>
+                            <div id="refpaydiv" {if $data['payrefstatus'] != 1} style="display:none;" {/if}>
+                                <div class="form-group">
+                                    <label class="col-sm-2 control-label">刷新间隔时间</label>
+                                    <div class="col-sm-9">
+                                        <div class="input-group">
+                                            <input type="number" min="0" name="data[refhour]" class="form-control" value="{$data['refhour']}" />
+                                            <span class="input-group-addon">小时</span>
+                                        </div>
+                                        <span class="help-block">两次刷新之间间隔时间，不填或填0则无限制。</span>
+                                    </div>
+                                </div>
+                                <div class="form-group">
+                                    <label class="col-sm-2 control-label">付费刷新金额</label>
+                                    <div class="col-sm-9">
+                                        <div style="margin-top: 10px;">
+                                            <div class="input-group data-item">
+                                                <span class="input-group-addon">[普通用户]</span>
+                                                <input type="number" min="0" name="refprice[]" class="form-control" value="{$refarray['N']}">
+                                                <span class="input-group-addon">元(最多保留两位小数)</span>
+                                            </div>
+                                        </div>
+                                        <div style="margin-top: 10px;">
+                                            <div class="input-group data-item">
+                                                <span class="input-group-addon">[{$_W['wlsetting']['halflevel']['name']}]</span>
+                                                <input type="number" min="0" name="refprice[]" class="form-control" value="{$refarray[0]}">
+                                                <span class="input-group-addon">元(最多保留两位小数)</span>
+                                            </div>
+                                        </div>
+                                        {loop $levels $lpr}
+                                        <div style="margin-top: 10px;">
+                                            <div class="input-group data-item">
+                                                <span class="input-group-addon">[{$lpr['name']}]</span>
+                                                <input type="number" min="0" name="refprice[]" class="form-control" value="{$refarray[$lpr['id']]}">
+                                                <span class="input-group-addon">元(最多保留两位小数)</span>
+                                            </div>
+                                        </div>
+                                        {/loop}
+                                        <span class="help-block">金额不填或填0则免费刷新。</span>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="tab-pane" id="tab_share">
+                            <div class="panel panel-default">
+                                <div class="panel-body">
+                                    <div class="alert alert-info">
+                                        <b>适用模板变量：[昵称] [时间] [系统名称] </b>
+                                    </div>
+                                    <div class="form-group">
+                                        <label class="col-sm-2 control-label">公众号分享图片</label>
+                                        <div class="col-sm-9">
+                                            {php echo attachment_select('data[share_image]', $data['share_image']);}
+                                            <span class="help-block">大小2M以下，建议尺寸500*500，如果不选择，默认为商品缩略图片</span>
+                                        </div>
+                                    </div>
+                                    <div class="form-group">
+                                        <label class="col-sm-2 control-label">小程序分享图片</label>
+                                        <div class="col-sm-9">
+                                            {php echo attachment_select('data[share_wxapp_image]', $data['share_wxapp_image']);}
+                                            <span class="help-block">大小2M以下，建议尺寸500*400，如果不选择，默认为商品缩略图片</span>
+                                        </div>
+                                    </div>
+                                    <div class="form-group">
+                                        <label class="col-sm-2 control-label">分享标题</label>
+                                        <div class="col-sm-9">
+                                            <input type="text" name="data[share_title]" class="form-control" value="{$data['share_title']}" />
+                                            <span class="help-block">如果不填写，默认为商品名称</span>
+                                        </div>
+                                    </div>
+                                    <div class="form-group">
+                                        <label class="col-sm-2 control-label">分享描述</label>
+                                        <div class="col-sm-9">
+                                            <input type="text" name="data[share_desc]" class="form-control" value="{$data['share_desc']}" />
+                                            <span class="help-block">如果不填写，默认为分享描述</span>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+
+                    </div>
+                </div>
+            </div>
+            <div class="form-group">
+                <label class="col-sm-2 control-label"></label>
+                <div class="col-sm-9">
+                    <input type="submit" name="submit" value="提交" class="btn btn-primary min-width" />
+                    <input type="hidden" name="token" value="{$_W['token']}" />
+                </div>
+            </div>
+        </form>
+    </div>
+</div>
+<script>
+
+    var kw = 1;
+    function addType() {
+        $(".btn-add-type").button("loading");
+        $.ajax({
+            url: "{php echo web_url('housekeep/KeepWeb/dayandprice')}&kw="+kw,
+            cache: false
+        }).done(function (html) {
+            $(".btn-add-type").button("reset");
+            $("#datas").append(html);
+        });
+        kw++;
+    }
+    function removes(asd){
+        $(asd).closest('.data-item').remove();
+    }
+</script>
+{php include wl_template('common/footer');}

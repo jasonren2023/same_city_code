@@ -1,0 +1,205 @@
+{php include wl_template('common/header');}
+<style>
+    .user{
+        height: 60px;
+        min-width: 180px;
+    }
+    .user .img{
+        width: 60px;
+        height: 60px;
+        float: left;
+        position: relative;
+    }
+    .user .img img{
+        width: 60px;
+        height: 60px;
+        border-radius: 50%;
+    }
+    .user .img i{
+        position: absolute;
+        top: 0;
+        right: 0px;
+        color: #FFF;
+        opacity: .7;
+        font-size: 13px;
+        border-radius: 50%;
+        width: 20px;
+        height: 20px;
+        line-height: 20px;
+        text-align: center;
+    }
+    .user .info{
+        float: left;
+        height: 60px;
+        width: calc(100% - 60px);
+        padding-left: 10px;
+        padding-top: 10px;
+        font-size: 15px;
+        text-align: left;
+        line-height: 50px;
+    }
+</style>
+<ul class="nav nav-tabs" id="myTab">
+    <li class="active"><a href="javascript:;">路线列表</a></li>
+</ul>
+<div class="app-content">
+    <!--顶部操作-->
+    <div class="app-filter">
+        <div class="filter-action">
+            <a href="{php echo web_url('vehicle/route/routeEdit')}" class="btn btn-primary">发布路线</a>
+        </div>
+        <div class="filter-list">
+            <form action="" method="get" class="form-horizontal" role="form" id="form1">
+                <input type="hidden" name="c" value="site" />
+                <input type="hidden" name="a" value="entry" />
+                <input type="hidden" name="m" value="{MODULE_NAME}" />
+                <input type="hidden" name="p" value="vehicle" />
+                <input type="hidden" name="ac" value="route" />
+                <input type="hidden" name="do" value="routeList" />
+                <input type="hidden" name="status" value="{$status}" />
+                <input type="hidden" name="transport_type" value="{$transportType}" />
+                <div class="form-group">
+                    <div class="col-sm-2 control-label">用户昵称</div>
+                    <div class="col-sm-9">
+                        <input type="text" class="form-control" name="nickname" value="{$nickname}" placeholder="请输入用户昵称...">
+                    </div>
+                </div>
+                <div class="form-group">
+                    <label class="col-sm-2 control-label">状态</label>
+                    <div class="col-sm-9">
+                        <div class="btn-group">
+                            <a href="{php echo wl_filter_url('status:0');}" class="btn {if $status == 0}btn-primary{else}btn-default{/if}">全部</a>
+                            <a href="{php echo wl_filter_url('status:1');}" class="btn {if $status == 1}btn-primary{else}btn-default{/if}">待付款</a>
+                            <a href="{php echo wl_filter_url('status:2');}" class="btn {if $status == 2}btn-primary{else}btn-default{/if}">待审核</a>
+                            <a href="{php echo wl_filter_url('status:3');}" class="btn {if $status == 3}btn-primary{else}btn-default{/if}">未通过</a>
+                            <a href="{php echo wl_filter_url('status:4');}" class="btn {if $status == 4}btn-primary{else}btn-default{/if}">进行中</a>
+                            <a href="{php echo wl_filter_url('status:5');}" class="btn {if $status == 5}btn-primary{else}btn-default{/if}">已完成</a>
+                        </div>
+                    </div>
+                </div>
+                <div class="form-group">
+                    <label class="col-sm-2 control-label">运输类型</label>
+                    <div class="col-sm-9">
+                        <div class="btn-group">
+                            <a href="{php echo wl_filter_url('transport_type:0');}" class="btn {if $transportType == 0}btn-primary{else}btn-default{/if}">全部</a>
+                            <a href="{php echo wl_filter_url('transport_type:1');}" class="btn {if $transportType == 1}btn-primary{else}btn-default{/if}">载客</a>
+                            <a href="{php echo wl_filter_url('transport_type:2');}" class="btn {if $transportType == 2}btn-primary{else}btn-default{/if}">载货</a>
+                            <a href="{php echo wl_filter_url('transport_type:3');}" class="btn {if $transportType == 3}btn-primary{else}btn-default{/if}">找客</a>
+                            <a href="{php echo wl_filter_url('transport_type:4');}" class="btn {if $transportType == 4}btn-primary{else}btn-default{/if}">找货</a>
+                        </div>
+                    </div>
+                </div>
+                <div class="form-group">
+                    <div class="col-sm-2 control-label"></div>
+                    <div class="col-sm-9">
+                        <button class="btn btn-primary" type="submit">搜索</button>
+                        <a href="{php echo web_url('vehicle/route/routeList')}" class="btn btn-danger">清除</a>
+                    </div>
+                </div>
+            </form>
+        </div>
+    </div>
+    <!--表格信息-->
+    <div class="app-table-list">
+        <!--列表信息-->
+        <div class="table-responsive order-list">
+            <table class="table table-hover">
+                <thead>
+                    <tr>
+                        <th class="text-center" width="5%"><input type="checkbox" /></th>
+                        <th class="text-left" width="10%">用户信息</th>
+                        <th class="text-center" width="5%">运输类型</th>
+                        <th class="text-center" width="10%">出发时间</th>
+                        <th class="text-center" width="10%">状态</th>
+                        <th class="text-center" width="15%">出发点</th>
+                        <th class="text-center" width="15%">终点</th>
+                        <th class="text-center" width="10%">发布时间</th>
+                        <th class="text-center" width="5%">联系人</th>
+                        <th class="text-center" width="15%">操作</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    {loop $list $key $item}
+                        <tr class="text-center">
+                            <td><input type="checkbox" value="{$item['id']}" /></td>
+                            <td>
+                                <div class="user">
+                                    <div class="img">
+                                        <img src="{$item['avatar']}">
+                                    </div>
+                                    <div class="info">
+                                        <div>{$item['nickname']}</div>
+                                    </div>
+                                </div>
+                            </td>
+                            <td>
+                                {if $item['transport_type'] == 1}
+                                    <label class="label label-primary">载客</label>
+                                {elseif $item['transport_type'] == 2}
+                                    <label class="label label-info">载货</label>
+                                {elseif $item['transport_type'] == 3}
+                                    <label class="label label-success">找客</label>
+                                {elseif $item['transport_type'] == 4}
+                                    <label class="label label-danger">找货</label>
+                                {/if}
+                            </td>
+                            <td>{$item['start_time']}</td>
+                            <td>
+                                {if $item['status'] == 1}
+                                <label class="label label-primary">待付款</label>
+                                {elseif $item['status'] == 2}
+                                <label class="label label-info">待审核</label>
+                                {elseif $item['status'] == 3}
+                                <label class="label label-danger">未通过</label>
+                                {elseif $item['status'] == 4}
+                                <label class="label label-success">进行中</label>
+                                {elseif $item['status'] == 5}
+                                <label class="label label-default">已完成</label>
+                                {/if}
+                            </td>
+                            <td class="text-left">{$item['start_address']}</td>
+                            <td class="text-left">{$item['end_address']}</td>
+                            <td>{$item['create_time']}</td>
+                            <td>
+                                {$item['contacts']}<br />
+                                {$item['contacts_phone']}<br />
+                            </td>
+                            <td>
+                                <a href="{php echo web_url('vehicle/route/routeEdit',['id'=>$item['id']])}" class="btn btn-primary btn-sm">编辑</a>
+                                <a href="{php echo web_url('vehicle/route/routeDel',['ids'=>$item['id']])}" class="btn btn-danger btn-sm" data-toggle="ajaxRemove" data-confirm="确定删除当前信息？">删除</a>
+                                {if $item['status'] == 2}
+                                    <a href="{php echo web_url('vehicle/route/routeExamine',['id'=>$item['id'],'status'=>4])}" data-toggle="ajaxPost" class="btn btn-info btn-sm">通过</a>
+                                    <a href="javascript:;" class="btn btn-success btn-sm btn-reject" data-id="{$item['id']}">驳回</a>
+                                {/if}
+                            </td>
+                        </tr>
+                    {/loop}
+                </tbody>
+            </table>
+        </div>
+        <!--操作按钮 分页信息-->
+        <div class="app-table-foot clearfix">
+            <div class="pull-left">
+                <button class="btn btn-default" type="button" data-toggle='batch-remove' data-confirm="确定删除当前选中的所有信息？" data-href="{php echo web_url('vehicle/route/routeDel')}">批量删除</button>
+            </div>
+            <div class="pull-right">{$pager}</div>
+        </div>
+    </div>
+</div>
+<script>
+    //点击驳回
+    $(document).on('click','.btn-reject',function (){
+        let id = $(this).data('id'),
+            url = "{php echo web_url('vehicle/route/routeExamine')}";
+        tip.prompt('请输入驳回原因！', {
+            maxlength: 230,
+            callback: function (reason) {
+                $.post(url,{id:id,status:3,reason:reason},function (res){
+                    if(res.status == 0) tip.msgbox.err(res.result.message);
+                    else tip.msgbox.suc(res.result.message,res.result.url);
+                },'json');
+            }
+        });
+    });
+</script>
+{php include wl_template('common/footer');}

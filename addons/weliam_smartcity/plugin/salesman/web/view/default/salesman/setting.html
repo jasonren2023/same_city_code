@@ -1,0 +1,87 @@
+{php include wl_template('common/header');}
+<ul class="nav nav-tabs" id="myTab">
+    <li class="active"><a href="#tab_basic">业务员设置</a></li>
+</ul>
+<div class="app-content">
+    <div class="app-form">
+        <form action="" method="post" class="form-horizontal form form-validate">
+            <div class="panel panel-default">
+                <div class="panel-heading">业务员设置</div>
+                <div class="alert alert-warning">
+                    <p>业务员提成佣金按照店铺有效订单金额（成功交易的订单，不包括已退款订单）进行计算</p>
+                </div>
+                <div class="panel-body">
+                    <div class="form-group ">
+                        <label class="col-sm-2 control-label must">开启业务员</label>
+                        <div class="col-sm-9">
+                            <label class="radio-inline">
+                                <input type="radio" name="isopen" value="0" {if empty($settings['isopen'])}checked{/if}>禁用
+                            </label>
+                            <label class="radio-inline">
+                                <input type="radio" name="isopen" value="1" {if !empty($settings['isopen'])}checked{/if}>启用
+                            </label>
+                            <div class="help-block">关闭以后前端不再显示入口，已有的业务员也不再享受佣金结算</div>
+                        </div>
+                    </div>
+                    <div class="form-group">
+                        <label class="col-sm-2 control-label">默认适用插件</label>
+                        <div class="col-sm-9">
+                            <label class="checkbox-inline" style="padding-left: 30px;margin-left: 0;">
+                                <input type="checkbox" name="plugin[]" value="rush" {if in_array('rush',$plugin)}checked="true"{/if}>抢购
+                            </label>
+                            <label class="checkbox-inline" style="padding-left: 30px;margin-left: 0;">
+                                <input type="checkbox" name="plugin[]" value="groupon" {if in_array('groupon',$plugin)}checked="true"{/if}>团购
+                            </label>
+                            <label class="checkbox-inline" style="padding-left: 30px;margin-left: 0;">
+                                <input type="checkbox" name="plugin[]" value="fightgroup" {if in_array('fightgroup',$plugin)}checked="true"{/if}>拼团
+                            </label>
+                            <label class="checkbox-inline" style="padding-left: 30px;margin-left: 0;">
+                                <input type="checkbox" name="plugin[]" value="coupon" {if in_array('coupon',$plugin)}checked="true"{/if}>卡券
+                            </label>
+                            <label class="checkbox-inline" style="padding-left: 30px;margin-left: 0;">
+                                <input type="checkbox" name="plugin[]" value="bargain" {if in_array('bargain',$plugin)}checked="true"{/if}>砍价
+                            </label>
+                            <label class="checkbox-inline" style="padding-left: 30px;margin-left: 0;">
+                                <input type="checkbox" name="plugin[]" value="payonline" {if in_array('payonline',$plugin)}checked="true"{/if}>买单
+                            </label>
+                            {if uniacid_p('citydelivery')}
+                            <label class="checkbox-inline" style="padding-left: 30px;margin-left: 0;">
+                                <input type="checkbox" name="plugin[]" value="citydelivery" {if in_array('citydelivery',$plugin)}checked="true"{/if}>同城配送
+                            </label>
+                            {/if}
+                            <div class="help-block">一项都不勾选则视为全部勾选</div>
+                        </div>
+                    </div>
+                    <div class="form-group">
+                        <label class="col-sm-2 control-label">默认提成比例</label>
+                        <div class="col-sm-9">
+                            <div class="input-group">
+                                <input type="number" name="scale"  required min="0.01" max="100" placeholder="请输入业务员提成比例" autocomplete="off" class="form-control" value="{$settings['scale']}">
+                                <span class="input-group-addon">%</span>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="form-group ">
+                        <label class="col-sm-2 control-label must">业务员管理店铺</label>
+                        <div class="col-sm-9">
+                            <label class="radio-inline">
+                                <input type="radio" name="hasmanage" value="0" {if empty($settings['hasmanage'])}checked{/if}>禁用
+                            </label>
+                            <label class="radio-inline">
+                                <input type="radio" name="hasmanage" value="1" {if !empty($settings['hasmanage'])}checked{/if}>启用
+                            </label>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <div class="form-group">
+                <label class="col-sm-2 control-label"></label>
+                <div class="col-sm-9">
+                    <input type="submit" name="submit" value="提交" class="btn btn-primary min-width" />
+                    <input type="hidden" name="token" value="{$_W['token']}" />
+                </div>
+            </div>
+        </form>
+    </div>
+</div>
+{php include wl_template('common/footer');}

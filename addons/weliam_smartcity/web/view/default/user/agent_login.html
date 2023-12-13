@@ -1,0 +1,35 @@
+{php include wl_template('common/header-base')}
+<style>
+*{box-sizing: border-box;margin: 0;padding: 0;font-weight: 300;}
+html,body{min-width: auto;min-height: auto;font-family: "微软雅黑";color: white;font-weight: 300;}
+html { overflow-y:hidden; }
+.wrapper{background: #444;position: absolute;top: 0;left: 0;width: 100%;height: 100%;overflow: hidden;}
+.container{padding: 40px 0;position: relative;z-index: 2;width: 380px;background: #fff;border-radius: 10px;position: fixed;top: 50%;left: 50%;margin-left: -190px;margin-top: -310px;}
+.container h1{font-size: 26px;font-weight: 200;color: #333;text-align: center;line-height: 40px;margin: 10px 0 30px;}
+.container input{border-radius: 3px;padding: 10px 15px;margin: 0 auto 10px auto;display: block;font-size: 14px;font-weight: 300;background: #edf0f3;color: #3c4856;border: 1px solid #edf0f3;width: 325px;margin: 15px auto;line-height: 28px;}
+.container input:hover{background-color: rgba(255, 255, 255, 0.4);}
+.container button{background-color: #22dd82;border: 0;padding: 10px 15px;color: #ffffff;border-radius: 3px;width: 325px;margin: 0 auto;cursor: pointer;font-size: 14px;display: block;line-height: 30px;}
+.container button:hover{background-color: #2cef90;}
+#footer{display: none;}
+</style>
+<div class="wrapper">
+	<div class="container">
+		<h1>{if $set['name']}{$set['name']}{else}智慧城市o2o{/if}管理后台</h1>
+		<form class="form" action="" method="post" role="form">
+			<input type="text" placeholder="用户名" name="username">
+			<input type="password" placeholder="登录密码" name="password">
+			<input type="submit" name="submit" value="提交" style="display: none;" id="form1">
+			<button id="login-button">登录</button>
+			<input name="token" value="{$_W['token']}" type="hidden" />
+		</form>
+	</div>
+</div>
+<script>
+$('#login-button').click(function(event){
+	event.preventDefault();
+	$('form').fadeOut(500);
+	$('.wrapper').addClass('form-success');
+    $('#form1').click();
+});
+</script>
+{php include wl_template('common/footer');}

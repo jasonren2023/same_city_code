@@ -1,0 +1,25 @@
+<?xml version="1.0" encoding="utf-8"?>
+<manifest>
+	<application>
+		<name><![CDATA[开放接口]]></name>
+		<identifie><![CDATA[openapi]]></identifie>
+		<version><![CDATA[1.0.0]]></version>
+		<type><![CDATA[expand]]></type>
+		<description><![CDATA[开放接口，可以对接其他模块]]></description>
+		<author><![CDATA[微连科技]]></author>
+		<url><![CDATA[http://www.weliam.cn/]]></url>
+	</application>
+	<setting>
+		<agent embed="false" />
+		<system embed="true" />
+		<task embed="false" />
+	</setting>
+	<agentmenu>
+	</agentmenu>
+	<systemmenu>
+		<menu title="接口" font="fa-inbox">
+			<entry title="接口列表" ac="apilist" do="apimanage" iscover="true" />
+			<entry title="接口设置" ac="apilist" do="apiset" />
+		</menu>
+	</systemmenu>
+</manifest>

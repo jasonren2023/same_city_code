@@ -1,0 +1,405 @@
+{php include wl_template('common/header');}
+<style type='text/css'>
+	.trbody td{text-align: center;vertical-align:top;border-left:1px solid #ccc;border-bottom: 1px solid #ddd;}
+	.order-rank img{width:16px;height:16px;}
+	.goods-info{position:relative;padding-left:60px;}
+	.goods-info .img{position:absolute;top:50%;margin-top:-25px;background: url({IMAGE_LOADING}
+	) center center no-repeat;width:50px;height:50px;}
+	.goods-info span{white-space: nowrap;overflow: hidden;text-overflow: ellipsis;display: block;}
+	.table>thead>tr>th, .table>tbody>tr>th, .table>tfoot>tr>th, .table>thead>tr>td, .table>tbody>tr>td, .table>tfoot>tr>td{border-top: 1px solid rgba(221, 221, 221, 0);}
+	.all-tips{margin-left: 65px;}
+	.effect-time{font-size: 14px;display: block;font-weight: 500;}
+	.table>thead>tr>td, .table>tbody>tr>td, .table>tfoot>tr>td{white-space: normal;}
+	.todetail{text-align: center;display: inline-block;font-size: 14px;width: 100%;overflow: hidden;text-overflow: ellipsis;color: deepskyblue;}
+	.todetail:hover{cursor:pointer;}
+</style>
+<ul class="nav nav-tabs">
+	<li {if empty($_GPC['status'])}class="active"{/if}><a href="{php echo wl_filter_url('status:0');}">全部<span class="label label-warning pull-right" style="margin-left: 10px;">{$status0}</span></a></li>
+	<li {if $_GPC['status']==1}class="active"{/if}><a href="{php echo wl_filter_url('status:1');}">未开始<span class="label label-warning pull-right" style="margin-left: 10px;">{$status1}</span></a></li>
+	<li {if $_GPC['status']==2}class="active"{/if}><a href="{php echo wl_filter_url('status:2');}">活动中<span class="label label-warning pull-right" style="margin-left: 10px;">{$status2}</span></a></li>
+	<li {if $_GPC['status']==3}class="active"{/if}><a href="{php echo wl_filter_url('status:3');}">已结束<span class="label label-warning pull-right" style="margin-left: 10px;">{$status3}</span></a></li>
+	<li {if $_GPC['status']==4}class="active"{/if}><a href="{php echo wl_filter_url('status:4');}">已下架<span class="label label-warning pull-right" style="margin-left: 10px;">{$status4}</span></a></li>
+	<li {if $_GPC['status']==5}class="active"{/if}><a href="{php echo wl_filter_url('status:5');}">审核中<span class="label label-warning pull-right" style="margin-left: 10px;">{$status5}</span></a></li>
+	<li {if $_GPC['status']==6}class="active"{/if}><a href="{php echo wl_filter_url('status:6');}">被驳回<span class="label label-warning pull-right" style="margin-left: 10px;">{$status6}</span></a></li>
+	<li {if $_GPC['status']==8}class="active"{/if}><a href="{php echo wl_filter_url('status:8');}">回收站<span class="label label-warning pull-right" style="margin-left: 10px;">{$status8}</span></a></li>
+</ul>
+<div class="app-content">
+	<div class="app-filter">
+		<div class="filter-action">
+			<a href="{php echo web_url('wlcoupon/couponlist/editCoupons')}" class="btn btn-primary">添加卡券</a>
+		</div>
+		<div class="filter-list">
+			<form action="" method="get" class="form-horizontal" role="form" id="form1">
+				<input type="hidden" name="c" value="site" />
+				<input type="hidden" name="a" value="entry" />
+				<input type="hidden" name="m" value="{MODULE_NAME}" />
+				<input type="hidden" name="p" value="wlcoupon" />
+				<input type="hidden" name="ac" value="couponlist" />
+				<input type="hidden" name="do" value="couponsList" />
+				<input type="hidden" name="status" value="{$status}" />
+				<div class="form-group">
+					<label class="col-sm-2 control-label">关键字</label>
+					<div class="col-md-3">
+						<select name="keywordtype" class="form-control">
+							<option value="">关键字类型</option>
+							<option value="1" {if $_GPC['keywordtype']==1}selected="selected"{/if}>超级券标题</option>
+							{if !is_store()}
+							<option value="2" {if $_GPC['keywordtype']==2}selected="selected"{/if}>商户名称</option>
+							{/if}
+						</select>
+                    </div>
+                    <div class="col-md-4">
+                        <input type="text" name="keyword" class="form-control" value="{$_GPC['keyword']}"  placeholder="请输入关键字"/>
+                    </div>
+				</div>
+				<div class="form-group">
+					<label class="col-sm-2 control-label">有效时间筛选</label>
+					<div class="col-md-2">
+						<select name="timetype" class="form-control">
+							<option {if $_GPC['timetype'] != 1} selected="selected" {/if} value="0">关闭</option>
+							<option {if $_GPC['timetype'] == 1} selected="selected" {/if} value="1">开启</option>
+						</select>
+					</div>
+					<div class="col-sm-6">
+						{php echo tpl_select_time_info('time_limit', array('starttime' => date('Y-m-d',$starttime), 'endtime' => date('Y-m-d', $endtime)));}
+					</div>
+				</div>
+				<div class="form-group">
+					<label class="col-sm-2 control-label"></label>
+					<div class="col-sm-9">
+						<button class="btn btn-primary" id="search">筛选</button>
+						<button class="btn btn-warning" type="submit" name="export" value="1">导出</button>
+					</div>
+				</div>
+			</form>
+		</div>
+	</div>
+	<script type="text/javascript">
+        $("#search").click(function(){
+            $('#form1')[0].submit();
+        });
+	</script>
+	<div class="app-table-list">
+			<div class="panel-body table-responsive collapse in order-list" id="order-template-item-4" style="padding: 0;">
+				<table class="table table-hover table-bordered">
+					<thead style="background-color: #FFFFFF;">
+						<tr>
+							<th class="text-center" width="30px"><input type="checkbox" name="checkall" value="" id="checkall" class="checkboxall" onclick="var ck = this.checked; $(':checkbox').each(function(){this.checked = ck});"/></th>
+							<th style="width:50px">ID</th>
+							<th style="width:200px;text-align:center;">超级券内容</th>
+							<th style="width:100px; text-align:center;">已售/库存</th>
+							<th style="width:80px; text-align:center;">所属商家</th>
+							<th style="width:100px; text-align: center;">介绍</th>
+							<th style="width:80px; text-align: center;">超级券价格</th>
+							<th style="width:80px; text-align:center;">超级券状态</th>
+							<th style="width:130px; text-align:center;">有效时间</th>
+							<th style="width:200px; text-align:center;">操作</th>
+						</tr>
+					</thead>
+					<tbody >
+					{loop $coupons $y $item}
+						<tr>
+							<td><center><input type="checkbox" name="items[]" value="{$item['id']}" class="checkbox" /></center></td>
+							<td style="width: 50px;" ><center>{$item['id']}</center></td>
+							<td class="goods-info line-feed" style="width:200px;padding-left: 10px;">
+								<div class="img"><img src="{IMAGE_PIXEL}" class="scrollLoading" data-url="{php echo tomedia($item['logo'])}" height="50" width="50" ></div>
+								<div class="all-tips">
+									<span class="">{$item['title']}</span>
+								</div>
+
+							</td>
+							<td class="text-center" style="width:100px;;height:60px">
+								<a href="{php echo web_url('wlcoupon/couponlist/merbercoupon', array('parentid' => $item['id'],'title'=>$item['title']))}" >{$item['surplus']}&nbsp;/&nbsp;{$item['quantity']}</a>
+							</td>
+							<td class="text-center" style="width:80px; font-family: "Arial","Microsoft YaHei","黑体","宋体",sans-serif ;">{$item['storename']}</td>
+							<td class=" line-feed" style="width:100px;padding-left: 10px;">
+								<div class="title" style="padding-left: 5px;position: relative;">
+									<span class="todetail"  couponid="{$item['id']}">查看详情</span>
+								</div>
+							</td>
+							<td class="text-center" style="width:80px;">
+								{if $item['is_charge']==0}<span class="label label-success stat">免费</span>{/if}
+								{if $item['is_charge'] != 0}<span class="label label-danger stat">￥{$item['price']}</span>{/if}
+							</td>
+							<td class="text-center" style="width:80px;">
+								{if $item['status']==1}<span class="label label-default stat">未开始</span>{/if}
+								{if $item['status']==2}<span class="label label-success stat">活动中</span>{/if}
+								{if $item['status']==3}<span class="label label-info stat">已结束</span>{/if}
+								{if $item['status']==4 || $item['status']==0}<span class="label label-warning stat">已下架</span>{/if}
+								{if $item['status']==5}<span class="label label-warning stat">审核中</span>{/if}
+								{if $item['status']==6}<span class="label label-danger stat">被驳回</span>{/if}
+								{if $item['status']==8}<span class="label label-danger stat">回收站</span>{/if}
+							</td>
+							<td class="text-center" style="width:130px;">
+								<span class="effect-time">
+								{if $item['time_type']==1}
+								开始日期：{php echo date('y-m-d',$item['starttime'])} <br />
+								结束日期：{php echo date('y-m-d',$item['endtime'])}
+								{/if}
+								{if $item['time_type']==2}
+								领取后{$item['deadline']}天内
+								{/if}
+								</span>
+							</td>
+							<td class="text-center" style="position: relative;width:200px;">
+								{if p('wxplatform')}
+								<a href="javascript:;" class="js-clip" data-url="{php echo h5_url('pages/subPages/goods/index',['type'=>5,'id'=>$item['id']])}" >复制链接</a>
+								{/if}
+								{if p('wxapp')}
+								<a href="javascript:;" class="js-clip" data-url="pages/subPages/goods/index?type=5&goodsType=5&id={$item['id']}" >复制路径</a>
+								{/if}
+								<a href="{php echo web_url('wlcoupon/couponlist/editCoupons', array('id' => $item['id'],'page'=> $pindex))}" class="js-edit" order-id="{$item['id']}">编辑</a>
+								<br>
+								<a href="javascript:;" data-id="{$item['id']}" class="copycoupon">复制卡券</a>
+								{if $item['status'] == 5 && !is_store()}
+								<a href="javascript:;" class="js-pass" order-id="{$item['id']}">通过</a>
+								<a href="javascript:;" class="js-nopass" order-id="{$item['id']}">驳回</a>
+								{/if}
+								{if $item['status'] == 1 || $item['status'] == 2 || $item['status'] == 3}
+								<p style="color: #428bca;display: inline-block;"><a href="javascript:;" class="js-removee" order-id="{$item['id']}" order-status="1">下架</a></p>
+								{/if}
+								{if $item['status'] == 4 || $item['status'] == 8 || $item['status'] == 0}
+								<p style="color: #428bca;display: inline-block;"><a href="javascript:;" class="js-removee" order-id="{$item['id']}" order-status="0">上架</a></p>
+								{/if}
+								{if $item['status'] == 8}
+								<p style="color: #428bca;display: inline-block;"><a href="{php echo web_url('wlcoupon/couponlist/deleteCoupons', array('id'=>$item['id']))}" data-toggle="ajaxRemove" data-confirm="此操作会删除卡券活动，同时导致订单商品数据缺失或其他问题，确定要删除吗？">彻底删除</a></p>
+								{else}
+								<p style="color: #428bca;display: inline-block;"><a href="{php echo web_url('wlcoupon/couponlist/cutoff', array('id'=>$item['id']))}" data-toggle="ajaxRemove" data-confirm="确定把卡券放入回收站吗？">删除</a></p>
+								{/if}
+								{if Customized::init('pft147') > 0}
+								<p style="color: #428bca;display: inline-block;"><a href="{php echo web_url('goodshouse/goodshouse/checklist', array('id' => $item['id'],'plugin'=>'coupon'))}">核销码</a> </p>
+								{/if}
+								{if $item['status'] == 1 || $item['status'] == 2}
+								<p style="color: #428bca;display: inline-block;"><a data-toggle="ajaxModal" href="{php echo web_url('wlcoupon/couponlist/couponSend', array('id' => $item['id']))}">发放</a> </p>
+								{/if}
+							</td>
+						</tr>
+					{/loop}
+					</tbody>
+				</table>
+			</div>
+			<div class="app-table-foot clearfix">
+				<div class="pull-left">
+					<button class="btn btn-default btn-sm" type="button" onclick="location.reload();"><i class="fa fa-refresh"></i></button>
+					<div class="btn-group btn-group-sm">
+						<button  class="btn btn-default" disabled="disabled" id="checkYse" onclick="checkOrDelete(1);">批量上架</button>
+						<button  class="btn btn-default" disabled="disabled" id="checkNo" onclick="checkOrDelete(4);">批量下架</button>
+					</div>
+					<button class="btn btn-default btn-sm" type="button" disabled="disabled" id="delete" onclick="checkOrDelete(8);"><i class="fa fa-trash"></i> 回收站</button>
+				</div>
+				<div class="pull-right">
+					{$pager}
+				</div>
+			</div>
+		</div>
+	</div>
+	<div id="modal-module-gift" class="modal fade" tabindex="-1">
+		<div class="modal-dialog" style='width: 920px;'>
+			<div class="modal-content" style="overflow: auto;">
+				<div class="modal-header">
+					<button aria-hidden="true" data-dismiss="modal" class="close" type="button">×</button>
+					<h3>卡券详情</h3>
+				</div>
+				<div class="modal-body">
+					<div id="detail" class="modal-body"></div>
+				</div>
+				<div class="modal-body">
+					<h4>使用须知</h4>
+					<div id="detail2" class="modal-body"></div>
+				</div>
+				<div class="modal-footer" style="padding: 5px 15px;">
+					<a class="btn btn-primary js-order-remark-post" order-id="" data-dismiss="modal" aria-hidden="true">确定</a>
+				</div>
+			</div>
+		</div>
+	</div>
+</div>
+
+
+<script type="text/javascript">
+	function checkOrDelete(check){
+		var content = '';
+		if(check==1) content = '确认上架选中商品？';
+		if(check==4) content = '确认下架选中商品？';
+		if(check==8) content = '确认把选中商品放入回收站？如果商品已在回收站将会被彻底删除。';
+		layer.open({
+			title: [
+				'提示',
+				'background-color:#23c6c8; color:#fff;'
+			]
+			,anim: 'up'
+			,content: content
+			,btn: ['确认', '取消']
+			,yes:function(index){
+				$('.layer-anim').remove();
+				var ids = [];
+				var $checks=$('.checkbox:checkbox:checked');
+				$checks.each(function() {
+					if (this.checked) {
+						ids.push(this.value);
+					};
+				});
+				//处理
+				$.post("{php echo web_url('wlcoupon/couponlist/changestatus')}", { ids : ids ,type:check}, function(data){
+					if(!data.errno){
+						util.tips("操作成功！");
+						location.reload();
+					}else{
+						util.tips(data.message);
+					};
+				}, 'json');
+			}
+		});
+	}
+
+	require(['jquery', 'util'], function($, util){
+		$('.js-copy').each(function(){
+			var id=$(this).attr('data-id');
+			util.clip("#js-copy"+id, $(this).attr('data-url'));
+		});
+	});
+	$('.todetail').click(function(){
+		popwin = $('#modal-module-gift').modal();
+		var id = $(this).attr('couponid');
+		$.post("{php echo web_url('wlcoupon/couponlist/todetail')}",{id:id},function(d){
+			if(!d.errno){
+				$('#detail').html(d.data);
+				$('#detail2').html(d.data2);
+			}
+		},"json");
+		//$('#double').hide();
+	});
+</script>
+<script type="text/javascript">
+	$('#output').click(function(){
+		var orderType = '{$_GPC['orderType']}';
+		var status = '{$_GPC['status']}';
+		var paytype = '{$_GPC['pay_type']}';
+		var keywordtype = '{$_GPC['keywordtype']}';
+		var keyword = '{$_GPC['keyword']}';
+		var timetype = '{$_GPC['timetype']}';
+		var times = "{$_GPC['time']['start']}";
+		var timee = "{$_GPC['time']['end']}";
+		location.href = "{php echo web_url('order/order/output')}&orderType="+orderType+"&status="+status+"&paytype="+paytype+"&keywordtype="+keywordtype+"&keyword="+keyword+"&timetype="+timetype+"&times="+times+"&timee="+timee;
+	});
+	$(function(){
+		$('.order-list').delegate('.js-removee', 'click', function(e){
+			e.stopPropagation();
+			var $this = $(this);
+			var id = $this.attr('order-id');
+			var status = $this.attr('order-status');
+			var statushtml = (status == 0) ? "上架" : "下架";
+			util.nailConfirm(this, function(state) {
+				if(!state) return;
+				$.post("{php echo web_url('wlcoupon/couponlist/delete')}", {id:id,status:status}, function(data){
+					console.log(data);
+					if(!data.errno){
+						util.tips(statushtml+"成功！");
+						location.reload();
+					};
+				}, 'json');
+			}, {html: '确认'+statushtml+"？"});
+		});
+		$('[name="rank_all"]').click(function() {
+			var checked = this.checked;
+			$('.js-rank').find('input:checkbox').each(function() {
+				this.checked = checked;
+			});
+		});
+		$('#export').click(function() {
+			if ($('[name="selecttime[start]"]').val() == '') {
+				alert('请选择下单时间');
+				$(this).focus();
+				return false;
+			};
+			$(this).attr('type', 'submit').submit();
+		});
+
+		$('.order-rank').each(function(){
+			o.rank(this);
+		});
+
+		$('.checkbox,.checkboxall').click(function(){
+			var $checks=$('.checkbox:checkbox:checked');
+			$('#check').attr('disabled','');
+			if($checks.length>0) {
+				$('#checkYse').attr('disabled',false);
+				$('#checkNo').attr('disabled',false);
+				$('#delete').attr('disabled',false);
+			}else{
+				$('#checkYse').attr('disabled',true);
+				$('#checkNo').attr('disabled',true);
+				$('#delete').attr('disabled',true);
+			}
+		});
+
+	});
+
+$('.js-disable').click(function(e) {
+		e.stopPropagation();
+		var id = $(this).attr('order-id');
+		var asd = $(this);
+		util.nailConfirm(this, function(state) {
+			if (!state) return;
+			$.post("{php echo web_url('wlcoupon/couponlist/disable')}", {id : id}, function(data) {
+				if(!data.errno){
+					asd.hide();
+					asd.next().hide();
+					asd.next().next().show();
+					location.reload();
+				};
+				util.tips(data.message);
+			}, 'json');
+		}, {html:'<div class="inner__content"><span style="color:red;font-size:12px;">失效后将导致该超级券无法被领取和编辑</span></div>确定让这组超级券失效?', placement:'left'});
+	});
+
+$('.js-pass').click(function(e){
+	e.stopPropagation();
+	var id = $(this).attr('order-id');
+	util.nailConfirm(this, function(state) {
+		if (!state) return;
+		$.post("{php echo web_url('wlcoupon/couponlist/pass')}", {id : id , flag : 1}, function(data) {
+			if(!data.errno){
+				util.tips('通过成功');
+				location.reload();
+			}else{
+				util.tips('通过失败');
+			};
+		}, 'json');
+	}, {html:'确定通过审核?', placement:'left'});
+});
+$('.js-nopass').click(function(e){
+	e.stopPropagation();
+	var id = $(this).attr('order-id');
+	util.nailConfirm(this, function(state) {
+		if (!state) return;
+		$.post("{php echo web_url('wlcoupon/couponlist/pass')}", {id : id , flag : 0}, function(data) {
+			if(!data.errno){
+				util.tips('驳回成功');
+				location.reload();
+			}else{
+				util.tips('驳回失败');
+			};
+		}, 'json');
+	}, {html:'确定驳回审核?', placement:'left'});
+});
+
+
+$('.order-list').delegate('.copycoupon', 'click', function(e){
+	e.stopPropagation();
+	var $this = $(this);
+	var id = $this.attr('data-id');
+	util.nailConfirm(this, function(state) {
+		if(!state) return;
+		$.post("{php echo web_url('wlcoupon/couponlist/copycoupon')}", {id:id}, function(data){
+			if(!data.errno){
+				util.tips("复制成功！");
+				location.reload();
+			};
+		}, 'json');
+	}, {html: '确认复制该活动？被复制的超级券会在已下架中'});
+});
+
+
+</script>
+{php include wl_template('common/footer');}

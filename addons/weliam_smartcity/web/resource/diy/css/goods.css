@@ -1,0 +1,1133 @@
+/****************************************** 大礼包组件样式 ************************************************************/
+.model-packages{
+    margin-bottom: 30px;
+    padding: 5px 10px;
+    background: #f6f6f6;
+}
+/*风格一*/
+.model-packages .packages_global{
+    background-color: #fff;
+}
+.model-packages .packages_global-wrap {
+    padding: 12px 15px;
+    display: flex;
+    justify-content: space-between;
+}
+.model-packages .packages_left{
+    width: calc(100% - 115px);
+    display: inline-block;
+    -webkit-flex-shrink: 1;
+    flex-shrink: 1;
+}
+.model-packages .packages_left .packages_leftShop{
+    height: 40px;
+    line-height: 40px;
+}
+.model-packages .packages_left .packages_leftShop .leftShop_img{
+    height: 40px;
+    width: 40px;
+    line-height: 30px;
+    text-align: center;
+    float: left;
+    padding: 5px;
+}
+.model-packages .packages_left .packages_leftShop .leftShop_img img{
+    width: 100%;
+    height: 100%;
+    border-radius: 50%;
+    margin-top: -2px;
+    border: 1px solid #CCC;
+}
+.model-packages .packages_left .packages_leftShop .leftShop_shopName{
+    width: calc(100% - 40px);
+    display: inline-block;
+    padding-left: 5px;
+    font-size: 15px;
+    overflow: hidden;
+    white-space: nowrap;
+    text-overflow: ellipsis;
+}
+.model-packages .packages_left .packages_leftInfo{
+    float: left;
+    width: 100%;
+    height: 40px;
+    line-height: 20px;
+}
+.model-packages .packages_left .packages_leftInfo .leftInfo_name{
+    width: 100%;
+    height: 21px;
+    line-height: 21px;
+    font-size: 16px;
+    overflow: hidden;
+    white-space: nowrap;
+    text-overflow: ellipsis;
+}
+.model-packages .packages_left .packages_leftInfo .leftInfo_useNum{
+    line-height: 21px;
+    font-size: 12px;
+    color: #e62424;
+}
+.model-packages .packages_right{
+    text-align: right;
+    line-height: 40px;
+    flex-shrink: 0;
+    max-width: 115px;
+}
+.model-packages .packages_right .right_worth{
+    height: 35px;
+    line-height: 35px;
+    color: #e62424;
+    text-align: center;
+}
+.model-packages .packages_right .right_btn {
+    height: calc(100% - 35px);
+    display: -webkit-flex;
+    display: flex;
+    align-items: center;
+    -webkit-justify-content: flex-end;
+    justify-content: flex-end;
+}
+.model-packages .packages_right .right_button{
+    height: 1.4rem;
+    line-height: 1.4rem;
+    padding: 0 .5rem;
+    color: #fff;
+    font-size: .6rem;
+    border: none;
+    border-radius: 4px;
+    background: linear-gradient(90deg,#ff8032,#fe453f);
+    background: linear-gradient(90deg,#ff8032,#fe453f);
+    -ms-flex-negative: 0;
+    flex-shrink: 0;
+    box-sizing: initial;
+    display: inline-block;
+    margin: auto;
+}
+/*风格二*/
+.model-packages .packages_global2{
+    margin: 10px;
+    background-color: #fff;
+    border-radius: 8px;
+}
+.model-packages .packages_global2-wrap {
+    padding: 12px 15px 12px 15px;
+}
+.model-packages .packages_global2-wrap-content {
+    display: -webkit-flex;
+    display: flex;
+    -webkit-justify-content: space-between;
+    justify-content: space-between;
+}
+.model-packages .packages_left2{
+    width: calc(100% - 120px);
+    display: inline-block;
+    -webkit-flex-shrink: 1;
+    flex-shrink: 1;
+}
+.model-packages .packages_left2 .packages_leftTitle{
+    height: 35px;
+    line-height: 35px;
+    font-size: 14px;
+    text-overflow: -o-ellipsis-lastline;
+    overflow: hidden;
+    text-overflow: ellipsis;
+    display: -webkit-box;
+    -webkit-line-clamp: 2;
+    line-clamp: 2;
+    -webkit-box-orient: vertical;
+}
+.model-packages .packages_left2 .packages_leftInfo{
+    font-size: 12px;
+}
+.model-packages .packages_left2 .packages_leftInfo .leftInfo_name{
+    width: 100%;
+    height: 21px;
+    line-height: 21px;
+    font-size: 16px;
+    white-space: nowrap;
+    text-overflow: ellipsis;
+    overflow: hidden;
+    word-break: break-all;
+}
+.model-packages .packages_left2 .packages_leftInfo .leftInfo_useNum{
+    line-height: 21px;
+    white-space: normal;
+    word-break: break-all;
+    color: #e62424;
+    font-size: 12px;
+}
+.model-packages .packages_right2{
+    width: 120px;
+    text-align: right;
+    line-height: 30px;
+    -webkit-flex-shrink: 0;
+    flex-shrink: 0;
+}
+.model-packages .packages_right2 .right_worth{
+    height: 35px;
+    line-height: 35px;
+    color: #e62424;
+}
+.model-packages .packages_right2 .right_btn {
+    height: calc(100% - 35px);
+    display: -webkit-flex;
+    display: flex;
+    align-items: center;
+    -webkit-justify-content: flex-end;
+    justify-content: flex-end;
+}
+.model-packages .packages_right2 .right_button{
+    height: 1.4rem;
+    line-height: 1.4rem;
+    padding: 0 .5rem;
+    color: #fff;
+    font-size: .6rem;
+    border: none;
+    border-radius: 4px;
+    background: linear-gradient(90deg,#ff8032,#fe453f);
+    background: linear-gradient(90deg,#ff8032,#fe453f);
+    -ms-flex-negative: 0;
+    flex-shrink: 0;
+}
+.model-packages .packages_footer{
+    font-size: 14px;
+    line-height: 14px;
+    width: 100%;
+}
+.model-packages .packages_footer .footer_useRestriction{
+    display: inline-block;
+    width: calc(100% - 20px);
+    height: 21px;
+    font-size: 14px;
+    line-height: 16px;
+    margin-top: 5px;
+    white-space: nowrap;
+    text-overflow: ellipsis;
+    overflow: hidden;
+    word-break: break-all;
+}
+.model-packages .packages_footer i {
+    vertical-align: 6px;
+}
+/****************************************** 折扣卡组件样式 ************************************************************/
+.model-discount_card{
+    margin-bottom: 30px;
+    background: #f6f6f6;
+    padding: 5px;
+}
+.model-discount_card .discountCard_global{
+    height: 90px;
+    background: #FFFF;
+    box-sizing: initial;
+    position: relative;
+}
+/*风格一*/
+.model-discount_card .discountCard_global .discountCard_img{
+    width: 90px;
+    float: left;
+    margin-right: 10px;
+}
+.model-discount_card .discountCard_global .discountCard_img img{
+    width: 100%;
+    height: 100%;
+}
+.model-discount_card .discountCard_global .discountCard_header{
+    width: calc(100% - 100px);
+    display: inline-block;
+    float: left;
+    height: 25px;
+    font-size: 13px;
+    line-height: 25px;
+}
+.model-discount_card .discountCard_global .discountCard_header .center_shopName{
+    float: left;
+    width: calc(100% - 50px);
+    white-space: nowrap;
+    overflow: hidden;
+    text-overflow: ellipsis;
+}
+.model-discount_card .discountCard_global .discountCard_header .right_position{
+    float: right;
+    color: #e05a5a;
+    width: 50px;
+    text-align: center;
+}
+.model-discount_card .discountCard_global .discountCard_limit{
+    float: left;
+    width: calc(100% - 100px);
+    overflow: hidden;
+    text-overflow: ellipsis;
+    display: -webkit-box;
+    -webkit-box-orient: vertical;
+    -webkit-line-clamp: 2;
+    height: 40px;
+    line-height: 20px;
+    font-size: 13px;
+    color: #bdbdbd;
+}
+.model-discount_card .discountCard_global .discountCard_bottom{
+    float: left;
+    height: 25px;
+    line-height: 25px;
+    width: calc(100% - 100px);
+}
+.model-discount_card .discountCard_global .discountCard_bottom .center_info{
+    float: left;
+    width: 50%;
+    font-size: 16px;
+    color: #ff3f43;
+}
+.model-discount_card .discountCard_global .discountCard_bottom .right_btn{
+    float: right;
+    width: 50%;
+    text-align: right;
+    height: 25px;
+    line-height: 25px;
+}
+.model-discount_card .discountCard_global .discountCard_bottom .right_btn .right_button{
+    background: #f44;
+    border-radius: 3px;
+    font-size: 13px;
+    padding: 3px 10px;
+    color: #FFF;
+}
+/*风格二*/
+
+.model-discount_card .discountCard_global:after {
+    content: "";
+    height: 1px;
+    width: calc(100vw - 30px);
+    background-color: #f3f3f3;
+    position: absolute;
+    left: 15px;
+    bottom: 0;
+}
+.model-discount_card .discountCard_global:last-child {
+    padding-bottom: 15px;
+}
+.model-discount_card .discountCard_global:last-child:after {
+    height: 0;
+}
+.model-discount_card .discountCard_global .discountCard_left{
+    width: 90px;
+    height: 90px;
+    display: inline-block;
+    float: left;
+}
+.model-discount_card .discountCard_global .discountCard_left img{
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+    display: block;
+}
+.model-discount_card .discountCard_global .discountCard_center{
+    width: calc(100% - 150px);
+    padding: 0 10px;
+    display: inline-block;
+}
+.model-discount_card .discountCard_global .discountCard_center .center_shopName{
+    height: 25px;
+    line-height: 25px;
+    font-size: 13px;
+    white-space: nowrap;
+    text-overflow: ellipsis;
+    overflow: hidden;
+    word-break: break-all;
+}
+.model-discount_card .discountCard_global .discountCard_center .center_limit{
+    height: 40px;
+    line-height: 20px;
+    font-size: 12px;
+    margin-top: 3px;
+    text-overflow: -o-ellipsis-lastline;
+    overflow: hidden;
+    text-overflow: ellipsis;
+    display: -webkit-box;
+    -webkit-line-clamp: 2;
+    line-clamp: 3;
+    -webkit-box-orient: vertical;
+    color: #bdbdbd;
+}
+.model-discount_card .discountCard_global .discountCard_center .center_info{
+    height: 24px;
+    line-height: 24px;
+    font-size: 16px;
+    font-weight: bolder;
+    color: #ff3f43;
+}
+.model-discount_card .discountCard_global .discountCard_right{
+    width: calc(100% - 270px);
+    display: inline-block;
+    float: right;
+    text-align: center;
+    height: 100px;
+}
+.model-discount_card .discountCard_global .discountCard_right .right_position{
+    height: 20px;
+    line-height: 20px;
+    font-size: 14px;
+    color: #FF7F50;
+}
+.model-discount_card .discountCard_global .discountCard_right .right_btn {
+    height: calc(100% - 20px);
+    display: -webkit-flex;
+    display: flex;
+    align-items: flex-end;
+    -webkit-justify-content: flex-end;
+    justify-content: flex-end;
+}
+.model-discount_card .discountCard_global .discountCard_right .right_button{
+    height: 28px;
+    line-height: 28px;
+    padding: 0 10px;
+    background: linear-gradient(90deg,#ff8032,#fe453f);
+    color: #fff;
+    font-size: .6rem;
+    border: none;
+    border-radius: 3px;
+    display: inline-block;
+}
+.model-discount_card .discountCard_global .discountCard_right2{
+    float: right;
+    height: 90px;
+    width: 50px;
+    text-align: center;
+    padding-top: 10px;
+    position: relative;
+}
+.model-discount_card .discountCard_global .discountCard_right2 .right_position{
+    height: 20px;
+    line-height: 20px;
+    font-size: 12px;
+    color: #999;
+    overflow: hidden;
+    text-overflow: ellipsis;
+    white-space: nowrap;
+}
+.model-discount_card .discountCard_global .discountCard_right2 .right_button{
+    width: 50px;
+    display: inline-block;
+    border-radius: 50%;
+    height: 50px;
+    background: #d83a3a;
+    padding: 5px;
+    color: #FFF;
+    font-size: 14px;
+
+
+}
+/****************************************** 商品组件公共样式 **********************************************************/
+.goods_style_1 .block{
+    height: 120px;
+    width: 100%;
+    padding: 10px 15px;
+    background: #FFF;
+    margin-bottom: 10px;
+}
+.goods_style_1 .block:nth-last-child(1){
+    margin-bottom: 0px;
+}
+.goods_style_1 .block .images{
+    height: 100px;
+    width: 100px;
+    float: left;
+    margin-right: 10px;
+    position: relative;
+}
+.goods_style_1 .block .images .marker{
+    position: absolute;
+    top: 0;
+    left: 5px;
+    background: red;
+    color: #FFF;
+    width: 37px;
+    height: 17px;
+    font-size: 13px;
+    line-height: 17px;
+    text-align: center;
+    border-bottom-left-radius: 7px;
+    border-bottom-right-radius: 7px;
+}
+.goods_style_1 .block .images img{
+    width: 100%;
+    height: 100%;
+}
+.goods_style_1 .block .describe{
+    float: left;
+    width: calc(100% - 120px);
+    height: 100%;
+}
+.goods_style_1 .block .describe .title{
+    height: 30px;
+    line-height: 16px;
+    font-size: 13px;
+    overflow: hidden;
+    text-overflow: ellipsis;
+    display: -webkit-box;
+    -webkit-box-orient: vertical;
+    -webkit-line-clamp: 2;
+    color: #333333;
+}
+.goods_style_1 .block .describe .shop{
+    font-size: 12px;
+    height: 18px;
+    line-height: 18px;
+    margin-top: 5px;
+    color: #999999;
+}
+.goods_style_1 .block .describe .shop .shop_title{
+    float: left;
+    width: calc(100% - 60px);
+    text-align: left;
+    overflow: hidden;
+    text-overflow: ellipsis;
+    display: -webkit-box;
+    -webkit-box-orient: vertical;
+    -webkit-line-clamp: 1;
+}
+.goods_style_1 .block .describe .shop .shop_distance{
+    float: right;
+    width: 47px;
+    text-align: right;
+}
+.goods_style_1 .block .describe .footer_info{
+    height: 47px;
+}
+.goods_style_1 .block .describe .footer_info .sale_info{
+    float: left;
+    width: 100%;
+    height: 47px;
+}
+.goods_style_1 .block .describe .footer_info .sale_info .price_info{
+    height: 30px;
+    line-height: 30px;
+    width: 225px;
+}
+.goods_style_1 .block .describe .footer_info .sale_info .price_info .price{
+    float: left;
+    font-size: 20px;
+    color: #FF4444;
+    font-weight: 600;
+    line-height: 30px;
+    margin-right: 5px;
+    height: 30px;
+}
+.goods_style_1 .block .describe .footer_info .sale_info .price_info .old_price{
+    float: left;
+    line-height: 35px;
+    font-size: 12px;
+    color: #999999;
+    height: 30px;
+}
+.goods_style_1 .block .describe .footer_info .sale_info .sale_num{
+    border-radius: 50px;
+    background: #FEB2B2;
+    height: 14px;
+    color: #ffffff;
+}
+.goods_style_1 .block .describe .footer_info .sale_info .sale_num .buy_num{
+    position: relative;
+    z-index: 50;
+    top: -14px;
+    width: 100%;
+    height: 100%;
+    border-radius: 50px;
+    font-size: 12px;
+    line-height: 14px;
+    text-align: center;
+}
+.goods_style_1 .block .describe .footer_info .sale_info .sale_num .buy_bg{
+    height: 14px;
+    border-radius: 50px;
+    background: #FF6C6C;
+    max-width: 100%;
+}
+.goods_style_1 .block .describe .footer_info .button{
+    float: right;
+    width: 30%;
+    height: 25px;
+    background: #FF4444;
+    border-radius: 50px;
+    color: #FFF;
+    text-align: center;
+    line-height: 27px;
+    margin-top: -23px;
+}
+.goods_style_2 .block {
+    background: #FFF;
+}
+.goods_style_2 .block:after {
+    content: ".";
+    clear: both;
+    display: block;
+    height: 0;
+    overflow: hidden;
+    visibility: hidden;
+}
+.goods_style_2 .block .block_item {
+    background: #FFF;
+    float: left;
+    margin-bottom: 10px;
+}
+.goods_style_2 .block .block_item:nth-last-child(1){
+    margin-bottom: 0px;
+}
+.goods_style_2 .block .block_item:nth-last-child(2){
+    margin-bottom: 0px;
+}
+.goods_style_2 .block .block_item .images{
+    position: relative;
+    height: 165px;
+}
+.goods_style_2 .block .images .marker{
+    position: absolute;
+    top: 0;
+    left: 5px;
+    background: red;
+    color: #FFF;
+    width: 37px;
+    height: 17px;
+    font-size: 13px;
+    line-height: 17px;
+    text-align: center;
+    border-bottom-left-radius: 7px;
+    border-bottom-right-radius: 7px;
+}
+.goods_style_2 .block .block_item .images img{
+    width: 100%;
+    height: 100%;
+    border-radius: 10px;
+}
+.goods_style_2 .block .block_item .describe .name{
+    height: 30px;
+    line-height: 16px;
+    font-size: 13px;
+    overflow: hidden;
+    text-overflow: ellipsis;
+    display: -webkit-box;
+    -webkit-box-orient: vertical;
+    -webkit-line-clamp: 2;
+    color: #333333;
+    margin: 5px 0;
+}
+.goods_style_2 .block .block_item .describe .info{
+    height: 17px;
+    line-height: 17px;
+    font-size: 13px;
+    overflow: hidden;
+    text-overflow: ellipsis;
+    display: -webkit-box;
+    -webkit-box-orient: vertical;
+    -webkit-line-clamp: 1;
+    color: #EF4343;
+    max-width: 100%;
+}
+.goods_style_2 .block .block_item .describe .price_info{
+    height: 25px;
+    line-height: 25px;
+    font-size: 13px;
+    width: 100%;
+    float: left;
+    color: #FF4444;
+    font-weight: 600;
+    overflow: hidden;
+    white-space: nowrap;
+    text-overflow: ellipsis;
+}
+.goods_style_2 .block .block_item .describe .price_info .price{
+    font-size: 15px;
+    color: #FF4444;
+    font-weight: 600;
+    margin-right: 5px;
+    display: inline-block;
+}
+.goods_style_2 .block .block_item .describe .price_info .vip{
+    display: inline-block;
+    background: #333333;
+    height: 17px;
+    font-size: 13px;
+    line-height: 18px;
+    color: #EED196;
+    text-align: center;
+    border-radius: 3px;
+    padding: 0px 5px;
+    font-weight: 100;
+}
+.goods_style_2 .block .block_item .describe .price_info .discount{
+    font-weight: 100;
+}
+.goods_style_2 .block .block_item .describe .pv_info{
+    height: 20px;
+    line-height: 20px;
+    float: left;
+    width: 100%;
+    font-size: 13px;
+    color: #999999;
+}
+.goods_style_2 .block .block_item .describe .pv_info .old_priec{
+    float: left;
+    text-decoration: line-through;
+}
+.goods_style_2 .block .block_item .describe .pv_info .pv{
+    float: right;
+}
+.goods_style_2 .block .block_item .describe .footers{
+    height: 20px;
+    line-height: 20px;
+    font-size: 13px;
+    color: #333333;
+}
+.goods_style_2 .block .block_item .describe .footers .price{
+    color: #FF4444;
+    font-size: 20px;
+
+}
+.goods_style_2 .block .block_item .describe .footers .price .icons{
+    font-size: 13px;
+}
+.goods_style_2 .block .block_item .describe .footers .oldprice{
+    float: right;
+    color: #999999;
+}
+.goods_style_3 .goodslist{
+    margin-bottom: 10px;
+}
+.goods_style_3 .goodslist:nth-last-child(1){
+    margin-bottom: 0px;
+}
+.goods_style_3 .goodslist-i-t{
+    width: 100%;
+    /*height: calc((375px - 30px) / 1.8);*/
+    height: 257.6px;
+    position: relative;
+}
+.goods_style_3 .goodslist-i-t .top_top{
+    position: absolute;
+    top: 0;
+    background: #f92929;
+    padding: 2px 5px;
+    border-top-right-radius: 10px;
+    border-bottom-right-radius: 10px;
+    color: #FFF;
+    line-height: 20px;
+    width: 60px;
+}
+.goods_style_3 .qglist-i-t-bar{
+    height: 36px;
+    line-height: 36px;
+    background: -webkit-linear-gradient(90deg, #FF7E42, #FB2F52);
+    background: linear-gradient(90deg, #FF7E42, #FB2F52);
+    box-sizing: initial;
+    position: absolute;
+    top: 0;
+    right: 0;
+    display: inline-block;
+    border: 0;
+    padding: 0;
+    border-top-left-radius: 0;
+    border-top-right-radius: 0;
+    border-bottom-right-radius: 0;
+    border-bottom-left-radius: 5em;
+}
+.goods_style_3 .goodslist {
+    padding: 25px 15px 15px 15px;
+    padding-bottom: 0;
+    background-color: #fff;
+}
+.goods_style_3 .goodslist:first-child {
+    padding-top: 15px;
+}
+.goods_style_3 .goodslist:last-child {
+    padding-bottom: 15px;
+}
+.goods_style_3 .goodslist-i-c-t {
+    color: #999;
+    font-size: 12px;
+    margin-top: 10px;
+    display: -webkit-flex;
+    display: flex;
+    justify-content: space-between;
+}
+.goods_style_3 .goodslist-i-c-t-l {
+    padding-right: 10px;
+    -webkit-flex-shrink: 1;
+    flex-shrink: 1;
+    overflow: hidden;
+    text-overflow: ellipsis;
+    white-space: nowrap;
+}
+.goods_style_3 .goodslist-i-c-t-l {
+    -webkit-flex: 1;
+    flex: 1;
+}
+.goods_style_3 .goodslist-i-c-c {
+    line-height: 24px;
+    font-size: 16px;
+    margin-top: 10px;
+}
+.goods_style_3 .goodslist-i-c-c .i {
+    height: 24px;
+    line-height: 24px;
+    font-size: 14px;
+    font-style: normal;
+    margin-right: 5px;
+    padding: 0 9px;
+    background-color: #FFD93F;
+    border-radius: 2px;
+    display: inline-block;
+}
+.goods_style_3 .goodslist-i-c-c2 {
+    margin-top: 10px;
+    display: -webkit-flex;
+    display: flex;
+    -webkit-justify-content: space-between;
+    justify-content: space-between;
+}
+.goods_style_3 .goodslist-i-c-c2 .h1 {
+    color: #FF4040;
+    font-size: 20px;
+    font-weight: 600;
+    margin: 0;
+    -webkit-flex-shrink: 1;
+    flex-shrink: 1;
+    overflow: hidden;
+    text-overflow: ellipsis;
+    white-space: normal;
+    display: -webkit-box;
+    -webkit-box-orient: vertical;
+    -webkit-line-clamp: 1;
+}
+.goods_style_3 .goodslist-i-c-c2 .h1 .i {
+    font-size: 12px;
+    font-weight: normal;
+    vertical-align: 1px;
+    margin-left: 3px;
+}
+.goods_style_3 .goodslist-i-c-c2 .h1 .span {
+    color: #363636;
+    font-size: 11px;
+    font-style: normal;
+    font-weight: normal;
+    vertical-align: 1px;
+    margin-left: 10px;
+    display: inline;
+}
+.goods_style_3 .goodslist-i-c-c2 .h1 .span .i {
+    height: 14px;
+    line-height: 13px;
+    color: #DDCDA0;
+    font-size: 11px;
+    vertical-align: 0;
+    margin-left: 0;
+    margin-right: 2px;
+    padding: 2px 2px 0 2px;
+    background-color: #363636;
+    border-radius: 3px;
+    display: inline-block;
+}
+.goods_style_3 .goodslist-i-c-c2 .h2 {
+    width: 72px;
+    height: 28px;
+    line-height: 28px;
+    color: #fff;
+    font-size: 14px;
+    text-align: center;
+    font-weight: normal;
+    margin: 0;
+    background-color: #FF4040;
+    border-radius: 4px;
+    -webkit-flex-shrink: 0;
+    flex-shrink: 0;
+}
+.goods_style_3 .goodslist-i-c-c2 .sell-out {
+    color: #808080;
+    background-color: #D2D2D2;
+}
+.goods_style_3 .goodslist-i-c-b{
+    margin-top: 10px;
+}
+.goods_style_3 .goodslist-i-c-b .p {
+    color: #999;
+    font-size: 12px;
+    margin: 0;
+    margin-top: 3px;
+    display: -webkit-flex;
+    display: flex;
+    justify-content: space-between;
+}
+.goods_style_3 .goodslist-i-c-b .span {
+    text-decoration: line-through;
+}
+.goods_style_3 .goodslist-i-c-b .em {
+    font-style: normal;
+}
+.goods_style_4 .goods_father{
+    padding: 0;
+    margin: 0;
+}
+.goods_style_4 .goods_item{
+    padding: 0;
+    margin: 0;
+}
+.goods_style_4 .transverse{
+    padding-right: 0!important;
+}
+.goods_style_4 .transverse .transverse_list .goods_item{
+    padding: 0;
+    margin: 0;
+}
+/****************************************** 抢购商品组样式 ************************************************************/
+.goods_rush_1 .block .describe .footer_info .button-end{
+    background: #CCCCCC;
+    color: #FFFFFF;
+}
+.goods_rush_1 .block .describe .footer_info .button-remind{
+    background: #4CD43A;
+    color: #FFFFFF;
+}
+/****************************************** 团购商品组样式 ************************************************************/
+.goods_groupon_1 .block .describe .footer_info .sale_info .price_info .price{
+    font-size: 12px;
+}
+.goods_groupon_1 .block .describe .footer_info .sale_info .price_info .old_price .vip{
+    float: left;
+    background: #333333;
+    height: 17px;
+    font-size: 13px;
+    margin-top: 7px;
+    line-height: 19px;
+    color: #EED196;
+    text-align: center;
+    border-radius: 5px;
+    padding: 0px 5px;
+}
+.goods_groupon_1 .block .describe .footer_info .sale_info .price_info .old_price .discount{
+    margin-left: 3px;
+}
+.goods_groupon_1 .block .describe .footer_info .sale_info .sale_num{
+    background: #FFFFFF;
+    height: 17px;
+    line-height: 22px;
+    font-size: 13px;
+    color: #999999;
+}
+/****************************************** 卡卷商品组样式 ************************************************************/
+.goods_coupon_1 .block .images{
+    position: relative;
+}
+.goods_coupon_1 .block .images span{
+    position: absolute;
+    top: 0;
+    left: 0;
+    background: #FF4444;
+    border-bottom-right-radius: 15px;
+    font-size: 13px;
+    height: 20px;
+    line-height: 20px;
+    padding: 0 10px 0 5px;
+    color: #FFC6C6;
+}
+.goods_coupon_1 .block .describe .footer_info .sale_info .price_info .price{
+    font-size: 12px;
+}
+.goods_coupon_1 .block .describe .footer_info .sale_info .price_info .old_price .vip{
+    float: left;
+    background: #333333;
+    height: 17px;
+    font-size: 13px;
+    margin-top: 7px;
+    line-height: 19px;
+    color: #EED196;
+    text-align: center;
+    border-radius: 5px;
+    padding: 0px 5px;
+}
+.goods_coupon_1 .block .describe .footer_info .sale_info .price_info .old_price .discount{
+    margin-left: 3px;
+}
+/****************************************** 砍价商品组样式 ************************************************************/
+.goods_bargain_1 .block .describe .footer_info .sale_info .price_info{
+    color: #FF4444;
+    font-size: 13px;
+    letter-spacing: 1px;
+}
+.goods_bargain_1 .block .describe .footer_info .sale_info .price_info .price{
+    float: none;
+}
+.goods_bargain_1 .block .describe .footer_info .sale_info .sale_num{
+    background: #FFFFFF;
+    height: 17px;
+    line-height: 22px;
+    font-size: 13px;
+    color: #999999;
+}
+/****************************************** 拼团商品组样式 ************************************************************/
+.goods_fight_1 .block .describe .fight_info{
+    height: 30px;
+    padding: 5px 0;
+    line-height: 18px;
+    width: 100%;
+    float: left;
+    font-size: 13px;
+    color: #FF4444;
+}
+.goods_fight_1 .block .describe .fight_info .buy_num{
+    float: left;
+    padding: 1px 5px;
+    background: #FFF6F6;
+    margin-right: 10px;
+}
+.goods_fight_1 .block .describe .fight_info .fight_num{
+    float: left;
+    border: 1px solid #FF4444;
+    padding: 0px 5px;
+}
+.goods_fight_1 .block .describe .footer_info .sale_info .old_price{
+    color: #999999;
+    font-size: 13px;
+}
+.goods_fight_2 .block .block_item .describe .fight_info{
+    height: 30px;
+    padding: 5px 0;
+    line-height: 18px;
+    width: 100%;
+    float: left;
+    font-size: 13px;
+    color: #FF4444;
+}
+.goods_fight_2 .block .block_item .describe .fight_info .buy_num{
+    float: left;
+    padding: 1px 5px;
+    background: #FFF6F6;
+    margin-right: 10px;
+}
+.goods_fight_2 .block .block_item .describe .fight_info .fight_num{
+    float: left;
+    border: 1px solid #FF4444;
+    padding: 0px 5px;
+}
+.goods_fight_2 .block .block_item .describe .price_info{
+    float: left;
+    font-size: 16px;
+}
+.goods_fight_2 .block .block_item .describe .price_info .priec{
+    float: left;
+}
+.goods_fight_2 .block .block_item .describe .price_info .unit_Price{
+    font-size: 13px;
+    color: #999999;
+    float: right;
+}
+/****************************************** 积分商品组件样式 *************************************************************/
+/* 风格一 */
+.goods_integral_1 .block .describe{
+    position: relative;
+    width: calc(100% - 110px);
+
+}
+.goods_integral_1 .block .describe .title{
+    height: 40px;
+    line-height: 20px;
+    font-size: 15px;
+}
+.goods_integral_1 .block .describe .price{
+    height: 35px;
+    line-height: 35px;
+    font-size: 15px;
+    color: #ff4444;
+}
+.goods_integral_1 .block .describe .old_price{
+    display: inline-block;
+    text-decoration: line-through;
+    color: #999999;
+    position: absolute;
+    bottom: 0px;
+}
+.goods_integral_1 .block .describe .button{
+    position: absolute;
+    right: 0px;
+    bottom: 0px;
+    width: 71px;
+    height: 25px;
+    line-height: 25px;
+    border-radius: 12px;
+    background-color: #ff4444;
+    color: #FFF;
+    text-align: center;
+}
+/* 风格四 */
+.goods_integral_4 .transverse .transverse_list .goods_item .goods_title{
+    line-height: 18px;
+    height: 36px;
+    font-size: 14px;
+    color: #333;
+    overflow: hidden;
+    text-overflow: ellipsis;
+    white-space: normal;
+    display: -webkit-box;
+    -webkit-box-orient: vertical;
+    -webkit-line-clamp: 2;
+}
+.goods_integral_4 .transverse .transverse_list .goods_item .goods_price{
+    display: block;
+}
+.goods_integral_4 .transverse .goods_price .present_price{
+    font-size: 13px;
+    font-weight: 600;
+    white-space: nowrap;
+    overflow: hidden;
+    text-overflow: ellipsis;
+}
+.goods_integral_4 .transverse .goods_price .original_price{
+    padding-left: 0px!important;
+}
+/****************************************** 通用商品组样式 ************************************************************/
+.goods_public_2 .goodslist-i-t{
+    width: 100%;
+}
+.goods_public_2 .goodslist-i-c-c2 .h2{
+    width: auto;
+    padding: 0 10px;
+}
+/****************************************** 活动商品组样式 ************************************************************/
+.goods_activity_1 .block .describe .title{
+    height: 25px!important;
+    line-height: 25px!important;
+    font-size: 16px!important;
+    -webkit-line-clamp: 1;
+}
+.goods_activity_1 .block .describe .shop{
+    margin-top: 0px!important;
+}
+.goods_activity_1 .block .describe .footer_info .price_title{
+    float: left;
+    color: #999;
+    font-size: 12px;
+    line-height: 35px;
+}
+.goods_activity_1 .block .describe .footer_info .price_icon{
+    float: left;
+    color: #FF4444;
+    font-size: 12px;
+    line-height: 35px;
+    margin-right: 1px;
+}
+.goods_activity_1 .block .describe .footer_info .sale_info{
+    height: 30px!important;
+}
+.goods_activity_1 .block .describe .footer_info .sale_info .price_info .price{
+    margin-right: 0px!important;
+}
+.goods_activity_1 .block .describe .footer_info .button{
+    margin-top: 0px!important;
+}
+.goods_activity_1 .block .describe .footer_info .cate{
+    margin: 5px 0px;
+    background-color: rgb(255, 235, 235);
+    color: rgb(255, 68, 68);
+    border-radius: 33px;
+    height: 20px;
+    line-height: 20px;
+    padding: 0px 11px;
+    float: left;
+}

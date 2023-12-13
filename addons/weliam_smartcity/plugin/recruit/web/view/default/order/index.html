@@ -1,0 +1,192 @@
+{php include wl_template('common/header');}
+<ul class="nav nav-tabs" id="myTab">
+    <li class="active"><a href="javascript:;">招聘列表</a></li>
+</ul>
+<div class="app-content">
+    <!--顶部操作-->
+    <div class="app-filter">
+        <div class="filter-list">
+            <form action="" method="get" class="form-horizontal" role="form" id="form1">
+                <input type="hidden" name="c" value="site" />
+                <input type="hidden" name="a" value="entry" />
+                <input type="hidden" name="m" value="{MODULE_NAME}" />
+                <input type="hidden" name="p" value="recruit" />
+                <input type="hidden" name="ac" value="recruitOrder" />
+                <input type="hidden" name="do" value="index" />
+                <input type="hidden" name="recruitment_type" value="{$recruitmentType}" />
+                <div class="form-group">
+                    <div class="col-sm-2 control-label">职位名称</div>
+                    <div class="col-sm-9">
+                        <input type="text" class="form-control" name="title" value="{$title}" placeholder="请输入职位名称...">
+                    </div>
+                </div>
+                <div class="form-group">
+                    <label class="col-sm-2 control-label">职位行业</label>
+                    <div class="col-sm-9">
+                        <div class="row row-fix js-address-selector">
+                            <div class="col-md-4">
+                                <select name="industry_pid" class="form-control">
+                                    <option value="0">全部</option>
+                                    {loop $industry $oneItem}
+                                        <option value="{$oneItem['id']}" {if $oneItem['id'] == $industryPid}selected="selected"{/if}>{$oneItem['title']}</option>
+                                    {/loop}
+                                </select>
+                            </div>
+                            <div class="col-md-4">
+                                <select name="industry_id" class="form-control">
+                                    <option value="0">全部</option>
+                                    {loop $subIndustry $subItem}
+                                        <option value="{$subItem['id']}" {if $subItem['id'] == $industryId}selected="selected"{/if}>{$subItem['title']}</option>
+                                    {/loop}
+                                </select>
+                            </div>
+                            <div class="col-md-4">
+                                <select name="position_id" class="form-control">
+                                    <option value="0">全部</option>
+                                    {loop $position $positionItem}
+                                        <option value="{$positionItem['id']}" {if $positionItem['id'] == $positionId}selected="selected"{/if}>{$positionItem['title']}</option>
+                                    {/loop}
+                                </select>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                <div class="form-group">
+                    <label class="col-sm-2 control-label">招聘类型</label>
+                    <div class="col-sm-9">
+                        <div class="btn-group">
+                            <a href="{php echo wl_filter_url('recruitment_type:0');}" class="btn {if $recruitmentType == 0}btn-primary{else}btn-default{/if}">全部</a>
+                            <a href="{php echo wl_filter_url('recruitment_type:1');}" class="btn {if $recruitmentType == 1}btn-primary{else}btn-default{/if}">个人招聘</a>
+                            <a href="{php echo wl_filter_url('recruitment_type:2');}" class="btn {if $recruitmentType == 2}btn-primary{else}btn-default{/if}">企业招聘</a>
+                        </div>
+                    </div>
+                </div>
+                <div class="form-group">
+                    <div class="col-sm-2 control-label"></div>
+                    <div class="col-sm-9">
+                        <button class="btn btn-primary" type="submit">搜索</button>
+                        <a href="{php echo web_url('recruit/recruitOrder/index')}" class="btn btn-danger">清除</a>
+                    </div>
+                </div>
+            </form>
+        </div>
+    </div>
+    <!--表格信息-->
+    <div class="app-table-list">
+        <!--列表信息-->
+        <div class="table-responsive order-list">
+            <table class="table table-hover">
+                <thead>
+                    <tr>
+                        <th class="text-center">订单号</th>
+                        <th class="text-center">发布方(<span class="text-primary">用户</span>/<span class="text-danger">企业</span>)</th>
+                        <th class="text-center">招聘类型</th>
+                        <th class="text-center">付费类型</th>
+                        <th class="text-center">职位名称</th>
+                        <th class="text-center">订单金额</th>
+                        <th class="text-center">支付方式</th>
+                        <th class="text-center">支付时间</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    {loop $list $key $val}
+                        <tr class="text-center">
+                            <td>{$val['orderno']}</td>
+                            <td>
+                                <div style="height: 50px;float: left">
+                                    <div style="width: 50px;height: 50px;float: left;">
+                                        <img src="{$val['release_logo']}" style="width: 100%;height: 100%"/>
+                                    </div>
+                                    <div class="{if $val['recruitment_type'] == 1}text-primary{else}text-danger{/if}" style="float:left;height: 50px;line-height: 25px;margin-left: 5px">
+                                        {$val['release_name']}
+                                    </divcl>
+                                </div>
+                            </td>
+                            <td>
+                                {if $val['recruitment_type'] == 1}
+                                    <label class="label label-success">个人招聘</label>
+                                {else}
+                                    <label class="label label-danger">企业招聘</label>
+                                {/if}
+                            </td>
+                            <td>
+                                {if $val['fightstatus'] == 2}
+                                    <label class="label label-primary">置顶</label>
+                                {else}
+                                    <label class="label label-inverse">发布</label>
+                                {/if}
+                            </td>
+                            <td>{$val['title']}</td>
+                            <td>{$val['price']}</td>
+                            <td>
+                                {if $val['status'] > 0 && $val['status'] != 5}
+                                    {if $val['paytype']==1}
+                                        <span> <i class="icow icow-yue text-warning" style="font-size: 17px;"></i><span>余额支付</span></span>
+                                    {elseif $val['paytype']==2}
+                                        <span> <i class="icow icow-weixinzhifu text-success" style="font-size: 17px"></i>微信支付</span>
+                                    {elseif $val['paytype']==3}
+                                        <span><i class="icow icow-zhifubaozhifu text-primary" style="font-size: 17px"></i>支付宝支付</span>
+                                    {else}
+                                        <label class='label label-danger'>未知方式</label>
+                                    {/if}
+                                {else}
+                                    <label class='label label-default'>未支付</label>
+                                {/if}
+                            </td>
+                            <td>{if $val['paytime'] > 0}{php echo date("Y-m-d H:i:s",$val['paytime']);}{/if}</td>
+                        </tr>
+                    {/loop}
+                </tbody>
+            </table>
+        </div>
+        <!--操作按钮 分页信息-->
+        <div class="app-table-foot clearfix">
+            <div class="pull-right">{$pager}</div>
+        </div>
+    </div>
+</div>
+<script>
+    //行业职位三级联动 —— 改变上级行业时重新生成子行业信息
+    $("[name='industry_pid']").on('change',function () {
+        let id = $(this).val();
+        let html = '<option value="0">全部</option>';
+        if(id > 0){
+            //选择了行业信息
+            $.post("{php echo web_url('recruit/recruitment/getSubIndustry');}",{id:id},function (res) {
+                if(res.errno == 1){
+                    $.each(res.data,function (k,v) {
+                        html += '<option value="'+v['id']+'">'+v['title']+'</option>';
+                    });
+                    $("[name='industry_id']").html(html).change();
+                }else{
+                    tip.alert(res.message)
+                }
+            },'json');
+        }else{
+            //选择了全部
+            $("[name='industry_id']").html(html).change();
+        }
+    });
+    //行业职位三级联动 —— 改变子行业时重新生成职位信息
+    $("[name='industry_id']").on('change',function () {
+        let id = $(this).val();
+        let html = '<option value="0">全部</option>';
+        if(id > 0){
+            //选择了行业信息
+            $.post("{php echo web_url('recruit/recruitment/getPosition');}",{id:id},function (res) {
+                if(res.errno == 1){
+                    $.each(res.data,function (k,v) {
+                        html += '<option value="'+v['id']+'">'+v['title']+'</option>';
+                    });
+                    $("[name='position_id']").html(html);
+                }else{
+                    tip.alert(res.message)
+                }
+            },'json');
+        }else{
+            //选择了全部
+            $("[name='position_id']").html(html);
+        }
+    });
+</script>
+{php include wl_template('common/footer');}

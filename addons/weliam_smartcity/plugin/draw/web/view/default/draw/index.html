@@ -1,0 +1,115 @@
+{php include wl_template('common/header');}
+<ul class="nav nav-tabs" id="myTab">
+    <li class="active"><a href="javascript:;">活动列表</a></li>
+</ul>
+<!-- 直播间信息列表 -->
+<div class="app-content">
+    <div class="app-filter">
+        <div class="filter-action">
+            <a href="{php echo web_url('draw/draw/add')}" class="btn btn-primary">添加活动</a>
+        </div>
+        <div class="filter-list">
+            <form action="" method="get" class="form-horizontal" role="form" id="form1">
+                <input type="hidden" name="c" value="site" />
+                <input type="hidden" name="a" value="entry" />
+                <input type="hidden" name="m" value="{MODULE_NAME}" />
+                <input type="hidden" name="p" value="draw" />
+                <input type="hidden" name="ac" value="draw" />
+                <input type="hidden" name="do" value="index" />
+                <div class="form-group">
+                    <div class="col-sm-2 control-label">活动名称</div>
+                    <div class="col-sm-9">
+                        <input type="text" class="form-control" name="title" value="{$title}" placeholder="请输入活动名称...">
+                    </div>
+                </div>
+                <div class="form-group">
+                    <label class="col-sm-2 control-label">活动类型</label>
+                    <div class="col-sm-9">
+                        <select name="type" class="form-control">
+                            <option value="0" {if $type == 0}selected{/if}>全部</option>
+                            <option value="1" {if $type == 1}selected{/if}>9宫格</option>
+                            <option value="2" {if $type == 2}selected{/if}>16宫格</option>
+                            <option value="2" {if $type == 3}selected{/if}>轮盘</option>
+                        </select>
+                    </div>
+                </div>
+                <div class="form-group">
+                    <label class="col-sm-2 control-label">状态</label>
+                    <div class="col-sm-9">
+                        <select name="status" class="form-control">
+                            <option value="0" {if $status == 0}selected{/if}>全部</option>
+                            <option value="1" {if $status == 1}selected{/if}>未开启</option>
+                            <option value="2" {if $status == 2}selected{/if}>使用中</option>
+                        </select>
+                    </div>
+                </div>
+                <div class="form-group">
+                    <div class="col-sm-2 control-label"></div>
+                    <div class="col-sm-9">
+                        <button class="btn btn-primary" type="submit">搜索</button>
+                        <a href="{php echo web_url('draw/draw/index')}" class="btn btn-danger">清除</a>
+                    </div>
+                </div>
+            </form>
+        </div>
+    </div>
+    <div class="app-table-list">
+        <div class="table-responsive order-list">
+            <table class="table table-hover">
+                <thead>
+                    <tr>
+                        <th class="text-center">活动主题</th>
+                        <th class="text-center">活动类型</th>
+                        <th class="text-center">状态</th>
+                        <th class="text-center">活动时间</th>
+                        <th class="text-center">创建时间</th>
+                        <th class="text-center">奖品数量</th>
+                        <th class="text-center">操作</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    {loop $list $item}
+                        <tr class="text-center">
+                            <td>{$item['title']}</td>
+                            <td>
+                                {if $item['type'] == 1}
+                                    <label class="label label-info">9宫格</label>
+                                {elseif $item['type'] == 2}
+                                    <label class="label label-warning">16宫格</label>
+                                {else}
+                                    <label class="label label-danger">轮盘</label>
+                                {/if}
+                            </td>
+                            <td>
+                                {if $item['status'] == 2}
+                                    <label class="label label-primary">使用中</label>
+                                {else}
+                                    <label class="label label-danger">未开启</label>
+                                {/if}
+                            </td>
+                            <td>
+                                开始时间：{$item['start_time']}<br />
+                                结束时间：{$item['end_time']}
+                            </td>
+                            <td>{$item['create_time']}</td>
+                            <td>{$item['prize']}</td>
+                            <td>
+                                <a class="btn btn-info btn-sm js-clip" data-url="{php echo h5_url('pages/subPages2/drawGame/drawGame',['id'=>$item['id']]);}" href="javascript:;">复制链接</a>
+                                <a class="btn btn-sm btn-warning" href="{php echo web_url('draw/draw/edit',['id'=>$item['id']]);}">编辑</a>
+                                {if $item['usetype'] > 0}
+                                <a class="btn btn-sm btn-success" href="{php echo web_url('draw/draw/codelist',['id'=>$item['id']]);}">抽奖码</a>
+                                {/if}
+                                <a class="btn btn-sm btn-danger" data-toggle="ajaxRemove" href="{php echo web_url('draw/draw/delete',['id'=>$item['id']]);}" data-confirm="确认删除此抽奖活动？">删除</a>
+                            </td>
+                        </tr>
+                    {/loop}
+                </tbody>
+            </table>
+        </div>
+        <div class="app-table-foot clearfix">
+            <div class="pull-left"></div>
+            <div class="pull-right">{$pager}</div>
+        </div>
+    </div>
+</div>
+{php include wl_template('common/footer');}

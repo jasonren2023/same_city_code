@@ -1,0 +1,102 @@
+{php include wl_template('common/header');}
+<ul class="nav nav-tabs" id="myTab">
+    <li class="active"><a href="javascript:;">{if Customized::init('distributionText') > 0}共享股东{else}分销商{/if}列表</a></li>
+</ul>
+<div class="app-content">
+
+    <div class="app-form">
+        <form action="" method="post" class="form-horizontal form" id="form">
+            <div class="panel panel-default">
+                <div class="panel-heading">添加团长</div>
+                <div class="panel-body">
+                    <div class="form-group">
+                        <label class="col-sm-2 control-label"><span style='color:red'>*</span>选择用户</label>
+                        <div class="col-sm-9">
+                            <input type='hidden' id='memberid' name='memberid' value="" />
+                            <div class='input-group'>
+                                <input type="text" name="messagesaler" maxlength="30" value="{if !empty($messagesaler)}{$messagesaler['nickname']}{/if}" id="messagesaler" class="form-control" readonly />
+                                <div class='input-group-btn'>
+                                    <button class="btn btn-default" type="button" onclick="popwin = $('#modal-module-menus2').modal();">选择用户</button>
+                                </div>
+                            </div>
+                            <div class="input-group " style="margin-top:.5em;">
+                                <input type="hidden" value="{$merchant['id']}" name="goods[merchantid]" id="sidmerchant">
+                                <img src="{if empty($messagesaler['avatar'])}../web/resource/images/nopic-107.jpg{else}{php echo tomedia($messagesaler['avatar'])}{/if}" class="img-responsive img-thumbnail" width="150" id="imgmerchant" />
+                                <em class="close" style="position:absolute; top: 0px; right: -14px;" title="删除" onclick="remove_merchant(this)">×</em>
+                            </div>
+                            <div id="modal-module-menus2"  class="modal fade" tabindex="-1">
+                                <div class="modal-dialog" style='width: 920px;'>
+                                    <div class="modal-content">
+                                        <div class="modal-header"><button aria-hidden="true" data-dismiss="modal" class="close two" type="button">×</button><h3>选择用户</h3></div>
+                                        <div class="modal-body" >
+                                            <div class="row">
+                                                <div class="input-group">
+                                                    <input type="text" class="form-control" name="keyword" value="" id="search-kwd2" placeholder="请输入粉丝昵称/mid/手机号" />
+                                                    <span class='input-group-btn'><button type="button" class="btn btn-default" onclick="search_members();">搜索</button></span>
+                                                </div>
+                                            </div>
+                                            <div id="module-menus2" style="padding-top:5px;"></div>
+                                        </div>
+                                        <div class="modal-footer"><a href="#" class="btn btn-default" data-dismiss="modal" aria-hidden="true" id="c2">关闭</a></div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="form-group">
+                        <label class="col-sm-2 control-label">团长等级</label>
+                        <div class="col-md-7">
+                            <select name="levelid" class="form-control select2 col-sm-7 col-xs-6" style="width: 100%;">
+                                {loop $dislevels $level}
+                                <option value="{$level['id']}">{$level['name']}</option>
+                                {/loop}
+                            </select>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <div class="form-group">
+                <label class="col-sm-2 control-label"></label>
+                <div class="col-sm-9">
+                    <input type="submit" name="submit" value="提交" class="btn btn-primary min-width" />
+                    <input type="hidden" name="token" value="{$_W['token']}" />
+                </div>
+            </div>
+        </form>
+    </div>
+
+</div>
+
+<script>
+    function search_members(){
+
+        if( $.trim($('#search-kwd2').val())==''){
+            tip.msgbox.err('请输入搜索关键词');
+            return;
+        }
+
+        $("#module-menus2").html("正在搜索....")
+        $.get("{php echo web_url('distribution/dissysbase/searchmember',['disflag' => 1])}", {
+            keyword: $.trim($('#search-kwd2').val())
+        }, function(dat){
+            $('#module-menus2').html(dat);
+        });
+    }
+
+    function select_member(o,type) {
+        $("#memberid").val(o.id);
+        $("#messagesaler").val(o.nickname);
+        $("#imgmerchant").attr('src', o.avatar);
+        $(".two").click();
+    }
+
+    function remove_merchant(obj){
+        $('#messageopenid').val('');
+        $('#messagesaler').val('');
+        $('#imgmerchant').attr("src",'');
+    }
+</script>
+
+
+
+{php include wl_template('common/footer');}

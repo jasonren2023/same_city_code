@@ -1,0 +1,27 @@
+<?xml version="1.0" encoding="utf-8"?>
+<manifest>
+	<application>
+		<name><![CDATA[微信视频号]]></name>
+		<identifie><![CDATA[wxchannels]]></identifie>
+		<version><![CDATA[1.0.0]]></version>
+		<type><![CDATA[channel]]></type>
+		<description><![CDATA[微信视频号，对接自定义交易组件；视频带货，引爆流量。]]></description>
+		<author><![CDATA[微连科技]]></author>
+		<url><![CDATA[http://www.weliam.cn/]]></url>
+	</application>
+	<setting>
+		<agent embed="false" />
+		<system embed="true" />
+		<task embed="true" />
+	</setting>
+	<agentmenu>
+	</agentmenu>
+	<systemmenu>
+		<menu title="小程序" font="fa-inbox">
+			<entry title="商品列表" ac="channelweb" do="goodslist" iscover="true" />
+			<entry title="订单列表" ac="channelweb" do="orderlist" />
+			<entry title="类目列表" ac="channelweb" do="category"  />
+			<entry title="组件接入" ac="channelsapply" do="applyset"  />
+		</menu>
+	</systemmenu>
+</manifest>

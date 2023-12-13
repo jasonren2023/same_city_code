@@ -1,0 +1,90 @@
+{php include wl_template('common/header');}
+<ul class="nav nav-tabs">
+    <li class="active"><a href="{php echo web_url('taxipay/taxipay/adv_edit', array('id' => $item['id']))}">编辑广告</a></li>
+</ul>
+<div class="app-content">
+    <div class="app-form">
+        <form action="" method="post" class="form-horizontal form form-validate">
+            <div class="form-group-title">广告信息</div>
+            <div class="form-group">
+                <label class="col-sm-2 control-label">排序</label>
+                <div class="col-sm-9">
+                    <input type="text" name="item[sort]" class="form-control" value="{$item['sort']}" placeholder="排序">
+                    <div class="help-block">排序由大到小，数值越大，顺序越靠前</div>
+                </div>
+            </div>
+            <div class="form-group">
+                <label class="col-sm-2 control-label"><span class="form-must">*</span>广告名称</label>
+                <div class="col-sm-9">
+                    <input type="text" name="item[title]" class="form-control" value="{$item['title']}" placeholder="请输入广告名称" required>
+                    <div class="help-block">前端不展示，仅用于后台显示</div>
+                </div>
+            </div>
+            <div class="form-group">
+                <label class="col-sm-2 control-label"><span class="form-must">*</span>广告图片</label>
+                <div class="col-sm-9">
+                    {php echo attachment_select('item[thumb]', $item['thumb'])}
+                    <div class="help-block">推荐尺寸700X200</div>
+                </div>
+            </div>
+            <div class="form-group">
+                <label class="col-sm-2 control-label"><span class="form-must">*</span>跳转链接</label>
+                <div class="col-sm-9">
+                    <div class="input-group">
+                        <input type="text" name="item[link]" class="form-control" value="{$item['link']}" readonly="readonly" required id="advlink">
+                        <span data-input="#advlink" data-toggle="selectUrl" class="input-group-addon btn btn-default">选择链接</span>
+                    </div>
+                </div>
+            </div>
+            <div class="form-group">
+                <label class="col-sm-2 control-label"><span class="form-must">*</span>广告金额</label>
+                <div class="col-sm-9">
+                    <div class="input-group">
+                        <input type="text" class="form-control" name="item[cost]" value="{$item['cost']}" placeholder="请输入广告金额" number="true">
+                        <span class="input-group-addon">元</span>
+                    </div>
+                    <div class="help-block">本条广告总的投放金额</div>
+                </div>
+            </div>
+            <div class="form-group">
+                <label class="col-sm-2 control-label"><span class="form-must">*</span>每日单人次</label>
+                <div class="col-sm-9">
+                    <div class="input-group">
+                        <input type="text" class="form-control" name="item[cost_one]" value="{$item['cost_one']}" placeholder="请输入每日单人次收费金额" number="true" required>
+                        <span class="input-group-addon">元</span>
+                    </div>
+                </div>
+            </div>
+            <div class="form-group">
+                <label class="col-sm-2 control-label"><span class="form-must">*</span>投放公司</label>
+                <div class="col-sm-9">
+                    <select name="companys[]" class="form-control select2" multiple="multiple">
+                        {loop $companys $company}
+                        <option value="{$company['id']}" {if in_array($company['id'], $companyids)}selected{/if}>{$company['name']}</option>
+                        {/loop}
+                    </select>
+                </div>
+            </div>
+            <div class="form-group">
+                <label class="col-sm-2 control-label">状态</label>
+                <div class="col-sm-9">
+                    <label class="radio-inline">
+                        <input type="radio" name="item[status]" value="0" {if empty($item['status'])}checked{/if}>禁用
+                    </label>
+                    <label class="radio-inline">
+                        <input type="radio" name="item[status]" value="1" {if !empty($item['status'])}checked{/if}>启用
+                    </label>
+                </div>
+            </div>
+            <div class="form-group">
+                <label class="col-sm-2 control-label"></label>
+                <div class="col-sm-9">
+                    <input type="submit" name="submit" value="提交" class="btn btn-primary min-width" />
+                    <input type="hidden" name="token" value="{$_W['token']}" />
+                    <input type="hidden" name="id" value="{$item['id']}" />
+                </div>
+            </div>
+        </form>
+    </div>
+</div>
+{php include wl_template('common/footer');}

@@ -1,0 +1,47 @@
+{php include wl_template('common/header');}
+<style>
+	.weliam-auth .alert-warning{background: #fff7cc;border: 1px solid #feb;color: #333;}
+	.weliam-auth .alert-warning a{color: #3296fa;}
+	.weliam-auth .auth-panel{background: #f7faff;-webkit-box-shadow:none;box-shadow: none;border: none;}
+	.weliam-auth .auth-panel .auth-heading{padding: 15px!important;border-radius: 4px 4px 0 0;color: #ffffff;background-color: #3296fa;}
+	.weliam-auth .auth-panel .auth-body{padding: 40px 50px 0;}
+	.weliam-auth .auth-panel .auth-body .col-md-4{margin-bottom: 40px;font-weight: bold;}
+	.weliam-auth .auth-panel .auth-body .col-md-4 span{margin-left: 15px;font-weight: normal;}
+</style>
+{if empty($_GPC['lct'])}
+<ul class="nav nav-tabs">
+	<li class="active"><a href="{php echo web_url('cloud/auth');}">系统授权</a></li>
+</ul>
+{/if}
+<div class="app-content">
+	<div class="app-form">
+		<div class="weliam-auth">
+			<!--<div class="alert alert-warning" role="alert">官方网站：<a href='https://www.weliam.cn' target='_blank'>https://www.weliam.cn</a>，每个站点享受一年免费更新服务，更新时间到期不影响程序使用。</div>-->
+			<div class="auth-panel">
+				<div class="auth-heading">授权信息</div>
+				<div class="auth-body">
+					{if empty($auth)}
+
+					{else}
+					<div class="row">
+						<div class="col-md-4">产品名称：<span>{$auth['name']}</span></div>
+						<div class="col-md-4">平台数量：<span>{$auth['number']}</span></div>
+						<div class="col-md-4">最新版本：<span>{$auth['version']}</span></div>
+					</div>
+					<div class="row">
+						<div class="col-md-4">授权域名：<span>{$auth['siteurl']}</span></div>
+						<div class="col-md-4">授权IP：<span>{$auth['ip']}</span></div>
+						<div class="col-md-4">授权码：<span>{$auth['code']}</span></div>
+					</div>
+					<div class="row">
+						<div class="col-md-4">授权状态：<span>{$auth['status']}</span></div>
+						<div class="col-md-4">到期时间：<span>{$auth['endtime']}</span></div>
+						<div class="col-md-4">站点ID：<span>{$auth['siteid']}</span></div>
+					</div>
+					{/if}
+				</div>
+			</div>
+		</div>
+	</div>
+</div>
+{php include wl_template('common/footer');}

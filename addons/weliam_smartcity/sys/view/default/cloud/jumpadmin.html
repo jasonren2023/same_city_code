@@ -1,0 +1,75 @@
+{php include wl_template('common/header');}
+{if empty($_GPC['lct'])}
+<ul class="nav nav-tabs" id="myTab">
+    <li class="active"><a href="#tab_basic">域名跳转</a></li>
+</ul>
+{/if}
+<div class="app-content">
+    <div class="app-form">
+        <form action="" method="post" class="form-horizontal form" id="setting-form">
+            <div class="panel panel-default">
+                <div class="panel-heading">域名跳转</div>
+                <div class="panel-body">
+                    <div class="form-group">
+                        <label class="col-sm-2 control-label">入口域名</label>
+                        <div class="col-sm-9">
+                            <div id="datas">
+                                {if empty($settings['targetDmain'])}
+                                <div class="input-group data-item" style="margin-top: 10px;">
+                                    <input type="text" name="targetDmain[]" class="form-control" value="">
+                                    <span onclick="removes(this)" class="input-group-addon btn btn-default data-item-delete"><i class="fa fa-remove"></i> 删除</span>
+                                </div>
+                                {else}
+                                {loop $settings['targetDmain'] $domain}
+                                <div class="input-group data-item" style="margin-top: 10px;">
+                                    <input type="text" name="targetDmain[]" class="form-control" value="{$domain}">
+                                    <span onclick="removes(this)" class="input-group-addon btn btn-default data-item-delete"><i class="fa fa-remove"></i> 删除</span>
+                                </div>
+                                {/loop}
+                                {/if}
+                            </div>
+                            <span class="help-block">填入需要被跳转的旧域名,以"/"结尾,如“https://www.baidu.com/”。</span>
+                        </div>
+                    </div>
+                    <div class="form-group">
+                        <label class="col-sm-2 control-label"></label>
+                        <div class="col-sm-9">
+                            <a class="btn btn-info btn-add-type" href="javascript:;" onclick="addType();">
+                                <i class="fa fa-plus" title=""></i>增加一个入口域名
+                            </a>
+                        </div>
+                    </div>
+                    <div class="form-group">
+                        <label class="col-sm-2 control-label">目标域名</label>
+                        <div class="col-sm-9">
+                            <input type="text" name="endDmain" class="form-control" value="{$settings['endDmain']}">
+                            <span class="help-block">填入需要跳入的域名,以"/"结尾,如“https://www.baidu.com/”。</span>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <div class="form-group">
+                <label class="col-sm-2 control-label"></label>
+                <div class="col-sm-9">
+                    <input type="submit" name="submit" value="提交" class="btn btn-primary min-width" />
+                    <input type="hidden" name="token" value="{$_W['token']}" />
+                </div>
+            </div>
+        </form>
+    </div>
+</div>
+<script>
+    function addType() {
+        $(".btn-add-type").button("loading");
+        var html = " <div class='input-group data-item' style='margin-top: 10px;'>"+
+                "<input type='text' name='targetDmain[]' class='form-control' value=''>"+
+                "<span onclick='removes(this)' class='input-group-addon btn btn-default data-item-delete'><i class='fa fa-remove'></i> 删除</span>"+
+            "</div>";
+        $("#datas").append(html);
+        $(".btn-add-type").button("reset");
+    }
+    function removes(asd){
+        $(asd).closest('.data-item').remove();
+    }
+</script>
+{php include wl_template('common/footer');}

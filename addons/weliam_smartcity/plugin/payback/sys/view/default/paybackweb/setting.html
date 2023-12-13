@@ -1,0 +1,80 @@
+{php include wl_template('common/header');}
+<div class="app-content">
+    <ul class="nav nav-tabs" id="myTab">
+        <li class="active"><a href="#tab_basic">基本设置</a></li>
+    </ul>
+    <div class="app-form">
+        <form action="" method="post" class="form-horizontal form form-validate">
+            <div class="panel panel-default">
+                <div class="panel-heading">基本设置</div>
+                <div class="panel-body">
+                    <div class="tab-content">
+                        <div class="tab-pane active" id="tab_basic">
+                            <div class="form-group">
+                                <label class="col-sm-2 control-label">银行卡返现</label>
+                                <div class="col-sm-9">
+                                    <label class="radio-inline">
+                                        <input type="radio" value="1" onclick="$('#bankdiv').show()" name="data[status]" {if $set['status']==1} checked {/if}>启用
+                                    </label>
+                                    <label class="radio-inline">
+                                        <input type="radio" value="0" onclick="$('#bankdiv').hide()" name="data[status]" {if $set['status']!=1} checked {/if}>禁用
+                                    </label>
+                                </div>
+                            </div>
+                            <div id="bankdiv"  {if $set['status'] != 1} style="display: none;" {/if} >
+                                <div class="form-group" >
+                                    <label class="col-sm-2 control-label">银行卡设置</label>
+                                    <div class="col-sm-9">
+                                        <div id="datas">
+                                            {if empty($banklist)}
+                                            {php include wl_template('paybackweb/bankback');}
+                                            {else}
+                                            {loop $banklist $ba}
+                                            {php include wl_template('paybackweb/bankback');}
+                                            {/loop}
+                                            {/if}
+                                        </div>
+                                        <span class="help-block">返现比例最多保留两位小数,请勿重复设置同一银行</span>
+                                    </div>
+                                </div>
+                                <div class="form-group">
+                                    <label class="col-sm-2 control-label"></label>
+                                    <div class="col-sm-9">
+                                        <a class="btn btn-info btn-add-type" href="javascript:;" onclick="addType();">
+                                            <i class="fa fa-plus" title=""></i>增加一家返现银行
+                                        </a>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <div class="form-group">
+                <label class="col-sm-2 control-label"></label>
+                <div class="col-sm-9">
+                    <input type="submit" name="submit" value="提交" class="btn btn-primary min-width" />
+                    <input type="hidden" name="token" value="{$_W['token']}" />
+                </div>
+            </div>
+        </form>
+    </div>
+</div>
+<script>
+    function removes(asd){
+        $(asd).closest('.data-item').remove();
+    }
+    var kw = 1;
+    function addType() {
+        $(".btn-add-type").button("loading");
+        $.ajax({
+            url: "{php echo web_url('payback/payback/bankback')}&kw="+kw,
+            cache: false
+        }).done(function (html) {
+            $(".btn-add-type").button("reset");
+            $("#datas").append(html);
+        });
+        kw++;
+    }
+</script>
+{php include wl_template('common/footer');}

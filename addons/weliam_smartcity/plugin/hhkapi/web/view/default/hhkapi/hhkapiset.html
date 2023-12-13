@@ -1,0 +1,49 @@
+{php include wl_template('common/header');}
+<ul class="nav nav-tabs" id="myTab">
+    <li class="active"><a href="#tab_basic">基本设置</a></li>
+</ul>
+<div class="app-content">
+    <div class="app-form">
+        <form action="" method="post" class="form-horizontal form form-validate">
+            <div class="panel panel-default">
+                <div class="panel-heading">基本设置</div>
+                <div class="panel-body">
+                    <div class="tab-content">
+                        <div class="tab-pane active" id="tab_basic">
+                            <div class="form-group">
+                                <label class="col-sm-2 control-label">订单金额</label>
+                                <div class="col-sm-9">
+                                    <input type="number" name="base[lowmoney]" class="form-control" value="{$base['lowmoney']}" />
+                                    <span class="help-block">支付金额大于设置金额的订单才会赠送会员资格，不填或填0即所有订单都赠送。</span>
+                                </div>
+                            </div>
+                            <div class="form-group">
+                                <label class="col-sm-2 control-label">赠送会员类型</label>
+                                <div class="col-sm-9">
+                                    <select name="base[viptypeid]" class="form-control chosen-select">
+                                        {loop $viptypelist $key $val}
+                                        <option value="{$val['id']}" {if $val['id'] == $base['viptypeid']}selected{/if}>{$val['name']}</option>
+                                        {/loop}
+                                    </select>
+                                    <span class="help-block">选择后会赠送对应开卡类型的会员和时间。</span>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <div class="form-group">
+                <label class="col-sm-2 control-label"></label>
+                <div class="col-sm-9">
+                    <input type="submit" name="submit" value="提交" class="btn btn-primary min-width" />
+                    <input type="hidden" name="token" value="{$_W['token']}" />
+                </div>
+            </div>
+        </form>
+    </div>
+</div>
+
+
+
+
+{php include wl_template('common/footer');}

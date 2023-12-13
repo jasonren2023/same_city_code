@@ -1,0 +1,135 @@
+{php include wl_template('common/header');}
+<ul class="nav nav-tabs">
+	<li  class="active" ><a href="#">商户列表</a></li>
+</ul>
+<div class="app-content">
+	<div class="app-table-list">
+		<div class="table-responsive">
+			<table class="table table-hover">
+				<thead>
+					<tr>
+						<th class="text-center" width="20%">商户名称/用户昵称</th>
+						<th class="text-center" width="15%">联系人</th>
+						{if !is_agent()}
+						<th class="text-center" width="10%">所属代理</th>
+						{/if}
+						<th class="text-center" width="20%">申请时间</th>
+						<th class="text-center" width="10%">申请状态</th>
+						<th class="text-center" width="35%">操作</th>
+					</tr>
+				</thead>
+				<tbody >
+					{loop $registers $regiseter}
+					<tr class="text-center">
+						<td>
+							{$regiseter['storedata']['storename']}
+							<br>
+							<label class="label label-default label-info">{$regiseter['member']['nickname']}</label>
+						</td>
+						<td>
+							{$regiseter['name']}
+							<br>
+							<label class="label label-default label-info">{$regiseter['mobile']}</label>
+						</td>
+						{if !is_agent()}
+						<td>{$regiseter['agentname']}</td>
+						{/if}
+						<td>
+							{php echo date('Y年m月d日',$regiseter['createtime'])}
+							<br>
+							{php echo date('H时i分',$regiseter['createtime'])}
+						</td>
+						<td>
+							{if $regiseter['storedata']['status'] == 0}
+								<label class="label label-default">未支付</label>
+							{elseif $regiseter['status']==1}
+								<label class="label label-info">待审核</label>
+							{elseif $regiseter['status']==0 || $regiseter['status']==3}
+								<label class="label label-warning">已驳回</label>
+							{/if}
+						</td>
+						<td>
+							<a href="{php echo web_url('store/merchant/edit',array('checkflag'=>'1','id'=>$regiseter['storedata']['id'],'is_jurisdiction'=>1))}" class="btn btn-info btn-sm" title="删除">
+								查看
+							</a>
+							-
+							{if $regiseter['storedata']['status'] == 0}
+								<!-- 未支付的审核操作 -->
+								<a href="javascript:;" class="btn btn-warning btn-sm" onclick="ontPayPass({$regiseter['storedata']['id']},{$regiseter['id']})">开通</a> -
+							{/if}
+							{if $regiseter['status']==1 && $regiseter['storedata']['status'] != 0}
+								<!--已支付操作-->
+							<a href="javascript:passById({$regiseter['storedata']['id']},{$regiseter['id']});"class="btn btn-primary btn-sm" data-toggle="tooltip" data-placement="top" title="通过">
+								通过
+							</a>
+							-
+							<a href="#" class="btn btn-danger btn-sm" data-toggle="modal" data-target="#modal-reject{$regiseter['id']}" data-placement="top" title="驳回">
+								驳回
+							</a>
+							-
+							{/if}
+							<a href="{php echo web_url('store/storeApply/edit',array('op'=>'del','id'=>$regiseter['storedata']['id'],'uid'=>$regiseter['id']))}" class="btn btn-default btn-sm" title="删除">
+								删除
+							</a>
+						</td>
+					</tr>
+					<div id="modal-reject{$regiseter['id']}" class="modal fade" tabindex="-1" role="dialog" aria-hidden="true" style="margin:0px auto;">
+						<div class="modal-dialog">
+							<div class="modal-content">
+								<div class="modal-header">
+									<button aria-hidden="true" data-dismiss="modal" class="close" type="button">×</button>
+									<h3>驳回原因</h3>
+								</div>
+								<div class="modal-body">
+									<textarea name="rejectCommon" cols="50" id="reject{$regiseter['id']}" class="form-control" value="" style="margin: 0px -1px 0px 0px; height: 233px; width: 570px;"></textarea>
+								</div>
+								<div class="modal-footer">
+									<button class="btn btn-primary span2" onclick="rejectById({$regiseter['storedata']['id']},{$regiseter['id']})">保存</button>
+									<a href="#" class="btn btn-default" data-dismiss="modal" aria-hidden="true">关闭</a>
+								</div>
+							</div>
+						</div>
+					</div>
+					{/loop}
+				</tbody>
+			</table>
+		</div>
+		<div class="app-table-foot clearfix">
+			<div class="pull-left">
+
+			</div>
+			<div class="pull-right">
+				{$pager}
+			</div>
+		</div>
+	</div>
+</div>
+<script>
+	//驳回申请
+	function rejectById(id,uid){
+		var rejectcomm = $('#reject'+uid).val();
+		if(rejectcomm==''){
+			layer.msg('请填写驳回原因', {icon: 5});
+			return false;
+		}
+		location.href = "{php echo web_url('store/storeApply/edit')}&id="+id+"&uid="+uid+"&reject="+rejectcomm+"&op=reject";
+	}
+	//已支付 - 通过申请
+	function passById(id,uid){
+		tip.confirm('确认通过',function () {
+			location.href = "{php echo web_url('store/storeApply/edit')}&id="+id+"&uid="+uid+"&op=pass";
+		});
+	}
+	/**
+	 * 未支付申请审核操作
+	 * @param id
+	 * @param uid
+	 */
+	function ontPayPass(id,uid) {
+		tip.confirm('当前商户暂未支付，是否确定手动开通商户入驻！',function () {
+			location.href = "{php echo web_url('store/storeApply/edit')}&id="+id+"&uid="+uid+"&op=pass";
+		});
+	}
+
+</script>
+{php include wl_template('common/footer');}

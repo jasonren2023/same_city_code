@@ -1,0 +1,279 @@
+{php include wl_template('common/header');}
+<ul class="nav nav-tabs" id="myTab">
+	<li class="active"><a href="#tab_basic">基本设置</a></li>
+</ul>
+<div class="app-content">
+	<div class="app-form">
+		<form action="" method="post" class="form-horizontal form form-validate">
+			<div class="panel panel-default">
+				<div class="panel-heading">基础信息设置</div>
+				<div class="panel-body">
+					<div class="form-group">
+						<label class="col-sm-2 control-label">系统名称<span class="must-fill">*</span></label>
+						<div class="col-sm-9">
+							<input type="text" name="shop[name]" required placeholder="请输入系统名称" autocomplete="off" class="form-control" value="{$settings['name']}">
+						</div>
+					</div>
+					<div class="form-group">
+						<label class="col-sm-2 control-label">LOGO</label>
+						<div class="col-sm-9">
+							{php echo attachment_select('shop[logo]', $settings['logo'])}
+							<span class="help-block">建议图片大小200*200</span>
+						</div>
+					</div>
+					<div class="form-group">
+						<label class="col-sm-2 control-label">加载图片</label>
+						<div class="col-sm-9">
+							{php echo attachment_select('shop[loading]', $settings['loading'])}
+							<span class="help-block">建议图片大小100*100</span>
+						</div>
+					</div>
+					<div class="form-group">
+						<label class="col-sm-2 control-label">系统版权<span class="must-fill">*</span></label>
+						<div class="col-sm-9">
+							<input type="text" name="shop[copyright]" required  placeholder="请输入系统版权" autocomplete="off" class="form-control" value="{$settings['copyright']}">
+						</div>
+					</div>
+                    <div class="form-group">
+                        <label class="col-sm-2 control-label">平台联系电话<span class="must-fill">*</span></label>
+                        <div class="col-sm-9">
+                            <input type="text" name="shop[phone]" required  placeholder="请输入平台联系电话" autocomplete="off" class="form-control" value="{$settings['phone']}">
+                        </div>
+                    </div>
+					<div class="form-group">
+						<label class="col-sm-2 control-label">IOS虚拟支付功能</label>
+						<div class="col-sm-9">
+							<label class="radio-inline">
+								<input type="radio" class="form-control" name="shop[payclose]" value="0" {if $settings['payclose'] == 0}checked="checked"{/if}> 启用
+							</label>
+							<label class="radio-inline">
+								<input type="radio" class="form-control" name="shop[payclose]" value="1" {if $settings['payclose'] == 1}checked="checked"{/if}> 关闭
+							</label>
+							<span class="help-block">由于微信IOS端不再支持虚拟商品支付，关闭支付功能后，IOS用户不能购买续费一卡通,付费发布掌上信息。</span>
+						</div>
+					</div>
+					<div class="form-group">
+						<label class="col-sm-2 control-label">热门搜索</label>
+						<div class="col-sm-9">
+							<input type="text" name="shop[shout]" class="form-control" value="{$settings['shout']}">
+							<span class="help-block">每个推荐以英文逗号隔开，参考形式：美食,火锅,串串,特色小吃,嘻嘻哈哈</span>
+						</div>
+					</div>
+					<div class="form-group">
+						<label class="col-sm-2 control-label">搜索框背景色</label>
+						<div class="col-sm-9">
+							<div class="input-group">
+								<span class="input-group-addon">外框颜色</span>
+								<input type="color" class="form-control" name="shop[serbgw]" value="{$settings['serbgw']}" >
+								<span class="input-group-addon">内框颜色</span>
+								<input type="color" class="form-control" name="shop[serbgn]" value="{$settings['serbgn']}" >
+							</div>
+							<span class="help-block">设置搜索页面搜索框背景颜色</span>
+						</div>
+					</div>
+					<div class="form-group">
+						<label class="col-sm-2 control-label">商品购买弹幕</label>
+						<div class="col-sm-9">
+							<label class="radio-inline">
+								<input type="radio"  name="shop[goodBarrage]" value="0" {if intval($settings['goodBarrage']) == 0 || empty($settings['goodBarrage'])}checked="checked"{/if}>开启
+							</label>
+							<label class="radio radio-success radio-inline">
+								<input type="radio"  name="shop[goodBarrage]"  value="1" {if intval($settings['goodBarrage']) == 1}checked="checked"{/if}>关闭
+							</label>
+							<span class="help-block">关闭后商品相亲页面一卡通首页不会显示最近用户购买记录。</span>
+						</div>
+					</div>
+					<div class="form-group">
+						<label class="col-sm-2 control-label">推荐商品</label>
+						<div class="col-sm-9">
+							<label class="radio-inline">
+								<input type="radio"  name="shop[recommendGoods]" onclick="$('#recommendType').removeClass('hide')" value="0" {if intval($settings['recommendGoods']) == 0 || empty($settings['recommendGoods'])}checked="checked"{/if}>开启
+							</label>
+							<label class="radio radio-success radio-inline">
+								<input type="radio"  name="shop[recommendGoods]" onclick="$('#recommendType').addClass('hide')" value="1" {if intval($settings['recommendGoods']) == 1}checked="checked"{/if}>关闭
+							</label>
+							<span class="help-block">关闭后所有页面不会显示推荐商品</span>
+						</div>
+					</div>
+					<div class="form-group {if intval($settings['recommendGoods']) == 1}hide{/if}" id="recommendType">
+						<label class="col-sm-2 control-label">推荐方式</label>
+						<div class="col-sm-9">
+							<label class="radio-inline">
+								<input type="radio"  name="shop[recommend_type]" value="0" {if intval($settings['recommend_type']) == 0 || !$settings['recommend_type']}checked="checked"{/if}> 同商家同类型
+							</label>
+							<label class="radio radio-success radio-inline">
+								<input type="radio"  name="shop[recommend_type]" value="1" {if intval($settings['recommend_type']) == 1}checked="checked"{/if}> 同商家
+							</label>
+							<label class="radio radio-success radio-inline">
+								<input type="radio"  name="shop[recommend_type]" value="2" {if intval($settings['recommend_type']) == 2}checked="checked"{/if}> 同类型
+							</label>
+							<label class="radio radio-success radio-inline">
+								<input type="radio"  name="shop[recommend_type]" value="3" {if intval($settings['recommend_type']) == 3}checked="checked"{/if}> 随机
+							</label>
+							<span class="help-block recommendTypeHelp recommendType0 {if intval($settings['recommend_type']) > 0}hide{/if}">在同一商家同一类型的所有商品中进行随机选择</span>
+							<span class="help-block recommendTypeHelp recommendType1 {if intval($settings['recommend_type']) != 1}hide{/if}">在同一商家的所有商品中进行随机选择</span>
+							<span class="help-block recommendTypeHelp recommendType2 {if intval($settings['recommend_type']) != 2}hide{/if}">在同一类型的所有商品中进行随机选择</span>
+							<span class="help-block recommendTypeHelp recommendType3 {if intval($settings['recommend_type']) != 3}hide{/if}">在所有商品中进行随机选择</span>
+						</div>
+					</div>
+					<div class="form-group">
+						<label class="col-sm-2 control-label">商品页轮播图比例</label>
+						<div class="col-sm-9">
+							<div class="input-group">
+								<span class="input-group-addon">宽</span>
+								<input type="number" name="shop[width]" min="0" class="form-control" value="{$settings['width']}" />
+								<span class="input-group-addon">px，高</span>
+								<input type="number" name="shop[height]" min="0"  class="form-control" value="{$settings['height']}" />
+								<span class="input-group-addon">px</span>
+							</div>
+							<span class="help-block">设置的宽高不为实机演示的宽高，图片实机宽度为实机屏幕宽度，高度则以设置比例计算，不填即为默认的750X560。</span>
+						</div>
+					</div>
+					<div class="form-group">
+						<label class="col-sm-2 control-label">列表页轮播图比例</label>
+						<div class="col-sm-9">
+							<div class="input-group">
+								<span class="input-group-addon">宽</span>
+								<input type="number" name="shop[listwidth]" min="0" class="form-control" value="{$settings['listwidth']}" />
+								<span class="input-group-addon">px，高</span>
+								<input type="number" name="shop[listheight]" min="0"  class="form-control" value="{$settings['listheight']}" />
+								<span class="input-group-addon">px</span>
+							</div>
+							<span class="help-block">设置的宽高不为实机演示的宽高，图片实机宽度为实机屏幕宽度，高度则以设置比例计算，不填即为默认的640X300。</span>
+						</div>
+					</div>
+					<div class="form-group">
+						<label class="col-sm-2 control-label">版权文本</label>
+						<div class="col-sm-9">
+							<div id="copytext">
+								{if empty($settings['copytext'])}
+									{php include wl_template('setting/copytext');}
+								{else}
+								{loop $settings['copytext'] $itmes}
+									{php include wl_template('setting/copytext');}
+								{/loop}
+								{/if}
+							</div>
+						</div>
+					</div>
+					<div class="form-group">
+						<label class="col-sm-2 control-label"></label>
+						<div class="col-sm-9">
+							<a class="btn btn-info btn-add-type" href="javascript:;" onclick="addtext();">
+								<i class="fa fa-plus" title=""></i>增加一行文本
+							</a>
+						</div>
+					</div>
+					<div class="form-group">
+						<label class="col-sm-2 control-label">版权链接</label>
+						<div class="col-sm-9">
+							<div id="copyurl">
+								{if empty($settings['copyurl'])}
+									{php include wl_template('setting/copyurl');}
+								{else}
+								{loop $settings['copyurl'] $kk $url}
+									{php include wl_template('setting/copyurl');}
+								{/loop}
+								{/if}
+							</div>
+						</div>
+					</div>
+					<div class="form-group">
+						<label class="col-sm-2 control-label"></label>
+						<div class="col-sm-9">
+							<a class="btn btn-info btn-add-type2" href="javascript:;" onclick="addurl();">
+								<i class="fa fa-plus" title=""></i>增加一条链接
+							</a>
+						</div>
+					</div>
+					<div class="form-group">
+						<label class="col-sm-2 control-label">默认视频首图</label>
+						<div class="col-sm-9">
+							{php echo attachment_select('shop[videoimg]', $settings['videoimg'])}
+						</div>
+					</div>
+					{if Customized::init('language1543') > 0}
+					<div class="form-group">
+						<label class="col-sm-2 control-label">前端语言</label>
+						<div class="col-sm-9">
+							<label class="radio-inline">
+								<input type="radio"  name="shop[languageStatus]" value="0" {if intval($settings['languageStatus']) == 0 || empty($settings['languageStatus'])}checked="checked"{/if}>中文
+							</label>
+							<label class="radio radio-success radio-inline">
+								<input type="radio"  name="shop[languageStatus]"  value="1" {if intval($settings['languageStatus']) == 1}checked="checked"{/if}>韩文
+							</label>
+						</div>
+					</div>
+					{/if}
+					{if Customized::init('yunmis160') > 0}
+					<div class="form-group">
+						<label class="col-sm-2 control-label">云收单图标</label>
+						<div class="col-sm-9">
+							{php echo attachment_select('shop[yun_logo]', $settings['yun_logo'])}
+							<span class="help-block">建议图片大小50*50</span>
+						</div>
+					</div>
+					<div class="form-group">
+						<label class="col-sm-2 control-label">云收单标题</label>
+						<div class="col-sm-9">
+							<input type="text" name="shop[yun_title]" class="form-control" value="{$settings['yun_title']}">
+						</div>
+					</div>
+					<div class="form-group">
+						<label class="col-sm-2 control-label">云收单描述</label>
+						<div class="col-sm-9">
+							<input type="text" name="shop[yun_desc]" class="form-control" value="{$settings['yun_desc']}">
+						</div>
+					</div>
+					{/if}
+				</div>
+			</div>
+			<div class="form-group">
+				<label class="col-sm-2 control-label"></label>
+				<div class="col-sm-9">
+					<input type="submit" name="submit" value="提交" class="btn btn-primary min-width" />
+					<input type="hidden" name="token" value="{$_W['token']}" />
+				</div>
+			</div>
+		</form>
+	</div>
+</div>
+<script>
+	var nums = 1;
+	function addtext() {
+		$(".btn-add-type").button("loading");
+		$.ajax({
+			url: "{php echo web_url('setting/shopset/copytext')}&kw="+nums,
+			cache: false
+		}).done(function (html) {
+			$(".btn-add-type").button("reset");
+			$("#copytext").append(html);
+		});
+		nums++;
+	}
+	var urlnums = "{$urlnum}";
+	function addurl() {
+		$(".btn-add-type2").button("loading");
+		$.ajax({
+			url: "{php echo web_url('setting/shopset/copyurl')}&kw="+urlnums,
+			cache: false
+		}).done(function (html) {
+			$(".btn-add-type2").button("reset");
+			$("#copyurl").append(html);
+		});
+		urlnums++;
+	}
+	function removes(asd){
+		$(asd).closest('.data-item').remove();
+	}
+
+	//根据选择的商品推荐方式 控制提示信息显示隐藏
+	$("[name='shop[recommend_type]']").on('change',function (){
+		let type = $("[name='shop[recommend_type]']:checked").val();
+		let _class = '.recommendType'+type;
+		//显示隐藏控制
+		$(".recommendTypeHelp").addClass("hide");
+		$(_class).removeClass("hide");
+	});
+</script>
+{php include wl_template('common/footer');}

@@ -1,0 +1,129 @@
+{php include wl_template('common/header');}
+<ul class="nav nav-tabs">
+    <li class="active"><a href="javascript:;">自动回复</a></li>
+</ul>
+<div class="app-content">
+    <!--头部信息-->
+    <div class="app-filter">
+        <div class="filter-action">
+            <a class="btn btn-primary" href="{php echo web_url('wxplatform/wechat/creatReply')}">添加自动回复</a>
+<!--            <a href="{php echo web_url('headline/headline/import')}" data-toggle='ajaxModal' class="btn btn-success">导入微信图文</a>-->
+        </div>
+        <div class="filter-list">
+            <form class="form-horizontal" action="{php echo web_url('wxplatform/wechat/autoreply')}" method="post">
+                <div class="form-group">
+                    <div class="col-sm-2 control-label">搜索内容</div>
+                    <div class="col-md-3">
+                        <select name="keywordtype" class="form-control">
+                            <option value="">关键字类型</option>
+                            <option value="1" {if $_GPC['keywordtype']==1}selected="selected"{/if}>规则名</option>
+                            <option value="2" {if $_GPC['keywordtype']==2}selected="selected"{/if}>关键字</option>
+                        </select>
+                    </div>
+                    <div class="col-sm-6">
+                        <input type="text" class="form-control" name="search" value="{$search}" placeholder="规则名/关键字名">
+                    </div>
+                </div>
+                <div class="form-group">
+                    <div class="col-sm-2 control-label"></div>
+                    <div class="col-sm-6">
+                        <div class="input-group">
+                            <button class="btn btn-primary" type="submit" >搜索</button>
+                        </div>
+                    </div>
+                </div>
+            </form>
+        </div>
+    </div>
+    <!--列表信息-->
+    <div class="app-table-list">
+        <div id="list" class="panel tab-pane panel-default">
+            <div class="table-responsive">
+                <table class="table table-hover table-bordered">
+                    <thead>
+                        <tr>
+                            <th width="5%" class="text-center"><input type="checkbox" name="checkall" value="" id="checkall" class="checkboxall" onclick="var ck = this.checked; $(':checkbox').each(function(){this.checked = ck});"/></th>
+                            <th class="text-center" width="15%">规则名称</th>
+                            <th class="text-center" width="40%">关键字</th>
+                            <th class="text-center" width="20%">回复内容</th>
+                            <th class="text-center" width="7%">状态</th>
+                            <th class="text-center" width="13%">操作</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                    {loop $list $k $v}
+                        <tr class="text-center">
+                            <td style="width: 50px;" ><center><input type="checkbox" name="checkbox[]" class="checkbox" value="{$item['id']}" /></center></td>
+                            <td>{$v['name']}</td>
+                            <td>
+                                {loop $v['keyword'] $kw}
+                                <label class="label label-success" data-toggle='popover' data-html='true' data-placement='bottom' data-trigger="hover"  data-content="{if $kw['type'] == 1}精准触发{else}模糊触发{/if}" >{$kw['content']}</label>
+                                {/loop}
+                            </td>
+                            <td>{$v['content']}</td>
+                            <td>{php echo tpl_change_status('wxplatform/wechat/changeReplyStatus&id='.$v['id'],$v['status'])}</td>
+                            <td>
+                                <a class="btn btn-sm btn-warning" href="{php echo web_url('wxplatform/wechat/creatReply',array('id'=>$v['id']))}" >编辑</a>
+                                <a class="btn btn-sm btn-danger"  data-toggle="ajaxRemove" href="{php echo web_url('wxplatform/wechat/deteleReply',array('id'=>$v['id']))}" data-confirm="确定删除当前自动回复?">删除</a>
+                            </td>
+                        </tr>
+                    {/loop}
+                    </tbody>
+                </table>
+            </div>
+            <div class="app-table-foot clearfix" style="margin-top:10px;">
+                <div class="pull-left">
+                    <button class="btn btn-default btn-sm" type="button" disabled="disabled" id="delete" onclick="checkDelete();"><i class="fa fa-trash"></i>批量删除</button>
+                </div>
+                <div class="pull-right">
+                    {$pager}
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+<script>
+
+    $('.checkbox,.checkboxall').click(function(){
+        var $checks=$('.checkbox:checkbox:checked');
+        $('#check').attr('disabled','');
+        if($checks.length>0) {
+            $('#delete').attr('disabled',false);
+        }else{
+            $('#delete').attr('disabled',true);
+        }
+    });
+
+    function checkDelete(){
+        var content = '确认批量删除所选项?';
+        layer.open({
+            title: [
+                '提示',
+                'background-color:#23c6c8; color:#fff;'
+            ]
+            ,anim: 'up'
+            ,content: content
+            ,btn: ['确认', '取消']
+            ,yes:function(index){
+                $('.layer-anim').remove();
+                var ids = [];
+                var $checks=$('.checkbox:checkbox:checked');
+                $checks.each(function() {
+                    if (this.checked) {
+                        ids.push(this.value);
+                    };
+                });
+                //处理
+                $.post("{php echo web_url('wxplatform/wechat/deteleReply')}", {ids:ids}, function(data){
+                    if(!data.errno){
+                        util.tips("操作成功！");
+                        location.reload();
+                    }else{
+                        util.tips(data.message);
+                    };
+                }, 'json');
+            }
+        });
+    }
+</script>
+{php include wl_template('common/footer');}

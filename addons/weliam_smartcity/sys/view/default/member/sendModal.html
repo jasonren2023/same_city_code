@@ -1,0 +1,100 @@
+{php include wl_template('common/header');}
+<ul class="nav nav-tabs">
+    <li class="active"><a href="javascript:;">消息推送</a></li>
+</ul>
+<div class="app-content">
+    <div class="app-form">
+        <form class="form-horizontal form" action="" method="post" id="form1">
+            <div class="panel panel-default">
+                <div class="panel-heading">
+                    消息推送
+                </div>
+                <div class="panel-body">
+                    <div class="form-group">
+                        <label class="col-sm-2 control-label">推送内容</label>
+                        <div class="col-sm-9">
+                            <input type="text" name="conteninfo" class="form-control" value="" />
+                        </div>
+                    </div>
+                    <div class="form-group">
+                        <label class="col-sm-2 control-label">头部提示</label>
+                        <div class="col-sm-9">
+                            <input type="text" name="headinfo" class="form-control" value="" />
+                        </div>
+                    </div>
+                    <div class="form-group">
+                        <label class="col-sm-2 control-label must">尾部提示</label>
+                        <div class="col-sm-9">
+                            <input type="text" name="tailinfo" class="form-control" value="" />
+                        </div>
+                    </div>
+                    <div class="form-group">
+                        <label class="col-sm-2 control-label">跳转连接</label>
+                        <div class="col-sm-9">
+                            <div class="input-group" style="margin: 0;">
+                                <input type="text" name="linkinfo" class="form-control" value="" readonly="readonly" name="link" placeholder="" id="advlink">
+                                <span data-input="#advlink" data-toggle="selectUrl" class="input-group-addon btn btn-default">选择链接</span>
+                                <span class="input-group-addon btn btn-default clearinput">X</span>
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- 推送渠道选择 1=微信公众号(wechat)；2=H5（h5）；3=微信小程序(weapp)-->
+                    {if p('wxapp') && p('wxplatform')}
+                    <!-- 同时存在公众号和小程序 -->
+                    <div class="form-group">
+                        <label class="col-sm-2 control-label">推送渠道</label>
+                        <div class="col-sm-9">
+                            <label class="radio-inline">
+                                <input type="radio" value="1" name="source" checked="">公众号
+                            </label>
+                            <label class="radio-inline">
+                                <input type="radio" value="3" name="source">小程序
+                            </label>
+                        </div>
+                    </div>
+                    {elseif  p('wxapp') && !p('wxplatform')}
+                    <!-- 只有小程序 -->
+                    <div class="form-group hide">
+                        <label class="col-sm-2 control-label">推送渠道</label>
+                        <div class="col-sm-9">
+                            <label class="radio-inline">
+                                <input type="radio" value="3" name="source" checked="checked">小程序
+                            </label>
+                        </div>
+                    </div>
+                    {else}
+                    <!-- 只有公众号 -->
+                    <div class="form-group hide">
+                        <label class="col-sm-2 control-label">推送渠道</label>
+                        <div class="col-sm-9">
+                            <label class="radio-inline">
+                                <input type="radio" value="1" name="source" checked="checked">公众号
+                            </label>
+                        </div>
+                    </div>
+                    {/if}
+                </div>
+            </div>
+            <div class="form-group">
+                <label class="col-sm-2 control-label"></label>
+                <div class="col-sm-9">
+                    <input type="hidden" name="id" id="id" value="{$id}" />
+                    <input type="submit" name="submit" value="推送" class="btn btn-primary min-width" />
+                    <input type="hidden" name="token" value="{$_W['token']}" />
+                </div>
+            </div>
+    </form>
+    </div>
+</div>
+
+
+<script>
+    $('.clearinput').click(function(){
+        $(this).prev().prev().val('');
+    });
+</script>
+
+{php include wl_template('common/footer');}
+
+

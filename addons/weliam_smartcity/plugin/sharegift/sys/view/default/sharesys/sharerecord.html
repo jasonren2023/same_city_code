@@ -1,0 +1,156 @@
+{php include wl_template('common/header');}
+<style>
+	.elli{overflow: hidden;text-overflow:ellipsis;white-space:nowrap;}
+</style>
+<ul class="nav nav-tabs">
+	<li class="active"><a href="">分享记录</a></li>
+</ul>
+<div class="app-content">
+	<div class="app-filter">
+		<div class="filter-list">
+	        <form action="" method="get" class="form-horizontal" role="form" id="form1">
+	            <input type="hidden" name="c" value="site" />
+	            <input type="hidden" name="a" value="entry" />
+	            <input type="hidden" name="m" value="{MODULE_NAME}" />
+	            <input type="hidden" name="p" value="sharegift" />
+				<input type="hidden" name="ac" value="sharebase" />
+				<input type="hidden" name="do" value="sharerecord" />
+				<div class="form-group">
+					<label class="col-sm-2 control-label">分享立减</label>
+					<div class="col-sm-9">
+						<div class="btn-group">
+							<a href="{php echo wl_filter_url('type:0');}" class="btn {if intval($_GPC['type']) == 0}btn-primary{else}btn-default{/if}">不限</a>
+							<a href="{php echo wl_filter_url('type:1');}" class="btn {if intval($_GPC['type']) == 1}btn-primary{else}btn-default{/if}">分享立减</a>
+							<a href="{php echo wl_filter_url('type:2');}" class="btn {if intval($_GPC['type']) == 2}btn-primary{else}btn-default{/if}">分享分佣</a>
+						</div>
+					</div>
+				</div>
+                <div class="form-group">
+					<label class="col-sm-2 control-label">插件</label>
+					<div class="col-sm-9">
+						<div class="btn-group">
+							<a href="{php echo wl_filter_url('plugin:0');}" class="btn {if intval($_GPC['plugin']) == 0}btn-primary{else}btn-default{/if}">不限</a>
+							<a href="{php echo wl_filter_url('plugin:1');}" class="btn {if intval($_GPC['plugin']) == 1}btn-primary{else}btn-default{/if}">抢购</a>
+							<a href="{php echo wl_filter_url('plugin:2');}" class="btn {if intval($_GPC['plugin']) == 2}btn-primary{else}btn-default{/if}">团购</a>
+							<a href="{php echo wl_filter_url('plugin:3');}" class="btn {if intval($_GPC['plugin']) == 3}btn-primary{else}btn-default{/if}">团购</a>
+						</div>
+					</div>
+				</div>
+				<div class="form-group">
+					<label class="col-sm-2 control-label">状态</label>
+					<div class="col-sm-9">
+						<div class="btn-group">
+							<a href="{php echo wl_filter_url('status:0');}" class="btn {if intval($_GPC['status']) == 0}btn-primary{else}btn-default{/if}">不限</a>
+							<a href="{php echo wl_filter_url('status:1');}" class="btn {if intval($_GPC['status']) == 1}btn-primary{else}btn-default{/if}">已付款</a>
+							<a href="{php echo wl_filter_url('status:2');}" class="btn {if intval($_GPC['status']) == 2}btn-primary{else}btn-default{/if}">已分佣</a>
+							<a href="{php echo wl_filter_url('status:4');}" class="btn {if intval($_GPC['status']) == 4}btn-primary{else}btn-default{/if}">未付款</a>
+						</div>
+					</div>
+				</div>
+				<div class="form-group">
+					<label class="col-sm-2 control-label">时间</label>
+					<div class="col-sm-9">
+                        {php echo tpl_select_time_info('time_limit', array('starttime' => date('Y-m-d',$starttime), 'endtime' => date('Y-m-d', $endtime)));}
+					</div>
+				</div>
+                <div class="form-group form-inline">
+					<label class="col-sm-2 control-label">关键字</label>
+					<div class="col-sm-9">
+						<select name="keywordtype" class="form-control">
+							<option value="">关键字类型</option>
+							<option value="1" {if $_GPC['keywordtype']==1}selected="selected"{/if}>商品名称</option>
+							<option value="2" {if $_GPC['keywordtype']==2}selected="selected"{/if}>分享人名称</option>
+							<option value="3" {if $_GPC['keywordtype']==3}selected="selected"{/if}>买家名称</option>
+						</select>
+						<input type="text" name="keyword" class="form-control" value="{$_GPC['keyword']}"  placeholder="请输入关键字"/>
+                    </div>
+				</div>
+                <div class="form-group">
+					<label class="col-sm-2 control-label"></label>
+					<div class="col-sm-9">
+						<button class="btn btn-primary" id="search">筛选</button>
+					</div>
+				</div>
+	        </form>
+		</div>
+	</div>
+	<script type="text/javascript">
+		$("#search").click(function(){
+			$('#form1')[0].submit();
+		});
+	</script>
+	<div class="app-table-list">
+		<div class="panel-body table-responsive collapse in" id="order-template-item-4" style="padding: 0;">
+			<table class="table table-bordered table-hover">
+				<thead style="background-color: #FFFFFF;">
+					<tr>
+						<th style="width:100px;text-align:center;">商品信息</th>
+						<th style="width:80px; text-align: center;">分享人信息</th>
+						<th style="width:80px;text-align: center;">买家信息</th>
+						<th style="width:80px;text-align: center;">金额</th>
+						<th style="width:80px; text-align:center;">插件</th>
+						<th style="width:80px; text-align:center;">类型</th>
+						<th style="width:80px;text-align: center;">状态</th>
+						<th style="width:100px; text-align:center;">时间</th>
+					</tr>
+				</thead>
+				<tbody >
+				{loop $records $item}
+					<tr>
+						<!--商品信息-->
+						<td class="goods-info line-feed" style="padding-left: 10px;">
+							<div class="all-tips">
+								<p class="elli" style="font-family: "Arial","Microsoft YaHei","黑体","宋体",sans-serif;">{$item['title']}</p>
+								{if $item['storename']}<p class="elli">商家：{$item['storename']}</p>{/if}
+							</div>
+						</td>
+						<!--分享人信息-->
+						<td style="position: relative;height:60px;font-family: "Arial","Microsoft YaHei","黑体","宋体",sans-serif;">
+							<div class="img"><img class="scrollLoading" style="width: 50px;height: 50px;" src="{$item['shareavatar']}"></div>
+							<div class="title" style="padding-left: 60px;position: absolute;top: 30px;">
+								<span>{$item['sharename']}</span>
+							</div>
+						</td>
+						<!--买家信息-->
+						<td style="position: relative;font-family: "Arial","Microsoft YaHei","黑体","宋体",sans-serif;">
+							<div class="img"><img class="scrollLoading" style="width: 50px;height: 50px;" src="{$item['buyavatar']}"></div>
+							<div class="title" style="padding-left: 60px;position: absolute;top: 30px;">
+								<span>{$item['buyname']}</span>
+							</div>
+						</td>
+						<td class="text-center" style="font-family: "Arial","Microsoft YaHei","黑体","宋体",sans-serif;">
+							{if $item['plugin']==3}分享佣金{else}每份商品{/if}￥{$item['price']}
+						</td>
+						<td class="text-center" style="font-family: "Arial","Microsoft YaHei","黑体","宋体",sans-serif;">
+							{if $item['plugin']==1}<span class="label label-success">抢购</span>{/if}
+							{if $item['plugin']==2}<span class="label label-info">团购</span>{/if}
+							{if $item['plugin']==3}<span class="label label-primary">掌上信息</span>{/if}
+						</td>
+						<td class="text-center" style="font-family: "Arial","Microsoft YaHei","黑体","宋体",sans-serif;">
+							{if $item['type']==1}<span class="label label-success">分享立减</span>{/if}
+							{if $item['type']==2}<span class="label label-info">分享分佣</span>{/if}
+						</td>
+						<td class="text-center" style="font-family: "Arial","Microsoft YaHei","黑体","宋体",sans-serif;">
+							{if $item['status']==0}<span class="label label-default">未支付</span>{/if}
+							{if $item['status']==1}<span class="label label-info">已支付</span>{/if}
+							{if $item['status']==2}<span class="label label-success">已结算</span>{/if}
+						</td>
+						<td class="text-center" style="font-family: "Arial","Microsoft YaHei","黑体","宋体",sans-serif;">
+							{php echo date('Y-m-d H:i:s',$item['createtime'])}		
+						</td>
+					</tr>
+					{/loop}
+				</tbody>
+			</table>
+		</div>
+		<div class="app-table-foot clearfix">
+			<div class="pull-left">
+				
+			</div>
+			<div class="pull-right">
+				{$pager}
+			</div>
+		</div>
+	</div>
+</div>
+{php include wl_template('common/footer');}

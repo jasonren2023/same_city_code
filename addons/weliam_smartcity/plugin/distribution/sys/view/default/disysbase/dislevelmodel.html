@@ -1,0 +1,237 @@
+<form action="{php echo web_url('distribution/dissysbase/editlevel')}" method="post"  class="form-horizontal form-validate">
+	<div class="modal-dialog" style="z-index: 50;">
+		<div class="modal-content" style="max-height: 850px;">
+			<div class="modal-header">
+				<button data-dismiss="modal" class="close" type="button">×</button>
+				<h4 class="modal-title">{if Customized::init('distributionText') > 0}共享股东{else}分销商{/if}等级</h4>
+			</div>
+			<div class="modal-body" style="margin-left: 100px;max-height: 700px;overflow-x: hidden;">
+				<div class="form-group">
+					<label class="col-sm-2 control-label">等级名称</label>
+					<div class="col-md-7">
+						<input type="text" name="name" id="name" class="form-control" value="{$level['name']}"/>
+					</div>
+				</div>
+				{if $level['isdefault'] != 1}
+				<div class="form-group">
+					<label class="col-sm-2 control-label">等级层级</label>
+					<div class="col-md-7">
+						<input type="number" name="levelclass"  class="form-control" value="{$level['levelclass']}"/>
+						<span class="help-block">层级唯一，表示该等级在分销商等级系统中所在层级，填入正整数。</span>
+					</div>
+				</div>
+				{/if}
+				<div class="form-group" >
+					<label class="col-sm-2 control-label">一级佣金比例</label>
+					<div class="col-md-7">
+						<div class="input-group">
+							<input type="text" name="onecommission" class="form-control" value="{$level['onecommission']}"/>
+							<span class="input-group-addon">%</span>
+						</div>
+					</div>
+				</div>
+				{if $base['ranknum']> 1}
+				<div class="form-group">
+					<label class="col-sm-2 control-label">二级佣金资格</label>
+					<div class="col-xs-12 col-sm-8">
+						<div class="radio-inline radio">
+							<input type="radio" id="own4" onclick="$('#towstatus').show();" name="twostatus" {if $level['twostatus'] == 0 || empty($level['twostatus']) } checked="checked" {/if}  value="0" /><label style="padding-left: 0;" for="own4">启用</label>
+						</div>
+						<div class="radio-inline radio">
+							<input type="radio" id="own3" onclick="$('#towstatus').hide();" name="twostatus" {if $level['twostatus'] == 1 } checked="checked" {/if}  value="1" /><label style="padding-left: 0;" for="own3">禁用</label>
+						</div>
+						<span class="help-block">关闭后此等级分销商无法获取二级分佣。</span>
+					</div>
+				</div>
+				<div class="form-group" id="towstatus" {if $level['twostatus'] == 1 } style="display:none;" {/if} >
+					<label class="col-sm-2 control-label">二级佣金比例</label>
+					<div class="col-md-7">
+						<div class="input-group">
+							<input type="text" name="twocommission" class="form-control" value="{$level['twocommission']}"/>
+							<span class="input-group-addon">%</span>
+						</div>
+					</div>
+				</div>
+				{/if}
+				{if $base['ranknum']> 2}
+				<div class="form-group" >
+					<label class="col-sm-2 control-label">三级佣金比例</label>
+					<div class="col-md-7">
+						<div class="input-group">
+							<input type="text" name="threecommission" class="form-control" value="{$level['threecommission']}"/>
+							<span class="input-group-addon">%</span>
+						</div>
+					</div>
+				</div>
+				{/if}
+				{if $level['isdefault'] != 1}
+				<div class="form-group" >
+					<label class="col-sm-2 control-label">升级条件</label>
+					<div class="col-md-7">
+						{if is_array($levelupstatusArray)}
+						{if in_array(0,$levelupstatusArray)}
+						<div class="input-group">
+							<span class="input-group-addon">已结算佣金总金额大于</span>
+							<input type="number" name="upstandard" class="form-control" value="{$level['upstandard']}">
+							<span class="input-group-addon">元</span>
+						</div>
+						{/if}
+						{if in_array(1,$levelupstatusArray)}
+						<div class="input-group">
+							<span class="input-group-addon">下线总人数满</span>
+							<input type="number" name="upstandard1" class="form-control" value="{$level['upstandard1']}">
+							<span class="input-group-addon">人</span>
+						</div>
+						{/if}
+						{if in_array(2,$levelupstatusArray)}
+						<div class="input-group">
+							<span class="input-group-addon">一级下线人数满</span>
+							<input type="number" name="upstandard2" class="form-control" value="{$level['upstandard2']}">
+							<span class="input-group-addon">人</span>
+						</div>
+						{/if}
+						{if in_array(3,$levelupstatusArray)}
+						<div class="input-group">
+							<span class="input-group-addon">下线{if Customized::init('distributionText') > 0}共享股东{else}分销商{/if}人数满</span>
+							<input type="number" name="upstandard3" class="form-control" value="{$level['upstandard3']}">
+							<span class="input-group-addon">人</span>
+						</div>
+						{/if}
+						{if in_array(4,$levelupstatusArray)}
+						<div class="input-group">
+							<span class="input-group-addon">一级{if Customized::init('distributionText') > 0}共享股东{else}分销商{/if}人数满</span>
+							<input type="number" name="upstandard4" class="form-control" value="{$level['upstandard4']}">
+							<span class="input-group-addon">人</span>
+						</div>
+						{/if}
+						{if in_array(5,$levelupstatusArray)}
+						<div class="input-group">
+							<span class="input-group-addon">自购订单金额大于</span>
+							<input type="number" name="upstandard5" class="form-control" value="{$level['upstandard5']}">
+							<span class="input-group-addon">元</span>
+						</div>
+						{/if}
+						<span class="help-block">多个升级条件满足一项即可升级，参数填0时表示此等级不能通过该条件升级。</span>
+						{else}
+						<span class="help-block">请先在分销设置-分销资格中勾选可升级条件。</span>
+						{/if}
+					</div>
+				</div>
+				<div class="form-group">
+					<label class="col-sm-2 control-label">升级赠送积分</label>
+					<div class="col-md-7">
+						<div class="input-group" style="width: 100%">
+							<input type="number" name="giftintegral" class="form-control" value="{$level['giftintegral']}">
+						</div>
+						<span class="help-block">最多保留两位小数。</span>
+					</div>
+				</div>
+				{/if}
+				<div class="form-group">
+					<label class="col-sm-2 control-label">自购返佣</label>
+					<div class="col-xs-12 col-sm-8">
+						<div class="radio-inline radio">
+							<input type="radio" id="own1" name="ownstatus" {if $level['ownstatus'] == 1 } checked="checked" {/if}  value="1" /><label style="padding-left: 0;" for="own1">启用</label>
+						</div>
+						<div class="radio-inline radio">
+							<input type="radio" id="own2" name="ownstatus" {if $level['ownstatus'] == 0 || empty($level['ownstatus']) } checked="checked" {/if}  value="0" /><label style="padding-left: 0;" for="own2">禁用</label>
+						</div>
+					</div>
+				</div>
+				<div class="form-group">
+					<label class="col-sm-2 control-label">适用插件</label>
+					<div class="col-xs-12 col-sm-8">
+						<div class="checkbox checkbox-success checkbox-inline" style="margin-left: 10px;">
+							<input id="plu1" type="checkbox" name="plugin[]" {if in_array("rush",$level['plugin'])} checked="checked" {/if}  value="rush" /><label style="padding-left: 0;" for="plu1">抢购 </label>
+						</div>
+						{if p('groupon')}
+						<div class="checkbox checkbox-success checkbox-inline">
+							<input id="plu9" type="checkbox" name="plugin[]" {if in_array("groupon",$level['plugin'])} checked="checked" {/if} value="groupon" /><label style="padding-left: 0;" for="plu9">团购</label>
+						</div>
+						{/if}
+						<div class="checkbox checkbox-success checkbox-inline">
+							<input id="plu6" type="checkbox" name="plugin[]" {if in_array("coupon",$level['plugin'])} checked="checked" {/if} value="coupon" /><label style="padding-left: 0;" for="plu6">超级券</label>
+						</div>
+						<div class="checkbox checkbox-success checkbox-inline">
+							<input id="plu3" type="checkbox" name="plugin[]" {if in_array("fightgroup",$level['plugin'])} checked="checked" {/if} value="fightgroup" /><label style="padding-left: 0;" for="plu3">拼团</label>
+						</div>
+						<div class="checkbox checkbox-success checkbox-inline">
+							<input id="plu2" type="checkbox" name="plugin[]" {if in_array("halfcard",$level['plugin'])} checked="checked" {/if} value="halfcard" /><label style="padding-left: 0;" for="plu2">一卡通</label>
+						</div>
+						<div class="checkbox checkbox-success checkbox-inline">
+							<input id="plupay" type="checkbox" name="plugin[]" {if in_array("payonline",$level['plugin'])} checked="checked" {/if} value="payonline" /><label style="padding-left: 0;" for="plupay">在线买单</label>
+						</div>
+						<div class="checkbox checkbox-success checkbox-inline">
+							<input id="plu4" type="checkbox" name="plugin[]" {if in_array("pocket",$level['plugin'])} checked="checked" {/if} value="pocket" /><label style="padding-left: 0;" for="plu4">掌上信息</label>
+						</div>
+						<div class="checkbox checkbox-success checkbox-inline">
+							<input id="plu7" type="checkbox" name="plugin[]" {if in_array("charge",$level['plugin'])} checked="checked" {/if} value="charge" /><label style="padding-left: 0;" for="plu7">商户入驻</label>
+						</div>
+						{if p('activity')}
+						<div class="checkbox checkbox-success checkbox-inline">
+							<input id="plu8" type="checkbox" name="plugin[]" {if in_array("activity",$level['plugin'])} checked="checked" {/if} value="activity" /><label style="padding-left: 0;" for="plu8">同城活动</label>
+						</div>
+						{/if}
+						<div class="checkbox checkbox-success checkbox-inline">
+							<input id="plu5" type="checkbox" name="plugin[]" {if in_array("distribution",$level['plugin'])} checked="checked" {/if} value="distribution" /><label style="padding-left: 0;" for="plu5">{if Customized::init('distributionText') > 0}共享股东{else}分销商{/if}申请</label>
+						</div>
+						<div class="checkbox checkbox-success checkbox-inline">
+							<input id="plucon" type="checkbox" name="plugin[]" {if in_array("consumption",$level['plugin'])} checked="checked" {/if} value="consumption" /><label style="padding-left: 0;" for="plucon">积分兑换</label>
+						</div>
+						{if p('bargain')}
+						<div class="checkbox checkbox-success checkbox-inline">
+							<input id="plub" type="checkbox" name="plugin[]" {if in_array("bargain",$level['plugin'])} checked="checked" {/if} value="bargain" /><label style="padding-left: 0;" for="plub">砍价活动</label>
+						</div>
+						{/if}
+						{if p('citycard')}
+						<div class="checkbox checkbox-success checkbox-inline">
+							<input id="plucard" type="checkbox" name="plugin[]" {if in_array("citycard",$level['plugin'])} checked="checked" {/if} value="citycard" /><label style="padding-left: 0;" for="plucard">同城名片</label>
+						</div>
+						{/if}
+						{if p('citydelivery')}
+						<div class="checkbox checkbox-success checkbox-inline">
+							<input id="pludelivery" type="checkbox" name="plugin[]" {if in_array("citydelivery",$level['plugin'])} checked="checked" {/if} value="citydelivery" /><label style="padding-left: 0;" for="pludelivery">同城配送</label>
+						</div>
+						{/if}
+						{if uniacid_p('mobilerecharge')}
+						<div class="checkbox checkbox-success checkbox-inline">
+							<input id="plumobilerecharge" type="checkbox" name="plugin[]" {if in_array("mobilerecharge",$level['plugin'])} checked="checked" {/if} value="mobilerecharge" /><label style="padding-left: 0;" for="plumobilerecharge">话费充值</label>
+						</div>
+						{/if}
+						{if uniacid_p('hotel')}
+						<div class="checkbox checkbox-success checkbox-inline">
+							<input id="hotel" type="checkbox" name="plugin[]" {if in_array("hotel",$level['plugin'])} checked="checked" {/if} value="hotel" /><label style="padding-left: 0;" for="hotel">酒店预约</label>
+						</div>
+						{/if}
+					</div>
+				</div>
+			</div>
+			<div class="modal-footer">
+				<input type="hidden" name="id" id="id" value="{$level['id']}" />
+				<button type="button" class="btn btn-default" data-dismiss="modal">关闭</button>
+				<button type="submit" class="btn btn-primary">提交更改</button>
+			</div>
+		</div>
+	</div>
+</form>
+<script>
+	$(document).on('show.bs.modal', '.modal', function(event) {
+        $(this).appendTo($('body'));
+    }).on('shown.bs.modal', '.modal.in', function(event) {
+        setModalsAndBackdropsOrder();
+    }).on('hidden.bs.modal', '.modal', function(event) {
+        setModalsAndBackdropsOrder();
+    });
+
+
+    function setModalsAndBackdropsOrder() {  
+        var modalZIndex = 1040;
+        $('.modal.in').each(function(index) {
+            var $modal = $(this);
+            modalZIndex++;
+            $modal.css('zIndex', modalZIndex);
+            $modal.next('.modal-backdrop.in').addClass('hidden').css('zIndex', modalZIndex - 1);
+        });
+        $('.modal.in:visible:last').focus().next('.modal-backdrop.in').removeClass('hidden');
+    }
+</script>

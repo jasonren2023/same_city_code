@@ -1,0 +1,16 @@
+<div class="data-item">
+    <div class="input-group" style="margin-bottom: 10px;">
+    	<span class="input-group-addon">时间</span>
+		{php echo tpl_form_field_date('signtime[]',date('Y-m-d',$spe['signtime']?$spe['signtime']:time()),false);}
+		<span class="input-group-addon">标题</span>
+		<input type="text"  name="signtitle[]" placeholder="非必填" class="form-control" value="{$spe['signtitle']}" />
+		<span class="input-group-addon">积分</span>
+		<input type="number" step="0.01" min="0" name="specialreward[]" class="form-control valid" value="{$spe['special']}">
+		<span class="input-group-addon btn btn-default data-item-delete"><i class="fa fa-remove"></i>删除</span>
+	</div>
+</div>
+<script type="text/javascript">
+	$(document).on('click', '.data-item-delete', function () {
+        $(this).closest('.data-item').remove();
+  });
+</script>

@@ -1,0 +1,104 @@
+{php include wl_template('common/header');}
+<style type='text/css'>
+    .order-rank img{width:16px; height:16px;}
+    .js-remark,.js-admin-remark{word-break:break-all; overflow:hidden; background: #FDEEEE;color: #ED5050;padding: 5px 10px;}
+    td.goods-info{position:relative; padding-left:60px;height: 60px;}
+    .goods-info .img{position:absolute;top:50%; margin-top:-25px; background: url({IMAGE_LOADING}) center center no-repeat; width:50px;height:50px; }
+    .goods-info span {white-space: nowrap;overflow: hidden;text-overflow: ellipsis;display: block;}
+    .status-text{cursor:pointer;}
+</style>
+<ul class="nav nav-tabs">
+    <li class="active"><a href="{php echo web_url('call/call/callList')}">活动列表</a></li>
+</ul>
+<div class="app-content">
+    <div class="app-filter">
+        <div class="filter-action">
+            <a class="btn btn-primary" href="{php echo web_url('call/call/getEditCall')}">添加活动</a>
+        </div>
+        <div class="filter-list">
+            <form class="form-horizontal" action="{php echo web_url('call/call/callList')}" method="post">
+                <div class="form-group">
+                    <div class="col-sm-2 control-label">活动名称</div>
+                    <div class="col-sm-9">
+                        <input type="text" class="form-control" name="name" value="{$name}" placeholder="请输入活动名称">
+                    </div>
+                </div>
+                <div class="form-group">
+                    <div class="col-sm-2 control-label"></div>
+                    <div class="col-sm-6">
+                        <div class="input-group">
+                            <button class="btn btn-primary" type="submit" >搜索</button>
+                        </div>
+                    </div>
+                </div>
+            </form>
+        </div>
+    </div>
+    <div class="app-table-list">
+        <div id="list" class="panel tab-pane panel-default">
+            <div class="table-responsive">
+                <table class="table table-hover table-bordered">
+                    <thead>
+                        <tr>
+                            <th class="text-center" width="5%">活动ID</th>
+                            <th class="text-center" width="15%">活动信息</th>
+                            <th class="text-center" width="15%">助力礼品</th>
+                            <th class="text-center" width="10%">助力人范围</th>
+                            <th class="text-center" width="20%">分享获礼</th>
+                            <th class="text-center" width="15%">活动时间</th>
+                            <th class="text-center" width="5%">活动状态</th>
+                            <th class="text-center" width="15%">操作</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        {loop $list $k $v}
+                            <tr class="text-center">
+                                <td>{$v['id']}</td>
+                                <td>{$v['title']}</td>
+                                <td class="goods-info line-feed">
+                                    <div class="img"><img class="scrollLoading" src="{IMAGE_PIXEL}" data-url="{php echo tomedia($v['price']['image'])}" height="50" width="50" onerror="this.src='{IMAGE_NOPIC_SMALL}'" ></div>
+                                    <div class="title" style="padding-left: 60px;">
+                                        <span>{$v['price']['title']}</span>
+                                    </div>
+                                </td>
+                                <td>
+                                    {if $v['qualifications'] > 0}
+                                    <label class="label label-warning">{$li['new_time']}后注册的新用户</label>
+                                    {else}
+                                    <label class="label label-success">全体用户</label>
+                                    {/if}
+                                </td>
+                                <td class="line-feed text-left">
+                                    {loop  $v['sharegifts'] $share}
+                                    <label class="label label-info">{$share['usernum']}人</label>助力赠:<label class="label label-warning">{$share['title']}</label><br/>
+                                    {/loop}
+                                </td>
+                                <td>{$v['start_time']} - {$v['end_time']}</td>
+                                <td>
+                                    {if $v['state'] > 0}
+                                    <label class="label label-success">开启</label>
+                                    {else}
+                                    <label class="label label-danger">关闭</label>
+                                    {/if}
+                                </td>
+                                <td>
+                                    {if p('wxplatform')}
+                                    <a class=" js-clip" href="javascript:;" data-url="{php echo h5_url('pages/subPages/friendshelp/friendshelp',['id'=>$v['id']])}" >复制链接</a>
+                                    {/if}
+                                    {if p('wxplatform')}
+                                    <a class="js-clip" href="javascript:;" data-url="pages/subPages/friendshelp/friendshelp?id={$v['id']}" >复制路径</a>
+                                    {/if}
+                                    <a href="{php echo web_url('call/call/joinList',array('keyword'=>$v['id'],'keywordtype' => 5))}">参与记录</a>
+                                    <a href="{php echo web_url('call/call/getEditCall',array('id'=>$v['id']))}">编辑</a>
+                                    <a data-toggle="ajaxRemove" href="{php echo web_url('call/call/delCall',array('id'=>$v['id']))}" data-confirm="确定删除当前分类?">删除</a>
+                                </td>
+                            </tr>
+                        {/loop}
+                    </tbody>
+                </table>
+            </div>
+        </div>
+        {$pager}
+    </div>
+</div>
+{php include wl_template('common/footer');}

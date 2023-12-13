@@ -1,0 +1,128 @@
+<form action="{php echo web_url('distribution/dissysbase/editgrouplevel')}" method="post"  class="form-horizontal form-validate">
+    <div class="modal-dialog" style="z-index: 50;">
+        <div class="modal-content" style="max-height: 850px;">
+            <div class="modal-header">
+                <button data-dismiss="modal" class="close" type="button">×</button>
+                <h4 class="modal-title">团长等级</h4>
+            </div>
+            <div class="modal-body" style="margin-left: 100px;max-height: 700px;overflow-x: hidden;">
+                <div class="form-group">
+                    <label class="col-sm-2 control-label">等级名称</label>
+                    <div class="col-md-7">
+                        <input type="text" name="data[name]" id="name" class="form-control" value="{$level['name']}"/>
+                    </div>
+                </div>
+                {if $level['isdefault'] != 1}
+                <div class="form-group">
+                    <label class="col-sm-2 control-label">等级层级</label>
+                    <div class="col-md-7">
+                        <input type="number" name="data[levelclass]"  class="form-control" value="{$level['levelclass']}"/>
+                        <span class="help-block">层级唯一，表示该等级在团长等级系统中所在层级，填入正整数。</span>
+                    </div>
+                </div>
+                {/if}
+                <div class="form-group" >
+                    <label class="col-sm-2 control-label">直属团队分红比例</label>
+                    <div class="col-md-7">
+                        <div class="input-group">
+                            <input type="text" name="data[onecommission]" class="form-control" value="{$level['onecommission']}"/>
+                            <span class="input-group-addon">%</span>
+                        </div>
+                    </div>
+                </div>
+                <div class="form-group" >
+                    <label class="col-sm-2 control-label">子团队分红比例</label>
+                    <div class="col-md-7">
+                        <div class="input-group">
+                            <input type="text" name="data[twocommission]" class="form-control" value="{$level['twocommission']}"/>
+                            <span class="input-group-addon">%</span>
+                        </div>
+                    </div>
+                </div>
+                <div class="form-group">
+                    <label class="col-sm-2 control-label">是否为平台股东</label>
+                    <div class="col-xs-12 col-sm-8">
+                        <div class="radio-inline radio">
+                            <input type="radio" id="own1" onclick="$('#up6text').html('高级');" name="data[shareholder]" {if $level['shareholder'] == 1 } checked="checked" {/if}  value="1" /><label style="padding-left: 0;" for="own1">是</label>
+                        </div>
+                        <div class="radio-inline radio">
+                            <input type="radio" id="own2" onclick="$('#up6text').html('团队');" name="data[shareholder]" {if $level['shareholder'] == 0 || empty($level['shareholder']) } checked="checked" {/if}  value="0" /><label style="padding-left: 0;" for="own2">否</label>
+                        </div>
+                        <span class="help-block">开启股东功能后，所在等级的团长会成为平台股东，获得商品的股东分红。</span>
+                    </div>
+                </div>
+                <div class="form-group" >
+                    <label class="col-sm-2 control-label">升级条件</label>
+                    <div class="col-md-7">
+
+                        <div class="input-group">
+                            <span class="input-group-addon">高级分销商人数</span>
+                            <input type="number" name="data[upstandard1]" class="form-control" value="{$level['upstandard1']}">
+                            <span class="input-group-addon">人</span>
+                        </div>
+
+                        <div class="input-group">
+                            <span class="input-group-addon">自然月内结算佣金</span>
+                            <input type="number" name="data[upstandard2]" class="form-control" value="{$level['upstandard2']}">
+                            <span class="input-group-addon">元</span>
+                        </div>
+
+                        <div class="input-group">
+                            <span class="input-group-addon">自购订单的金额</span>
+                            <input type="number" name="data[upstandard3]" class="form-control" value="{$level['upstandard3']}">
+                            <span class="input-group-addon">元</span>
+                        </div>
+
+                        <div class="input-group">
+                            <span class="input-group-addon">团队总人数</span>
+                            <input type="number" name="data[upstandard4]" class="form-control" value="{$level['upstandard4']}">
+                            <span class="input-group-addon">人</span>
+                        </div>
+
+                        <div class="input-group">
+                            <span class="input-group-addon">自然月内订单数量</span>
+                            <input type="number" name="data[upstandard5]" class="form-control" value="{$level['upstandard5']}">
+                            <span class="input-group-addon">个</span>
+                        </div>
+                        {if  empty($level['isdefault']) }
+                        <div class="input-group">
+                            <span class="input-group-addon"><span id="up6text">{if $level['shareholder'] > 0}高级{else}团队{/if}</span>团长人数</span>
+                            <input type="number" name="data[upstandard6]" class="form-control" value="{$level['upstandard6']}">
+                            <span class="input-group-addon">人</span>
+                        </div>
+                        {/if}
+                        <span class="help-block">多个升级条件需要全部满足才可以升级，参数填0时表示此等级升级时不需要此项条件。</span>
+                    </div>
+                </div>
+
+
+            </div>
+            <div class="modal-footer">
+                <input type="hidden" name="id" id="id" value="{$level['id']}" />
+                <button type="button" class="btn btn-default" data-dismiss="modal">关闭</button>
+                <button type="submit" class="btn btn-primary">提交更改</button>
+            </div>
+        </div>
+    </div>
+</form>
+<script>
+    $(document).on('show.bs.modal', '.modal', function(event) {
+        $(this).appendTo($('body'));
+    }).on('shown.bs.modal', '.modal.in', function(event) {
+        setModalsAndBackdropsOrder();
+    }).on('hidden.bs.modal', '.modal', function(event) {
+        setModalsAndBackdropsOrder();
+    });
+
+
+    function setModalsAndBackdropsOrder() {
+        var modalZIndex = 1040;
+        $('.modal.in').each(function(index) {
+            var $modal = $(this);
+            modalZIndex++;
+            $modal.css('zIndex', modalZIndex);
+            $modal.next('.modal-backdrop.in').addClass('hidden').css('zIndex', modalZIndex - 1);
+        });
+        $('.modal.in:visible:last').focus().next('.modal-backdrop.in').removeClass('hidden');
+    }
+</script>

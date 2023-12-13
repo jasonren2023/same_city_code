@@ -1,0 +1,41 @@
+<?xml version="1.0" encoding="utf-8"?>
+<manifest>
+	<application>
+		<name><![CDATA[酒店预约]]></name>
+		<identifie><![CDATA[hotel]]></identifie>
+		<version><![CDATA[1.0.0]]></version>
+		<type><![CDATA[market]]></type>
+		<description><![CDATA[酒店房间预定服务]]></description>
+		<author><![CDATA[微连科技]]></author>
+		<url><![CDATA[http://www.weliam.cn/]]></url>
+	</application>
+	<setting>
+		<agent embed="true" />
+		<store embed="true" />
+		<system embed="true" />
+		<task embed="false" />
+	</setting>
+	<storemenu>
+		<menu title="酒店信息" font="fa-inbox" >
+			<entry title="房间管理" ac="hotel" do="roomList" iscover="true" ></entry>
+		</menu>
+	</storemenu>
+	<agentmenu>
+		<menu title="酒店信息" font="fa-inbox" >
+			<entry title="房间管理" ac="hotel" do="roomList" iscover="true"></entry>
+			<entry title="标签管理" ac="hotel" do="labelList" ></entry>
+		</menu>
+        <menu title="设置" font="fa-inbox">
+            <entry title="基础设置" ac="hotel" do="hotelset" />
+        </menu>
+	</agentmenu>
+	<systemmenu>
+		<menu title="酒店信息" font="fa-inbox" >
+			<entry title="房间管理" ac="hotel" do="roomList" iscover="true"></entry>
+			<entry title="标签管理" ac="hotel" do="labelList"></entry>
+		</menu>
+		<menu title="设置" font="fa-inbox">
+			<entry title="基础设置" ac="hotel" do="hotelset" />
+		</menu>
+	</systemmenu>
+</manifest>

@@ -1,0 +1,119 @@
+{php include wl_template('common/header');}
+<ul class="nav nav-tabs" id="myTab">
+	<li class="active"><a href="#tab_basic">订单设置</a></li>
+</ul>
+<div class="app-content">
+	<div class="app-form">
+		<form action="" method="post" class="form-horizontal form form-validate">
+			<div class="panel panel-default">
+				<div class="panel-heading">订单设置</div>
+				<div class="panel-body">
+					<div class="form-group">
+						<label class="col-sm-2 control-label">订单自动取消时间</label>
+						<div class="col-sm-9">
+							<div class="input-group">
+								<input type="number" min="0" name="shop[cancel]" class="form-control" value="{$settings['cancel']}" />
+								<span class="input-group-addon">分</span>
+							</div>
+							<span class="help-block">下单后超过此时间未支付，订单自动取消,不填或填0默认为10分钟。</span>
+						</div>
+					</div>
+					<div class="form-group">
+						<label class="col-sm-2 control-label">订单过期提醒时间</label>
+						<div class="col-sm-9">
+							<div class="input-group">
+								<input type="number" min="0" name="shop[remind]" class="form-control" value="{$settings['remind']}" />
+								<span class="input-group-addon">时</span>
+							</div>
+							<span class="help-block">订单在此时间后过期时，提前发送过期提醒，不填或填0默认为48小时。</span>
+						</div>
+					</div>
+					<div class="form-group">
+						<label class="col-sm-2 control-label">自动收货时间</label>
+						<div class="col-sm-9">
+							<div class="input-group">
+								<input type="number" min="0" name="shop[receipt]" class="form-control" value="{$settings['receipt']}" />
+								<span class="input-group-addon">天</span>
+							</div>
+							<span class="help-block">发货后超过时间的未确认收货订单将会标记为已签收,不填或填0则订单不会自动签收。</span>
+						</div>
+					</div>
+					<div class="form-group">
+						<label class="col-sm-2 control-label">自动退款申请订单</label>
+						<div class="col-sm-9">
+							<label class="radio-inline"><input type="radio" name="shop[autoapplyre]" value="1" {if $settings['autoapplyre'] == 1} checked {/if}>开启</label>
+							<label class="radio-inline"><input type="radio" name="shop[autoapplyre]" value="0" {if $settings['autoapplyre'] != 1} checked {/if}>关闭</label>
+						</div>
+					</div>
+					<div class="form-group">
+						<label class="col-sm-2 control-label">自动退款过期订单</label>
+						<div class="col-sm-9">
+							<label class="radio-inline"><input type="radio" name="shop[reovertime]" value="1" {if $settings['reovertime'] == 1} checked {/if}>开启</label>
+							<label class="radio-inline"><input type="radio" name="shop[reovertime]" value="0" {if $settings['reovertime'] != 1} checked {/if}>关闭</label>
+							<span class="help-block">开启后,未使用过的过期订单会自动退款。</span>
+						</div>
+					</div>
+					<div class="form-group">
+						<label class="col-sm-2 control-label">商户退款订单</label>
+						<div class="col-sm-9">
+							<label class="radio-inline"><input type="radio" name="shop[storerefund]" value="1" {if $settings['storerefund'] == 1} checked {/if}>开启</label>
+							<label class="radio-inline"><input type="radio" name="shop[storerefund]" value="0" {if $settings['storerefund'] != 1} checked {/if}>关闭</label>
+							<span class="help-block">开启后，商户可以在手机端和PC端后台退款订单。</span>
+						</div>
+					</div>
+					<div class="form-group">
+						<label class="col-sm-2 control-label">订单退款提示</label>
+						<div class="col-sm-9">
+							<div class="input-group" style="width: 100%">
+								<input type="text" name="shop[refundtip]" class="form-control" placeholder="请等待系统退款" value="{$settings['refundtip']}" />
+							</div>
+						</div>
+					</div>
+					<div class="form-group">
+						<label class="col-sm-2 control-label">核销码类型</label>
+						<div class="col-sm-9">
+							<label class="radio-inline"><input type="radio" name="shop[codetype]" value="0" {if $settings['codetype'] != 1} checked {/if}>数字+字母</label>
+							<label class="radio-inline"><input type="radio" name="shop[codetype]" value="1" {if $settings['codetype'] == 1} checked {/if}>纯数字</label>
+							<span class="help-block">系统自动生成的核销码样式：纯数字核销码在订单量大时可能重复，保密性更低。</span>
+						</div>
+					</div>
+					<div class="form-group">
+						<label class="col-sm-2 control-label">{if !empty($_W['wlsetting']['trade']['shiylctext'])}{$_W['wlsetting']['trade']['shiylctext']}{else}使用流程{/if}</label>
+						<div class="col-sm-9">
+							<label class="radio-inline" onclick="$('#use_info').show();" ><input type="radio" name="shop[use_switch]" value="0" {if $settings['use_switch'] != 1} checked {/if}>显示</label>
+							<label class="radio-inline" onclick="$('#use_info').hide();" ><input type="radio" name="shop[use_switch]" value="1" {if $settings['use_switch'] == 1} checked {/if}>隐藏</label>
+						</div>
+					</div>
+
+					<div class="form-group" id="use_info" {if $settings['use_switch'] == 1} style="display: none;" {/if}>
+						<label class="col-sm-2 control-label">商品{if !empty($_W['wlsetting']['trade']['shiylctext'])}{$_W['wlsetting']['trade']['shiylctext']}{else}使用流程{/if}</label>
+						<div class="col-sm-9">
+							{php echo tpl_diy_editor_create('shop[use_info]', $settings['use_info']);}
+						</div>
+					</div>
+					<div class="form-group">
+						<label class="col-sm-2 control-label">{if !empty($_W['wlsetting']['trade']['jiagsmext'])}{$_W['wlsetting']['trade']['jiagsmext']}{else}价格说明{/if}</label>
+						<div class="col-sm-9">
+							<label class="radio-inline" onclick="$('#price_info').show();" ><input type="radio" name="shop[price_switch]" value="0" {if $settings['price_switch'] != 1} checked {/if}>显示</label>
+							<label class="radio-inline" onclick="$('#price_info').hide();" ><input type="radio" name="shop[price_switch]" value="1" {if $settings['price_switch'] == 1} checked {/if}>隐藏</label>
+						</div>
+					</div>
+					<div class="form-group"  id="price_info" {if $settings['price_switch'] == 1} style="display: none;" {/if}>
+						<label class="col-sm-2 control-label">商品{if !empty($_W['wlsetting']['trade']['jiagsmext'])}{$_W['wlsetting']['trade']['jiagsmext']}{else}价格说明{/if}</label>
+						<div class="col-sm-9">
+							{php echo tpl_diy_editor_create('shop[price_info]', $settings['price_info']);}
+						</div>
+					</div>
+				</div>
+			</div>
+			<div class="form-group">
+				<label class="col-sm-2 control-label"></label>
+				<div class="col-sm-9">
+					<input type="submit" name="submit" value="提交" class="btn btn-primary min-width" />
+					<input type="hidden" name="token" value="{$_W['token']}" />
+				</div>
+			</div>
+		</form>
+	</div>
+</div>
+{php include wl_template('common/footer');}

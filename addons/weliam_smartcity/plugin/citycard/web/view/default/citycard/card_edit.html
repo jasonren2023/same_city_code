@@ -1,0 +1,175 @@
+{php include wl_template('common/header');}
+<ul class="nav nav-tabs">
+    <li class="active"><a href="{php echo web_url('citycard/citycard/card_edit', array('id' => $item['id']))}">编辑名片</a></li>
+</ul>
+<div class="app-content">
+    <div class="app-form">
+        <form action="" method="post" class="form-horizontal form form-validate">
+            <div class="form-group-title">名片信息</div>
+            <div class="form-group">
+                <label class="col-sm-2 control-label">排序</label>
+                <div class="col-sm-9">
+                    <input type="text" name="item[sort]" class="form-control" value="{$item['sort']}" placeholder="排序">
+                    <div class="help-block">排序由大到小，数值越大，顺序越靠前</div>
+                </div>
+            </div>
+            <div class="form-group">
+                <label class="col-sm-2 control-label"><span class="form-must">*</span>名片姓名</label>
+                <div class="col-sm-9">
+                    <input type="text" name="item[name]" maxlength="20" class="form-control" value="{$item['name']}" placeholder="请输入名片姓名" required>
+                </div>
+            </div>
+            <div class="form-group">
+                <label class="col-sm-2 control-label"><span class="form-must">*</span>所属用户</label>
+                <div class="col-sm-9">
+                    {php echo tpl_select_user('item[mid]', $item['mid'])}
+                </div>
+            </div>
+            <div class="form-group">
+                <label class="col-sm-2 control-label">名片LOGO</label>
+                <div class="col-sm-9">
+                    {php echo attachment_select('item[logo]', $item['logo'])}
+                    <div class="help-block">推荐200X200，不上传则默认使用用户头像</div>
+                </div>
+            </div>
+            <div class="form-group">
+                <label class="col-sm-2 control-label"><span class="form-must">*</span>联系电话</label>
+                <div class="col-sm-9">
+                    <input type="text" name="item[mobile]" class="form-control" value="{$item['mobile']}" placeholder="请输入名片联系电话" required>
+                </div>
+            </div>
+            <div class="form-group">
+                <label class="col-sm-2 control-label"><span class="form-must">*</span>微信</label>
+                <div class="col-sm-9">
+                    <input type="text" name="item[wechat]" class="form-control" value="{$item['wechat']}" placeholder="请输入名片微信" required>
+                </div>
+            </div>
+            <div class="form-group">
+                <label class="col-sm-2 control-label">公司名称</label>
+                <div class="col-sm-9">
+                    <input type="text" name="item[company]" class="form-control" value="{$item['company']}" placeholder="请输入公司名称">
+                </div>
+            </div>
+            <div class="form-group">
+                <label class="col-sm-2 control-label">部门</label>
+                <div class="col-sm-9">
+                    <input type="text" name="item[branch]" class="form-control" value="{$item['branch']}" placeholder="请输入部门名称">
+                </div>
+            </div>
+            <div class="form-group">
+                <label class="col-sm-2 control-label">职位</label>
+                <div class="col-sm-9">
+                    <input type="text" name="item[position]" class="form-control" value="{$item['position']}" placeholder="请输入职位">
+                </div>
+            </div>
+            <div class="form-group">
+                <label class="col-sm-2 control-label">介绍</label>
+                <div class="col-sm-9">
+                    <input type="text" name="item[desc]" class="form-control" value="{$item['desc']}" placeholder="一句话介绍你的业务">
+                </div>
+            </div>
+            <div class="form-group">
+                <label class="col-sm-2 control-label"><span class="form-must">*</span>定位</label>
+                <div class="col-sm-9">
+                    {php echo tpl_select_address('item[address]','location[lng]','location[lat]',$item['address'],$item['lng'],$item['lat'])}
+                </div>
+            </div>
+            <div class="form-group-title">其他信息</div>
+            <div class="form-group">
+                <label class="col-sm-2 control-label"><span class="form-must">*</span>所属分类</label>
+                <div class="col-sm-9">
+                    {php echo tpl_form_field_category_2level('category', $categorys['parents'], $categorys['childrens'], $item['one_class'], $item['two_class'])}
+                </div>
+            </div>
+            <div class="form-group">
+                <label class="col-sm-2 control-label"><span class="form-must">*</span>套餐</label>
+                <div class="col-sm-9">
+                    <select name="item[meal_id]" class="form-control">
+                        {loop $meals $meal}
+                        <option value="{$meal['id']}" {if $item['meal_id'] == $meal['id']}selected{/if}>{$meal['name']}</option>
+                        {/loop}
+                    </select>
+                </div>
+            </div>
+            <div class="form-group">
+                <label class="col-sm-2 control-label"><span class="form-must">*</span>套餐到期时间</label>
+                <div class="col-sm-9">
+                    {php echo tpl_form_field_date('item[meal_endtime]',$item['meal_endtime']);}
+                </div>
+            </div>
+            <div class="form-group">
+                <label class="col-sm-2 control-label">置顶</label>
+                <div class="col-sm-9">
+                    <label class="radio-inline">
+                        <input type="radio" name="item[top_is]" value="0" onclick="$('.top_endtime').hide()" {if empty($item['top_is'])}checked{/if}>禁用
+                    </label>
+                    <label class="radio-inline">
+                        <input type="radio" name="item[top_is]" value="1" onclick="$('.top_endtime').show()" {if !empty($item['top_is'])}checked{/if}>启用
+                    </label>
+                </div>
+            </div>
+            <div class="form-group top_endtime" {if empty($item['top_is'])}style="display: none;"{/if}>
+                <label class="col-sm-2 control-label"><span class="form-must">*</span>置顶到期时间</label>
+                <div class="col-sm-9">
+                    {php echo tpl_form_field_date('item[top_endtime]',$item['top_endtime']);}
+                </div>
+            </div>
+            <div class="form-group">
+                <label class="col-sm-2 control-label">公开地址信息</label>
+                <div class="col-sm-9">
+                    <label class="radio-inline">
+                        <input type="radio" name="item[show_addr]" value="0" {if empty($item['show_addr'])}checked{/if}>隐藏
+                    </label>
+                    <label class="radio-inline">
+                        <input type="radio" name="item[show_addr]" value="1" {if !empty($item['show_addr'])}checked{/if}>显示
+                    </label>
+                    <div class="help-block">选择关闭后地址信息将隐藏</div>
+                </div>
+            </div>
+            <div class="form-group">
+                <label class="col-sm-2 control-label">公开电话信息</label>
+                <div class="col-sm-9">
+                    <label class="radio-inline">
+                        <input type="radio" name="item[show_mobile]" value="0" {if empty($item['show_mobile'])}checked{/if}>隐藏
+                    </label>
+                    <label class="radio-inline">
+                        <input type="radio" name="item[show_mobile]" value="1" {if !empty($item['show_mobile'])}checked{/if}>显示
+                    </label>
+                    <div class="help-block">选择关闭后电话信息将隐藏</div>
+                </div>
+            </div>
+            <div class="form-group">
+                <label class="col-sm-2 control-label">公开微信信息</label>
+                <div class="col-sm-9">
+                    <label class="radio-inline">
+                        <input type="radio" name="item[show_wechat]" value="0" {if empty($item['show_wechat'])}checked{/if}>隐藏
+                    </label>
+                    <label class="radio-inline">
+                        <input type="radio" name="item[show_wechat]" value="1" {if !empty($item['show_wechat'])}checked{/if}>显示
+                    </label>
+                    <div class="help-block">选择关闭后微信信息将隐藏</div>
+                </div>
+            </div>
+            <div class="form-group">
+                <label class="col-sm-2 control-label">状态</label>
+                <div class="col-sm-9">
+                    <label class="radio-inline">
+                        <input type="radio" name="item[status]" value="0" {if empty($item['status'])}checked{/if}>禁用
+                    </label>
+                    <label class="radio-inline">
+                        <input type="radio" name="item[status]" value="1" {if !empty($item['status'])}checked{/if}>启用
+                    </label>
+                </div>
+            </div>
+            <div class="form-group">
+                <label class="col-sm-2 control-label"></label>
+                <div class="col-sm-9">
+                    <input type="submit" name="submit" value="提交" class="btn btn-primary min-width" />
+                    <input type="hidden" name="token" value="{$_W['token']}" />
+                    <input type="hidden" name="id" value="{$item['id']}" />
+                </div>
+            </div>
+        </form>
+    </div>
+</div>
+{php include wl_template('common/footer');}

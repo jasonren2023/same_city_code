@@ -1,0 +1,35 @@
+<?xml version="1.0" encoding="utf-8"?>
+<manifest>
+	<application>
+		<name><![CDATA[分享有礼]]></name>
+		<identifie><![CDATA[call]]></identifie>
+		<version><![CDATA[1.0.0]]></version>
+		<type><![CDATA[interact]]></type>
+		<description><![CDATA[邀请好友,助力好礼]]></description>
+		<author><![CDATA[微连科技]]></author>
+		<url><![CDATA[http://www.weliam.cn/]]></url>
+	</application>
+	<setting>
+		<agent embed="true" />
+		<system embed="true" />
+		<task embed="false" />
+	</setting>
+	<systemmenu>
+		<menu title="内容管理" font="fa-inbox">
+			<entry title="活动列表" ac="call" do="callList" iscover="true"/>
+			<entry title="奖品列表" ac="call" do="prizeList" />
+			<entry title="参与记录" ac="call" do="joinList" />
+			<entry title="助力记录" ac="call" do="helpList" />
+			<entry title="领奖记录" ac="call" do="getList" />
+		</menu>
+	</systemmenu>
+	<agentmenu>
+		<menu title="内容管理" font="fa-inbox">
+			<entry title="活动列表" ac="call" do="callList" iscover="true"/>
+			<entry title="奖品列表" ac="call" do="prizeList" />
+			<entry title="参与记录" ac="call" do="joinList" />
+			<entry title="助力记录" ac="call" do="helpList" />
+			<entry title="领奖记录" ac="call" do="getList" />
+		</menu>
+	</agentmenu>
+</manifest>

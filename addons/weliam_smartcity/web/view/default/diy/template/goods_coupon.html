@@ -1,0 +1,131 @@
+<!--------------------------  优惠券组件群  ----------------------------------->
+<!-- 优惠券商品组 风格一 -->
+<script type="text/html" id="tpl_show_coupon_goods">
+    <div class="drag" data-itemid="<%itemid%>"  group_name="<%group_name%>" group_key="<%group_key%>" data-id="<%group_name%>" >
+        <div class="goods_coupon_1 goods_style_1" style="margin-bottom: <%style.marginBottom%>px;padding: <%style.margin||'10'%>px;background-color:<%style.bgColor||'#ffffff'%>">
+            <%each data as item index%>
+            <div class="block" style="padding:<%style.padding||'10'%>px;">
+                <div class="images">
+                    <img src="<%imgsrc item.logo%>" onerror="this.src='../addons/{MODULE_NAME}/web/resource/images/default.png';"/>
+                    <%if item.vipstatus == 1%><span>会员特供</span><%else if item.vipstatus == 2%><span>会员特价</span><%/if%>
+                </div>
+                <div class="describe">
+                    <div class="title"><%item.goods_name%></div>
+                    <div class="shop">
+                        <div class="shop_title"><%item.storename%></div>
+                    </div>
+                    <div class="footer_info">
+                        <div class="sale_info">
+                            <div class="price_info">
+                                <%if item.is_charge == 1%>
+                                    <div class="price">¥<%item.price%></div>
+                                    <%if item.vipstatus == 2%>
+                                        <div class="old_price">
+                                            <span class="vip">会员</span>
+                                            <span class="discount">优惠<%item.discount_price%>元</span>
+                                        </div>
+                                    <%/if%>
+                                <%else%>
+                                    <div class="price">免费</div>
+                                <%/if%>
+                            </div>
+                            <div class="sale_num">
+                                <div class="buy_bg" style="width: <%item.buy_percentage%>%"></div>
+                                <div class="buy_num">已抢<%item.buy_num%>件</div>
+                            </div>
+                        </div>
+                        <div class="button"><%if item.is_charge == 1%>去购买<%else%>去领取<%/if%></div>
+                    </div>
+                </div>
+            </div>
+            <%/each%>
+        </div>
+    </div>
+</script>
+<!-- 优惠券商品组 风格二 -->
+<script type="text/html" id="tpl_show_coupon_goods2">
+    <div class="drag" data-itemid="<%itemid%>" group_name="<%group_name%>" group_key="<%group_key%>" data-id="<%group_name%>">
+        <div class="fui-coupon_goods2"  style="background-color: <%style.bgColor%>;margin-bottom: <%style.marginBottom%>px;">
+            <div class="jjrm-c">
+                <div class="jjrm-c-d">
+                    <%each data as val%>
+                    <div class="jjrm-c-i">
+                        <div class="a">
+                            <div class="jjrm-c-i-t">
+                                <img src="<%imgsrc val.logo%>" onerror="this.src='../addons/{MODULE_NAME}/web/resource/images/default.png';"/>
+                            </div>
+                            <div class="jjrm-c-i-c">
+                                <%val.goods_name%>
+                            </div>
+                            <div class="jjrm-c-i-b">
+                                <div class="h1"> <%val.price%><div class="i inline">元</div></div>
+                                <div class="p"><div class="span"> <%if val.vipstatus == 1%>VIP特供<%else if val.vipstatus == 2%>VIP特价:<%val.vipprice%><%else%>无限制<%/if%></div><div class="em">已售<%val.buy_num%></div></div>
+                            </div>
+                        </div>
+                    </div>
+                    <%/each%>
+                </div>
+            </div>
+        </div>
+    </div>
+</script>
+<!-- 优惠券商品组 风格三 -->
+<script type="text/html" id="tpl_show_coupon_goods3">
+    <div class="drag" data-itemid="<%itemid%>" group_name="<%group_name%>" group_key="<%group_key%>" data-id="<%group_name%>">
+        <div class="fui-coupon_goods3" style="background-color: <%style.bgColor%>;margin-bottom: <%style.marginBottom%>px;" >
+            <%each data as item%>
+            <div class="goodslist">
+                <div class="goodslist-i" v-for="(item, key) in goodsList" :key="key">
+                    <div class="a">
+                        <div class="goodslist-i-t">
+                            <img src="<%imgsrc item.long_logo%>" onerror="this.src='../addons/{MODULE_NAME}/web/resource/images/default.png';"/>
+                        </div>
+                    </div>
+                    <div class="goodslist-i-c">
+                        <div class="goodslist-i-c-t">
+                            <div class="goodslist-i-c-t-l"><%item.storename%></div>
+                            <div class="goodslist-i-c-t-r">999m</div>
+                        </div>
+                        <div class="goodslist-i-c-c">
+                            <div class="a"><div class="i">优惠券</div><%item.goods_name%></div>
+                        </div>
+                        <div class="goodslist-i-c-c2">
+                            <div class="h1"><%item.price%><div class="i inline">元</div></div><div class="h2"><div class="a">购买</div></div>
+                        </div>
+                        <div class="goodslist-i-c-b">
+                            <div class="p"><div class="span"><%if item.vipstatus == 1%>VIP特供<%else if item.vipstatus == 2%>VIP特价:<%item.vipprice%><%else%>无限制<%/if%></div><div class="em"><%item.buy_num%>人购买</div></div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <%/each%>
+        </div>
+    </div>
+</script>
+<!-- 优惠券商品组 风格四 -->
+<script type="text/html" id="tpl_show_coupon_goods4">
+    <div class="drag" data-itemid="<%itemid%>"  group_name="<%group_name%>" group_key="<%group_key%>" data-id="<%group_name%>">
+        <div class="diy-public_goods" style="margin-bottom: <%style.marginBottom||'1'%>px;">
+            <div class="transverse">
+                <div class="transverse_list">
+                    <div class="goods_father">
+                        <%each data as item%>
+                        <div class="goods_item">
+                            <div class="goods_img">
+                                <img class="image" src="<%imgsrc item.logo%>" onerror="this.src='../addons/{MODULE_NAME}/web/resource/images/default.png';"/>
+                            </div>
+                            <div class="goods_tit"><%item.goods_name%></div>
+                            <div class="goods_price">
+                                <div class="present_price">
+                                    <div class="span">￥<%item.price%></div>
+                                </div>
+                                <div class="original_price" style="text-decoration: none;"><%if item.vipstatus == 1%>VIP特供<%else if item.vipstatus == 2%>VIP特价:<%item.vipprice%><%else%>无限制<%/if%></div>
+                            </div>
+                        </div>
+                        <%/each%>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</script>

@@ -1,0 +1,169 @@
+{php include wl_template('common/header');}
+<ul class="nav nav-tabs" id="myTab">
+    <li class="active"><a href="javascript:;">行业列表</a></li>
+</ul>
+<div class="app-content">
+    <!--顶部操作-->
+    <div class="app-filter">
+        <div class="filter-action">
+            <a href="{php echo web_url('recruit/industryPosition/industryEdit')}" class="btn btn-primary">添加行业</a>
+            <a href="javascript:;" class="btn btn-success" id="wholeButton" data-status="1">全部展开</a>
+            <a href="javascript:;" class="btn btn-info" id="createButton" title="一键生成默认行业信息">一键生成</a>
+        </div>
+        <div class="filter-list">
+            <form action="" method="get" class="form-horizontal" role="form" id="form1">
+                <input type="hidden" name="c" value="site" />
+                <input type="hidden" name="a" value="entry" />
+                <input type="hidden" name="m" value="{MODULE_NAME}" />
+                <input type="hidden" name="p" value="recruit" />
+                <input type="hidden" name="ac" value="industryPosition" />
+                <input type="hidden" name="do" value="industryList" />
+                <div class="form-group">
+                    <div class="col-sm-2 control-label">行业名称</div>
+                    <div class="col-sm-9">
+                        <input type="text" class="form-control" name="title" value="{$title}" placeholder="请输入行业名称...">
+                    </div>
+                </div>
+                <div class="form-group">
+                    <div class="col-sm-2 control-label"></div>
+                    <div class="col-sm-9">
+                        <button class="btn btn-primary" type="submit">搜索</button>
+                        <a href="{php echo web_url('recruit/industryPosition/industryList')}" class="btn btn-danger">清除</a>
+                        <a href="{php echo web_url('recruit/industryPosition/industryExport',['title'=>$title])}" class="btn btn-warning">导出</a>
+                    </div>
+                </div>
+            </form>
+        </div>
+    </div>
+    <!--表格信息-->
+    <div class="app-table-list">
+        <!--列表信息-->
+        <div class="table-responsive order-list">
+            <table class="table table-hover">
+                <thead>
+                    <tr>
+                        <th class="text-center"><input type="checkbox" /></th>
+                        <th class="text-center">行业</th>
+                        <th class="text-center">排序</th>
+                        <th class="text-center">创建时间</th>
+                        <th class="text-center">操作</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    {loop $list $key $item}
+                        <tr class="text-center">
+                            <td>
+                                <input type="checkbox" value="{$item['id']}" />
+                            </td>
+                            <td class="text-left">
+                                <div>
+                                    <span>{$item['title']}</span>
+                                    <span class="category-caret">
+                                    <i class="fa fa-caret-down hide hideButton" data-pid="{$item['id']}"></i>
+                                    <i class="fa fa-caret-up showButton" data-pid="{$item['id']}"></i>
+                                </span>
+                                </div>
+                            </td>
+                            <td>{$item['sort']}</td>
+                            <td>{php echo date("Y-m-d H:i:s",$item['create_time']);}</td>
+                            <td>
+                                <a href="{php echo web_url('recruit/industryPosition/industryEdit',['id'=>$item['id']])}" class="btn btn-warning btn-sm">编辑</a>
+                                <a href="{php echo web_url('recruit/industryPosition/industryDel',['ids'=>$item['id']])}"class="btn btn-danger btn-sm" data-toggle="ajaxRemove" data-confirm="删除上级行业将删除此行业下所有子行业和职位信息，确定删除当前行业？">删除</a>
+                            </td>
+                        </tr>
+                        {loop $item['list'] $vo}
+                            <tr class="text-center two-industry industry_{$item['id']} hide">
+                                <td>
+                                    <input type="checkbox" value="{$vo['id']}" />
+                                </td>
+                                <td class="text-left">
+                                    <div style="padding-left:50px;height:30px;line-height:30px;background:url('./resource/images/bg_repno.gif') no-repeat -245px -545px;">
+                                        {$vo['title']}
+                                    </div>
+                                </td>
+                                <td>{$vo['sort']}</td>
+                                <td>{php echo date("Y-m-d H:i:s",$vo['create_time']);}</td>
+                                <td class="text-center">
+                                    <a href="{php echo web_url('recruit/industryPosition/industryEdit',['id'=>$vo['id']])}" class="btn btn-warning btn-sm">编辑</a>
+                                    <a href="{php echo web_url('recruit/industryPosition/industryDel',['ids'=>$item['id']])}"class="btn btn-danger btn-sm" data-toggle="ajaxRemove" data-confirm="确定删除当前行业？">删除</a>
+                                </td>
+                            </tr>
+                        {/loop}
+                    {/loop}
+                </tbody>
+            </table>
+        </div>
+        <!--操作按钮 分页信息-->
+        <div class="app-table-foot clearfix">
+            <div class="pull-left">
+                <button class="btn btn-default" type="button" data-toggle='batch-remove' data-confirm="删除上级行业将删除此行业下所有子行业和职位信息，确定删除当前选中的所有行业及其子行业？" data-href="{php echo web_url('recruit/industryPosition/industryDel')}">批量删除</button>
+            </div>
+            <div class="pull-right">{$pager}</div>
+        </div>
+    </div>
+</div>
+<script>
+    /**
+     * 点击显示子行业信息
+     */
+    $(".showButton").on('click',function () {
+        let pid = $(this).data("pid");
+        //显示对应的子行业列表信息
+        $(".industry_"+pid).removeClass('hide');
+        //隐藏显示按钮  显示隐藏按钮
+        $(this).addClass('hide');
+        $(this).siblings('.hideButton').removeClass('hide');
+    });
+    /**
+     * 点击隐藏子行业信息
+     */
+    $(".hideButton").on('click',function () {
+        let pid = $(this).data("pid");
+        //显示对应的子行业列表信息
+        $(".industry_"+pid).addClass('hide');
+        //隐藏显示按钮  显示隐藏按钮
+        $(this).addClass('hide');
+        $(this).siblings('.showButton').removeClass('hide');
+    });
+    /**
+     * 全部展开/全部折叠
+     */
+    $("#wholeButton").on('click',function () {
+        let status = $(this).data("status");
+        if(status == 1){
+            //全部展开
+            $(".showButton").addClass('hide');
+            $(".hideButton").removeClass('hide');
+            $(".two-industry").removeClass('hide');
+            $(this).data('status',0);
+            $(this).html('全部折叠');
+        }else{
+            //全部隐藏
+            $(".showButton").removeClass('hide');
+            $(".hideButton").addClass('hide');
+            $(".two-industry").addClass('hide');
+            $(this).data('status',1);
+            $(this).html('全部展开');
+        }
+    });
+    /**
+     * 默认行业信息生成
+     */
+    $("#createButton").on('click',function () {
+        tip.confirm('是否生成默认的行业信息？',function () {
+            //显示加载动画
+            $("#page-loading").show();
+            //请求生成
+            let link = "{php echo web_url('recruit/industryPosition/industryDefaultInfo');}";
+            $.post(link,function (res) {
+                tip.alert(res.message,function () {
+                    history.go(0);
+                });
+            },'json');
+        });
+    });
+
+
+
+</script>
+{php include wl_template('common/footer');}

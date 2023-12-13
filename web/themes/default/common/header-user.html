@@ -1,0 +1,37 @@
+    {if $_W['iscontroller'] && $_W['isadmin']}
+        <li><a href="{php echo $_W['siteroot'] . 'web/home.php'}" ><i class="wi wi-caozuotai"></i><span>客户端</span></a></li>
+    {else}
+    {if $_W['isadmin']}
+        <li ><a href="{php echo url('account/manage', array('iscontroller' => 1))}"><i class="wi wi-kongzhitai"></i><span>控制台</span></a></li>
+    {/if}
+    {/if}
+
+    <!-- 用户信息 -->
+    <li class="dropdown user" >
+        <a href="javascript:;" class="dropdown-toggle" data-toggle="dropdown" ><i class="wi wi-user"></i><span class="caret"></span></a>
+        <ul class="dropdown-menu color-gray dropdown-menu-right" role="menu">
+            <li>
+                <a href="{url 'user/profile'}{if !$_W['iscontroller']}iscontroller=0{/if}" target="_blank">我的账号</a>
+            </li>
+            <li class="divider"></li>
+            <li><a href="#" id="updateCache">更新缓存</a></li>
+            <li class="divider"></li>
+            <li>
+                <a href="{url 'user/logout'}">退出系统</a>
+            </li>
+        </ul>
+    </li>
+    <!-- end用户信息 -->
+
+    <script>
+        $(function() {
+            $('#updateCache').on('click', function(){
+                $('.loader').show();
+                $.post('./index.php?c=system&a=updatecache&do=updatecache', {}, function(data) {
+                    $('.loader').hide();
+                    util.message('更新缓存成功！', '', 'success');
+                })
+            });
+        })
+    </script>
+</ul>

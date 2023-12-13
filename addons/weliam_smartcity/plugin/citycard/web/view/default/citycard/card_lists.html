@@ -1,0 +1,133 @@
+{php include wl_template('common/header');}
+<ul class="nav nav-tabs">
+    <li class="active"><a href="javascript:;">名片管理</a></li>
+</ul>
+<div class="app-content">
+    <div class="app-filter">
+        <div class="filter-action">
+            <a href="{php echo web_url('citycard/citycard/card_edit')}" class="btn btn-primary">添加名片</a>
+        </div>
+        <div class="filter-list">
+            <form class="form-horizontal" action="{php echo web_url('citycard/citycard/card_lists')}" method="post">
+                <div class="form-group">
+                    <div class="col-sm-2 control-label">名片信息</div>
+                    <div class="col-sm-9">
+                        <input type="text" class="form-control" name="name" value="{$_GPC['name']}" placeholder="请输入名片名称">
+                    </div>
+                </div>
+                <div class="form-group">
+                    <div class="col-sm-2 control-label"></div>
+                    <div class="col-sm-9">
+                        <button class="btn btn-primary" type="submit">搜索</button>
+                    </div>
+                </div>
+            </form>
+        </div>
+    </div>
+    <div class="app-table-list">
+        {if !empty($lists) || $pindex != 1}
+        <div class="table-responsive">
+            <table class="table table-hover table-bordered">
+                <thead>
+                    <tr>
+                        <th class="text-center"><input type="checkbox" /></th>
+                        <th class="text-center">名片信息</th>
+                        <th class="text-center">所属用户</th>
+                        <th class="text-center">关联套餐</th>
+                        <th class="text-center">统计</th>
+                        <th class="text-center">审核</th>
+                        <th class="text-center">状态</th>
+                        <th class="text-center">操作</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    {loop $lists $list}
+                    <tr class="text-center">
+                        <td>
+                            <input type="checkbox" value="{$list['id']}" />
+                        </td>
+                        <td class="name text-left">
+                            <div style="display: flex">
+                                <img class="img-40" src="{php echo tomedia($list['logo'])}" style="border-radius:50%;border:1px solid #efefef;margin-top: 20px;" onerror="this.src='../addons/{MODULE_NAME}/web/resource/images/nopic-small.jpg'" height="40" width="40">
+                                <span style="display: flex;flex-direction: column;justify-content: center;align-items: flex-start;padding-left: 5px">
+                                    <p><b>名片名称：</b>{$list['name']}</p>
+                                    <p><b>所属分类：</b>{$list['one_class_name']} - {$list['two_class_name']}</p>
+                                    <p><b>入驻时间：</b>{php echo date('Y-m-d H:i:s', $list['createtime'])}</p>
+                                </span>
+                            </div>
+                        </td>
+                        <td>
+                            {if !empty($list['member'])}
+                            {$list['member']['nickname']}<br>
+                            {$list['member']['mobile']}
+                            {else}
+                            平台添加
+                            {/if}
+                        </td>
+                        <td>
+                            <p><b>套餐名称：</b>{$list['meal']['name']}</p>
+                            <p><b>套餐明细：</b>￥{$list['meal']['price']}/入驻{$list['meal']['day']}天</p>
+                            <p>
+                            	<b>到期时间：</b>
+                            	{if $list['meal_endtime']>0}
+                            	{php echo date('Y-m-d H:i:s', $list['meal_endtime'])}
+                            	{else}
+                            		<span class='label label-danger'>未支付</span>
+                            	{/if}
+                            </p>
+                        </td>
+                        <td>
+                            <p><b>浏览：</b>{$list['pv']}</p>
+                            <p><b>收存：</b>{$list['collect']}</p>
+                        </td>
+                        <td style="position: relative;">
+                        	{if $list['paystatus']}
+                            <div class="btn-group" style="width: 68px;">
+                                <button class="btn btn-sm {$checkstatus[$list['checkstatus']]['class']} dropdown-toggle" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">{$checkstatus[$list['checkstatus']]['text']}</button>
+                                <ul class="dropdown-menu" style="width: 68px;min-width: 68px;">
+                                    {if $list['checkstatus'] != 0}
+                                    <li><a href="{php echo web_url('citycard/citycard/card_check_status', array('id'=>$list['id'],'status'=>0))}" data-toggle="ajaxRemove" data-confirm="确认修改为待审核吗？" style="margin: 0;">待审核</a></li>
+                                    {/if}
+                                    {if $list['checkstatus'] != 1}
+                                    <li><a href="{php echo web_url('citycard/citycard/card_check_status', array('id'=>$list['id'],'status'=>1))}" data-toggle="ajaxRemove" data-confirm="确认通过审核吗？" style="margin: 0;">通过</a></li>
+                                    {/if}
+                                    {if $list['checkstatus'] != 2}
+                                    <li><a href="{php echo web_url('citycard/citycard/card_check_status', array('id'=>$list['id'],'status'=>2))}" data-toggle="ajaxRemove" data-confirm="确认驳回审核吗？" style="margin: 0;">驳回</a></li>
+                                    {/if}
+                                </ul>
+                            </div>
+                            {else}
+                            	<span class='label label-danger'>未支付</span>
+                            {/if}
+                        </td>
+                        <td>
+                            <span class='label {if $list['status']==1}label-primary{else}label-default{/if}'>
+                            {if $list['status']==1}启用{else}禁用{/if}</span>
+                        </td>
+                        <td>
+                            <a class="btn btn-sm btn-default" href="{php echo web_url('citycard/citycard/card_edit', array('id' => $list['id']))}">编辑</a>
+                            <a class="btn btn-sm btn-default" data-toggle="ajaxRemove" href="{php echo web_url('citycard/citycard/card_del', array('id' => $list['id']))}" data-confirm="确定删除当前名片?">删除</a>
+                        </td>
+                    </tr>
+                    {/loop}
+                </tbody>
+            </table>
+        </div>
+        <div class="app-table-foot clearfix">
+            <div class="pull-left">
+                <button class="btn btn-default" type="button" data-toggle='batch-remove' data-confirm="确定删除当前选择的名片？" data-href="{php echo web_url('citycard/citycard/card_del')}">批量删除</button>
+                <button class="btn btn-default" type="button" data-toggle='batch' data-href="{php echo web_url('citycard/citycard/card_check_status', array('status'=>1))}">批量通过</button>
+                <button class="btn btn-default" type="button" data-toggle='batch' data-href="{php echo web_url('citycard/citycard/card_check_status', array('status'=>2))}">批量驳回</button>
+            </div>
+            <div class="pull-right">
+                {$pager}
+            </div>
+        </div>
+        {else}
+        <div class="no-result">
+            <p>还没有相关数据</p>
+        </div>
+        {/if}
+    </div>
+</div>
+{php include wl_template('common/footer');}

@@ -1,0 +1,168 @@
+{php include wl_template('common/header');}
+<ul class="nav nav-tabs" id="myTab">
+    <li class="active"><a href="javascript:;">职位列表</a></li>
+</ul>
+<div class="app-content">
+    <!--顶部操作-->
+    <div class="app-filter">
+        <div class="filter-action">
+            <a href="{php echo web_url('recruit/industryPosition/positionEdit')}" class="btn btn-primary">添加职位</a>
+            <a href="javascript:;" class="btn btn-info" id="createButton" title="一键生成默认职位信息">一键生成</a>
+        </div>
+        <div class="filter-list">
+            <form action="" method="get" class="form-horizontal" role="form" id="form1">
+                <input type="hidden" name="c" value="site" />
+                <input type="hidden" name="a" value="entry" />
+                <input type="hidden" name="m" value="{MODULE_NAME}" />
+                <input type="hidden" name="p" value="recruit" />
+                <input type="hidden" name="ac" value="industryPosition" />
+                <input type="hidden" name="do" value="positionList" />
+                <div class="form-group">
+                    <div class="col-sm-2 control-label">职位名称</div>
+                    <div class="col-sm-9">
+                        <input type="text" class="form-control" name="title" value="{$title}" placeholder="请输入职位名称...">
+                    </div>
+                </div>
+                <div class="form-group">
+                    <label class="col-sm-2 control-label">上级行业</label>
+                    <div class="col-sm-9">
+                        <select name="industry_pid" class="form-control select2">
+                            <option value="0">全部</option>
+                            {loop $industryList $industryVo}
+                                <option value="{$industryVo['id']}" {if $industryPid == $industryVo['id']}selected="selected"{/if}>{$industryVo['title']}</option>
+                            {/loop}
+                        </select>
+                    </div>
+                </div>
+                <div class="form-group">
+                    <label class="col-sm-2 control-label">子行业</label>
+                    <div class="col-sm-9">
+                        <select name="industry_id" class="form-control select2">
+                            <option value="0">全部</option>
+                            {loop $subList $subVo}
+                                <option value="{$subVo['id']}" {if $industryId == $subVo['id']}selected="selected"{/if}>{$subVo['title']}</option>
+                            {/loop}
+                        </select>
+                    </div>
+                </div>
+                <div class="form-group">
+                    <div class="col-sm-2 control-label"></div>
+                    <div class="col-sm-9">
+                        <button class="btn btn-primary" type="submit">搜索</button>
+                        <a href="{php echo web_url('recruit/industryPosition/positionList')}" class="btn btn-danger">清除</a>
+                        <button class="btn btn-warning" type="submit" name="export" value="1">导出</button>
+                    </div>
+                </div>
+            </form>
+        </div>
+    </div>
+    <!--表格信息-->
+    <div class="app-table-list">
+        <!--列表信息-->
+        <div class="table-responsive order-list">
+            <table class="table table-hover">
+                <thead>
+                    <tr>
+                        <th class="text-center"><input type="checkbox" /></th>
+                        <th class="text-center">所属行业</th>
+                        <th class="text-center">职位</th>
+                        <th class="text-center">排序</th>
+                        <th class="text-center">创建时间</th>
+                        <th class="text-center">操作</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    {loop $list $key $item}
+                        <tr class="text-center">
+                            <td><input type="checkbox" value="{$item['id']}" /></td>
+                            <td>{$item['industry_one_title']} - {$item['industry_two_title']}</td>
+                            <td>{$item['title']}</td>
+                            <td>{$item['sort']}</td>
+                            <td>{php echo date("Y-m-d H:i:s",$item['create_time']);}</td>
+                            <td>
+                                <a href="{php echo web_url('recruit/industryPosition/positionEdit',['id'=>$item['id']])}" class="btn btn-warning btn-sm">编辑</a>
+                                <a href="{php echo web_url('recruit/industryPosition/positionDel',['ids'=>$item['id']])}"class="btn btn-danger btn-sm" data-toggle="ajaxRemove" data-confirm="确定删除当前职位信息？">删除</a>
+                            </td>
+                        </tr>
+                    {/loop}
+                </tbody>
+            </table>
+        </div>
+        <!--操作按钮 分页信息-->
+        <div class="app-table-foot clearfix">
+            <div class="pull-left">
+                <button class="btn btn-default" type="button" data-toggle='batch-remove' data-confirm="确定删除当前选中的所有职位信息？" data-href="{php echo web_url('recruit/industryPosition/positionDel')}">批量删除</button>
+            </div>
+            <div class="pull-right">{$pager}</div>
+        </div>
+    </div>
+</div>
+<!--进度框-->
+<div class="upgrade-modal-page">
+    <div class="upgrade-modal-mask">
+        <div class="upgrade-modal">
+            <div>
+                <img src="../addons/{MODULE_NAME}/web/resource/images/upgrade.png"/>
+            </div>
+            <div class="progress">
+                <div class="progress-bar" role="progressbar" aria-valuenow="0" aria-valuemin="0" aria-valuemax="100">0%</div>
+            </div>
+            <div class="upgrade-modal-tip">
+                系统正在为您生成默认的职位信息，请耐心等待~~~
+            </div>
+        </div>
+    </div>
+</div>
+<script>
+    /**
+     * 默认职位信息生成
+     */
+    $("#createButton").on('click',function () {
+        tip.confirm('生成职位信息需要先生成默认行业信息，否则生成空的职位信息。是否生成默认的职位信息？',function () {
+            //显示加载动画
+            $(".upgrade-modal-page").modal();
+            //请求生成
+            let link = "{php echo web_url('recruit/industryPosition/positionDefaultInfo');}";
+            let eachList = function(){
+                $.post(link,function (res) {
+                    if(res.errno == 1 && res.data['total'] > 0){
+                        let rate = res.data['rate']+'%';
+                        $(".progress-bar").css({"width":rate});
+                        $(".progress-bar").html(rate);
+                        eachList();
+                    }else{
+                        tip.alert(res.message,function () {
+                            history.go(0);
+                        });
+                    }
+                },'json');
+            }
+            eachList();
+        });
+    });
+    /**
+     * 上级行业和子行业联动操作
+     */
+    $("[name='industry_pid']").on('change',function () {
+        let id = $(this).val(),
+            link = "{php echo web_url('recruit/industryPosition/industrySubList');}";
+        //请求获取子行业信息
+        $.post(link,{id:id},function (res) {
+            if(res.errno == 1){
+                let data = res.data,
+                    html = '<option value="0">全部</option>';
+                //循环生成子行业信息
+                $.each(data,function (k,v) {
+                    html += '<option value="'+v['id']+'">'+v['title']+'</option>';
+                });
+                //替换信息
+                $("[name='industry_id']").html(html);
+            }else{
+                tip.alert(res.message,function () {
+                    history.go(0);
+                });
+            }
+        },'json');
+    });
+</script>
+{php include wl_template('common/footer');}

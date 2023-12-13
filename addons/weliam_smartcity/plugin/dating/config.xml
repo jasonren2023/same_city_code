@@ -1,0 +1,46 @@
+<?xml version="1.0" encoding="utf-8"?>
+<manifest>
+	<application>
+		<name><![CDATA[相亲交友]]></name>
+		<identifie><![CDATA[dating]]></identifie>
+		<version><![CDATA[1.0.0]]></version>
+		<type><![CDATA[expand]]></type>
+		<description><![CDATA[相亲交友]]></description>
+		<author><![CDATA[微连科技]]></author>
+		<url><![CDATA[http://www.weliam.cn/]]></url>
+	</application>
+	<setting>
+		<agent embed="true" />
+		<system embed="true" />
+		<task embed="true" />
+	</setting>
+	<agentmenu>
+		<menu title="会员管理" font="fa-inbox">
+			<entry title="用户列表" ac="member" do="memberList" actions='["do",["memberList","memberSee"]]' iscover="true" />
+			<entry title="会员动态" ac="member" do="dynamicList" actions='["do",["dynamicList","dynamicEdit"]]'/>
+			<entry title="动态评论" ac="member" do="commentList" actions='["do",["commentList"]]'/>
+		</menu>
+	</agentmenu>
+	<systemmenu>
+		<menu title="会员管理" font="fa-inbox">
+			<entry title="用户列表" ac="member" do="memberList" actions='["do",["memberList","memberSee"]]' iscover="true" />
+			<entry title="个性标签" ac="member" do="labelList" actions='["do",["labelList","labelEdit"]]'/>
+			<entry title="会员动态" ac="member" do="dynamicList" actions='["do",["dynamicList","dynamicEdit"]]'/>
+			<entry title="动态评论" ac="member" do="commentList" actions='["do",["commentList"]]'/>
+			<entry title="选项设置" ac="member" do="optionList" actions='["do",["optionList"]]'/>
+		</menu>
+		<menu title="VIP卡管理" font="fa-inbox">
+			<entry title="VIP卡" ac="vip" do="vipList" actions='["do",["vipList","vipEdit"]]'/>
+			<entry title="会员列表" ac="vip" do="userList" actions='["do",["userList"]]'/>
+			<entry title="开卡记录" ac="vip" do="recordList" actions='["do",["recordList"]]'/>
+		</menu>
+		<menu title="红娘管理" font="fa-inbox">
+			<entry title="红娘列表" ac="matchmaker" do="matchmakerList" actions='["do",["matchmakerList","matchmakerEdit"]]'/>
+			<entry title="佣金明细" ac="matchmaker" do="commissionList" actions='["do",["commissionList"]]'/>
+			<entry title="订单管理" ac="matchmaker" do="orderList" actions='["do",["orderList"]]'/>
+		</menu>
+		<menu title="设置" font="fa-inbox">
+			<entry title="基本设置" ac="member" do="setEdit" actions='["do",["setEdit"]]'/>
+		</menu>
+	</systemmenu>
+</manifest>

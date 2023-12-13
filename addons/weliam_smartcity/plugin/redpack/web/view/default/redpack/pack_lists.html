@@ -1,0 +1,108 @@
+{php include wl_template('common/header');}
+<ul class="nav nav-tabs">
+    <li class="active"><a href="javascript:;">红包管理</a></li>
+</ul>
+<div class="app-content">
+    <div class="app-filter">
+        <div class="filter-action">
+            <a href="{php echo web_url('redpack/redpack/pack_edit')}" class="btn btn-primary">添加红包</a>
+        </div>
+        <div class="filter-list">
+            <form class="form-horizontal" action="{php echo web_url('redpack/redpack/pack_lists')}" method="post">
+                <div class="form-group" >
+                    <label class="col-sm-2 control-label">状态</label>
+                    <div class="col-sm-9">
+                        <div class="btn-group">
+                            <a href="{php echo wl_filter_url('status:');}" class="btn {if empty($_GPC['status'])}btn-primary{else}btn-default{/if}">不限</a>
+                            <a href="{php echo wl_filter_url('status:1');}" class="btn {if $_GPC['status'] == '1'}btn-primary{else}btn-default{/if}">上架</a>
+                            <a href="{php echo wl_filter_url('status:2');}" class="btn {if $_GPC['status'] == '2'}btn-primary{else}btn-default{/if}">过期</a>
+                            <a href="{php echo wl_filter_url('status:3');}" class="btn {if $_GPC['status'] == '3'}btn-primary{else}btn-default{/if}">下架</a>
+                        </div>
+                    </div>
+                </div>
+                <div class="form-group">
+                    <div class="col-sm-2 control-label">红包信息</div>
+                    <div class="col-sm-9">
+                        <input type="text" class="form-control" name="name" value="{$_GPC['name']}" placeholder="请输入红包名称">
+                    </div>
+                </div>
+                <div class="form-group">
+                    <div class="col-sm-2 control-label"></div>
+                    <div class="col-sm-9">
+                        <button class="btn btn-primary" type="submit">搜索</button>
+                        <button class="btn btn-warning" type="submit" name="export" value="1">导出</button>
+                    </div>
+                </div>
+            </form>
+        </div>
+    </div>
+    <div class="app-table-list">
+        {if !empty($lists)}
+        <div class="table-responsive">
+            <table class="table table-hover table-bordered">
+                <thead>
+                    <tr>
+                        <th class="text-center">ID</th>
+                        <th class="text-center">红包名称</th>
+                        <th class="text-center">红包金额 / 使用条件</th>
+                        <th class="text-center">红包场景</th>
+                        <th class="text-center">总数量 / 已领数量</th>
+                        <th class="text-center">每人限领</th>
+                        <th class="text-center">使用期限</th>
+                        <th class="text-center">状态</th>
+                        <th class="text-center">排序</th>
+                        <th class="text-center">操作</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    {loop $lists $list}
+                    <tr class="text-center">
+                        <td>{$list['id']}</td>
+                        <td>{$list['title']}</td>
+                        <td>{$list['cut_money']}元 / {php echo $list['full_money'] ? '满'.$list['full_money'].'元可用':"无门槛";}</td>
+                        <td>
+                            <span class='label {if $list['scene']==1}label-primary{else}label-warning{/if}'>
+                            {if $list['scene']==1}系统发放{else}自助领取{/if}</span>
+                        </td>
+                        <td>{$list['all_count']} / {$list['get_count']}个</td>
+                        <td>{$list['limit_count']}</td>
+                        <td>{$list['usetime_text']}</td>
+                        <td>
+                            {if $list['status']==2}
+                            <a href="javascript:;" class='btn btn-sm btn-danger'>过期</a>
+                            {else}
+                                <a data-toggle="ajaxPost" href="{php echo web_url('redpack/redpack/pack_changeStatus', ['id' => $list['id'],'status'=>$list['status']])}" class='btn btn-sm {if $list['status']==1}btn-primary{else}btn-default{/if}'>
+                                    {if $list['status']==1}上架{else}下架{/if}
+                                </a>
+                            {/if}
+                        </td>
+                        <td>{$list['sort']}</td>
+                        <td>
+                            <a class="btn btn-sm btn-info" href="{php echo web_url('redpack/redpack/record_lists', ['packid' => $list['id']])}">领取记录</a>
+                            <!--发放按钮 需要红包上架并且为系统发放 才可以使用-->
+                            {if $list['status']==1 && $list['scene']==1}
+                                <a class="btn btn-sm btn-warning" href="{php echo web_url('redpack/redpack/pack_send', array('id' => $list['id']))}" data-toggle="ajaxModal">发放</a>
+                            {/if}
+                            <a class="btn btn-sm btn-primary" href="{php echo web_url('redpack/redpack/pack_edit', array('id' => $list['id']))}">编辑</a>
+                            <a class="btn btn-sm btn-danger" data-toggle="ajaxRemove" href="{php echo web_url('redpack/redpack/pack_del', array('id' => $list['id']))}" data-confirm="删除红包将删除所有用户已经领取的红包及节日红包中的该红包，确定删除?">删除</a>
+                        </td>
+                    </tr>
+                    {/loop}
+                </tbody>
+            </table>
+        </div>
+        <div class="app-table-foot clearfix">
+            <div class="pull-left">
+            </div>
+            <div class="pull-right">
+                {$pager}
+            </div>
+        </div>
+        {else}
+        <div class="no-result">
+            <p>还没有相关数据</p>
+        </div>
+        {/if}
+    </div>
+</div>
+{php include wl_template('common/footer');}

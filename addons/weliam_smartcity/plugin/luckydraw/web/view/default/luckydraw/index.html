@@ -1,0 +1,125 @@
+{php include wl_template('common/header');}
+<ul class="nav nav-tabs" id="myTab">
+    <li class="active"><a href="javascript:;">活动列表</a></li>
+</ul>
+<!-- 直播间信息列表 -->
+<div class="app-content">
+    <div class="app-filter">
+        <div class="filter-action">
+            <a href="{php echo web_url('luckydraw/luckydraw/edit')}" class="btn btn-primary">添加活动</a>
+        </div>
+        <div class="filter-list">
+            <form action="" method="get" class="form-horizontal" role="form" id="form1">
+                <input type="hidden" name="c" value="site" />
+                <input type="hidden" name="a" value="entry" />
+                <input type="hidden" name="m" value="{MODULE_NAME}" />
+                <input type="hidden" name="p" value="luckydraw" />
+                <input type="hidden" name="ac" value="luckydraw" />
+                <input type="hidden" name="do" value="index" />
+                <div class="form-group">
+                    <div class="col-sm-2 control-label">活动名称</div>
+                    <div class="col-sm-9">
+                        <input type="text" class="form-control" name="title" value="{$title}" placeholder="请输入活动名称...">
+                    </div>
+                </div>
+                <div class="form-group">
+                    <label class="col-sm-2 control-label">开奖类型</label>
+                    <div class="col-sm-9">
+                        <select name="type" class="form-control">
+                            <option value="0" {if $type == 0}selected{/if}>全部</option>
+                            <option value="2" {if $type == 2}selected{/if}>定时开奖</option>
+                            <option value="1" {if $type == 1}selected{/if}>组图开奖</option>
+                        </select>
+                    </div>
+                </div>
+                <div class="form-group">
+                    <label class="col-sm-2 control-label">状态</label>
+                    <div class="col-sm-9">
+                        <select name="status" class="form-control">
+                            <option value="0" {if $status == 0}selected{/if}>全部</option>
+                            <option value="1" {if $status == 1}selected{/if}>已开启</option>
+                            <option value="2" {if $status == 2}selected{/if}>禁用中</option>
+                        </select>
+                    </div>
+                </div>
+                <div class="form-group">
+                    <div class="col-sm-2 control-label"></div>
+                    <div class="col-sm-9">
+                        <button class="btn btn-primary" type="submit">搜索</button>
+                        <a href="{php echo web_url('luckydraw/luckydraw/index')}" class="btn btn-danger">清除</a>
+                    </div>
+                </div>
+            </form>
+        </div>
+    </div>
+    <div class="app-table-list">
+        <div class="table-responsive order-list">
+            <table class="table table-hover">
+                <thead>
+                    <tr>
+                        <th class="text-center">活动主题</th>
+                        <th class="text-center">活动类型</th>
+                        <th class="text-center">状态</th>
+                        <th class="text-center">活动内容</th>
+                        <th class="text-center">创建时间</th>
+                        <th class="text-center">奖品数量</th>
+                        <th class="text-center">操作</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    {loop $list $item}
+                        <tr class="text-center">
+                            <td>{$item['title']}</td>
+                            <td>
+                                {if $item['drawstatus'] == 1}
+                                    <label class="label label-info">组团开奖</label>
+                                {else}
+                                    <label class="label label-danger">定时开奖</label>
+                                {/if}
+                            </td>
+                            <td>
+
+                                {if $item['status'] == 1}
+                                    <label class="label label-primary">使用中</label>
+                                {else}
+                                    <label class="label label-danger">未开启</label>
+                                {/if}
+                            </td>
+                            <td>
+                                {if $item['drawstatus'] == 1}
+                                成团数量：{$item['drawcodenum']}个<br />
+                                成团次数：{$item['drawsucnum']}次
+                                {else}
+                                开始时间：{$item['starttime']}<br />
+                                结束时间：{$item['endtime']}
+                                {/if}
+                            </td>
+                            <td>{$item['createtime']}</td>
+                            <td>
+                                一等奖：{$item['oneprizenum']}个
+                                {if !empty($item['twoprizeid'])} <br/> 二等奖：{$item['twoprizenum']}个 {/if}
+                                {if !empty($item['threeprizeid'])} <br/> 三等奖：{$item['threeprizenum']}个 {/if}
+                            </td>
+                            <td>
+                                {if p('wxplatform')}
+                                <a class="btn btn-info btn-sm js-clip" data-url="{php echo h5_url('pages/subPages2/lottery/lotteryIndex/lotteryIndex',['id'=>$item['id']]);}" href="javascript:;">复制链接</a>
+                                {/if}
+                                {if p('wxapp')}
+                                <a class="btn btn-default btn-sm js-clip" data-url="pages/subPages2/lottery/lotteryIndex/lotteryIndex?id={$item['id']}" href="javascript:;">复制路径</a>
+                                {/if}
+                                <a class="btn btn-sm btn-success" target='_blank' href="{php echo web_url('luckydraw/luckydraw/recordIndex',['activityid'=>$item['id']]);}">活动记录</a>
+                                <a class="btn btn-sm btn-warning" href="{php echo web_url('luckydraw/luckydraw/edit',['id'=>$item['id']]);}">编辑</a>
+                                <a class="btn btn-sm btn-danger" data-toggle="ajaxRemove" href="{php echo web_url('luckydraw/luckydraw/delete',['id'=>$item['id']]);}" data-confirm="抽奖活动是重要信息，请勿轻易删除,确认删除此抽奖活动？">删除</a>
+                            </td>
+                        </tr>
+                    {/loop}
+                </tbody>
+            </table>
+        </div>
+        <div class="app-table-foot clearfix">
+            <div class="pull-left"></div>
+            <div class="pull-right">{$pager}</div>
+        </div>
+    </div>
+</div>
+{php include wl_template('common/footer');}

@@ -1,0 +1,123 @@
+{php include wl_template('common/header');}
+<style>
+    .temp_id{
+        width: 350px!important;
+    }
+</style>
+<ul class="nav nav-tabs">
+    <li class="active">
+        <a href="javascript:;">
+            {if $type == 'pay'}
+                订单支付成功设置
+            {else if $type == 'refund'}
+                退款通知设置
+            {else if $type == 'write_off'}
+                核销成功提醒设置
+            {else if $type == 'card'}
+                开卡成功通知设置
+            {else if $type == 'fight'}
+                拼团结果通知设置
+            {else if $type == 'send'}
+                发货提醒设置
+            {else if $type == 'remind'}
+                订单催付提醒设置
+            {else if $type == 'phone'}
+                手机绑定通知设置
+            {else if $type == 'shop_join'}
+                商户入驻通知设置
+            {else if $type == 'examine'}
+                审核结果通知设置
+            {else if $type == 'service'}
+                服务进度提醒设置
+            {else if $type == 'sign'}
+                签到成功通知设置
+            {/if}
+        </a>
+    </li>
+</ul>
+<div class="app-content">
+    <div class="app-form">
+        <div class="panel panel-default">
+            <form action="{php echo web_url('news/template/saveSet')}" class="form-horizontal form" method="post">
+                <div class="panel-body" id="formList">
+                    <!--<div class="form-group-title">基础设置</div>-->
+                    <!--基础设置预览位-->
+                    <div class="form-group-title">微信公众号消息</div>
+                    <div class="form-group">
+                        <label class="col-sm-2 control-label">是否启用</label>
+                        <div class="col-sm-9">
+                            <label class="radio-inline" onclick="showcutoff(0)">
+                                <input type="radio" value="0" name="data[wechat][status]" {if !$info['wechat']['status']}checked="checked"{/if}>关闭
+                            </label>
+                            <label class="radio-inline" onclick="showcutoff(1)">
+                                <input type="radio" value="1" name="data[wechat][status]" {if $info['wechat']['status'] == 1}checked="checked"{/if}>开启
+                            </label>
+                        </div>
+                    </div>
+                    <div class="form-group">
+                        <label class="col-sm-2 control-label">模板id</label>
+                        <div class="col-sm-9">
+                            <div class="input-group">
+                                <div class="input-group">
+                                    <input type="text" class="form-control temp_id" name="data[wechat][id]" value="{$info['wechat']['id']}">
+                                    <span class="input-group-btn get_template_id" source="1"><button class="btn btn-default" type="button" >一键获取</button></span>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="form-group-title">微信小程序消息</div>
+                    <div class="form-group">
+                        <label class="col-sm-2 control-label">是否启用</label>
+                        <div class="col-sm-9">
+                            <label class="radio-inline" onclick="showcutoff(0)">
+                                <input type="radio" value="0" name="data[weapp][status]" {if !$info['weapp']['status']}checked="checked"{/if}>关闭
+                            </label>
+                            <label class="radio-inline" onclick="showcutoff(1)">
+                                <input type="radio" value="1" name="data[weapp][status]" {if $info['weapp']['status'] == 1}checked="checked"{/if}>开启
+                            </label>
+                        </div>
+                    </div>
+                    <div class="form-group">
+                        <label class="col-sm-2 control-label">模板id</label>
+                        <div class="col-sm-9">
+                            <div class="input-group">
+                                <div class="input-group">
+                                    <input type="text" class="form-control temp_id" name="data[weapp][id]" value="{$info['weapp']['id']}">
+                                    <span class="input-group-btn get_template_id" source="3"><button class="btn btn-default " type="button" >一键获取</button></span>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                    <!--<div class="form-group-title">短信消息</div>-->
+                    <!--短信消息设置预览位-->
+                </div>
+                <div class="form-group">
+                    <div class="col-sm-2 control-label must "></div>
+                    <div class="col-sm-9">
+                        <input type="hidden" name="type" value="{$type}"/>
+                        <input type="submit" name="submit" value="提交" class="btn btn-primary col-sm-1 min-width" />
+                        <a href="{php echo web_url('news/template/index')}">
+                            <input type="button" value="取消" class="btn btn-warning col-sm-1 min-width" style="margin-left: 30px"/>
+                        </a>
+                    </div>
+                </div>
+            </form>
+        </div>
+    </div>
+</div>
+<script>
+    let type = "{$type}";//模板信息类型
+    $(function () {
+        $("#formList").on('click','.get_template_id',function () {
+            //端口设置：1=微信公众号；2=h5;3=微信小程序
+            let source = $(this).attr('source');
+            let res = common.ajaxPost('news/template/getTempId',{type:type,source:source},true,false);
+            if(res['errno'] == 0){
+                $(this).prev().val(res['data']);
+            }else{
+                tip.alert(res['message']);
+            }
+        });
+    })
+</script>
+{php include wl_template('common/footer');}

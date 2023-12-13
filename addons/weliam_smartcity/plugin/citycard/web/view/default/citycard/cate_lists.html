@@ -1,0 +1,112 @@
+{php include wl_template('common/header');}
+<ul class="nav nav-tabs">
+    <li class="active"><a href="javascript:;">分类管理</a></li>
+</ul>
+<div class="app-content">
+    <div class="app-filter">
+        <div class="filter-action">
+            <a href="{php echo web_url('citycard/citycard/cate_edit')}" class="btn btn-primary">添加分类</a>
+            <a href="javascript:;" class="btn btn-success js-category-all js-collapse">全部折叠</a>
+        </div>
+    </div>
+    <div class="app-table-list">
+        {if !empty($categorys['parents'])}
+        <div class="table-responsive">
+            <table class="table table-hover">
+                <thead>
+                    <tr>
+                        <th class="text-center"><input type="checkbox" /></th>
+                        <th class="text-center">顺序</th>
+                        <th class="text-left">分类名称</th>
+                        <th class="text-center">状态</th>
+                        <th class="text-center">操作</th>
+                    </tr>
+                </thead>
+                <tbody >
+                {loop $categorys['parents'] $category}
+                <tr class="text-center">
+                    <td>
+                        <input type="checkbox" value="{$category['id']}" />
+                    </td>
+                    <td>{$category['sort']}</td>
+                    <td class="text-left">
+                        <div>
+                            <span>{$category['name']}</span>
+                            <span class="category-caret">
+                                <i class="fa fa-caret-down js-category-down" style="display:none;" pid="{$category['id']}"></i>
+                                <i class="fa fa-caret-up js-category-up" pid="{$category['id']}"></i>
+                            </span>
+                        </div>
+                    </td>
+                    <td>{php echo tpl_change_status('citycard/citycard/cate_enabled&id='.$category['id'], $category['enabled'])}</td>
+                    <td>
+                        <a href="{php echo web_url('citycard/citycard/cate_edit',array('parentid' => $category['id']))}" class="btn btn-default btn-sm">添加子分类</a>
+                        <a href="{php echo web_url('citycard/citycard/cate_edit',array('id'=>$category['id']))}" class="btn btn-default btn-sm">编辑</a>
+                        <a href="{php echo web_url('citycard/citycard/cate_del',array('id'=>$category['id']))}"class="btn btn-default btn-sm" data-toggle="ajaxRemove" data-confirm="删除一级分类将删除此分类下所有子分类，确定删除当前分类？">删除</a>
+                    </td>
+                </tr>
+                {loop $categorys['childrens'][$category['id']] $children}
+                <tr class="js-collpase js-child-category text-center" pid="{$category['id']}">
+                    <td>
+                        <input type="checkbox" value="{$children['id']}" />
+                    </td>
+                    <td>{$children['sort']}</td>
+                    <td class="text-left">
+                        <div style="padding-left:50px;height:30px;line-height:30px;background:url('./resource/images/bg_repno.gif') no-repeat -245px -545px;">
+                            {$children['name']}
+                        </div>
+                    </td>
+                    <td>{php echo tpl_change_status('citycard/citycard/cate_enabled&id='.$children['id'], $children['enabled'])}</td>
+                    <td class="text-center">
+                        <a href="{php echo web_url('citycard/citycard/cate_edit', array('id' => $children['id']))}" class="btn btn-default btn-sm">编辑</a>
+                        <a href="{php echo web_url('citycard/citycard/cate_del', array('id' => $children['id']))}"class="btn btn-default btn-sm" data-toggle="ajaxRemove" data-confirm="确定删除当前分类？">删除</a>
+                    </td>
+                </tr>
+                {/loop}
+                {/loop}
+                </tbody>
+            </table>
+        </div>
+        <div class="app-table-foot clearfix">
+            <div class="pull-left">
+                <button class="btn btn-default" type="button" data-toggle='batch-remove' data-confirm="删除一级分类将删除此分类下所有子分类，确定删除当前选择的分类？" data-href="{php echo web_url('citycard/citycard/cate_del')}">批量删除</button>
+            </div>
+        </div>
+        {else}
+        <div class="no-result">
+            <p>还没有相关数据</p>
+        </div>
+        {/if}
+    </div>
+</div>
+<script type="text/javascript">
+    //控制显示
+    $(function(){
+        $('.js-category-all').click(function() {
+            if($(this).hasClass('js-collapse')) {
+                $('.js-child-category').fadeOut("slow");
+                $('.fa-caret-up').hide();
+                $('.fa-caret-down').show();
+                $(this).text('全部展开').removeClass('js-collapse');
+            } else {
+                $('.js-child-category').fadeIn("slow");
+                $('.fa-caret-up').show();
+                $('.fa-caret-down').hide();
+                $(this).text('全部折叠').addClass('js-collapse');
+            }
+        });
+        $('.js-category-up').click(function() {
+            var parentId = $(this).attr('pid');
+            $('tr[pid="'+parentId+'"]').fadeOut("slow");
+            $(this).prev().show();
+            $(this).hide();
+        });
+        $('.js-category-down').click(function() {
+            var parentId = $(this).attr('pid');
+            $('tr[pid="'+parentId+'"]').fadeIn("slow");
+            $(this).next().show();
+            $(this).hide();
+        });
+    });
+</script>
+{php include wl_template('common/footer');}

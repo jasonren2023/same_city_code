@@ -1,0 +1,23 @@
+<style>
+    .wx-qrcode{}
+    .wx-qrcode .qrcode-img{border: 1px solid #eee; padding: 20px;width: 220px; height: 220px;margin: auto;}
+    .wx-qrcode .qrcode-img img {width:180px;height:180px;}
+    .wx-qrcode .qrcode-title{line-height: 40px;text-align: center;}
+    .wx-qrcode .qrcode-btn{display: block;text-align: center;line-height: 160px;}
+
+</style>
+<div class="modal-dialog">
+    <div class="modal-content">
+        <div class="modal-header">
+            <button data-dismiss="modal" class="close" type="button">×</button>
+            <h4 class="modal-title">直播二维码</h4>
+        </div>
+        <div class="modal-body" style="height: 350px;">
+            <div class="wx-qrcode">
+                <div class="qrcode-img">
+                    <img src="{$qrcode}" >
+                </div>
+            </div>
+        </div>
+    </div>
+</div>

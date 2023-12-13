@@ -1,0 +1,87 @@
+{php include wl_template('common/header');}
+<ul class="nav nav-tabs">
+	<li class="active"><a href="javascript:;">分类列表</a></li>
+</ul>
+<div class="app-content">
+	<div class="app-filter">
+		<div class="filter-action">
+			<a href="{php echo web_url('activity/activity_web/categoryedit');}" class="btn btn-primary">新建分类</a>
+			<a href="{php echo web_url('goodshouse/category/cateImportShop',['plugin'=>'activity'])}" class="btn btn-default" data-toggle='ajaxPost' data-confirm="确定要导入商家一级分类吗？">一键导入商家分类</a>
+		</div>
+		<!--搜索栏-->
+		<div class="filter-list">
+			<form action="" method="get" class="form-horizontal" role="form" id="form1">
+				<input type="hidden" name="c" value="site" />
+				<input type="hidden" name="a" value="entry" />
+				<input type="hidden" name="m" value="{MODULE_NAME}" />
+				<input type="hidden" name="p" value="activity" />
+				<input type="hidden" name="ac" value="activity_web" />
+				<input type="hidden" name="do" value="categorylist" />
+				<div class="form-group">
+					<label class="col-sm-2 control-label">分类名</label>
+					<div class="col-md-4">
+						<input type="text" name="keyword" class="form-control" value="{$_GPC['keyword']}"  placeholder="请输入关键字"/>
+					</div>
+				</div>
+				<div class="form-group">
+					<label class="col-sm-2 control-label"></label>
+					<div class="col-sm-9">
+						<button class="btn btn-primary" id="search">筛选</button>
+					</div>
+				</div>
+			</form>
+		</div>
+	</div>
+	<!--列表-->
+	<div class="app-table-list">
+		<div class="panel panel-default">
+			<table class="table table-hover table-responsive table-bordered">
+				<thead class="navbar-inner">
+				<tr>
+					<th style="width: 25px;text-align: center;">图标</th>
+					<th style="width: 120px;">分类名称(点击编辑)</th>
+					<th style="width: 30px;text-align: center;">状态</th>
+					<th style="width: 30px;text-align: center;">排序</th>
+					<th style="width: 80px">操作</th>
+				</tr>
+				</thead>
+				<tbody>
+				{loop $list $item}
+				<tr>
+					<td style="text-align: center;">
+						<img style="height: 50px;" src="{php echo tomedia($item['logo'])}" />
+					</td>
+					<td>
+						<a href='javascript:;' data-toggle='ajaxEdit' data-href="{php echo web_url('activity/activity_web/editcategoryname',array('id'=>$item['id']))}">
+							{$item['name']}
+						</a>
+					</td>
+					<th style="text-align: center;">
+		        	<span class="change">
+						<span class='label {if $item['status']==1}label label-primary {else}label-default{/if}'
+			                data-toggle='ajaxSwitch'
+			                data-switch-value='{$item['status']}'
+			                data-switch-value0='0|禁用|label label-default|{php echo web_url('activity/activity_web/changestatus',array('value'=>1,'id'=>$item['id']))}'
+			                data-switch-value1='1|启用|label label-primary|{php echo web_url('activity/activity_web/changestatus',array('value'=>0,'id'=>$item['id']))}'>
+			             	{if $item['status']==1}启用{else}禁用{/if}
+						</span>
+						</span>
+					</th>
+					<td style="text-align: center;">{$item['sort']}</td>
+					<td style="position: relative;">
+						<a class="btn btn-sm btn-info" href="{php echo web_url('activity/activity_web/categoryedit',array('id' => $item['id']))}">编辑</a>
+						<a class="btn btn-sm btn-primary js-clip" href='javascript:;' data-url="{php echo h5_url('pages/mainPages/index/diypage?type=3',['id'=>$item['id']])}">复制链接</a>
+						<a class="btn btn-sm btn-danger" data-toggle="ajaxRemove" href="{php echo web_url('activity/activity_web/categorydelete', array('id'=>$item['id']))}" data-confirm="确定要删除该分类吗？">删除</a>
+					</td>
+				</tr>
+				{/loop}
+				</tbody>
+			</table>
+		</div>
+	</div>
+	{$pager}
+</div>
+<style>
+	.change:hover{cursor:pointer;}
+</style>
+{php include wl_template('common/footer');}

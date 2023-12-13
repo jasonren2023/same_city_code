@@ -1,0 +1,59 @@
+{php include wl_template('common/header');}
+{if empty($_GPC['lct'])}
+<ul class="nav nav-tabs">
+	<li class="active"><a href="javascript:;">计划任务</a></li>
+</ul>
+{/if}
+<div class="app-content">
+	<div class="bs-callout bs-callout-danger" id="callout-glyphicons-empty-only">
+	    <h4>{$settings['name']}设置</h4>
+	    <p>计划任务只需设置一次，所有公众号均可使用</p>
+	</div>
+	<div class="app-form">
+		<form action="" method="post" class="form-horizontal form form-validate" >
+			<div class="panel">
+				<div class="panel-body">
+				    <div class="form-group">
+				        <label class="col-sm-2 control-label">直接链接</label>
+				        <div class="col-sm-9">
+				            <p class='form-control-static'><a href='javascript:;' class="js-clip" title='点击复制链接' data-url="{php echo $settings['url']}" >{php echo $settings['url']}</a></p>
+				        </div>
+				    </div>
+					<div class="form-group">
+				        <label class="col-sm-2 control-label">计划任务状态</label>
+				        <div class="col-sm-9">
+				            {if $status==2}<button type="button" class="btn btn-primary min-width">正常</button>{else if $status==3}<button type="button" class="btn btn-warning min-width">锁死</button>{else}<button type="button" class="btn btn-danger min-width">异常</button>{/if}
+				        </div>
+				    </div>
+					{if $status == 3}
+					<div class="form-group">
+						<label class="col-sm-2 control-label">重启计划任务</label>
+						<div class="col-sm-9">
+							<a class="label label-info" data-toggle="ajaxPost"  data-confirm="确认重启计划任务?" href="{php echo web_url('cloud/wlsysset/restartqueen')}"  style="position: relative;top: 6px;">重启</a>
+						</div>
+					</div>
+					{/if}
+					<div class="form-group">
+						<label class="col-sm-2 control-label">适用公众号</label>
+						<div class="col-sm-9">
+							<select name ='passiveid[]' class="form-control select2" multiple="multiple">
+								{loop $all_wechats $pp}
+								<option value="{$pp['uniacid']}" {if in_array($pp['uniacid'],$passiveid)} selected {/if} >{$pp['name']}</option>
+								{/loop}
+							</select>
+							<span class="help-block">不选择任何公众号即对所有公众号生效</span>
+						</div>
+					</div>
+				</div>
+			</div>
+			<div class="form-group">
+				<label class="col-sm-2 control-label"></label>
+				<div class="col-sm-9">
+					<input type="submit" name="submit" value="提交" class="btn btn-primary min-width" />
+					<input type="hidden" name="token" value="{$_W['token']}" />
+				</div>
+			</div>
+		</form>
+	</div>
+</div>
+{php include wl_template('common/footer');}

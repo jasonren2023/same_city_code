@@ -1,0 +1,122 @@
+{php include wl_template('common/header');}
+<style>
+    .sapp-steps{margin:75px;}
+    .sapp-steps .code{width:320px;margin:20px auto;text-align:center;display: none;}
+    .sapp-steps .code .qrcode{width:122px;height:122px;position:relative;display:inline-block}
+    .sapp-steps .code .qrcode .mask{position:absolute;top:0;left:0;right:0;width:120px;height:120px;background:rgba(0,0,0,.8);line-height:120px;color:#fff;font-weight:700;text-align:center;cursor:pointer}
+    .sapp-steps .code .qrcode .mask .la-ball-clip-rotate{top: 0!important;left: 0!important;}
+    .sapp-steps .code .qrcode img{width:120px;height:120px}
+    .sapp-steps .code .description{margin-top: 20px;}
+    .sapp-steps .up-btns{margin:0 auto;}
+    .sapp-steps .step{margin-bottom:10px;}
+    .sapp-steps .step .num{display: inline-flex;}
+    .sapp-steps .step .num .step-num{margin-bottom:10px;width:40px;height:40px;line-height:40px;text-align:center;display:block;font-size:16px;color:#666;background-color:#fff7f5;border-radius:50%}
+    .sapp-steps .line{display:block;width:90px;border-top:1px dashed #999;margin:20px auto;height: 1px;}
+    .sapp-steps .step .title{font-size:14px;color:#333;line-height:14px;margin-bottom:10px;margin-top:5px}
+    .sapp-steps .step .info,.sapp-steps .step .time{font-size:12px;color:#999;line-height:12px;margin-bottom:10px}
+
+
+    .current-version{
+        margin-right: 50px;
+    }
+
+
+</style>
+<ul class="nav nav-tabs" id="myTab">
+    <li class="active"><a href="#tab_basic">小程序发布</a></li>
+</ul>
+<div class="app-content">
+    <div class="app-form">
+        <form action="" method="post" class="form-horizontal form form-validate">
+            <p class="alert alert-warning">温情提示：发布小程序之前请先完善小程序信息，修改跳转小程序需重新发布方可生效。</p>
+            <!-- 版本信息 -->
+            <div class="form-group-title">
+                <span class="current-version">当前使用版本:{php echo $_W['wlsetting']['wxapp_upload_code']['version'] ?? ' -- ';}</span>
+                <span>最新版本:{$auth['version']}</span>
+            </div>
+            <!-- 基本信息 -->
+            <div class="form-group">
+                <div class="col-sm-2 control-label">小程序名称</div>
+                <div class="col-sm-9">
+                    <input class="form-control" value="{$info['name']}" readonly="readonly"/>
+                </div>
+            </div>
+            <div class="form-group">
+                <div class="col-sm-2 control-label">AppId</div>
+                <div class="col-sm-9">
+                    <input class="form-control" value="{$info['appid']}" readonly="readonly"/>
+                </div>
+            </div>
+            <div class="form-group">
+                <div class="col-sm-2 control-label">AppSecret</div>
+                <div class="col-sm-9">
+                    <input class="form-control" value="{$info['secret']}" readonly="readonly"/>
+                </div>
+            </div>
+            <div class="form-group">
+                <div class="col-sm-2 control-label">上次提交时间</div>
+                <div class="col-sm-9">
+                    <input class="form-control" value="{php echo $_W['wlsetting']['wxapp_upload_code']['time'] ? date('Y-m-d H:i:s', $_W['wlsetting']['wxapp_upload_code']['time']) : ' -- ';}" readonly="readonly"/>
+                </div>
+            </div>
+            <div class="form-group">
+                <div class="col-sm-2 control-label">二维码</div>
+                <div class="col-sm-9">
+                    <div style="max-width: 150px;max-height: 150px;padding: 4px;">
+                        <img src="{php echo tomedia($info['qrcode'])}" style="display:inline-block;max-width: 100%;max-height: 100%;"/>
+                    </div>
+                </div>
+            </div>
+            <div class="form-group hide" id="previewImage">
+                <div class="col-sm-2 control-label">预览二维码</div>
+                <div class="col-sm-9">
+                    <img src="" width="142" height="142"/>
+                </div>
+            </div>
+            <div class="form-group">
+                <div class="col-sm-2 control-label">发布操作</div>
+                <div class="col-sm-9">
+                    <a class="btn btn-warning download-code" href="{php echo web_url('wxapp/wxappset/wxapp_download_code')}" target="_blank">下载小程序代码</a>
+                    <a class="btn btn-primary" id="release" href="javascript:;">上传小程序包</a>
+                    <a class="btn btn-info hide" id="preview" href="javascript:;">预览小程序v{$_W['wlsetting']['wxapp_upload_code']['version']}</a>
+                </div>
+            </div>
+        </form>
+    </div>
+</div>
+<script>
+    /**
+     * 点击发布小程序
+     */
+    $(document).on('click',"#release",function () {
+        //上传中
+        let _this = $(this);
+        _this.attr("id",'').html("小程序发布中，请勿进行任何操作......");
+        $.post("{php echo web_url('wxapp/wxappset/wxapp_upload_code')}", function(data){
+            //_this.attr("id",'release').html("发布小程序");
+            _this.remove();//删除发布按钮
+            tip.alert(data['message'],function () {
+                $("#preview").removeClass('hide');//显示预览按钮
+            });
+        }, 'json');
+    });
+    /**
+     * 点击生成预览二维码
+     */
+    $(document).on('click',"#preview",function () {
+        let _this = $(this), _html = _this.html();
+        _this.attr("id",'').html("预览二维码获取中，请勿进行任何操作......");
+        $.post("{php echo web_url('wxapp/wxappset/wxapp_preview')}", function(data){
+            _this.attr("id",'release').html(_html);
+            if(data['errno'] == 0){
+                $("#previewImage").removeClass('hide');
+                $("#previewImage").find("img").attr('src',data['data']);
+            }else{
+                tip.alert(data['message'],function () {
+                    history.go(0);
+                });
+            }
+        }, 'json');
+    });
+</script>
+{php include wl_template('common/footer');}

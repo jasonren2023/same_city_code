@@ -1,0 +1,75 @@
+<style>
+    .qrcode-tab .wx-qrcode{}
+    .qrcode-tab .wx-qrcode .qrcode-img{width: 200px;margin: auto;}
+    .qrcode-tab .wx-qrcode .qrcode-title{line-height: 50px;text-align: center;font-weight: bold;font-size: 16px;}
+    #wxplatformANDwxapp .linkDiv{
+        height: 20px;
+        line-height: 20px;
+        text-align: center;
+    }
+    #wxplatformANDwxapp .linkSpan{
+        display: inline-block;
+        float: left;
+    }
+    #wxplatformANDwxapp .linkA{
+        overflow: hidden;
+        text-overflow: ellipsis;
+        white-space: nowrap;
+        width: calc(100% - 80px)!important;
+        display: inline-block;
+        float: left;
+        text-align: left;
+    }
+    .qrcode-img img {
+        width: 100%!important;
+    }
+</style>
+<div class="modal-dialog">
+    <div class="modal-content">
+        <div class="modal-header">
+            <button data-dismiss="modal" class="close" type="button">×</button>
+            <h4 class="modal-title">买单二维码</h4>
+        </div>
+        <div class="modal-body" style="height: 470px;">
+            <div class="qrcode-tab">
+                <div id="wxplatformANDwxapp">
+                    <div class="alert alert-warning">
+                        <div class="linkDiv">
+                            <span class="linkSpan">买单链接：</span>
+                            <a class="linkA weChatBuyLink js-clip" data-url="{$h5qrcode['url']}">{$h5qrcode['url']}</a>
+                        </div>
+                        <div class="linkDiv">
+                            <span class="linkSpan">买单路径：</span>
+                            <a class="linkA weChatBuyLink js-clip" data-url="{$wxappqrcode['url']}">{$wxappqrcode['url']}</a>
+                        </div>
+                    </div>
+                    <div class="row">
+                        <div class="col-md-6">
+                            <div class="wx-qrcode">
+                                <div class="qrcode-img weChatBuyQrCode">
+                                    <img src="{php echo tomedia($h5qrcode['img']);}">
+                                </div>
+                                <div class="qrcode-title">公众号买单码</div>
+                            </div>
+                        </div>
+                        <div class="col-md-6">
+                            <div class="wx-qrcode">
+                                <div class="qrcode-img weChatBuyQrCode">
+                                    <img src="{php echo tomedia($wxappqrcode['img']);}">
+                                </div>
+                                <div class="qrcode-title">小程序买单码</div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+<script>
+    $(function () {
+        common.copyLink();
+    });
+</script>
+
+

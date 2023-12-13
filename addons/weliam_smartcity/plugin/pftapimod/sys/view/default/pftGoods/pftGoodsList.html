@@ -1,0 +1,91 @@
+{php include wl_template('common/header');}
+<style type='text/css'>
+    .order-rank img{width:16px; height:16px;}
+    .js-remark,.js-admin-remark{word-break:break-all; overflow:hidden; background: #FDEEEE;color: #ED5050;padding: 5px 10px;}
+    td.goods-info{position:relative; padding-left:60px;}
+    .goods-info .img{position:absolute;top:50%; margin-top:-25px; background: url({IMAGE_LOADING}) center center no-repeat; width:50px;height:50px; }
+    .goods-info span {white-space: nowrap;overflow: hidden;text-overflow: ellipsis;display: block;}
+    .status-text{cursor:pointer;}
+</style>
+<ul class="nav nav-tabs">
+    <li class="active"><a href="#">票付通商品列表</a></li>
+</ul>
+<div class="app-content" >
+    <div class="app-filter">
+        <div class="app-table-list">
+            {if empty($list['error'])}
+            <div class="panel-body table-responsive collapse in order-list" id="order-template-item-4" style="padding: 0;padding-bottom:65px;">
+                <table class="table table-hover table-bordered">
+                    <thead style="background-color: #FFFFFF;">
+                    <tr>
+                        <th style="width:30px;text-align:center;">ID</th>
+                        <th style="width:120px;">商品</th>
+                        <th style="width:100px; text-align:center;">添加时间</th>
+                        <th style="width:60px; text-align:center;">商品类型</th>
+                        <th style="width:60px; text-align:center;">所属地区</th>
+                        <th style="width:100px; text-align:center;">操作</th>
+                    </tr>
+                    </thead>
+                    <tbody>
+                    {loop $list $item}
+                    <tr>
+                        <td class="text-center">{$item['UUid']}</td>
+                        <td class="goods-info line-feed">
+                            <div class="img"><img class="scrollLoading" src="{IMAGE_PIXEL}" data-url="{$item['UUimgpath']}" height="50" width="50" onerror="this.src='{IMAGE_NOPIC_SMALL}'" ></div>
+                            <div class="title" style="padding-left: 60px;">
+                                <span>{$item['UUtitle']}</span>
+                            </div>
+                        </td>
+                        <td class="line-feed" style="width:150px;padding-left: 5px;">
+                            <div class="title" style="text-align: center;">
+                                <span>{$item['UUaddtime']}</span>
+                            </div>
+                        </td>
+                        <td class="text-center" style="width:60px;">
+                            {if $item['UUp_type'] == 'A' }<span class="label label-success">景点</span>{/if}
+                            {if $item['UUp_type'] == 'B' }<span class="label label-warning">线路</span>{/if}
+                            {if $item['UUp_type'] == 'C' }<span class="label label-info">酒店</span>{/if}
+                            {if $item['UUp_type'] == 'F' }<span class="label label-danger">套票</span>{/if}
+                            {if $item['UUp_type'] == 'H' }<span class="label label-default">演出</span>{/if}
+                        </td>
+                        <td class="text-center" style="width:60px;">
+                            <span>{$item['UUarea']}</span>
+                        </td>
+                        <td class="text-center">
+                            <div class="btn-group">
+                                <a class="btn btn-success"  data-toggle="ajaxModal" href="{php echo web_url('pftapimod/pftGoods/importGoodsModel', array('id'=>$item['UUid']))}">导入为系统商品</a>
+<!--                                <button type="button" class="btn btn-success dropdown-toggle" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">导入为系统商品</button>-->
+<!--                                <ul class="dropdown-menu" style="min-width: 68px;">-->
+<!--                                    <li><a onclick="checkOrDelete({$item['UUid']},1);" href="javascript:;"  style="margin: 0;">抢购</a></li>-->
+<!--                                    <li><a onclick="checkOrDelete({$item['UUid']},2);" href="javascript:;"  style="margin: 0;">团购</a></li>-->
+<!--                                    <li><a onclick="checkOrDelete({$item['UUid']},3);" href="javascript:;"  style="margin: 0;">拼团</a></li>-->
+<!--                                </ul>-->
+                            </div>
+                        </td>
+                    </tr>
+                    {/loop}
+                    </tbody>
+                </table>
+            </div>
+            <div class="app-table-foot clearfix">
+                <div class="pull-left">
+
+                </div>
+                <div class="pull-right">
+                    {$pager}
+                </div>
+            </div>
+            {else}
+            <div class="no-result">
+                {if !empty($msg)}
+                <p>{$msg}</p>
+                {else}
+                <p>暂无商品数据，请到票付通平台添加。</p>
+                {/if}
+            </div>
+            {/if}
+        </div>
+    </div>
+</div>
+
+{php include wl_template('common/footer');}

@@ -1,0 +1,71 @@
+{php include wl_template('common/header');}
+<ul class="nav nav-tabs" id="myTab">
+    <li class="active"><a href="#tab_basic">基础设置</a></li>
+</ul>
+<div class="app-content">
+    <div class="app-form">
+        <form action="" method="post" class="form-horizontal form form-validate">
+            <div class="tab-content">
+                <div class="tab-pane active" id="tab_basic">
+                    <div class="form-group-title">基础设置</div>
+                    <div class="form-group">
+                        <label class="col-sm-2 control-label">首页社群</label>
+                        <div class="col-sm-9">
+                            <select name="settings[communityid]" class="form-control select2">
+                                <option value="0">不显示社群</option>
+                                {loop $communitylist $key $val}
+                                <option value="{$val['id']}" {if $val['id'] == $settings['communityid']}selected{/if}>{$val['communname']}</option>
+                                {/loop}
+                            </select>
+                            <span class="help-block">请选择首页是否显示社群</span>
+                        </div>
+                    </div>
+                    <div class="form-group">
+                        <label class="col-sm-2 control-label">浏览增量</label>
+                        <div class="col-sm-9">
+                            <div class="input-group">
+                                <span class="input-group-addon">每次增加</span>
+                                <input type="text" name="settings[minup]" class="form-control" value="{$settings['minup']}" digits="true">
+                                <span class="input-group-addon">~</span>
+                                <input type="text" name="settings[maxup]" class="form-control" value="{$settings['maxup']}" digits="true">
+                                <span class="input-group-addon">次</span>
+                            </div>
+                            <div class="help-block">设置后，所有活动浏览1次将不再是计数1，而是取您设置的上限和下限之间的随机数</div>
+                        </div>
+                    </div>
+                    <div class="form-group-title">首页分享</div>
+                    <div class="alert alert-warning">
+                        <p>适用模板变量：[昵称] [时间] [系统名称]</p>
+                    </div>
+                    <div class="form-group">
+                        <label class="col-sm-2 control-label">分享标题</label>
+                        <div class="col-sm-9">
+                            <input type="text" name="settings[share_title]" class="form-control" value="{$settings['share_title']}" />
+                        </div>
+                    </div>
+                    <div class="form-group">
+                        <label class="col-sm-2 control-label">分享图片</label>
+                        <div class="col-sm-9">
+                            {php echo attachment_select('settings[share_image]', $settings['share_image']);}
+                            <span class="help-block">推荐图片尺寸500X500</span>
+                        </div>
+                    </div>
+                    <div class="form-group">
+                        <label class="col-sm-2 control-label">分享描述</label>
+                        <div class="col-sm-9">
+                            <input type="text" name="settings[share_desc]" class="form-control" value="{$settings['share_desc']}" />
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <div class="form-group">
+                <label class="col-sm-2 control-label"></label>
+                <div class="col-sm-9">
+                    <input type="submit" name="submit" value="提交" class="btn btn-primary min-width" />
+                    <input type="hidden" name="token" value="{$_W['token']}" />
+                </div>
+            </div>
+        </form>
+    </div>
+</div>
+{php include wl_template('common/footer');}

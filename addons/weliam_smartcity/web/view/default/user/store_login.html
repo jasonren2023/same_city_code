@@ -1,0 +1,254 @@
+{php include wl_template('common/header-base')}
+<script type="text/javascript" src="{URL_WEB_JS}jquery.qrcode.min.js"></script>
+<style>
+    *{-webkit-touch-callout: none;-webkit-user-select: none;-khtml-user-select: none;-moz-user-select: none;-ms-user-select: none;user-select: none;}
+    body{background-color: rgb(51, 51, 51);padding-top: 10vh;}
+    .flex-dir-row{-webkit-box-orient: horizontal;-webkit-box-direction: normal;-webkit-flex-direction: row;-ms-flex-direction: row;flex-direction: row;}
+    .dis-flex{display: -webkit-box!important;display: -webkit-flex!important;display: -ms-flexbox!important;display: flex!important}
+    .impowerBox,.impowerBox .status_icon,.impowerBox .status_txt{display:inline-block;vertical-align:middle;text-align: center;}
+    .impowerBox{line-height:1.6;position:relative;width:100%;z-index:1;text-align:center;}
+    .impowerBox .title{text-align:center;font-size:20px;color: #ffffff;margin-top: 15vh;}
+    .impowerBox .title-two{width: 239px;height: 42px;text-align: center;padding: 4px;background: rgba(0,0,0,.2);border-radius: 22px;margin-bottom: 24px;position: relative;margin: auto;}
+    .impowerBox .title-two .item{width: 100%;font-size: 15px;color: #fff;border-radius: 22px;position: relative;z-index: 1;height: 33px;line-height: 33px;cursor: pointer;}
+    .impowerBox .title-two .item.active{color: #333;background: #fff;}
+    .impowerBox .qrcode{width:280px;height:280px;margin-top:25px;border:1px solid #E2E2E2;}
+    .impowerBox .info{width:280px;margin:0 auto;text-align: center}
+    .impowerBox .status{padding:7px 14px;text-align:left}
+    .impowerBox .status.status_browser,.redesign-msg{text-align:center}
+    .impowerBox .status.normal{color: #ffffff;margin-top:15px;background-color:#232323;border-radius:100px;-moz-border-radius:100px;-webkit-border-radius:100px;box-shadow:inset 0 5px 10px -5px #191919,0 1px 0 0 #444;-moz-box-shadow:inset 0 5px 10px -5px #191919,0 1px 0 0 #444;-webkit-box-shadow:inset 0 5px 10px -5px #191919,0 1px 0 0 #444}
+    .impowerBox .status p{font-size:13px;margin-bottom: 0;}
+    .impowerBox .status_icon{margin-right:5px}
+    .impowerBox .status_txt p{top:-2px;position:relative;margin:0}
+    .impowerBox .icon38_msg{display:inline-block;width:38px;height:38px}
+    .impowerBox .icon38_msg.succ{background:url({URL_WEB_RESOURCE}images/icon_popup3696b4.png)0 -46px no-repeat}
+    .impowerBox .icon38_msg.warn{background:url({URL_WEB_RESOURCE}images/icon_popup3696b4.png)0 -87px no-repeat}
+    .wrp_code{height: 300px;}
+    .foot{display: none;}
+    #shadow{display: none;width: 280px;height: 280px;border: 1px solid #E2E2E2;background: #000000;margin: auto;position: relative;top: -280px;opacity: .5;line-height: 280px;font-size: 35px;color: #FFF;}
+    #tips{display: none;width: 280px;height: 280px;border: 1px solid #E2E2E2;margin: auto;position: relative;top: -560px;line-height: 280px;font-size: 35px;color: #FFF;cursor: pointer;}
+    #qrcode{background: #FFF;padding: 10PX;}
+    #qrcode canvas{width: 100%;border: 1PX solid #CCC;}
+    #qrcode img{width: 100%;}
+</style>
+<div class="old-template" style="">
+    <div class="main impowerBox">
+        <div class="loginPanel normalPanel">
+            <div class="title-two flex-dir-row dis-flex" id="titleButton">
+                {if $wechat == 1}
+                    <div class="item active" type="1">公众号登录</div>
+                {/if}
+                {if $weapp == 1}
+                    <div class="item {if $wechat == 0}active{/if}" type="2">小程序登录</div>
+                {/if}
+            </div>
+            <div class="waiting panelContent">
+                <div class="wrp_code">
+                    <div id="qrcode" class="qrcode lightBorder"></div>
+                    <div id="shadow"></div>
+                    <div id="tips"><!-- 扫码成功/失败的提示 --></div>
+                </div>
+                <div class="info">
+                    <!-- 登录二维码  -1=初始化 -->
+                    <div class="status status_browser js_status js_wx_default_tip normal" style="display:block" id="wx_default_tip">
+                        <p>请使用微信扫描二维码登录</p>
+                        <p>“{if $cloudset['name']}{$cloudset['name']}{else}智慧城市同城{/if}”</p>
+                    </div>
+                    <!-- 扫码成功，提示确认登录 1=扫描成功 -->
+                    <div class="status status_succ js_status js_wx_after_scan normal" style="display:none" id="wx_after_scan">
+                        <i class="status_icon icon38_msg succ"></i>
+                        <div class="status_txt">
+                            <h4>扫描成功</h4>
+                            <p>请在微信中点击确认即可登录</p>
+                        </div>
+                    </div>
+                    <!-- 取消登录，提示重试或者关闭窗口 -2=取消登录 -->
+                    <div class="status status_fail js_status js_wx_after_cancel normal" style="display:none" id="wx_after_cancel">
+                        <i class="status_icon icon38_msg warn"></i>
+                        <div class="status_txt">
+                            <h4>您已取消此次登录</h4>
+                            <p>您可刷新重新扫描，或关闭窗口</p>
+                        </div>
+                    </div>
+                    <!-- 二维码失效，提示重新获取 -3=二维码失效 -->
+                    <div class="status status_fail js_status js_wx_after_cancel normal" style="display:none" id="wx_after_invalid">
+                        <i class="status_icon icon38_msg warn"></i>
+                        <div class="status_txt">
+                            <h4>当前二维码已失效</h4>
+                            <p>请点击刷新重新获取二维码信息</p>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+<script>
+    let path = "{$path}",
+        weapp_path = '<img src="{$weAppPath}" />',
+        only_key = "{$onlyKey}",
+        time_judge,//超时判断计时器
+        end_time = "{$endTime}";
+            	console.log(end_time);
+        
+    $(function () {
+        console.log({path,only_key});
+        //进入页面自动加载信息
+        $(window).load(function(){
+            addQrCode();
+        });
+        //根据登录状态 进行对应的操作
+        $("#tips").on('click',function () {
+            let status = $(this).data("status");
+            switch (status) {
+                case -3:
+                    history.go(0);
+                    break;//二维码失效
+                case -2:
+                    let userAgent = navigator.userAgent;
+                    if (userAgent.indexOf("Firefox") != -1 || userAgent.indexOf("Chrome") !=-1) {
+                        window.location.href="about:blank";
+                    } else {
+                        window.opener = null;
+                        window.open("", "_self");
+                    }
+                    window.close();
+                    break;//取消登录
+                case -1:break;//初始化
+                case 1:break;//扫描成功
+                default:
+                    history.go(0);
+                    break;//二维码失效
+            }
+        });
+        //点击更换二维码类型
+        $("#titleButton").on('click','.item',function () {
+            //判断是否改变二维码
+            if($("#titleButton .active").attr("type") == $(this).attr("type")){
+                return false;
+            }
+            //改变class信息
+            $("#titleButton .item").removeClass('active');
+            $(this).addClass('active');
+            //请求后台更新过期时间
+            let res = common.ajaxPost('user/storelogin/changeEndTime',{only_key:only_key},true,2);
+            end_time = res.data.end_time;
+            //从新加载二维码
+            addQrCode();
+        });
+    });
+    /**
+     * 控制二维码|太阳码的显示
+     */
+    function addQrCode() {
+        //删除已存在的二维码信息
+        $("#qrcode").html('');
+        //获取被选中项
+        let type = $("#titleButton .active").attr("type") ? $("#titleButton .active").attr("type") : 1;
+        //显示二维码信息
+        if(type == 1){
+            //显示公众号二维码
+            $("#qrcode").qrcode(path);
+        }else{
+            //显示小程序太阳码
+            $("#qrcode").html(weapp_path);
+        }
+        //状态初始化
+        clearInterval(time_judge);//关闭已存在的定时器
+        $("#shadow").hide();
+        $("#tips").html('').data('status',-1).hide();//关闭弹出的二维码过期信息
+        tipsChange("wx_default_tip");//显示初始化信息
+        //添加新的计时器 判断是否过期
+        time_judge = setInterval(function () {
+            let timestamp = Math.floor((new Date().getTime()) / 1000);
+            if(end_time <= timestamp){
+                invalid();//二维码失效
+            }else{
+                //获取登录状态
+                requestGetInfo();
+            }
+        },2000);
+    }
+    /**
+     * 控制提示的显示隐藏
+     * @param name
+     */
+    function tipsChange(name) {
+        $(".js_status.status").hide();
+        let id_name = '#' + name;
+        $(id_name).show();
+    }
+    /**
+     * 显示二维码的提示信息
+     * @param title
+     * @param status
+     */
+    function tipsShow(title,status) {
+        $("#shadow").show();
+        $("#tips").html(title).data('status',status).show();
+    }
+    /**
+     * 二维码失效
+     */
+    function invalid() {
+        //关闭计时器
+        clearInterval(time_judge);
+        //弹出二维码过期信息
+        tipsShow('刷新',-3);
+        //显示过期提示
+        tipsChange("wx_after_invalid");
+    }
+    /**
+     * 取消登录
+     */
+    function cancelLogin() {
+        //关闭计时器
+        clearInterval(time_judge);
+        //弹出二维码过期信息
+        tipsShow('退出',-2);
+        //显示过期提示
+        tipsChange("wx_after_cancel");
+    }
+    /**
+     * 扫描成功
+     */
+    function scanSuccess() {
+        //关闭计时器
+        //clearInterval(time_judge);
+        //弹出二维码过期信息
+        tipsShow('成功',1);
+        //显示过期提示
+        tipsChange("wx_after_scan");
+    }
+    /**
+     * 请求获取信息
+     */
+    function requestGetInfo() {
+        let result = common.ajaxPost('user/storelogin/getLoginStatus',{only_key:only_key},true,2);
+        let status = result.data.status,
+            mid    = result.data.mid;
+        if(result.errno == 1 || !status){
+            invalid();//二维码失效
+        }else{
+            switch (status) {
+                case -3:
+                    invalid();
+                    break;//二维码失效
+                case -2:
+                    cancelLogin();
+                    break;//取消登录
+                case -1:break;//初始化
+                case 1:
+                    scanSuccess();
+                    break;//扫描成功
+                case 2:
+                    let links = common.storeUrl('user/storelogin/storeLogin',{},true);
+                    window.location.href = links;
+                    break;//确认登录
+                default:
+                    invalid();
+                    break;//二维码失效
+            }
+        }
+    }
+</script>
+{php include wl_template('common/footer');}

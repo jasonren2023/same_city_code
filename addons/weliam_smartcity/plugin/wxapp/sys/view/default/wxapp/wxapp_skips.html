@@ -1,0 +1,69 @@
+{php include wl_template('common/header');}
+<ul class="nav nav-tabs" id="myTab">
+    <li class="active"><a href="#tab_basic">跳转小程序</a></li>
+</ul>
+<div class="app-content">
+    <div class="app-form">
+        <form action="" method="post" id="setting-form" class="form-horizontal form form-validate">
+            <div class="panel panel-default">
+                <div class="panel-heading">跳转小程序列表</div>
+                <div class="panel-body">
+                    <p class="alert alert-warning">温情提示：小程序跳转小程序，需要先添加小程序Appid，最多可添加10个跳转小程序，每次修改需要重新发布小程序方可生效</p>
+                    <div id="datas">
+                        {if empty($settings)}
+                        {php include wl_template('wxapp/wxapp_skips_tpl');}
+                        {else}
+                        {loop $settings $data}
+                        {php include wl_template('wxapp/wxapp_skips_tpl');}
+                        {/loop}
+                        {/if}
+                    </div>
+                    <div class="form-group">
+                        <label class="col-sm-2 control-label"></label>
+                        <div class="col-sm-9">
+                            <a class="btn btn-default btn-add-type" href="javascript:;" onclick="addType();">
+                                <i class="fa fa-plus" title=""></i>添加小程序
+                            </a>
+                        </div>
+                    </div>
+                    <div class="form-group">
+                        <label class="col-sm-2 control-label"></label>
+                        <div class="col-sm-9">
+                            <input type="submit" name="submit" lay-submit value="提交" class="btn btn-primary min-width" />
+                            <input type="hidden" name="token" value="{$_W['token']}" />
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </form>
+    </div>
+</div>
+<script>
+    $(function () {
+        $(document).on('click', '.data-item-delete', function () {
+            var len = $(".data-item").length;
+            if(len==1){
+                layer.msg('必须保留一条!');
+                return;
+            }
+            $(this).closest('.data-item').remove();
+        });
+    });
+
+    function addType() {
+        var len = $(".data-item").length;
+        if(len > 10){
+            layer.msg('最多添加十条');
+            return;
+        }
+        $(".btn-add-type").button("loading");
+        $.ajax({
+            url: "{php echo web_url('wxapp/wxappset/wxapp_skips_tpl')}",
+            cache: false
+        }).done(function (html) {
+            $(".btn-add-type").button("reset");
+            $("#datas").append(html);
+        });
+    }
+</script>
+{php include wl_template('common/footer');}

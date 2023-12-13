@@ -1,0 +1,118 @@
+<!--------------------------  积分组件群  ----------------------------------->
+<!-- 风格一 -->
+<script type="text/html" id="tpl_show_integral_goods">
+    <div class="drag" data-itemid="<%itemid%>"  group_name="<%group_name%>" group_key="<%group_key%>" data-id="<%group_name%>" >
+        <div class="goods_integral_1 goods_style_1" style="margin-bottom: <%style.marginBottom%>px;padding: <%style.margin||'10'%>px;background-color:<%style.bgColor||'#ffffff'%>">
+            <%each data as item index%>
+                <div class="block" style="padding:<%style.padding||'10'%>px;">
+                    <div class="images">
+                        <img src="<%imgsrc item.thumb%>" onerror="this.src='../addons/{MODULE_NAME}/web/resource/images/default.png';"/>
+                    </div>
+                    <div class="describe">
+                        <div class="title"><%item.title%></div>
+                        <div class="price"><%item.price_text%></div>
+                        <div class="old_price">原价:<%item.old_price%>元</div>
+                        <div class="button">去兑换</div>
+                    </div>
+                </div>
+            <%/each%>
+        </div>
+    </div>
+</script>
+<!-- 风格二 -->
+<script type="text/html" id="tpl_show_integral_goods2">
+    <style>
+        #s<%itemid%> .block_item{margin-right: <%style.padding||'0'%>px;}
+        #s<%itemid%> .block_item:nth-child(2n){margin-right: 0px;}
+    </style>
+    <div class="drag" data-itemid="<%itemid%>"  group_name="<%group_name%>" group_key="<%group_key%>" data-id="<%group_name%>">
+        <div class="goods_integral_2 goods_style_2" style="margin-bottom: <%style.marginBottom%>px;padding: <%style.margin||'0'%>px;background-color:<%style.bgColor||'#ffffff'%>;">
+            <div id="s<%itemid%>" class="block" style="padding:<%style.padding||'0'%>px">
+                <%each data as val index%>
+                <div class="block_item" style="width: calc((100% - <%style.padding||'0'%>px) / 2);">
+                    <div class="images">
+                        <img src="<%imgsrc val.thumb%>" onerror="this.src='../addons/{MODULE_NAME}/web/resource/images/default.png';"/>
+                    </div>
+                    <div class="describe">
+                        <div class="name"><%val.title%></div>
+                        <div class="price_info">
+                            <%val.price_text%>
+                        </div>
+                        <div class="pv_info">
+                            <div class="old_priec">原价:<%val.old_price%>元</div>
+                            <div class="pv"><%val.pv%>人喜欢</div>
+                        </div>
+                    </div>
+                </div>
+                <%/each%>
+            </div>
+        </div>
+    </div>
+</script>
+<!-- 风格三 -->
+<script type="text/html" id="tpl_show_integral_goods3">
+    <div class="drag" data-itemid="<%itemid%>"  group_name="<%group_name%>" group_key="<%group_key%>" data-id="<%group_name%>">
+        <div class="goods_integral_3 goods_style_3" style="margin-bottom: <%style.marginBottom%>px;padding: <%style.margin||'0'%>px;background-color:<%style.bgColor||'#ffffff'%>;">
+            <%each data as item index%>
+            <div class="goodslist" style="padding: <%style.padding||'15'%>px;">
+                <div class="goodslist-i" v-for="(item, key) in goodsList" :key="key">
+                    <div class="a">
+                        <div class="goodslist-i-t">
+                            <img src="<%imgsrc item.long_logo%>" onerror="this.src='../addons/{MODULE_NAME}/web/resource/images/default.png';"/>
+                            <%if params.sort_icon == 1%>
+                                <div class="top_top">TOP <%index.substring(index.length-2)%></div>
+                            <%/if%>
+                        </div>
+                    </div>
+                    <div class="goodslist-i-c">
+                        <div class="goodslist-i-c-c">
+                            <div class="a">
+                                <div class="i"><%params.goodsLabel||'积分'%></div>
+                                <%item.title%>
+                            </div>
+                        </div>
+                        <div class="goodslist-i-c-c2">
+                            <div class="h1"><%item.price_text%></div>
+                            <div class="h2">
+                                <div class="a">兑换</div>
+                            </div>
+                        </div>
+                        <div class="goodslist-i-c-b">
+                            <div class="p">
+                                <div class="span">原价<%item.old_price%>元</div>
+                                <div class="em"><%item.pv%>人喜欢</div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <%/each%>
+        </div>
+    </div>
+</script>
+<!-- 风格四 -->
+<script type="text/html" id="tpl_show_integral_goods4">
+    <div class="drag" data-itemid="<%itemid%>"  group_name="<%group_name%>" group_key="<%group_key%>" data-id="<%group_name%>">
+        <div class="goods_integral_4 goods_style_4" style="margin-bottom: <%style.marginBottom||'1'%>px;padding: <%style.margin||'0'%>px;background-color:<%style.bgColor||'#ffffff'%>;">
+            <div class="transverse" style="padding: <%style.padding||'0'%>px;">
+                <div class="transverse_list">
+                    <div class="goods_father">
+                        <%each data as item%>
+                        <div class="goods_item"  style="padding-right: <%style.padding||'0'%>px;">
+                            <div class="goods_img">
+                                <img class="image" src="<%imgsrc item.thumb%>" onerror="this.src='../addons/{MODULE_NAME}/web/resource/images/default.png';"/>
+                            </div>
+                            <div class="goods_title"><%item.title%></div>
+                            <div class="goods_price">
+                                <div class="present_price"><%item.price_text%></div>
+                                <div class="original_price">原价:<%item.old_price%>元</div>
+                            </div>
+                        </div>
+                        <%/each%>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</script>
+

@@ -1,0 +1,163 @@
+{php include wl_template('common/header');}
+<ul class="nav nav-tabs" id="myTab">
+    <li><a href="javascript:;">支付记录</a></li>
+</ul>
+<div class="app-content">
+    <div class="app-filter">
+        <div class="filter-list">
+            <form action="" method="get" class="form-horizontal" role="form" id="form1">
+                <input type="hidden" name="c" value="site" />
+                <input type="hidden" name="a" value="entry" />
+                <input type="hidden" name="m" value="{MODULE_NAME}" />
+                <input type="hidden" name="p" value="housekeep" />
+                <input type="hidden" name="ac" value="KeepType" />
+                <input type="hidden" name="do" value="orderlists" />
+                <input type="hidden" name="fightstatus" value="{$_GPC['fightstatus']}" />
+                <input type="hidden" name="status" value="{$_GPC['status']}" />
+                <div class="form-group">
+                    <label class="col-sm-2 control-label">付费类型</label>
+                    <div class="col-sm-9">
+                        <div class="btn-group">
+                            <a href="{php echo wl_filter_url('fightstatus:0');}" class="btn {if intval($_GPC['fightstatus']) == 0}btn-primary{else}btn-default{/if}">全部</a>
+                            <a href="{php echo wl_filter_url('fightstatus:1');}" class="btn {if $_GPC['fightstatus'] == 1}btn-primary{else}btn-default{/if}">项目下单</a>
+                            <a href="{php echo wl_filter_url('fightstatus:2');}" class="btn {if $_GPC['fightstatus'] == 2}btn-primary{else}btn-default{/if}">付费入驻</a>
+                            <a href="{php echo wl_filter_url('fightstatus:3');}" class="btn {if $_GPC['fightstatus'] == 3}btn-primary{else}btn-default{/if}">发布需求</a>
+                            <a href="{php echo wl_filter_url('fightstatus:4');}" class="btn {if $_GPC['fightstatus'] == 4}btn-primary{else}btn-default{/if}">置顶需求</a>
+                            <a href="{php echo wl_filter_url('fightstatus:4');}" class="btn {if $_GPC['fightstatus'] == 5}btn-primary{else}btn-default{/if}">刷新需求</a>
+                        </div>
+                    </div>
+                </div>
+                <div class="form-group">
+                    <label class="col-sm-2 control-label">订单状态</label>
+                    <div class="col-sm-9">
+                        <div class="btn-group">
+                            <a href="{php echo wl_filter_url('status:0');}" class="btn {if intval($_GPC['status']) == 0}btn-primary{else}btn-default{/if}">全部</a>
+                            <a href="{php echo wl_filter_url('status:8');}" class="btn {if $_GPC['status'] == 8}btn-primary{else}btn-default{/if}">未支付</a>
+                            <a href="{php echo wl_filter_url('status:1');}" class="btn {if $_GPC['status'] == 1}btn-primary{else}btn-default{/if}">待完成</a>
+                            <a href="{php echo wl_filter_url('status:2');}" class="btn {if $_GPC['status'] == 2}btn-primary{else}btn-default{/if}">待评价</a>
+                            <a href="{php echo wl_filter_url('status:3');}" class="btn {if $_GPC['status'] == 3}btn-primary{else}btn-default{/if}">已完成</a>
+                            <a href="{php echo wl_filter_url('status:6');}" class="btn {if $_GPC['status'] == 6}btn-primary{else}btn-default{/if}">待退款</a>
+                            <a href="{php echo wl_filter_url('status:7');}" class="btn {if $_GPC['status'] == 7}btn-primary{else}btn-default{/if}">已退款</a>
+                        </div>
+                    </div>
+                </div>
+                <div class="form-group form-inline">
+                    <label class="col-sm-2 control-label">用户</label>
+                    <div class="col-sm-9">
+                        <select name="keywordtype" class="form-control">
+                            <option value="1" {if $_GPC['keywordtype']==1}selected="selected"{/if}>昵称</option>
+                            <option value="2" {if $_GPC['keywordtype']==2}selected="selected"{/if}>手机号</option>
+                        </select>
+                        <input type="text" name="keyword" class="form-control" value="{$_GPC['keyword']}"  placeholder="请输入关键字"/>
+                    </div>
+                </div>
+                <div class="form-group">
+                    <label class="col-sm-2 control-label">支付时间</label>
+                    <div class="col-sm-9">
+                        {php echo tpl_select_time_info('time_limit', array('starttime' => date('Y-m-d',$starttime), 'endtime' => date('Y-m-d', $endtime)));}
+                    </div>
+                </div>
+                <div class="form-group">
+                    <label class="col-sm-2 control-label"></label>
+                    <div class="col-sm-9">
+                        <button class="btn btn-primary" id="search">筛选</button>
+                    </div>
+                </div>
+            </form>
+        </div>
+    </div>
+    <div class="app-table-list">
+        <div class="table-responsive">
+            <table class="table table-hover">
+                <thead class="navbar-inner">
+                <tr>
+                    <th style="width:15%;">订单编号</th>
+                    <th style="width:15%;">用户信息</th>
+                    <th style="width:10%;">付费类型</th>
+                    <th style="width:15%;">付费项目</th>
+                    <th style="width:5%;">订单金额</th>
+                    <th style="width:5%;">订单状态</th>
+                    <th style="width:10%;">支付方式</th>
+                    <th style="width:10%;">支付时间</th>
+                    <th style="width:15%;">操作</th>
+                </tr>
+                </thead>
+                <tbody>
+                {loop $list $de}
+                <tr>
+                    <td>{$de['orderno']}</td>
+                    <td><img src="{$de['avatar']}" style="width: 30px;height: 30px;"> {$de['nickname']}</td>
+                    <td>
+                        {if $de['fightstatus'] == 1}
+                        <span  class="label label-danger">项目下单</span>
+                        {else if $de['fightstatus'] == 2}
+                        <span  class="label label-info">付费入驻</span>
+                        {else if $de['fightstatus'] == 3}
+                        <span  class="label label-success">发布需求</span>
+                        {else if $de['fightstatus'] == 4}
+                        <span  class="label label-warning">置顶需求</span>
+                        {else if $de['fightstatus'] == 5}
+                        <span  class="label label-default">刷新需求</span>
+                        {/if}
+                    </td>
+                    <td >{$de['goodsname']}</td>
+                    <td >￥{$de['price']}</td>
+                    <td>
+                        {if $de['status'] == 0}
+                        <span  class="label label-default">未支付</span>
+                        {else if $de['status'] == 1}
+                        <span  class="label label-success">待完成</span>
+                        {else if $de['status'] == 2}
+                        <span  class="label label-info">待评价</span>
+                        {else if $de['status'] == 3}
+                        <span  class="label label-info">已完成</span>
+                        {else if $de['status'] == 6}
+                        <span  class="label label-warning">待退款</span>
+                        {else if $de['status'] == 7}
+                        <span  class="label label-danger">已退款</span>
+                        {/if}
+                    </td>
+                    <td>
+                        {if $de['paytype'] == 2}
+                        <span  class="label label-success">微信支付</span>
+                        {else if $de['paytype'] == 3}
+                        <span  class="label label-info">支付宝</span>
+                        {else if $de['paytype'] == 1}
+                        <span  class="label label-warning">余额支付</span>
+                        {else if $de['paytype'] == 5}
+                        <span  class="label label-default">小程序</span>
+                        {else if $de['paytype'] == 6}
+                        <span  class="label label-danger">0元购</span>
+                        {else if $de['paytype'] == 0}
+                        <span  class="label label-default">未支付</span>
+                        {else}
+                        <span  class="label label-danger">其他方式</span>
+                        {/if}
+                    </td>
+                    <td>
+                        {if !empty($de['paytime'])}{$de['paytime']}{else} - 无 - {/if}
+                    </td>
+                    <td>
+                        {if $de['status'] == 1}
+                        <p style="color: #428bca;display: inline-block;"><a href="{php echo web_url('housekeep/KeepType/finish', array('id'=>$de['id']))}" data-toggle="ajaxRemove" data-confirm="确定此订单已经完成？">完成</a></p>
+                        {/if}
+                        {if $de['status'] == 6 || $de['status'] == 1}
+                        <p style="color: #428bca;display: inline-block;"><a href="{php echo web_url('housekeep/KeepType/refund', array('id'=>$de['id']))}" data-toggle="ajaxRemove" data-confirm="确定退款此订单？">退款</a></p>
+                        {/if}
+                    </td>
+                </tr>
+                {/loop}
+                </tbody>
+            </table>
+        </div>
+        <div class="app-table-foot clearfix">
+            <div class="pull-left">
+
+            </div>
+            <div class="pull-right">
+                {$pager}
+            </div>
+        </div>
+    </div>
+</div>
+{php include wl_template('common/footer');}

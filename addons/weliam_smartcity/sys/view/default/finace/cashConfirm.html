@@ -1,0 +1,290 @@
+{php include wl_template('common/header');}
+<ul class="nav nav-tabs">
+	<li class="active"><a href="#">提现列表</a></li>
+</ul>
+<div class="app-content">
+	<div class="app-filter">
+		<div class="filter-list">
+			<form action="" method="get" class="form-horizontal" role="form">
+				<input type="hidden" name="c" value="site" />
+				<input type="hidden" name="a" value="entry" />
+				<input type="hidden" name="m" value="{MODULE_NAME}" />
+				<input type="hidden" name="p" value="finace" />
+				<input type="hidden" name="ac" value="finaceWithdrawalApply" />
+				<input type="hidden" name="do" value="cashApply" />
+				<input type="hidden" name="status" value="{$_GPC['status']}" />
+				<input type="hidden" name="type" value="{$_GPC['type']}" />
+				<div class="form-group">
+					<label class="col-sm-2 control-label">提现状态</label>
+					<div class="col-sm-9">
+						<div class="btn-group">
+							<a href="{php echo wl_filter_url('status:1');}" class="btn {if intval($_GPC['status']) == 0 || intval($_GPC['status']) == 1}btn-primary{else}btn-default{/if}">不限</a>
+							<a href="{php echo wl_filter_url('status:2');}" class="btn {if $_GPC['status'] == 2}btn-primary{else}btn-default{/if}">待审核</a>
+							<a href="{php echo wl_filter_url('status:3');}" class="btn {if $_GPC['status'] == 3}btn-primary{else}btn-default{/if}">待打款</a>
+							<a href="{php echo wl_filter_url('status:4');}" class="btn {if $_GPC['status'] == 4}btn-primary{else}btn-default{/if}">已完成</a>
+							<a href="{php echo wl_filter_url('status:5');}" class="btn {if $_GPC['status'] == 5}btn-primary{else}btn-default{/if}">未通过</a>
+						</div>
+					</div>
+				</div>
+				<div class="form-group">
+					<label class="col-sm-2 control-label">提现类型</label>
+					<div class="col-sm-9">
+						<div class="btn-group">
+							<a href="{php echo wl_filter_url('type:0');}" class="btn {if intval($_GPC['type']) == 0}btn-primary{else}btn-default{/if}">不限</a>
+							<a href="{php echo wl_filter_url('type:1');}" class="btn {if $_GPC['type'] == 1}btn-primary{else}btn-default{/if}">商家提现</a>
+							<a href="{php echo wl_filter_url('type:2');}" class="btn {if $_GPC['type'] == 2}btn-primary{else}btn-default{/if}">代理提现</a>
+                            {if p(distribution)}
+                                <a href="{php echo wl_filter_url('type:3');}" class="btn {if $_GPC['type'] == 3}btn-primary{else}btn-default{/if}">
+									{if Customized::init('distributionText') > 0}共享股东{else}分销{/if}提现
+								</a>
+                            {/if}
+							<a href="{php echo wl_filter_url('type:4');}" class="btn {if $_GPC['type'] == 4}btn-primary{else}btn-default{/if}">用户余额提现</a>
+							{if p('dating')}
+								<a href="{php echo wl_filter_url('type:5');}" class="btn {if $_GPC['type'] == 5}btn-primary{else}btn-default{/if}">红娘提现</a>
+							{/if}
+						</div>
+					</div>
+				</div>
+				{if $_GPC['type'] == 1}
+				<div class="form-group form-inline">
+					<label class="col-sm-2 control-label">搜索内容</label>
+					<div class="col-sm-9">
+						<select name="keywordtype" class="form-control">
+							<option value="1" {if $_GPC['keywordtype']==1}selected="selected"{/if}>商户名称</option>
+							<option value="2" {if $_GPC['keywordtype']==2}selected="selected"{/if}>商户sid</option>
+						</select>
+						<input type="text" name="keyword" class="form-control" value="{$_GPC['keyword']}"  placeholder="请输入关键字"/>
+					</div>
+				</div>
+				{/if}
+				{if $_GPC['type'] == 2}
+				<div class="form-group form-inline">
+					<label class="col-sm-2 control-label">搜索内容</label>
+					<div class="col-sm-9">
+						<select name="keywordtype" class="form-control">
+							<option value="1" {if $_GPC['keywordtype']==1}selected="selected"{/if}>代理名称</option>
+							<option value="2" {if $_GPC['keywordtype']==2}selected="selected"{/if}>代理aid</option>
+						</select>
+						<input type="text" name="keyword" class="form-control" value="{$_GPC['keyword']}"  placeholder="请输入关键字"/>
+					</div>
+				</div>
+				{/if}
+				{if $_GPC['type'] > 2}
+				<div class="form-group form-inline">
+					<label class="col-sm-2 control-label">搜索内容</label>
+					<div class="col-sm-9">
+						<select name="keywordtype" class="form-control">
+							<option value="1" {if $_GPC['keywordtype']==1}selected="selected"{/if}>用户昵称</option>
+							<option value="2" {if $_GPC['keywordtype']==2}selected="selected"{/if}>用户实名</option>
+							<option value="3" {if $_GPC['keywordtype']==3}selected="selected"{/if}>用户mid</option>
+						</select>
+						<input type="text" name="keyword" class="form-control" value="{$_GPC['keyword']}"  placeholder="请输入关键字"/>
+					</div>
+				</div>
+				{/if}
+
+
+                <div class="form-group">
+                    <label class="col-sm-2 control-label">申请时间段</label>
+					<div class="col-md-2">
+						<select name="timetype" class="form-control">
+							<option value="0" {if $_GPC['timetype']==0}selected="selected"{/if}>关闭</option>
+							<option value="1" {if $_GPC['timetype']==1}selected="selected"{/if}>开启</option>
+						</select>
+					</div>
+                    <div class="col-sm-3">
+                        <div class="btn-group">
+							{php echo tpl_select_time_info('time', array('starttime' => date('Y-m-d',$starttime), 'endtime' => date('Y-m-d', $endtime)));}
+						</div>
+                    </div>
+                </div>
+                <div class="form-group">
+                    <label class="col-sm-2 control-label"></label>
+                    <div class="col-sm-9">
+						<button class="btn btn-primary" type="submit">筛选</button>
+						<button class="btn btn-default" type="submit" name="export" value="export"><i class="fa fa-download"></i>  导出记录</button>
+                    </div>
+                </div>
+			</form>
+		</div>
+	</div>
+	<div class="app-table-list">
+		<div class="table-responsive">
+			<table class="table table-hover">
+				<thead class="navbar-inner">
+					<tr>
+						<th>提现人信息</th>
+						<th>实名</th>
+						<th>提现类型</th>
+						<th>提现金额</th>
+						<th>申请渠道</th>
+						<th>提现方式</th>
+						<th>手续费</th>
+						<th>到账金额</th>
+						<th>到账类型</th>
+						<th>申请时间</th>
+						<th>操作时间</th>
+						<th>状态</th>
+						<th class="text-center">操作</th>
+					</tr>
+				</thead>
+				<tbody>
+					{loop $list  $merchant}
+					<tr>
+						<td>
+						<a href="{$merchant['currurl']}">
+                            {if $merchant['type']==1}
+                                	商家：{$merchant['name']}
+                            {elseif $merchant['type']==2}
+                                	代理：{$merchant['name']}
+                            {elseif $merchant['type']==3}
+							{if Customized::init('distributionText') > 0}共享股东{else}分销商{/if}：{$merchant['name']}
+                            {elseif $merchant['type']==4}
+                                	用户：{$merchant['name']}
+							{elseif $merchant['type']==5}
+									红娘：{$merchant['name']}
+							{/if}
+                         </a>	 
+                        </td>
+						<td>{$merchant['realname']}</td>
+						<td>
+                            {if $merchant['type']==1}<label class="label label-default label-primary">商家提现</label>{/if}
+							{if $merchant['type']==2}<label class="label label-default label-danger">代理提现</label>{/if}
+                            {if $merchant['type']==3}<label class="label label-default label-warning">{if Customized::init('distributionText') > 0}共享股东{else}分销{/if}提现</label>{/if}
+                            {if $merchant['type']==4}<label class="label label-default label-info">用户余额提现</label>{/if}
+							{if $merchant['type']==5}<label class="label label-default label-inverse">红娘提现</label>{/if}
+						</td>
+						<td>{$merchant['sapplymoney']}元</td>
+						<td>
+							{if $merchant['source'] == 1}
+							<label class="label label-default label-success">微信公众号</label>
+							{else if $merchant['source'] == 3}
+							<label class="label label-default label-info">微信小程序</label>
+							{else if $merchant['source'] == 2}
+							<label class="label label-default label-warning">H5网页端</label>
+							{/if}
+						</td>
+						<td>
+                            {if $merchant['payment_type'] == 1}
+                                <label class="label label-default label-warning">支付宝:{$merchant['alipay']}</label>
+                            {elseif $merchant['payment_type'] == 2}
+                                <label class="label label-default label-info">微信</label>
+                            {elseif $merchant['payment_type'] == 3}
+                                <label class="label label-default label-success">银行卡:{$merchant['card_number']}</label><br />
+                                <label class="label label-default label-success">开户行:{$merchant['bank_name']}</label><br />
+                                <label class="label label-default label-success">开户人:{$merchant['bank_username']}</label>
+                            {elseif $merchant['payment_type'] == 4}
+                                <label class="label label-default">余额</label><br />
+                            {elseif $merchant['payment_type'] == 5}
+                                <label class="label label-default label-danger">任意</label><br />
+                                {if $merchant['alipay']}
+                                    <label class="label label-default label-warning">支付宝:{$merchant['alipay']}</label><br />
+                                {/if}
+                                {if $merchant['card_number'] && $merchant['bank_name']}
+                                    <label class="label label-default label-success">银行卡:{$merchant['card_number']}</label><br />
+                                    <label class="label label-default label-success">开户行:{$merchant['bank_name']}</label><br />
+                                    <label class="label label-default label-success">开户人:{$merchant['bank_username']}</label>
+                                {/if}
+                            {else}
+                                <!--这里是未添加红包打款前的提现信息 默认为微信-->
+                                <label class="label label-default label-info">微信</label>
+                                <!--<label class="label label-default label-danger">未选择提现方式</label>-->
+                            {/if}
+                        </td>
+						<td>{$merchant['spercentmoney']}元</td>
+						<td>{$merchant['sgetmoney']}元</td>
+						<td>
+							{if $merchant['settletype']==1 || $merchant['settletype']==3 }
+                                <label class="label label-success">手动处理
+                            {elseif $merchant['settletype']==2}
+                                <label class="label label-info">微信零钱
+                            {elseif $merchant['settletype']==4}
+                                <label class="label label-default">余额到账
+							{elseif $merchant['settletype']==5}
+								<label class="label label-warning">红包打款
+							{elseif $merchant['settletype']==6}
+								<label class="label label-danger">支付宝转账
+							{else}
+                                <label class="label label-default">未打款
+                            {/if}
+                                </label>
+						</td>
+						<td>{php echo date('Y-m-d',$merchant['applytime'])}<br>{php echo date('H:i:s',$merchant['applytime'])}</td>
+						<td>
+                            {if $merchant['updatetime']}
+                                {php echo date('Y-m-d',$merchant['updatetime'])}<br>{php echo date('H:i:s',$merchant['updatetime'])}
+                            {/if}
+                        </td>
+						<td>
+							<!--15=红娘提现审核中,16=红娘提现审核通过(待打款),17=红娘提现驳回,18=红娘提现已完成(打款完成)-->
+							{if $merchant['status']==1}
+							    <label class="label label-default label-default">审核中</label>
+							{elseif $merchant['status']==2 || $merchant['status']==6 || $merchant['status']==7 || $merchant['status']==15}
+							    <label class="label label-default label-info">待审核</label>
+							{elseif $merchant['status']==3 || $merchant['status']==8 || $merchant['status']==16}
+							    <label class="label label-default label-warning">待打款</label>
+							{elseif $merchant['status']==4 || $merchant['status']==5 || $merchant['status']==9 || $merchant['status']==18}
+							    <label class="label label-default label-success">提现成功</label>
+							{elseif $merchant['status']== -1 || $merchant['status']== 10 || $merchant['status']==11 || $merchant['status']==17}
+							    <label class="label label-default label-danger">驳回申请</label>
+							{/if}
+						</td>
+						<td style="text-align: center;">
+							{if $merchant['status']==2  || $merchant['status']==6 || $merchant['status']==7 || $merchant['status']==15}
+							<a href="{php echo web_url('finace/finaceWithdrawalApply/cashApply',array('id'=>$merchant['id'],'type'=>'submit'));}" title="审核通过" class="btn btn-default btn-sm" data-toggle="ajaxRemove" data-confirm="警告：此操作不可逆，确认审核通过？">审核通过</a>
+							<a href="{php echo web_url('finace/finaceWithdrawalApply/cashApply',array('id'=>$merchant['id'],'type'=>'reject'));}" title="申请驳回" class="btn btn-danger btn-sm"  data-toggle="ajaxRemove" data-confirm="警告：此操作不可逆，确认驳回提现申请？">申请驳回</a>
+							{/if}
+							{if $merchant['status']==3 || $merchant['status']==8 || $merchant['status']==16}
+                                {if $merchant['payment_type'] == 1}
+									<a href="{php echo web_url('finace/finaceWithdrawalApply/settlementing', array('id'=>$merchant['id'],'type'=>6,'phone'=>$merchant['alipay']));}" title="支付宝打款" class="btn btn-default btn-sm" data-toggle="ajaxRemove" data-confirm="此操作不可逆，确认使用支付宝打款？">支付宝打款</a>
+                                {elseif $merchant['payment_type'] == 2}
+                                    <a href="{php echo web_url('finace/finaceWithdrawalApply/settlementing', array('id'=>$merchant['id'],'type'=>2));}" title="微信打款" class="btn btn-primary btn-sm" data-toggle="ajaxRemove" data-confirm="此操作不可逆，确认通过微信打款给申请人？">微信打款</a>
+                                    {if $merchant['sgetmoney'] < 200 && $merchant['sgetmoney'] > 1}
+                                        <a href="{php echo web_url('finace/finaceWithdrawalApply/settlementing', array('id'=>$merchant['id'],'type'=>5));}" title="微信红包" class="btn btn-primary btn-sm" data-toggle="ajaxRemove" data-confirm="此操作不可逆，确认通过微信红包打款给申请人？">微信红包</a>
+                                    {/if}
+                                {elseif $merchant['payment_type'] == 3}
+                                    <!--<a href="{php echo web_url('finace/wlCash/settlementing', array('id'=>$merchant['id'],'type'=>1));}" title="设为已处理" class="btn btn-default btn-sm" data-toggle="ajaxRemove" data-confirm="此操作不可逆，确认修改申请状态为已完成？">银行卡手动处理</a>-->
+                                {elseif $merchant['payment_type'] == 4}
+                                    <a href="{php echo web_url('finace/finaceWithdrawalApply/settlementing', array('id'=>$merchant['id'],'type'=>4));}" title="余额打款" class="btn btn-default btn-sm" data-toggle="ajaxRemove" data-confirm="此操作不可逆，确认通过余额打款给申请人？">余额打款</a>
+                                {elseif $merchant['payment_type'] == 5}
+                                    <a href="{php echo web_url('finace/finaceWithdrawalApply/settlementing', array('id'=>$merchant['id'],'type'=>2));}" title="微信打款" class="btn btn-primary btn-sm" data-toggle="ajaxRemove" data-confirm="此操作不可逆，确认通过微信打款给申请人？">微信打款</a>
+                                    {if $merchant['sgetmoney'] < 200 && $merchant['sgetmoney'] > 1}
+                                        <a href="{php echo web_url('finace/finaceWithdrawalApply/settlementing', array('id'=>$merchant['id'],'type'=>5));}" title="微信红包" class="btn btn-primary btn-sm" data-toggle="ajaxRemove" data-confirm="此操作不可逆，确认通过微信红包打款给申请人？">微信红包</a>
+                                    {/if}
+                                    {if $merchant['alipay']}
+										<a href="{php echo web_url('finace/finaceWithdrawalApply/settlementing', array('id'=>$merchant['id'],'type'=>6,'phone'=>$merchant['alipay']));}" title="支付宝打款" class="btn btn-default btn-sm" data-toggle="ajaxRemove" data-confirm="此操作不可逆，确认使用支付宝打款？">支付宝打款</a>
+                                    {/if}
+                                    {if $merchant['card_number'] && $merchant['bank_name']}
+                                        <!--<a href="{php echo web_url('finace/wlCash/settlementing', array('id'=>$merchant['id'],'type'=>1));}" title="设为已处理" class="btn btn-default btn-sm" data-toggle="ajaxRemove" data-confirm="此操作不可逆，确认修改申请状态为已完成？">银行卡手动处理</a>-->
+                                    {/if}
+                                {else}
+                                    <!--未添加红包打款前的提现操作 默认为微信-->
+                                    <a href="{php echo web_url('finace/finaceWithdrawalApply/settlementing', array('id'=>$merchant['id'],'type'=>2));}" title="微信打款" class="btn btn-primary btn-sm" data-toggle="ajaxRemove" data-confirm="此操作不可逆，确认通过微信打款给申请人？">微信打款</a>
+                                    {if $merchant['sgetmoney'] < 200 && $merchant['sgetmoney'] > 1}
+                                        <a href="{php echo web_url('finace/finaceWithdrawalApply/settlementing', array('id'=>$merchant['id'],'type'=>5));}" title="微信红包" class="btn btn-primary btn-sm" data-toggle="ajaxRemove" data-confirm="此操作不可逆，确认通过微信红包打款给申请人？">微信红包</a>
+                                    {/if}
+                                {/if}
+                                <a href="{php echo web_url('finace/finaceWithdrawalApply/settlementing', array('id'=>$merchant['id'],'type'=>1));}" title="设为已处理" class="btn btn-default btn-sm"data-toggle="ajaxRemove" data-confirm="此操作不可逆，确认修改申请状态为已完成？">设为已处理</a>
+                            {/if}
+						</td>
+					</tr>
+					{/loop}
+				</tbody>
+			</table>
+			{if empty($list)}
+				<div class="panel-body" style="text-align: center;padding:30px;">
+					暂时没有任何数据!
+				</div>
+			{/if}
+		</div>
+		<div class="app-table-foot clearfix">
+			<div class="pull-left">
+
+			</div>
+			<div class="pull-right">
+				{$pager}
+			</div>
+		</div>
+	</div>
+</div>
+{php include wl_template('common/footer');}

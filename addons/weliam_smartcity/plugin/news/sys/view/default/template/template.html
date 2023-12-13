@@ -1,0 +1,640 @@
+{php include wl_template('common/header');}
+<style>
+    /*新版本模板消息补充样式*/
+    .new_temp .temp_title{
+        font-weight: 600;
+        font-size: 15px;
+        line-height: 27px;
+        border-bottom: 1px solid #C0C0C0;
+        padding: 10px 20px;
+    }
+    .new_temp .temp_block{
+        width: 378px;
+        height: 137px;
+        background: #fff;
+        border-radius: 4px;
+        margin: 20px 0 20px 20px;
+        display: inline-block;
+    }
+    .new_temp .temp_block .header{
+        background: #f3f4f7;
+        padding: 15px;
+        float: left;
+        width: 100%;
+        border-top: 1px solid #eee;
+        border-left: 1px solid #eee;
+        border-right: 1px solid #eee;
+    }
+    .new_temp .temp_block .header .title{
+        color: #000;
+        font-size: 16px;
+        height: 35px;
+        line-height: 35px;
+        float: left;
+    }
+    .new_temp .temp_block .header .setting{
+        color: #409eff;
+        background: #ecf5ff;
+        border: 1px solid #b3d8ff;
+        float: right;
+        height: 30px;
+        width: 60px;
+        margin-top: 3px;
+    }
+    .new_temp .temp_block .header .setting span{
+        box-sizing: inherit;
+        margin: 5px;
+    }
+    .new_temp .temp_block .header .switchery{
+        float: right;
+    }
+    .new_temp .temp_block .info{
+        float: left;
+        width: 100%;
+        height: 70px;
+        text-align: center;
+        padding: 18px 10px;
+        border-bottom: 1px solid #eee;
+        border-left: 1px solid #eee;
+        border-right: 1px solid #eee;
+    }
+    .diyFormGroup .control-label{
+        height: 35px;
+        line-height: 35px;
+    }
+    .diyFormGroup .input-group img{
+        display: none!important;
+    }
+</style>
+<ul class="nav nav-tabs">
+    <li class="active"><a href="javascript:;">消息管理</a></li>
+</ul>
+<div class="app-content">
+    <div class="app-filter">
+        <div class="alert alert-warning">
+            注意：请将公众平台模板消息所在行业选择为： IT科技 互联网|电子商务，IT科技 IT软件与服务<br />
+            注意：请将小程序订阅消息所在行业选择为： 商家自营-服饰内衣
+        </div>
+    </div>
+    <div class="app-table-list">
+        <div id="list" class="panel tab-pane panel-default">
+            <div class="table-responsive">
+                <!-- 管理员设置 -->
+                <div class="new_temp">
+                    <div class="form-group-title" style="margin: 0;">管理员设置</div>
+                    <div class="temp_block" style="width: 720px;height: auto;border: none;">
+                        <div class="form-group diyFormGroup">
+                            <label class="col-sm-2 control-label">选择微信账号</label>
+                            <div class="col-sm-9">
+                                {php echo tpl_select_user('mid', $member['id'],'选择微信账号');}
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                <!-- 更换公众号消息类型按钮 -->
+                {if p('wxplatform')}
+                <!-- todo 确定开启公众号订阅消息并且关闭公众号模板消息后可以删除该代码  同步修改addons/weliam_smartcity/core/model/TempModel.mod.php文件  使用公众号订阅消息 -->
+                    <!--<div class="new_temp">
+                        <div class="form-group-title" style="margin: 0;">公众号消息类型</div>
+                        <div class="temp_block" style="width: 720px;height: auto;border: none;">
+                            <div class="form-group diyFormGroup">
+                                <label class="col-sm-2 control-label">消息类型</label>
+                                <div class="col-sm-9">
+                                    <label class="radio-inline">
+                                        <input type="radio" value="0" name="use_template_type" {if $useTemplateType != 1}checked="checked"{/if}> 使用模板消息
+                                    </label>
+                                    <label class="radio-inline">
+                                        <input type="radio" value="1" name="use_template_type" {if $useTemplateType == 1}checked="checked"{/if}> 使用订阅消息
+                                    </label>
+                                    <div class="help-block">服务号订阅通知功能开启灰度测试，模板消息即将弃用，请尽快改为使用订阅消息</div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>-->
+                {/if}
+                <!--  模板信息-公众号  -->
+                <div class="new_temp {if $useTemplateType == 1}hide{/if}">
+                    <!--标题内容-->
+                    <div class="form-group-title">公众号 - 模板消息</div>
+                    <!--模板消息设置列表块-->
+                    <div class="temp_block">
+                        <div class="header">
+                            <div class="title">订单支付成功</div>
+                            {php echo tpl_change_status('news/template/changeStatus&name=pay&source=wechat&key=status',$set['pay']['wechat']['status'])}
+                        </div>
+                        <div class="info {if $set['pay']['wechat']['status'] != 1}hide{/if}">
+                            <div class="input-group">
+                                <input type="text" class="form-control temp_id" name="&name=pay&source=wechat&key=id" value="{$set['pay']['wechat']['id']}">
+                                <span class="input-group-btn get_template_id" type="pay" source="1" type="pay" source="1"><button class="btn btn-default" type="button">获取</button></span>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="temp_block">
+                        <div class="header">
+                            <div class="title">订单发货提醒</div>
+                            {php echo tpl_change_status('news/template/changeStatus&name=send&source=wechat&key=status',$set['send']['wechat']['status'])}
+                        </div>
+                        <div class="info {if $set['send']['wechat']['status'] != 1}hide{/if}">
+                            <div class="input-group">
+                                <input type="text" class="form-control temp_id" name="&name=send&source=wechat&key=id" value="{$set['send']['wechat']['id']}">
+                                <span class="input-group-btn get_template_id" type="send" source="1"><button class="btn btn-default" type="button">获取</button></span>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="temp_block">
+                        <div class="header">
+                            <div class="title">售后状态通知</div>
+                            {php echo tpl_change_status('news/template/changeStatus&name=after_sale&source=wechat&key=status',$set['after_sale']['wechat']['status'])}
+                        </div>
+                        <div class="info {if $set['after_sale']['wechat']['status'] != 1}hide{/if}">
+                            <div class="input-group">
+                                <input type="text" class="form-control temp_id" name="&name=after_sale&source=wechat&key=id" value="{$set['after_sale']['wechat']['id']}">
+                                <span class="input-group-btn get_template_id" type="after_sale" source="1"><button class="btn btn-default" type="button">获取</button></span>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="temp_block">
+                        <div class="header">
+                            <div class="title">退款成功通知</div>
+                            {php echo tpl_change_status('news/template/changeStatus&name=refund&source=wechat&key=status',$set['refund']['wechat']['status'])}
+                        </div>
+                        <div class="info {if $set['refund']['wechat']['status'] != 1}hide{/if}">
+                            <div class="input-group">
+                                <input type="text" class="form-control temp_id" name="&name=refund&source=wechat&key=id" value="{$set['refund']['wechat']['id']}">
+                                <span class="input-group-btn get_template_id" type="refund" source="1"><button class="btn btn-default" type="button">获取</button></span>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="temp_block">
+                        <div class="header">
+                            <div class="title">业务处理结果通知</div>
+                            {php echo tpl_change_status('news/template/changeStatus&name=service&source=wechat&key=status',$set['service']['wechat']['status'])}
+                        </div>
+                        <div class="info {if $set['service']['wechat']['status'] != 1}hide{/if}">
+                            <div class="input-group">
+                                <input type="text" class="form-control temp_id" name="&name=service&source=wechat&key=id" value="{$set['service']['wechat']['id']}">
+                                <span class="input-group-btn get_template_id" type="service" source="1"><button class="btn btn-default" type="button">获取</button></span>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="temp_block">
+                        <div class="header">
+                            <div class="title">核销成功提醒</div>
+                            {php echo tpl_change_status('news/template/changeStatus&name=write_off&source=wechat&key=status',$set['write_off']['wechat']['status'])}
+                        </div>
+                        <div class="info {if $set['write_off']['wechat']['status'] != 1}hide{/if}">
+                            <div class="input-group">
+                                <input type="text" class="form-control temp_id" name="&name=write_off&source=wechat&key=id" value="{$set['write_off']['wechat']['id']}">
+                                <span class="input-group-btn get_template_id" type="write_off" source="1"><button class="btn btn-default" type="button">获取</button></span>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="temp_block">
+                        <div class="header">
+                            <div class="title">拼团结果通知</div>
+                            {php echo tpl_change_status('news/template/changeStatus&name=fight&source=wechat&key=status',$set['fight']['wechat']['status'])}
+                        </div>
+                        <div class="info {if $set['fight']['wechat']['status'] != 1}hide{/if}">
+                            <div class="input-group">
+                                <input type="text" class="form-control temp_id" name="&name=fight&source=wechat&key=id" value="{$set['fight']['wechat']['id']}">
+                                <span class="input-group-btn get_template_id" type="fight" source="1"><button class="btn btn-default" type="button">获取</button></span>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="temp_block">
+                        <div class="header">
+                            <div class="title">签到成功通知</div>
+                            {php echo tpl_change_status('news/template/changeStatus&name=sign&source=wechat&key=status',$set['sign']['wechat']['status'])}
+                        </div>
+                        <div class="info {if $set['sign']['wechat']['status'] != 1}hide{/if}">
+                            <div class="input-group">
+                                <input type="text" class="form-control temp_id" name="&name=sign&source=wechat&key=id" value="{$set['sign']['wechat']['id']}">
+                                <span class="input-group-btn get_template_id" type="sign" source="1"><button class="btn btn-default" type="button">获取</button></span>
+                            </div>
+                        </div>
+                    </div>
+                    {if Customized::init('customized530')}
+                    <!--  定制消息推送  售后群：530  定制用户授权码：E42B66E240ED831B957640A4C7DB2B70  -->
+                        <div class="temp_block">
+                            <div class="header">
+                                <div class="title">收益到账通知</div>
+                                {php echo tpl_change_status('news/template/changeStatus&name=profit&source=wechat&key=status',$set['profit']['wechat']['status'])}
+                            </div>
+                            <div class="info {if $set['profit']['wechat']['status'] != 1}hide{/if}">
+                                <div class="input-group">
+                                    <input type="text" class="form-control temp_id" name="&name=profit&source=wechat&key=id" value="{$set['profit']['wechat']['id']}">
+                                    <span class="input-group-btn get_template_id" type="profit" source="1"><button class="btn btn-default" type="button">获取</button></span>
+                                    <span class="input-group-btn set_template_info" type="profit" name="&name=profit&source=wechat"><button class="btn btn-default" type="button">设置</button></span>
+                                </div>
+                            </div>
+                            <div class="modal fade" aria-hidden="false" id="profit">
+                                <div class="modal-dialog">
+                                    <div class="modal-content">
+                                        <div class="modal-body form-horizontal">
+                                            <div class="form-group">
+                                                <div class="col-sm-2 control-label">备注信息</div>
+                                                <div class="col-sm-9">
+                                                    <input class="form-control" type="text" name="profit_remark" placeholder="请输入备注信息" value="{$set['profit']['wechat']['remark']}"/>
+                                                </div>
+                                            </div>
+                                            <div class="form-group">
+                                                <label class="col-sm-2 control-label">跳转链接</label>
+                                                <div class="col-sm-9">
+                                                    <div class="input-group form-group" style="margin: 0;">
+                                                        <input type="text" value="{$set['profit']['wechat']['link']}" name="profit_link" readonly="readonly" class="form-control valid" id="profitLink">
+                                                        <span data-input="#profitLink" data-toggle="selectUrl" class="input-group-addon btn btn-default">选择链接</span>
+                                                    </div>
+                                                </div>
+                                            </div>
+                                        </div>
+                                        <div class="modal-footer">
+                                            <div class="btn btn-primary saveTemplateInfo">保存</div>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    {else}
+                        <div class="temp_block">
+                            <div class="header">
+                                <div class="title">积分变更通知</div>
+                                {php echo tpl_change_status('news/template/changeStatus&name=change&source=wechat&key=status',$set['change']['wechat']['status'])}
+                            </div>
+                            <div class="info {if $set['change']['wechat']['status'] != 1}hide{/if}">
+                                <div class="input-group">
+                                    <input type="text" class="form-control temp_id" name="&name=change&source=wechat&key=id" value="{$set['change']['wechat']['id']}">
+                                    <span class="input-group-btn get_template_id" type="change" source="1"><button class="btn btn-default" type="button">获取</button></span>
+                                </div>
+                            </div>
+                        </div>
+                    {/if}
+                </div>
+                <!--  模板信息 - 公众号订阅消息 -->
+                {if p('wxplatform')}
+                <!-- todo 确定开启公众号订阅消息并且关闭公众号模板消息后可以取消注释 使用公众号订阅消息  并且可以删除上面的公众号模板消息 -->
+                <!--<div class="new_temp {if $useTemplateType != 1}hide{/if}">
+                    &lt;!&ndash;标题内容&ndash;&gt;
+                    <div class="form-group-title">公众号 - 订阅消息</div>
+                    &lt;!&ndash; 公众号模板id填写 &ndash;&gt;
+                    <div class="temp_block" style="height: 55px; width: auto;display: block;border: none;">
+                        <div class="form-group diyFormGroup" style="max-width: 1000px;">
+                            <label class="col-sm-2 control-label">公众号模板id</label>
+                            <div class="col-sm-9">
+                                <div class="input-group">
+                                    <input type="text" class="form-control" value="{$weChatTempId}" id="weChatTempId">
+                                    <span class="btn input-group-addon" id="changeTempIdButton">提交修改</span>
+                                </div>
+                                <div class="help-block">移动端进行消息订阅时需要使用该id。id获取位置：公众号平台 - 接口权限 - 一次性订阅消息 - 查看模板id</div>
+                            </div>
+                        </div>
+                    </div>
+                    &lt;!&ndash;模板消息设置列表块&ndash;&gt;
+                    <div class="temp_block">
+                        <div class="header">
+                            <div class="title">订单支付成功</div>
+                            {php echo tpl_change_status('news/template/changeStatus&name=pay&source=wechatSubscription&key=status',$set['pay']['wechatSubscription']['status'])}
+                        </div>
+                        <div class="info {if $set['pay']['wechatSubscription']['status'] != 1}hide{/if}">
+                            <div class="input-group">
+                                <input type="text" class="form-control temp_id" name="&name=pay&source=wechatSubscription&key=id" value="{$set['pay']['wechatSubscription']['id']}">
+                                <span class="input-group-btn get_template_id" type="pay" source="1" type="pay" source="1"><button class="btn btn-default" type="button">获取</button></span>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="temp_block">
+                        <div class="header">
+                            <div class="title">订单发货提醒</div>
+                            {php echo tpl_change_status('news/template/changeStatus&name=send&source=wechatSubscription&key=status',$set['send']['wechatSubscription']['status'])}
+                        </div>
+                        <div class="info {if $set['send']['wechatSubscription']['status'] != 1}hide{/if}">
+                            <div class="input-group">
+                                <input type="text" class="form-control temp_id" name="&name=send&source=wechatSubscription&key=id" value="{$set['send']['wechatSubscription']['id']}">
+                                <span class="input-group-btn get_template_id" type="send" source="1"><button class="btn btn-default" type="button">获取</button></span>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="temp_block">
+                        <div class="header">
+                            <div class="title">售后状态通知</div>
+                            {php echo tpl_change_status('news/template/changeStatus&name=after_sale&source=wechatSubscription&key=status',$set['after_sale']['wechatSubscription']['status'])}
+                        </div>
+                        <div class="info {if $set['after_sale']['wechatSubscription']['status'] != 1}hide{/if}">
+                            <div class="input-group">
+                                <input type="text" class="form-control temp_id" name="&name=after_sale&source=wechatSubscription&key=id" value="{$set['after_sale']['wechatSubscription']['id']}">
+                                <span class="input-group-btn get_template_id" type="after_sale" source="1"><button class="btn btn-default" type="button">获取</button></span>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="temp_block">
+                        <div class="header">
+                            <div class="title">退款成功通知</div>
+                            {php echo tpl_change_status('news/template/changeStatus&name=refund&source=wechatSubscription&key=status',$set['refund']['wechatSubscription']['status'])}
+                        </div>
+                        <div class="info {if $set['refund']['wechatSubscription']['status'] != 1}hide{/if}">
+                            <div class="input-group">
+                                <input type="text" class="form-control temp_id" name="&name=refund&source=wechatSubscription&key=id" value="{$set['refund']['wechatSubscription']['id']}">
+                                <span class="input-group-btn get_template_id" type="refund" source="1"><button class="btn btn-default" type="button">获取</button></span>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="temp_block">
+                        <div class="header">
+                            <div class="title">业务处理结果通知</div>
+                            {php echo tpl_change_status('news/template/changeStatus&name=service&source=wechatSubscription&key=status',$set['service']['wechatSubscription']['status'])}
+                        </div>
+                        <div class="info {if $set['service']['wechatSubscription']['status'] != 1}hide{/if}">
+                            <div class="input-group">
+                                <input type="text" class="form-control temp_id" name="&name=service&source=wechatSubscription&key=id" value="{$set['service']['wechatSubscription']['id']}">
+                                <span class="input-group-btn get_template_id" type="service" source="1"><button class="btn btn-default" type="button">获取</button></span>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="temp_block">
+                        <div class="header">
+                            <div class="title">核销成功提醒</div>
+                            {php echo tpl_change_status('news/template/changeStatus&name=write_off&source=wechatSubscription&key=status',$set['write_off']['wechatSubscription']['status'])}
+                        </div>
+                        <div class="info {if $set['write_off']['wechatSubscription']['status'] != 1}hide{/if}">
+                            <div class="input-group">
+                                <input type="text" class="form-control temp_id" name="&name=write_off&source=wechatSubscription&key=id" value="{$set['write_off']['wechatSubscription']['id']}">
+                                <span class="input-group-btn get_template_id" type="write_off" source="1"><button class="btn btn-default" type="button">获取</button></span>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="temp_block">
+                        <div class="header">
+                            <div class="title">拼团结果通知</div>
+                            {php echo tpl_change_status('news/template/changeStatus&name=fight&source=wechatSubscription&key=status',$set['fight']['wechatSubscription']['status'])}
+                        </div>
+                        <div class="info {if $set['fight']['wechatSubscription']['status'] != 1}hide{/if}">
+                            <div class="input-group">
+                                <input type="text" class="form-control temp_id" name="&name=fight&source=wechatSubscription&key=id" value="{$set['fight']['wechatSubscription']['id']}">
+                                <span class="input-group-btn get_template_id" type="fight" source="1"><button class="btn btn-default" type="button">获取</button></span>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="temp_block">
+                        <div class="header">
+                            <div class="title">签到成功通知</div>
+                            {php echo tpl_change_status('news/template/changeStatus&name=sign&source=wechatSubscription&key=status',$set['sign']['wechatSubscription']['status'])}
+                        </div>
+                        <div class="info {if $set['sign']['wechatSubscription']['status'] != 1}hide{/if}">
+                            <div class="input-group">
+                                <input type="text" class="form-control temp_id" name="&name=sign&source=wechatSubscription&key=id" value="{$set['sign']['wechatSubscription']['id']}">
+                                <span class="input-group-btn get_template_id" type="sign" source="1"><button class="btn btn-default" type="button">获取</button></span>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="temp_block">
+                        <div class="header">
+                            <div class="title">积分变更通知</div>
+                            {php echo tpl_change_status('news/template/changeStatus&name=change&source=wechatSubscription&key=status',$set['change']['wechatSubscription']['status'])}
+                        </div>
+                        <div class="info {if $set['change']['wechatSubscription']['status'] != 1}hide{/if}">
+                            <div class="input-group">
+                                <input type="text" class="form-control temp_id" name="&name=change&source=wechatSubscription&key=id" value="{$set['change']['wechatSubscription']['id']}">
+                                <span class="input-group-btn get_template_id" type="change" source="1"><button class="btn btn-default" type="button">获取</button></span>
+                            </div>
+                        </div>
+                    </div>
+                </div>-->
+                {/if}
+                <!--  模板信息 - 小程序订阅消息  -->
+                {if p('wxapp')}
+                    <div class="new_temp">
+                        <!--标题内容-->
+                        <div class="form-group-title">小程序 - 订阅消息</div>
+                        <!--模板消息设置列表块-->
+                        <div class="temp_block">
+                            <div class="header">
+                                <div class="title">订单支付成功</div>
+                                {php echo tpl_change_status('news/template/changeStatus&name=pay&source=weappSubscription&key=status',$set['pay']['weappSubscription']['status'])}
+                            </div>
+                            <div class="info {if $set['pay']['weappSubscription']['status'] != 1}hide{/if}">
+                                <div class="input-group">
+                                    <input type="text" class="form-control temp_id" name="&name=pay&source=weappSubscription&key=id" value="{$set['pay']['weappSubscription']['id']}">
+                                    <span class="input-group-btn get_template_id" type="pay" source="2"><button class="btn btn-default" type="button">获取</button></span>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="temp_block">
+                            <div class="header">
+                                <div class="title">订单发货提醒</div>
+                                {php echo tpl_change_status('news/template/changeStatus&name=send&source=weappSubscription&key=status',$set['send']['weappSubscription']['status'])}
+                            </div>
+                            <div class="info {if $set['send']['weappSubscription']['status'] != 1}hide{/if}">
+                                <div class="input-group">
+                                    <input type="text" class="form-control temp_id" name="&name=send&source=weappSubscription&key=id" value="{$set['send']['weappSubscription']['id']}">
+                                    <span class="input-group-btn get_template_id" type="send" source="2"><button class="btn btn-default" type="button">获取</button></span>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="temp_block">
+                            <div class="header">
+                                <div class="title">售后状态通知</div>
+                                {php echo tpl_change_status('news/template/changeStatus&name=after_sale&source=weappSubscription&key=status',$set['after_sale']['weappSubscription']['status'])}
+                            </div>
+                            <div class="info {if $set['after_sale']['weappSubscription']['status'] != 1}hide{/if}">
+                                <div class="input-group">
+                                    <input type="text" class="form-control temp_id" name="&name=after_sale&source=weappSubscription&key=id" value="{$set['after_sale']['weappSubscription']['id']}">
+                                    <span class="input-group-btn get_template_id" type="after_sale" source="2"><button class="btn btn-default" type="button">获取</button></span>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="temp_block">
+                            <div class="header">
+                                <div class="title">退款成功通知</div>
+                                {php echo tpl_change_status('news/template/changeStatus&name=refund&source=weappSubscription&key=status',$set['refund']['weappSubscription']['status'])}
+                            </div>
+                            <div class="info {if $set['refund']['weappSubscription']['status'] != 1}hide{/if}">
+                                <div class="input-group">
+                                    <input type="text" class="form-control temp_id" name="&name=refund&source=weappSubscription&key=id" value="{$set['refund']['weappSubscription']['id']}">
+                                    <span class="input-group-btn get_template_id" type="refund" source="2"><button class="btn btn-default" type="button">获取</button></span>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="temp_block">
+                            <div class="header">
+                                <div class="title">业务处理结果通知</div>
+                                {php echo tpl_change_status('news/template/changeStatus&name=service&source=weappSubscription&key=status',$set['service']['weappSubscription']['status'])}
+                            </div>
+                            <div class="info {if $set['service']['weappSubscription']['status'] != 1}hide{/if}">
+                                <div class="input-group">
+                                    <input type="text" class="form-control temp_id" name="&name=service&source=weappSubscription&key=id" value="{$set['service']['weappSubscription']['id']}">
+                                    <span class="input-group-btn get_template_id" type="service" source="2"><button class="btn btn-default" type="button">获取</button></span>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="temp_block">
+                            <div class="header">
+                                <div class="title">核销成功提醒</div>
+                                {php echo tpl_change_status('news/template/changeStatus&name=write_off&source=weappSubscription&key=status',$set['write_off']['weappSubscription']['status'])}
+                            </div>
+                            <div class="info {if $set['write_off']['weappSubscription']['status'] != 1}hide{/if}">
+                                <div class="input-group">
+                                    <input type="text" class="form-control temp_id" name="&name=write_off&source=weappSubscription&key=id" value="{$set['write_off']['weappSubscription']['id']}">
+                                    <span class="input-group-btn get_template_id" type="write_off" source="2"><button class="btn btn-default" type="button">获取</button></span>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="temp_block">
+                            <div class="header">
+                                <div class="title">拼团结果通知</div>
+                                {php echo tpl_change_status('news/template/changeStatus&name=fight&source=weappSubscription&key=status',$set['fight']['weappSubscription']['status'])}
+                            </div>
+                            <div class="info {if $set['fight']['weappSubscription']['status'] != 1}hide{/if}">
+                                <div class="input-group">
+                                    <input type="text" class="form-control temp_id" name="&name=fight&source=weappSubscription&key=id" value="{$set['fight']['weappSubscription']['id']}">
+                                    <span class="input-group-btn get_template_id" type="fight" source="2"><button class="btn btn-default" type="button">获取</button></span>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="temp_block">
+                            <div class="header">
+                                <div class="title">签到成功通知</div>
+                                {php echo tpl_change_status('news/template/changeStatus&name=sign&source=weappSubscription&key=status',$set['sign']['weappSubscription']['status'])}
+                            </div>
+                            <div class="info {if $set['sign']['weappSubscription']['status'] != 1}hide{/if}">
+                                <div class="input-group">
+                                    <input type="text" class="form-control temp_id" name="&name=sign&source=weappSubscription&key=id" value="{$set['sign']['weappSubscription']['id']}">
+                                    <span class="input-group-btn get_template_id" type="sign" source="2"><button class="btn btn-default" type="button">获取</button></span>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="temp_block">
+                            <div class="header">
+                                <div class="title">积分变更通知</div>
+                                {php echo tpl_change_status('news/template/changeStatus&name=change&source=weappSubscription&key=status',$set['change']['weappSubscription']['status'])}
+                            </div>
+                            <div class="info {if $set['change']['weappSubscription']['status'] != 1}hide{/if}">
+                                <div class="input-group">
+                                    <input type="text" class="form-control temp_id" name="&name=change&source=weappSubscription&key=id" value="{$set['change']['weappSubscription']['id']}">
+                                    <span class="input-group-btn get_template_id" type="change" source="2"><button class="btn btn-default" type="button">获取</button></span>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                {/if}
+            </div>
+        </div>
+    </div>
+</div>
+<script>
+    /**
+     * 开启、关闭的效果操作
+     */
+    $(document).on('change', '.js-switch.tpl_change_status', function () {
+        //参数获取
+        let _this = $(this),
+            checked = _this.attr("checked"),
+            position = _this.parents(".header").siblings('.info');
+        //判断当前的操作
+        if (checked) {
+            //关闭时的操作
+            position.addClass("hide");
+            //关闭模板消息 自动清空模板id
+            position.find(".temp_id").val('').change();
+        } else {
+            //开启时的操作
+            position.removeClass("hide");
+            //开启模板消息 自动获取当前模板消息的模板id
+            position.find(".get_template_id").click();
+        }
+    });
+    /**
+     * 获取通讯模板id信息
+     */
+    $(document).on('click','.get_template_id',function () {
+        let _this = $(this),
+            type = _this.attr("type"),//模板类型
+            source = _this.attr("source");//端口设置：1=微信公众号；2=h5;3=微信小程序
+        let res = common.ajaxPost('news/template/getTempId',{type:type,source:source},true,false);
+        if(res['errno'] == 0){
+            $(this).prev().val(res['data']).change();
+        }else{
+            tip.alert(res['message'],function () {
+                history.go(0);
+            });
+        }
+    });
+    /**
+     * 提交模板id的修改信息
+     */
+    $(document).on('change','.temp_id',function () {
+        //基本参数获取
+        let _this = $(this),
+            name = _this.attr("name"),
+            val = _this.val(),
+            url = 'news/template/changeStatus' + name;
+        //提交修改
+        let res = common.ajaxPost(url,{status:val},true,false);
+
+        //console.log(res);
+    });
+    /**
+     * 修改管理员
+     */
+    $(document).on('change',"[name='mid']",function(){
+        let mid = $(this).val();
+        $.get("{php echo web_url('news/template/addmid')}", {
+            mid: mid
+        }, function(){
+            util.tips('修改成功');
+        });
+    });
+    /**
+     * 修改模板消息中的设置信息
+     */
+    $(document).on('click','.set_template_info',function () {
+        let id = $(this).attr('type'),
+            modalId = '#'+id,
+            name = $(this).attr('name');
+        //弹出设置栏
+        $(modalId).modal();
+        //点击提交设置信息
+        $(modalId).on('click',".saveTemplateInfo",function () {
+            let remarkName = id + '_remark',
+                linkName = id + '_link',
+                remark = $("[name='"+remarkName+"']").val(),
+                link = $("[name='"+linkName+"']").val();
+
+            let res = common.ajaxPost('news/template/changeSetInfo'+name,{remark:remark,link:link},true,false);
+            if(res.errno == 0) tip.alert(res.message,function (){
+                history.go(0);
+            })
+        });
+    });
+    /**
+     * 修改公众号消息类型
+     */
+    $(document).on('change',"[name='use_template_type']",function(){
+        let type = $(this).val();
+        $.post("{php echo web_url('news/template/changeTemplateType')}", {
+            type: type
+        }, function(){
+            tip.alert('修改成功',function (){
+                history.go(0);
+            })
+        });
+    });
+    /**
+     * 修改公众号模板id
+     */
+    $(document).on('click','#changeTempIdButton',function () {
+        let temp_id = $("#weChatTempId").val();
+        if(temp_id.length <= 1) {
+            tip.alert("请输入公众号模板id");
+        }else{
+            $.post("{php echo web_url('news/template/changeWeChatTempId')}", {
+                temp_id: temp_id
+            }, function(){
+                tip.alert('修改成功',function (){
+                    history.go(0);
+                })
+            });
+        }
+    });
+
+
+</script>
+{php include wl_template('common/footer');}

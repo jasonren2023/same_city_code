@@ -1,0 +1,74 @@
+{php include wl_template('common/header');}
+<ul class="nav nav-tabs" id="myTab">
+    <li class="active"><a href="#">黑名单用户</a></li>
+</ul>
+<div class="app-content">
+    <div class="app-table-list">
+        <div class="panel-body table-responsive collapse in" id="order-template-item-4" style="padding: 0;">
+            <table class="table table-hover table-bordered" id="de2">
+                <thead style="background-color: #FFFFFF;">
+                <tr>
+                    <th style="width:50px;text-align:center;">用户头像</th>
+                    <th style="width:90px;text-align: center;">用户昵称</th>
+                    <th style="width:70px;text-align: center;">违规帖子</th>
+                    <th style="width:100px;text-align:center;">拉黑时间</th>
+                    <th style="width:80px;text-align:center;">操作</th>
+                </tr>
+                </thead>
+                <tbody >
+                {loop $blacklist $item}
+                <tr>
+                    <!--用户昵称-->
+                    <td class="goods-info line-feed" style="width:150px;padding-left: 10px;height: 60px;text-align: center;">
+                        <div class="img"><img src="{IMAGE_PIXEL}" class="scrollLoading" data-url="{php echo tomedia($item['avatar'])}" height="50" width="50" ></div>
+                    </td>
+                    <!--用户电话-->
+                    <td class="text-center" style="width:150px;font-family: "Arial","Microsoft YaHei","黑体","宋体",sans-serif;">
+                    <div class="all-tips">
+                        <p class="" style="font-family: "Arial","Microsoft YaHei","黑体","宋体",sans-serif;">{$item['nickname']}</p>
+                    </div>
+                    </td>
+                    <td class="text-center" style="width:150px;font-family: "Arial","Microsoft YaHei","黑体","宋体",sans-serif;">
+                    <a href="{php echo web_url('pocket/Tiezi/details',array('id'=>$item['inid']))}">查看帖子详情</a>
+                    </td>
+                    <!--开通时间-->
+                    <td class="text-center" style="width:100px;font-family: "Arial","Microsoft YaHei","黑体","宋体",sans-serif;">
+                    {php echo date('Y-m-d H:i:s',$item['createtime'])}
+                    </td>
+                    <td class="text-center dede" style="width:100px;font-family: "Arial","Microsoft YaHei","黑体","宋体",sans-serif;">
+                    <a href="javascript:;" class="deteblack" inmid = "{$item['mid']}">取消黑名单</a>
+                    </td>
+                </tr>
+                {/loop}
+                </tbody>
+            </table>
+        </div>
+        <div class="app-table-foot clearfix">
+            <div class="pull-left">
+
+            </div>
+            <div class="pull-right">
+                {$pager}
+            </div>
+        </div>
+    </div>
+</div>
+<script>
+    $('#de2').delegate('.deteblack','click',function(e){
+        e.stopPropagation();
+        var mid = $(this).attr('inmid');
+        util.nailConfirm(this, function(state) {
+            if(!state) return;
+            $.post("{php echo web_url('pocket/Tiezi/deteblack')}", { mid : mid }, function(data){
+                if(!data.errno){
+                    util.tips("取消成功！");
+                    location.reload();
+                }else{
+                    util.tips(data.msg);
+                };
+            }, 'json');
+        }, {html: '确认把该用户取消黑名单?'});
+    });
+</script>
+
+{php include wl_template('common/footer');}

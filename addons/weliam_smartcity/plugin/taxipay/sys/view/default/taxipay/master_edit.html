@@ -1,0 +1,159 @@
+{php include wl_template('common/header');}
+<ul class="nav nav-tabs">
+    <li class="active"><a href="{php echo web_url('taxipay/taxipay/master_edit', array('id' => $item['id']))}">编辑师傅</a></li>
+</ul>
+<div class="app-content">
+    <div class="app-form">
+        <form action="" method="post" class="form-horizontal form form-validate">
+            <div class="form-group-title">师傅信息</div>
+            <div class="alert alert-warning">
+                <P>师傅必须是分销商方可买单，非分销商将无法买单。</P>
+            </div>
+            <div class="form-group">
+                <label class="col-sm-2 control-label"><span class="form-must">*</span>师傅姓名</label>
+                <div class="col-sm-9">
+                    <input type="text" name="item[name]" class="form-control" value="{$item['name']}" placeholder="请输入师傅姓名" required>
+                </div>
+            </div>
+            <div class="form-group">
+                <label class="col-sm-2 control-label">所属用户</label>
+                <div class="col-sm-9">
+                    {php echo tpl_select_user('item[mid]', $item['mid'])}
+                </div>
+            </div>
+            <div class="form-group">
+                <label class="col-sm-2 control-label"><span class="form-must">*</span>车牌号</label>
+                <div class="col-sm-9">
+                    <div class="input-group" style="display: flex">
+                        <select name="item[plate1]" class="form-control" style="width: 150px;">
+                            {loop $province_codes $province_code}
+                            <option value="{$province_code}" {if $item['plate1'] == $province_code}selected{/if}>{$province_code}</option>
+                            {/loop}
+                        </select>
+                        <select name="item[plate2]" class="form-control" style="width: 150px;">
+                            {loop $letters $letter}
+                            <option value="{$letter}" {if $item['plate2'] == $letter}selected{/if}>{$letter}</option>
+                            {/loop}
+                        </select>
+                        <input type="text" name="item[plate_number]" class="form-control" value="{$item['plate_number']}" placeholder="请输入车牌号" minlength="5" maxlength="8" required>
+                    </div>
+                </div>
+            </div>
+            <div class="form-group">
+                <label class="col-sm-2 control-label"><span class="form-must">*</span>联系电话</label>
+                <div class="col-sm-9">
+                    <input type="text" name="item[mobile]" class="form-control" value="{$item['mobile']}" placeholder="请输入师傅联系电话" required>
+                </div>
+            </div>
+            <div class="form-group">
+                <label class="col-sm-2 control-label">每日收款限制</label>
+                <div class="col-sm-9">
+                    <label class="radio-inline">
+                        <input type="radio" name="item[is_maxpay]" value="0" onclick="$('.is_maxpay').hide();" {if empty($item['is_maxpay'])}checked{/if}>跟随系统
+                    </label>
+                    <label class="radio-inline">
+                        <input type="radio" name="item[is_maxpay]" value="1" onclick="$('.is_maxpay').show()" {if !empty($item['is_maxpay'])}checked{/if}>单独设置
+                    </label>
+                </div>
+            </div>
+            <div class="form-group is_maxpay" {if empty($item['is_maxpay'])}style="display: none;"{/if}>
+                <label class="col-sm-2 control-label"><span class="form-must">*</span>每日收款金额限制</label>
+                <div class="col-sm-9">
+                    <div class="input-group">
+                        <input type="number" name="item[maxpay]" class="form-control" value="{$item['maxpay']}" placeholder="每日收款金额限制" required>
+                        <div class="input-group-addon">元</div>
+                    </div>
+                    <div class="help-block">避免刷单，设置司机收款限额，超出限制无法收款</div>
+                </div>
+            </div>
+            <div class="form-group">
+                <label class="col-sm-2 control-label"><span class="form-must">*</span>所在公司</label>
+                <div class="col-sm-9">
+                    <select name="item[cid]" class="form-control">
+                        {loop $companys $company}
+                        <option value="{$company['id']}" {if $item['cid'] == $company['id']}selected{/if}>{$company['name']}</option>
+                        {/loop}
+                    </select>
+                </div>
+            </div>
+            <div class="form-group">
+                <label class="col-sm-2 control-label">状态</label>
+                <div class="col-sm-9">
+                    <label class="radio-inline">
+                        <input type="radio" name="item[status]" value="0" {if empty($item['status'])}checked{/if}>禁用
+                    </label>
+                    <label class="radio-inline">
+                        <input type="radio" name="item[status]" value="1" {if !empty($item['status'])}checked{/if}>启用
+                    </label>
+                </div>
+            </div>
+            <div class="form-group-title">云喇叭设置</div>
+            <div class="panel-body">
+
+
+                <!-- 是否开启 0=关闭，1=开启 -->
+                <div class="form-group">
+                    <label class="col-sm-2 control-label">喇叭状态</label>
+                    <div class="col-sm-9">
+                        <label class="radio-inline">
+                            <input type="radio" name="cloudspeaker[state]" value="0" {if $cloudspeaker['state'] != 1}checked{/if}>关闭
+                        </label>
+                        <label class="radio-inline">
+                            <input type="radio" name="cloudspeaker[state]" value="1" {if $cloudspeaker['state'] == 1}checked{/if}>开启
+                        </label>
+                    </div>
+                </div>
+                <!-- 零度 -->
+                <div id="voice-ld" class="voice_block {if $cloudspeaker['state'] != 1}hide{/if}">
+                    <!-- 云喇叭的id -->
+                    <div class="form-group">
+                        <label class="col-sm-2 control-label">喇叭id<span class="must-fill">*</span></label>
+                        <div class="col-sm-9">
+                            <input type="number" name="cloudspeaker[ld_id]" placeholder="请输入喇叭id" class="form-control voiceRequired" value="{$cloudspeaker['ld_id']}" autocomplete="off" {if $cloudspeaker['state'] == 1}required="required"{/if}>
+                        </div>
+                    </div>
+                    <div class="form-group">
+                        <label class="col-sm-2 control-label">喇叭模板<span class="must-fill">*</span></label>
+                        <div class="col-sm-9">
+                            <input type="text" name="cloudspeaker[ld_temp]" placeholder="请输入模板" class="form-control" value="{$cloudspeaker['ld_temp']}" autocomplete="off">
+                            <div class="help-block">语音播报模板，不填则使用默认模板；模板变量: [金额] [支付方式]</div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <div class="form-group">
+                <label class="col-sm-2 control-label"></label>
+                <div class="col-sm-9">
+                    <input type="submit" name="submit" value="提交" class="btn btn-primary min-width" />
+                    <input type="hidden" name="token" value="{$_W['token']}" />
+                    <input type="hidden" name="id" value="{$item['id']}" />
+                </div>
+            </div>
+        </form>
+    </div>
+</div>
+<script>
+    /**
+     * 监听云喇叭是否开启
+     */
+    $("[name='cloudspeaker[state]']").change(function () {
+        voiceSwitch();
+    });
+    /**
+     * 根据云喇叭状态，类型 修改显示内容
+     */
+    function voiceSwitch() {
+        let state = $("input[name='cloudspeaker[state]']:checked").val();//总开关状态  0=关闭，1=开启
+        //判断总开关
+        if(state == 0){
+            //关闭云喇叭使用
+            $(".voice_block").addClass("hide");
+            $(".voiceRequired").attr("required",false);
+        }else {
+            //开启云喇叭使用
+            $("#voice-ld").removeClass("hide");
+            $("#voice-ld .voiceRequired").attr("required",true);
+        }
+    }
+</script>
+{php include wl_template('common/footer');}

@@ -1,0 +1,347 @@
+{template 'common/header'}
+<div id="js-user-profile" ng-controller="UserProfileDisplay" ng-cloak>
+	{if $_W['highest_role'] != 'founder'}
+	<div class="user-head-info we7-padding-bottom" >
+		<img ng-src="{{profile.avatar}}" class="img-circle user-avatar ">
+		<div class="info">
+			<h3 class="title" ng-bind="user.username"></h3>
+		</div>
+	</div>
+	{/if}
+	{if $user_type=='' || $user_type == PERSONAL_BASE_TYPE}
+	<div class="base">
+		<table class="table we7-table table-hover table-form">
+			<col width="140px " />
+			<col />
+			<col width="120px" />
+			<tr>
+				<th class="text-left" colspan="3">账户设置</th>
+			</tr>
+			<tr>
+				<td class="table-label">头像</td>
+				<td><img ng-src="{{profile.avatar}}" class="img-circle user-avatar" width="65px" height="65px" /></td>
+				<td><div class="link-group"><a href="javascript:;" ng-click="changeAvatar()">修改</a></div></td>
+			</tr>
+			<tr>
+				<td class="table-label">用户</td>
+				<td ng-bind="user.username"></td>
+				<td>{if permission_check_account_user('see_user_profile_edit_username')}<div class="link-group"><a href="#name" data-toggle="modal" data-target="" ng-click="editInfo('username', user.username)">修改</a></div>{/if}</td>
+			</tr>
+			<tr>
+				<td class="table-label">密码</td>
+				<td>******</td>
+				<td><div class="link-group"><a href="javascript:;" data-toggle="modal" data-target="#pass">修改</a></div></td>
+			</tr>
+			
+		</table>
+		<div class="modal fade" id="name" role="dialog">
+			<div class="we7-modal-dialog modal-dialog">
+				<div class="modal-content">
+					<div class="modal-header">
+						<button type="button" class="close" data-dismiss="modal"><span aria-hidden="true">&times;</span><span class="sr-only">Close</span></button>
+						<div class="modal-title">修改用户名</div>
+					</div>
+					<div class="modal-body">
+						<div class="form-group">
+							<input type="text" ng-model="userOriginal.username" class="form-control" placeholder="用户名" />
+							<span class="help-block"></span>
+						</div>
+					</div>
+					<div class="modal-footer">
+						<button type="button" class="btn btn-primary" ng-click="httpChange('username')">确定</button>
+						<button type="button" class="btn btn-default" data-dismiss="modal">取消</button>
+					</div>
+				</div>
+			</div>
+		</div>
+		<div class="modal fade" id="pass" role="dialog">
+			<div class="we7-modal-dialog modal-dialog">
+				<div class="modal-content">
+					<div class="modal-header">
+						<button type="button" class="close" data-dismiss="modal"><span aria-hidden="true">&times;</span><span class="sr-only">Close</span></button>
+						<div class="modal-title">修改密码</div>
+					</div>
+					<div class="modal-body text-center">
+						<div class="we7-form" style="width: 450px; margin: 0 auto;">
+							{if empty($user['register_type'])}
+							<div class="form-group">
+								<label for="" class="control-label col-sm-2">原密码</label>
+								<div class="form-controls col-sm-10">
+									<input type="password" value="" class="form-control old-password">
+
+								</div>
+							</div>
+							{/if}
+							<div class="form-group">
+								<label for="" class="control-label col-sm-2">新密码</label>
+								<div class="form-controls col-sm-10">
+									<input type="password" value="" class="form-control new-password">
+
+								</div>
+							</div>
+							<div class="form-group">
+								<label for="" class="control-label col-sm-2">确认新密码</label>
+								<div class="form-controls col-sm-10">
+									<input type="password" value="" class="form-control renew-password">
+								</div>
+							</div>
+						</div>
+					</div>
+					<div class="modal-footer">
+						<button type="button" class="btn btn-primary" ng-click="httpChange('password')">确定</button>
+						<button type="button" class="btn btn-default" data-dismiss="modal">取消</button>
+					</div>
+				</div>
+			</div>
+		</div>
+		<table class="table we7-table table-hover table-form">
+			<col width="140px " />
+			<col />
+			<col width="100px" />
+			<tr>
+				<th class="text-left" colspan="3">基础信息</th>
+			</tr>
+			<tr>
+				<td class="table-label">真实姓名</td>
+				<td ng-bind="profile.realname"></td>
+				<td><div class="link-group"><a href="javascript:;" data-toggle="modal" data-target="#realname" ng-click="editInfo('realname', profile.realname)">修改</a></div></td>
+			</tr>
+			<tr>
+				<td class="table-label">上次登录时间</td>
+				<td ng-bind="user.last_visit"></td>
+				<td></td>
+			</tr>
+			<tr>
+				<td class="table-label">上次登录IP</td>
+				<td ng-bind="user.lastip"></td>
+				<td></td>
+			</tr>
+			<tr>
+				<td class="table-label">注册时间</td>
+				<td ng-bind="user.joindate"></td>
+				<td></td>
+			</tr>
+			<tr>
+				<td class="table-label">到期时间</td>
+				<td >{$endtime}</td>
+				<td></td>
+			</tr>
+			{if $_W['isadmin']}
+				<tr>
+					<td class="table-label">备注</td>
+					<td ng-bind="user.remark"></td>
+					<td><div class="link-group"><a href="javascript:;" data-toggle="modal" data-target="#remark" ng-click="editInfo('remark', user.remark)">修改</a></div></td>
+				</tr>
+			{/if}
+		</table>
+		<div class="modal fade" id="realname" role="dialog">
+			<div class="we7-modal-dialog modal-dialog">
+				<div class="modal-content">
+					<div class="modal-header">
+						<button type="button" class="close" data-dismiss="modal"><span aria-hidden="true">&times;</span><span class="sr-only">Close</span></button>
+						<div class="modal-title">修改真实姓名</div>
+					</div>
+					<div class="modal-body">
+						<div class="form-group">
+							<input type="text" class="form-control" ng-model="userOriginal.realname">
+							<span class="help-block">请填写真实姓名</span>
+						</div>
+					</div>
+					<div class="modal-footer">
+						<button type="button" class="btn btn-primary" ng-click="httpChange('realname')">确定</button>
+						<button type="button" class="btn btn-default" data-dismiss="modal">取消</button>
+					</div>
+				</div>
+			</div>
+		</div>
+		<div class="modal fade" id="remark" role="dialog">
+			<div class="we7-modal-dialog modal-dialog">
+				<div class="modal-content">
+					<div class="modal-header">
+						<button type="button" class="close" data-dismiss="modal"><span aria-hidden="true">&times;</span><span class="sr-only">Close</span></button>
+						<div class="modal-title">修改备注</div>
+					</div>
+					<div class="modal-body">
+						<div class="form-group">
+							<input type="text" ng-model="userOriginal.remark" class="form-control" placeholder="备注" />
+							<span class="help-block"></span>
+						</div>
+					</div>
+					<div class="modal-footer">
+						<button type="button" class="btn btn-primary" ng-click="httpChange('remark')" ng-click="editInfo('remark', user.remark)">确定</button>
+					<button type="button" class="btn btn-default" data-dismiss="modal">取消</button>
+				</div>
+			</div>
+		</div>
+	</div>
+	{/if}
+	<div class="modal fade" id="mobile" role="dialog">
+		<div class="we7-modal-dialog modal-dialog">
+			<div class="modal-content">
+				<div class="modal-header">
+					<button type="button" class="close" data-dismiss="modal"><span aria-hidden="true">&times;</span><span class="sr-only">Close</span></button>
+					<div class="modal-title">修改手机号</div>
+				</div>
+				<div class="modal-body">
+					<div class="form-group">
+						<input type="text" ng-model="userOriginal.mobile" class="form-control" placeholder="mobile" />
+						<span class="help-block"></span>
+					</div>
+				</div>
+				<div class="modal-footer">
+					<button type="button" class="btn btn-primary" ng-click="httpChange('mobile')">确定</button>
+					<button type="button" class="btn btn-default" data-dismiss="modal">取消</button>
+				</div>
+			</div>
+		</div>
+	</div>
+</div>
+<script>
+require(['underscore'], function(){
+	angular.module('userProfile').value('config', {
+		user: {php echo !empty($user) ? json_encode($user) : 'null'},
+		profile: {php echo !empty($profile) ? json_encode($profile) : 'null'},
+		group_info: {php echo !empty($group_info) ? json_encode($group_info) : 'null'},
+		groups: {php echo !empty($groups) ? json_encode($groups) : 'null'},
+		wechats: {php echo !empty($account_detail['account']) ? json_encode($account_detail['account']) : 'null'},
+		wxapps: {php echo !empty($account_detail['wxapp']) ? json_encode($account_detail['wxapp']) : 'null'},
+		account_num: 'null',
+		extra_fields: {php echo !empty($extra_fields) ? json_encode($extra_fields) : 'null'},
+		redirect_urls: {php echo !empty($redirect_urls) ? json_encode($redirect_urls) : 'null'},
+		user_extra_groups: {php echo !empty($user_extra_groups) ? json_encode($user_extra_groups) : 'null'},
+		extend: {php echo !empty($extend) ? json_encode($extend) : 'null'},
+		links: {
+			userPost: "{php echo url('user/profile/post')}",
+		},
+	});
+	angular.bootstrap($('#js-user-profile'), ['userProfile']);
+});
+</script>
+
+{if $user_type == PERSONAL_BIND_TYPE}
+<!--账号绑定-->
+<div class="bind-account" ng-controller="userBindCtrl" ng-cloak>
+	<table class="table we7-table table-hover table-form" >
+		<col width="140px " />
+		<col />
+		<col width="160px" />
+		<tr>
+			<th class="text-left" colspan="3">账号绑定</th>
+		</tr>
+		<tr>
+			<td class="table-label"><span class="wi wi-iphone color-default" style="font-size: 32px;"></span></td>
+			<td>{{bindmobile.third_nickname}}</td>
+			<td>
+				<div class="link-group">
+					<a href="javascript:;"  data-toggle="modal" data-target="#myModal" ng-if="bindmobile.third_type == 3">解绑手机</a>
+					<a href="javascript:;"  data-toggle="modal" data-target="#myModal" ng-if="bindmobile.third_type != 3">绑定手机</a>
+					{if $_W['isadmin']}
+					<a href="javascript:;"  data-toggle="modal" data-target="#founderModal" ng-if="bindmobile.third_type == 3">更换手机</a>
+					{else}
+					<a href="{php echo url('user/profile/change_mobile')}"  ng-if="bindmobile.third_type == 3">更换手机</a>
+					{/if}
+				</div>
+			</td>
+		</tr>
+		<tr ng-if="thirdlogin.qq.authstate == 1">
+			<td class="table-label"><span class="wi wi-qq color-default" style="font-size: 32px;"></span></td>
+			<td>{{bindqq.third_nickname}}</td>
+			<td>
+				<div class="link-group">
+					<a href="javascript:;" ng-if="bindqq.third_type == 1" ng-click="unbind(bindqq.third_type)">解除绑定</a>
+					<a href="{{login_urls.qq}}" ng-if="bindqq.third_type != 1">绑定QQ</a>
+				</div>
+			</td>
+		</tr>
+		<tr ng-if="thirdlogin.wechat.authstate == 1">
+			<td class="table-label"><span class="wi wi-account" style="font-size: 32px; color: #00bb00;"></span></td>
+			<td>{{bindwechat.third_nickname}}</td>
+			<td>
+				<div class="link-group">
+					<a href="javascript:;" ng-if="bindwechat.third_type == 2" ng-click="unbind(bindwechat.third_type)">解除绑定</a>
+					<a href="{{login_urls.wechat}}" ng-if="bindwechat.third_type != 2">绑定微信</a>
+				</div>
+			</td>
+		</tr>
+		<div class="modal fade basic" id="myModal" tabindex="-1" role="dialog" aria-labelledby="myModalLabel">
+			<div class="modal-dialog">
+				<div class="modal-content">
+					<div class="modal-header">
+						<button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">&times;</span></button>
+						<h4 class="modal-title" id="myModalLabel">
+							<span ng-if="bindmobile.third_type != 3">绑定手机号</span>
+							<span ng-if="bindmobile.third_type == 3">解绑手机号</span>
+						</h4>
+					</div>
+					<div class="modal-body material-content clearfix">
+						<div class="form-group input-group">
+							<input type="text" class="form-control" placeholder="输入手机号" ng-model="mobile" ng-disabled="bindmobile">
+							<span class="input-group-btn">
+							<button class="btn btn-primary send-code" ng-disabled="isDisable" ng-click="sendMessage(bindmobile.third_nickname)">{{text}}</button>
+						</span>
+						</div>
+						<div class="form-group input-group">
+							<input type="text" ng-model='imagecode' class="form-control" placeholder="输入图形验证码">
+							<a href="javascript:;" class="input-group-btn imgverify" style="" ng-click="changeVerify()"><img ng-src="{{image}}" style="width: 127px; height: 32px;"/></a>
+						</div>
+						<div class="form-group">
+							<input type="text" ng-model='smscode' class="form-control" placeholder="输入手机验证码">
+						</div>
+					</div>
+					<div class="modal-footer">
+						<button type="button" class="btn btn-primary" ng-click="mobileBind(bindmobile.third_nickname, 3)">确定</button>
+						<button type="button" class="btn smscodebtn-default" data-dismiss="modal">取消</button>
+					</div>
+				</div>
+			</div>
+		</div>
+		{if $_W['isadmin']}
+		<div class="modal fade basic" id="founderModal" tabindex="-1" role="dialog" aria-labelledby="founderModalLabel">
+			<div class="modal-dialog">
+				<div class="modal-content">
+					<div class="modal-header">
+						<button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">&times;</span></button>
+						<h4 class="modal-title" id="founderModalLabel">
+							<span>选择验证方式</span>
+						</h4>
+					</div>
+					<div class="modal-body">
+						<div class="sms-change-tip">
+							<p >创始人绑定的原始手机<span class="color-default">{{bindmobile.third_nickname | mobile}}</span>是否还在使用</p>
+							<p class="color-gray">如果手机号还能用，发送短信即可完成验证</p>
+						</div>
+						<a href="javascript:;" class="sms-change-type" style="display: none"　data-dismiss="modal" aria-label="Close">
+							手机号已停用
+						</a>
+						<a href="{php echo url('user/profile/change_mobile')}" class="sms-change-type">
+							手机号可以正常使用
+						</a>
+					</div>
+				</div>
+			</div>
+		</div>
+		{/if}
+		<!--end  账号绑定-->
+	</table>
+</div>
+<script>
+	angular.module('userProfile').value('config',{
+		'bindqq': {php echo !empty($bind_qq) ? json_encode($bind_qq) : 'null'},
+	'bindwechat': {php echo !empty($bind_wechat) ? json_encode($bind_wechat) : 'null'},
+	'bindmobile': {php echo !empty($bind_mobile) ? json_encode($bind_mobile) : 'null'},
+	'login_urls': {php echo !empty($support_login_urls) ? json_encode($support_login_urls) : 'null'},
+	'thirdlogin' : {php echo !empty($_W['setting']['thirdlogin']) ? json_encode($_W['setting']['thirdlogin']) : 'null'},
+	'bind_sign': "{php echo !empty($bind_sign) ? $bind_sign : 'null'}",
+			'image' : "{php echo url('utility/code')}",
+			'links':{
+		'img_verify_link': "{php echo url('utility/code')}",
+				'send_code_link': "{php echo url('utility/verifycode')}",
+				'valid_mobile_link' : "{php echo url('user/profile/validate_mobile')}",
+				'bind_mobile_link' : "{php echo url('user/profile/bind_mobile')}",
+				'unbind_third_link' : "{php echo url('user/profile/unbind')}",
+	},
+	});
+	angular.bootstrap($('.bind-account'), ['userProfile']);
+</script>
+{/if}
+{template 'common/footer'}

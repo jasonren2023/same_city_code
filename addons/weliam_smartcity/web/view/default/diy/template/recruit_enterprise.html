@@ -1,0 +1,53 @@
+<!--------------------------  求职招聘 - 企业组件群  ----------------------------------->
+<!-- 风格一 -->
+<script type="text/html" id="tpl_show_recruit_enterprise">
+    <div class="drag" data-itemid="<%itemid%>" group_name="<%group_name%>" group_key="<%group_key%>" data-id="<%group_name%>" >
+        <div class="recruit_enterprise" style="background-color: <%style.bgColor%>;padding: <%style.padding%>px;margin-bottom: <%style.marginBottom%>px;">
+            <%each data as child itemid %>
+                <div class="block">
+                    <div class="img">
+                        <img src="<%imgsrc child.logo%>" />
+                    </div>
+                    <div class="info">
+                        <div class="top">
+                            <div class="name"><%child.storename%></div>
+                            <div class="authentication  <%if child.is_authentication==0%>hide<%/if%>">已认证</div>
+                        </div>
+                        <div class="TSI"><%child.nature%>·<%child.scale%>·<%child.industry%></div>
+                        <div class="area"><%child.area%>  在招岗位<span class="num"><%child.release_recruit%></span>个</div>
+                    </div>
+                </div>
+            <%/each%>
+        </div>
+    </div>
+</script>
+<!-- 风格二 -->
+<script type="text/html" id="tpl_show_recruit_enterprise2">
+    <div class="drag" data-itemid="<%itemid%>"  group_name="<%group_name%>" group_key="<%group_key%>" data-id="<%group_name%>" >
+        <div class="recruit_enterprise2" style="background-color: <%style.bgColor%>;padding: <%style.padding%>px;margin-bottom: <%style.marginBottom%>px;">
+            <div class="top">
+                <div class="title"><%params.title%></div>
+                <div class="more <%if params.show_more != 1%>hide<%/if%>">更多<i class="icon icon-right"></i></div>
+            </div>
+            <div class="enterprise">
+                <%each data as child itemid %>
+                <div class="block">
+                    <div class="img">
+                        <img src="<%imgsrc child.logo%>" />
+                    </div>
+                    <div class="info">
+                        <div class="title"><%child.storename%></div>
+                        <div class="number">
+                            <%if child.release_recruit > 0%>
+                                <%child.release_recruit%>+岗位热招
+                            <%else%>
+                                暂无招聘
+                            <%/if%>
+                        </div>
+                    </div>
+                </div>
+                <%/each%>
+            </div>
+        </div>
+    </div>
+</script>

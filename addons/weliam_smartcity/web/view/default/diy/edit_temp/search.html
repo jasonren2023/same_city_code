@@ -1,0 +1,282 @@
+<!--------------------------  搜索框配置群  ----------------------------------->
+<!-- 风格一 -->
+<script type="text/html" id="tpl_edit_search">
+    <div class="form-group">
+        <div class="col-sm-2 control-label">背景颜色</div>
+        <div class="col-sm-9">
+            <div class="input-group input-group-sm">
+                <input class="form-control diy-bind color" data-bind-child="style" data-bind="background" value="<%style.background%>" type="color" />
+                <span class="input-group-addon btn btn-default" onclick="$(this).prev().val('#f1f1f2').trigger('propertychange')">重置</span>
+            </div>
+        </div>
+    </div>
+    <div class="form-group">
+        <div class="col-sm-2 control-label">输入框背景</div>
+        <div class="col-sm-9">
+            <div class="input-group input-group-sm">
+                <input class="form-control diy-bind color" data-bind-child="style" data-bind="inputbackground" value="<%style.inputbackground%>" type="color" />
+                <span class="input-group-addon btn btn-default" onclick="$(this).prev().val('#ffffff').trigger('propertychange')">重置</span>
+            </div>
+        </div>
+    </div>
+    <div class="form-group">
+        <div class="col-sm-2 control-label">文字颜色</div>
+        <div class="col-sm-9">
+            <div class="input-group input-group-sm">
+                <input class="form-control diy-bind color" data-bind-child="style" data-bind="color" value="<%style.color%>" type="color" />
+                <span class="input-group-addon btn btn-default" onclick="$(this).prev().val('#999999').trigger('propertychange')">重置</span>
+            </div>
+        </div>
+    </div>
+    <div class="form-group">
+        <div class="col-sm-2 control-label">图标颜色</div>
+        <div class="col-sm-9">
+            <div class="input-group input-group-sm">
+                <input class="form-control diy-bind color" data-bind-child="style" data-bind="iconcolor" value="<%style.iconcolor%>" type="color" />
+                <span class="input-group-addon btn btn-default" onclick="$(this).prev().val('#b4b4b4').trigger('propertychange')">重置</span>
+            </div>
+        </div>
+    </div>
+    <div class="form-group">
+        <div class="col-sm-2 control-label">提示文字</div>
+        <div class="col-sm-9">
+            <input class="form-control diy-bind" data-bind-child="params" data-bind="placeholder" data-placeholder="" placeholder="请输入提示文字(不填则不显示，最长15字)" value="<%params.placeholder%>" maxlength="15" />
+        </div>
+    </div>
+    <div class="form-group">
+        <div class="col-sm-2 control-label">下边距</div>
+        <div class="col-sm-9">
+            <div class="form-group">
+                <div class="slider col-sm-8" data-value="<%style.marginBottom%>" data-min="0" data-max="30"></div>
+                <div class="col-sm-9 control-labe count"><span><%style.marginBottom%></span>px(像素)</div>
+                <input class="diy-bind input" data-bind-child="style" data-bind="marginBottom" value="<%style.marginBottom%>" type="hidden" />
+            </div>
+        </div>
+    </div>
+    <div class="form-group">
+        <div class="col-sm-2 control-label">搜索框样式</div>
+        <div class="col-sm-9">
+            <label class="radio-inline"><input type="radio" name="searchstyle" value="" class="diy-bind" data-bind-child="style" data-bind="searchstyle" <%if style.searchstyle==''%>checked="checked"<%/if%> > 方形</label>
+            <label class="radio-inline"><input type="radio" name="searchstyle" value="radius" class="diy-bind" data-bind-child="style" data-bind="searchstyle" <%if style.searchstyle=='radius'%>checked="checked"<%/if%>> 圆角</label>
+            <label class="radio-inline"><input type="radio" name="searchstyle" value="round" class="diy-bind" data-bind-child="style" data-bind="searchstyle" <%if style.searchstyle=='round'%>checked="checked"<%/if%>> 圆弧</label>
+        </div>
+    </div>
+    <div class="form-group">
+        <div class="col-sm-2 control-label">文字对齐</div>
+        <div class="col-sm-9">
+            <label class="radio-inline"><input type="radio" name="textalign" value="left" class="diy-bind" data-bind-child="style" data-bind="textalign" <%if style.textalign=='left'%>checked="checked"<%/if%> > 居左</label>
+            <label class="radio-inline"><input type="radio" name="textalign" value="center" class="diy-bind" data-bind-child="style" data-bind="textalign" <%if style.textalign=='center'%>checked="checked"<%/if%>> 居中</label>
+            <label class="radio-inline"><input type="radio" name="textalign" value="right" class="diy-bind" data-bind-child="style" data-bind="textalign" <%if style.textalign=='right'%>checked="checked"<%/if%>> 居右</label>
+        </div>
+    </div>
+    <%if plugins.recruit == 1 ||  plugins.dating == 1 ||  plugins.housekeep == 1%>
+        <div class="form-group">
+            <div class="col-sm-2 control-label">搜索类型</div>
+            <div class="col-sm-9">
+                <label class="radio-inline">
+                    <input type="radio" name="search_type" value="1" class="diy-bind" data-bind-child="params" data-bind="search_type" <%if params.search_type!='2'%>checked="checked"<%/if%> > 搜索商品
+                </label>
+                <%if plugins.recruit == 1%>
+                    <label class="radio-inline">
+                        <input type="radio" name="search_type" value="2" class="diy-bind" data-bind-child="params" data-bind="search_type" <%if params.search_type=='2'%>checked="checked"<%/if%>> 搜索招聘
+                    </label>
+                <%/if%>
+                <%if plugins.dating == 1%>
+                    <label class="radio-inline">
+                        <input type="radio" name="search_type" value="3" class="diy-bind" data-bind-child="params" data-bind="search_type" <%if params.search_type=='3'%>checked="checked"<%/if%>> 相亲交友
+                    </label>
+                <%/if%>
+                <%if plugins.housekeep == 1%>
+                    <label class="radio-inline">
+                        <input type="radio" name="search_type" value="4" class="diy-bind" data-bind-child="params" data-bind="search_type" <%if params.search_type=='4'%>checked="checked"<%/if%>> 家政服务
+                    </label>
+                <%/if%>
+            </div>
+        </div>
+    <%/if%>
+</script>
+<!-- 风格二 -->
+<script type="text/html" id="tpl_edit_search2">
+    <div class="form-group">
+        <div class="col-sm-2 control-label">背景颜色</div>
+        <div class="col-sm-9">
+            <div class="input-group input-group-sm">
+                <input class="form-control diy-bind color" data-bind-child="style" data-bind="background" value="<%style.background%>" type="color" />
+                <span class="input-group-addon btn btn-default" onclick="$(this).prev().val('#f1f1f2').trigger('propertychange')">重置</span>
+            </div>
+        </div>
+    </div>
+    <div class="form-group">
+        <div class="col-sm-2 control-label">输入框背景</div>
+        <div class="col-sm-9">
+            <div class="input-group input-group-sm">
+                <input class="form-control diy-bind color" data-bind-child="style" data-bind="inputbackground" value="<%style.inputbackground%>" type="color" />
+                <span class="input-group-addon btn btn-default" onclick="$(this).prev().val('#ffffff').trigger('propertychange')">重置</span>
+            </div>
+        </div>
+    </div>
+    <div class="form-group">
+        <div class="col-sm-2 control-label">文字颜色</div>
+        <div class="col-sm-9">
+            <div class="input-group input-group-sm">
+                <input class="form-control diy-bind color" data-bind-child="style" data-bind="color" value="<%style.color%>" type="color" />
+                <span class="input-group-addon btn btn-default" onclick="$(this).prev().val('#999999').trigger('propertychange')">重置</span>
+            </div>
+        </div>
+    </div>
+    <div class="form-group">
+        <div class="col-sm-2 control-label">地区颜色</div>
+        <div class="col-sm-9">
+            <div class="input-group input-group-sm">
+                <input class="form-control diy-bind color" data-bind-child="style" data-bind="areaColor" value="<%style.areaColor%>" type="color" />
+                <span class="input-group-addon btn btn-default" onclick="$(this).prev().val('#999999').trigger('propertychange')">重置</span>
+            </div>
+        </div>
+    </div>
+    <div class="form-group">
+        <div class="col-sm-2 control-label">图标颜色</div>
+        <div class="col-sm-9">
+            <div class="input-group input-group-sm">
+                <input class="form-control diy-bind color" data-bind-child="style" data-bind="iconcolor" value="<%style.iconcolor%>" type="color" />
+                <span class="input-group-addon btn btn-default" onclick="$(this).prev().val('#999999').trigger('propertychange')">重置</span>
+            </div>
+        </div>
+    </div>
+    <div class="form-group">
+        <div class="col-sm-2 control-label">提示文字</div>
+        <div class="col-sm-9">
+            <input class="form-control diy-bind" data-bind-child="params" data-bind="placeholder" data-placeholder="" placeholder="请输入提示文字(不填则不显示，最长15字)" value="<%params.placeholder%>" maxlength="15" />
+        </div>
+    </div>
+    <div class="form-group">
+        <div class="col-sm-2 control-label">下边距</div>
+        <div class="col-sm-9">
+            <div class="form-group">
+                <div class="slider col-sm-8" data-value="<%style.marginBottom%>" data-min="0" data-max="30"></div>
+                <div class="col-sm-9 control-labe count"><span><%style.marginBottom%></span>px(像素)</div>
+                <input class="diy-bind input" data-bind-child="style" data-bind="marginBottom" value="<%style.marginBottom%>" type="hidden" />
+            </div>
+        </div>
+    </div>
+    <div class="form-group">
+        <div class="col-sm-2 control-label">搜索框样式</div>
+        <div class="col-sm-9">
+            <label class="radio-inline"><input type="radio" name="searchstyle" value="" class="diy-bind" data-bind-child="style" data-bind="searchstyle" <%if style.searchstyle==''%>checked="checked"<%/if%> > 方形</label>
+            <label class="radio-inline"><input type="radio" name="searchstyle" value="radius" class="diy-bind" data-bind-child="style" data-bind="searchstyle" <%if style.searchstyle=='radius'%>checked="checked"<%/if%>> 圆角</label>
+            <label class="radio-inline"><input type="radio" name="searchstyle" value="round" class="diy-bind" data-bind-child="style" data-bind="searchstyle" <%if style.searchstyle=='round'%>checked="checked"<%/if%>> 圆弧</label>
+        </div>
+    </div>
+    <div class="form-group">
+        <div class="col-sm-2 control-label">文字对齐</div>
+        <div class="col-sm-9">
+            <label class="radio-inline"><input type="radio" name="textalign" value="left" class="diy-bind" data-bind-child="style" data-bind="textalign" <%if style.textalign=='left'%>checked="checked"<%/if%> > 居左</label>
+            <label class="radio-inline"><input type="radio" name="textalign" value="center" class="diy-bind" data-bind-child="style" data-bind="textalign" <%if style.textalign=='center'%>checked="checked"<%/if%>> 居中</label>
+            <label class="radio-inline"><input type="radio" name="textalign" value="right" class="diy-bind" data-bind-child="style" data-bind="textalign" <%if style.textalign=='right'%>checked="checked"<%/if%>> 居右</label>
+        </div>
+    </div>
+    <%if plugins.recruit == 1 ||  plugins.dating == 1 ||  plugins.housekeep == 1%>
+        <div class="form-group">
+            <div class="col-sm-2 control-label">搜索类型</div>
+            <div class="col-sm-9">
+                <label class="radio-inline">
+                    <input type="radio" name="search_type" value="1" class="diy-bind" data-bind-child="params" data-bind="search_type" <%if params.search_type!='2'%>checked="checked"<%/if%> > 搜索商品
+                </label>
+                <%if plugins.recruit == 1%>
+                <label class="radio-inline">
+                    <input type="radio" name="search_type" value="2" class="diy-bind" data-bind-child="params" data-bind="search_type" <%if params.search_type=='2'%>checked="checked"<%/if%>> 搜索招聘
+                </label>
+                <%/if%>
+                <%if plugins.dating == 1%>
+                <label class="radio-inline">
+                    <input type="radio" name="search_type" value="3" class="diy-bind" data-bind-child="params" data-bind="search_type" <%if params.search_type=='3'%>checked="checked"<%/if%>> 相亲交友
+                </label>
+                <%/if%>
+                <%if plugins.housekeep == 1%>
+                    <label class="radio-inline">
+                        <input type="radio" name="search_type" value="4" class="diy-bind" data-bind-child="params" data-bind="search_type" <%if params.search_type=='4'%>checked="checked"<%/if%>> 家政服务
+                    </label>
+                <%/if%>
+            </div>
+        </div>
+    <%/if%>
+</script>
+<!-- 风格三 -->
+<script type="text/html" id="tpl_edit_search3">
+    <div class="form-group">
+        <div class="col-sm-2 control-label">背景颜色</div>
+        <div class="col-sm-9">
+            <div class="input-group input-group-sm">
+                <input class="form-control diy-bind color" data-bind-child="style" data-bind="background" value="<%style.background%>" type="color" />
+                <span class="input-group-addon btn btn-default" onclick="$(this).prev().val('#f1f1f2').trigger('propertychange')">重置</span>
+            </div>
+        </div>
+    </div>
+    <div class="form-group">
+        <div class="col-sm-2 control-label">输入框背景</div>
+        <div class="col-sm-9">
+            <div class="input-group input-group-sm">
+                <input class="form-control diy-bind color" data-bind-child="style" data-bind="inputbackground" value="<%style.inputbackground%>" type="color" />
+                <span class="input-group-addon btn btn-default" onclick="$(this).prev().val('#ffffff').trigger('propertychange')">重置</span>
+            </div>
+        </div>
+    </div>
+    <div class="form-group">
+        <div class="col-sm-2 control-label">文字&图标颜色</div>
+        <div class="col-sm-9">
+            <div class="input-group input-group-sm">
+                <input class="form-control diy-bind color" data-bind-child="style" data-bind="iconcolor" value="<%style.iconcolor%>" type="color" />
+                <span class="input-group-addon btn btn-default" onclick="$(this).prev().val('#999999').trigger('propertychange')">重置</span>
+            </div>
+        </div>
+    </div>
+    <div class="form-group">
+        <div class="col-sm-2 control-label">标题颜色</div>
+        <div class="col-sm-9">
+            <div class="input-group input-group-sm">
+                <input class="form-control diy-bind color" data-bind-child="style" data-bind="titlecolor" value="<%style.titlecolor%>" type="color" />
+                <span class="input-group-addon btn btn-default" onclick="$(this).prev().val('#999999').trigger('propertychange')">重置</span>
+            </div>
+        </div>
+    </div>
+    <div class="form-group">
+        <div class="col-sm-2 control-label">文字内容</div>
+        <div class="col-sm-9">
+            <input class="form-control diy-bind" data-bind-child="params" data-bind="textcontent" data-placeholder="" placeholder="请输入文字内容(不超过15字符)" value="<%params.textcontent%>" maxlength="15" />
+        </div>
+    </div>
+    <div class="form-group">
+        <div class="col-sm-2 control-label">下边距</div>
+        <div class="col-sm-9">
+            <div class="form-group">
+                <div class="slider col-sm-8" data-value="<%style.marginBottom%>" data-min="0" data-max="30"></div>
+                <div class="col-sm-9 control-labe count"><span><%style.marginBottom%></span>px(像素)</div>
+                <input class="diy-bind input" data-bind-child="style" data-bind="marginBottom" value="<%style.marginBottom%>" type="hidden" />
+            </div>
+        </div>
+    </div>
+    <%if plugins.recruit == 1 ||  plugins.dating == 1 ||  plugins.housekeep == 1%>
+        <div class="form-group">
+            <div class="col-sm-2 control-label">搜索类型</div>
+            <div class="col-sm-9">
+                <label class="radio-inline">
+                    <input type="radio" name="search_type" value="1" class="diy-bind" data-bind-child="params" data-bind="search_type" <%if params.search_type!='2'%>checked="checked"<%/if%> > 搜索商品
+                </label>
+                <%if plugins.recruit == 1%>
+                <label class="radio-inline">
+                    <input type="radio" name="search_type" value="2" class="diy-bind" data-bind-child="params" data-bind="search_type" <%if params.search_type=='2'%>checked="checked"<%/if%>> 搜索招聘
+                </label>
+                <%/if%>
+                <%if plugins.dating == 1%>
+                <label class="radio-inline">
+                    <input type="radio" name="search_type" value="3" class="diy-bind" data-bind-child="params" data-bind="search_type" <%if params.search_type=='3'%>checked="checked"<%/if%>> 相亲交友
+                </label>
+                <%/if%>
+                <%if plugins.housekeep == 1%>
+                <label class="radio-inline">
+                    <input type="radio" name="search_type" value="4" class="diy-bind" data-bind-child="params" data-bind="search_type" <%if params.search_type=='4'%>checked="checked"<%/if%>> 家政服务
+                </label>
+                <%/if%>
+            </div>
+        </div>
+    <%/if%>
+</script>

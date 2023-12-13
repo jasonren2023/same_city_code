@@ -1,0 +1,132 @@
+{php include wl_template('common/header');}
+<ul class="nav nav-tabs" id="myTab">
+    <li class="active"><a href="javascript:;">选项列表</a></li>
+</ul>
+<div class="app-content">
+    <!--顶部操作-->
+    <div class="app-filter">
+        <div class="filter-action">
+            <a href="{php echo web_url('dating/member/optionEdit')}" class="btn btn-primary">添加选项</a>
+            <a href="javascript:;" class="btn btn-info" id="createButton" title="一键生成默认选项信息">一键生成</a>
+            {if empty($university)}<a href="javascript:;" class="btn btn-danger" id="synButton" title="将已有的用户数据同步到新数据内">更新用户数据</a>{/if}
+        </div>
+        <div class="filter-list">
+            <form action="" method="get" class="form-horizontal" role="form" id="form1">
+                <input type="hidden" name="c" value="site" />
+                <input type="hidden" name="a" value="entry" />
+                <input type="hidden" name="m" value="{MODULE_NAME}" />
+                <input type="hidden" name="p" value="dating" />
+                <input type="hidden" name="ac" value="member" />
+                <input type="hidden" name="do" value="optionList" />
+                <input type="hidden" name="type" value="{$_GPC['type']}" />
+                <div class="form-group">
+                    <div class="col-sm-2 control-label">选项内容</div>
+                    <div class="col-sm-9">
+                        <input type="text" class="form-control" name="title" value="{$title}" placeholder="请输入选项内容...">
+                    </div>
+                </div>
+                <div class="form-group" style="max-width: 1180px;">
+                    <label class="col-sm-2 control-label">选项类型</label>
+                    <div class="col-sm-9">
+                        <div class="btn-group">
+                            <a href="{php echo wl_filter_url('type:');}" class="btn {if empty($_GPC['type'])}btn-primary{else}btn-default{/if}">全部</a>
+                            <a href="{php echo wl_filter_url('type:1');}" class="btn {if $_GPC['type'] == '1'}btn-primary{else}btn-default{/if}">{if $university}年纪{else}婚姻状况{/if}</a>
+                            <a href="{php echo wl_filter_url('type:2');}" class="btn {if $_GPC['type'] == '2'}btn-primary{else}btn-default{/if}">{if $university}专业{else}学历{/if}</a>
+                            <a href="{php echo wl_filter_url('type:3');}" class="btn {if $_GPC['type'] == '3'}btn-primary{else}btn-default{/if}">{if $university}社团协会{else}户籍类型{/if}</a>
+                            <a href="{php echo wl_filter_url('type:4');}" class="btn {if $_GPC['type'] == '4'}btn-primary{else}btn-default{/if}">{if $university}兴趣交友{else}居住情况{/if}</a>
+                            {if empty($university)}<a href="{php echo wl_filter_url('type:5');}" class="btn {if $_GPC['type'] == '5'}btn-primary{else}btn-default{/if}">出行情况</a>{/if}
+                        </div>
+                    </div>
+                </div>
+                <div class="form-group">
+                    <div class="col-sm-2 control-label"></div>
+                    <div class="col-sm-9">
+                        <button class="btn btn-primary" type="submit">搜索</button>
+                    </div>
+                </div>
+            </form>
+        </div>
+    </div>
+    <!--表格信息-->
+    <div class="app-table-list">
+        <!--列表信息-->
+        <div class="table-responsive order-list">
+            <table class="table table-hover">
+                <thead>
+                <tr>
+                    <th class="text-center"><input type="checkbox" /></th>
+                    <th class="text-center">选项内容</th>
+                    <th class="text-center">选项类型</th>
+                    <th class="text-center">排序</th>
+                    <th class="text-center">创建时间</th>
+                    <th class="text-center">操作</th>
+                </tr>
+                </thead>
+                <tbody>
+                {loop $list $key $item}
+                <tr class="text-center">
+                    <td><input type="checkbox" value="{$item['id']}" /></td>
+                    <td>{$item['title']}</td>
+                    <td>
+                        {if $item['type'] == 1}<label class="label label-success">{if $university}年纪{else}婚姻状况{/if}</label>{/if}
+                        {if $item['type'] == 2}<label class="label label-warning">{if $university}专业{else}学历{/if}</label>{/if}
+                        {if $item['type'] == 3}<label class="label label-info">{if $university}社团协会{else}户籍类型{/if}</label>{/if}
+                        {if $item['type'] == 4}<label class="label label-default">{if $university}兴趣交友{else}居住情况{/if}</label>{/if}
+                        {if $item['type'] == 5} <label class="label label-danger">出行情况</label>{/if}
+                    </td>
+                    <td>{$item['sort']}</td>
+                    <td>{php echo date("Y-m-d H:i:s",$item['create_time']);}</td>
+                    <td>
+                        <a href="{php echo web_url('dating/member/optionEdit',['id'=>$item['id']])}" class="btn btn-warning btn-sm">编辑</a>
+                        <a href="{php echo web_url('dating/member/optionDel',['ids'=>$item['id']])}" class="btn btn-danger btn-sm" data-toggle="ajaxRemove" data-confirm="确定删除当前选项内容？">删除</a>
+                    </td>
+                </tr>
+                {/loop}
+                </tbody>
+            </table>
+        </div>
+        <!--操作按钮 分页信息-->
+        <div class="app-table-foot clearfix">
+            <div class="pull-left">
+                <button class="btn btn-default" type="button" data-toggle='batch-remove' data-confirm="确定删除当前选中的所有选项内容？" data-href="{php echo web_url('dating/member/optionDel')}">批量删除</button>
+            </div>
+            <div class="pull-right">{$pager}</div>
+        </div>
+    </div>
+</div>
+<script>
+    /**
+     * 默认标签信息生成
+     */
+    $("#createButton").on('click',function () {
+        tip.confirm('是否确认生成默认的选项内容？',function () {
+            //显示加载动画
+            $("#page-loading").show();
+            //请求生成
+            let link = "{php echo web_url('dating/member/optionDefaultInfo');}";
+            $.post(link,function (res) {
+                tip.alert(res.message,function () {
+                    history.go(0);
+                });
+            },'json');
+        });
+    });
+
+    /**
+     * 旧用户数据更新
+     */
+    $("#synButton").on('click',function () {
+        tip.confirm('为保证数据不产生异常,请在导入默认数据后使用。',function () {
+            //显示加载动画
+            $("#page-loading").show();
+            //请求生成
+            let link = "{php echo web_url('dating/member/synchronizationInfo');}";
+            $.post(link,function (res) {
+                tip.alert(res.message,function () {
+                    history.go(0);
+                });
+            },'json');
+        });
+    });
+</script>
+{php include wl_template('common/footer');}

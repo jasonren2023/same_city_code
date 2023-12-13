@@ -1,0 +1,101 @@
+{php include wl_template('common/header');}
+<ul class="nav nav-tabs">
+    <li class="active"><a href="javascript:;">基本设置</a></li>
+</ul>
+<div class="app-content">
+    <div class="app-form">
+        <div class="panel panel-default">
+            <form class="form-horizontal form-validate form" method="post">
+<!--                <div class="form-group">-->
+<!--                    <label class="col-sm-2 control-label">谢谢参与概率</label>-->
+<!--                    <div class="col-sm-9">-->
+<!--                        <input class="form-control" type="text" required name="set[not_probability]" min="0.01" max="100" value="{$set['not_probability']}"/>-->
+<!--                        <div class="help-block">请填写0-100的数据</div>-->
+<!--                    </div>-->
+<!--                </div>-->
+                <div class="form-group">
+                    <label class="col-sm-2 control-label">我的奖品背景色</label>
+                    <div class="col-sm-9">
+                        <input type="color" class="form-control" name="set[prize_color]" value="{$set['prize_color']}" style="width: 235px">
+                    </div>
+                </div>
+                <div class="form-group">
+                    <label class="col-sm-2 control-label">我的奖品顶部图</label>
+                    <div class="col-sm-9">
+                        {php echo attachment_select('set[top]', $set['top']);}
+                        <div class="help-block">推荐图片比例：750 * 300</div>
+                    </div>
+                </div>
+                <div class="form-group">
+                    <label class="col-sm-2 control-label">我的奖品顶部图链接</label>
+                    <div class="col-sm-9">
+                        <div class="input-group" style="margin: 0;">
+                            <input type="text" name="set[top_link]" class="form-control" value="{$set['top_link']}" readonly="readonly"  id="advlink" >
+                            <span data-input="#advlink" data-toggle="selectUrl" class="input-group-addon btn btn-default">选择链接</span>
+                            <span class="input-group-addon btn btn-default clearinput">X</span>
+                        </div>
+                    </div>
+                </div>
+                <div class="form-group">
+                    <label class="col-sm-2 control-label">分享页面背景色</label>
+                    <div class="col-sm-9">
+                        <input type="color" class="form-control" name="set[bg_color]" value="{$set['bg_color']}" style="width: 235px">
+                    </div>
+                </div>
+                <div class="form-group">
+                    <label class="col-sm-2 control-label">分享页面顶部图</label>
+                    <div class="col-sm-9">
+                        {php echo attachment_select('set[share_top]', $set['share_top']);}
+                        <div class="help-block">推荐图片比例：750 * 300</div>
+                    </div>
+                </div>
+                <div class="form-group">
+                    <label class="col-sm-2 control-label">分享页面顶部图链接</label>
+                    <div class="col-sm-9">
+                        <div class="input-group" style="margin: 0;">
+                            <input type="text" name="set[share_top_link]" class="form-control" value="{$set['share_top_link']}" readonly="readonly"  id="advlink2" >
+                            <span data-input="#advlink2" data-toggle="selectUrl" class="input-group-addon btn btn-default">选择链接</span>
+                            <span class="input-group-addon btn btn-default clearinput">X</span>
+                        </div>
+                    </div>
+                </div>
+                <div class="form-group">
+                    <label class="col-sm-2 control-label">海报背景图片</label>
+                    <div class="col-sm-9">
+                        {php echo attachment_select('set[poster_bg]', $set['poster_bg']);}
+                        <div class="help-block">推荐图片比例：1380 * 1900</div>
+                    </div>
+                </div>
+<!--                <div class="form-group">-->
+<!--                    <label class="col-sm-2 control-label">规则说明</label>-->
+<!--                    <div class="col-sm-9">-->
+<!--                        {php echo tpl_diy_editor_create('set[rule]',$set['rule']);}-->
+<!--                    </div>-->
+<!--                </div>-->
+                <div class="form-group">
+                    <label class="col-sm-2 control-label">规则说明</label>
+                    <div class="col-sm-9">
+                        {php echo tpl_diy_editor_create('set[introduce]',$set['introduce']);}
+                    </div>
+                </div>
+                <!-- 提交按钮 -->
+                <div class="form-group">
+                    <label class="col-sm-2 control-label"></label>
+                    <div class="col-sm-9">
+                        <input type="hidden" name="token" value="{$_W['token']}" />
+                        <input type="submit" name="submit" value="提交" class="btn btn-primary col-sm-1 min-width" />
+                    </div>
+                </div>
+            </form>
+        </div>
+    </div>
+</div>
+<script>
+    /**
+     * 点击删除图片或者链接
+     */
+    $(".form").on('click','.clearinput',function () {
+        $(this).prev().prev().val('');
+    });
+</script>
+{php include wl_template('common/footer');}

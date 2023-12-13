@@ -1,0 +1,382 @@
+{php include wl_template('common/header');}
+<meta name="referrer" content="never">
+<style>
+    .goods_list{
+        position: absolute;
+        z-index: 1000;
+        top: calc((100% - 590px) / 2);
+        left: 25%;
+        width: 50%;
+        max-height: 60%;
+    }
+    .goods_list .goods_title{
+        float: left;
+        width: 100%;
+        height: 40px;
+        font-weight: 600;
+        font-family: arial, 'Hiragino Sans GB', 'Microsoft Yahei', '微软雅黑', '宋体', \5b8b\4f53, Tahoma, Arial, Helvetica, STHeiti;
+        text-align: center;
+        border-bottom: 1px solid #DDD;
+        background-color: #f2f2f2;
+    }
+    .goods_list .goods_title div{
+        width: 25%;
+        float: left;
+        padding: 10px;
+        height: 100%;
+    }
+    .goods_content{
+        float: left;
+        width: 100%;
+        height: 500px;
+        overflow-y: auto;
+        background: #FFFFFF;
+    }
+    .goods_goodList{
+        float: left;
+        width: 100%;
+        height: 50px;
+        font-family: arial, 'Hiragino Sans GB', 'Microsoft Yahei', '微软雅黑', '宋体', \5b8b\4f53, Tahoma, Arial, Helvetica, STHeiti;
+        font-size: 14px;
+        color: #333;
+        text-align: center;
+        box-sizing: border-box;
+        border-top: 1px solid #e7eaec;
+    }
+    .goods_goodList div{
+        float: left;
+        width: 25%;
+        height: 50px;
+        line-height: 50px;
+    }
+    .goods_close{
+        text-align: right;
+        padding-right: 10%;
+        background: #FFFFFF;
+        height: 50px;
+        line-height: 50px;
+        margin: 0;
+        width: 100%;
+        float: left;
+        border-top: 1px solid #e7eaec;
+    }
+    #playback{
+        position: absolute;
+        z-index: 1000;
+        top: 15%;
+        left: 20%;
+        width: 60%;
+        background: #FFFFFF;
+        height: 70%;
+        padding: 0!important;
+    }
+    #playbacklist{
+        float: left;
+        width: calc(100% + 4.3px);
+        height: calc(100% - 50px);
+        overflow-y: auto;
+        padding: 20px;
+    }
+    #playback .playback_close{
+        float: left;
+        height: 50px;
+        width: 100%;
+        text-align: right;
+        padding-right: 50px;
+        border-top: 1px solid #CCCCCC;
+        line-height: 50px;
+    }
+    .block{
+        width: calc((100vw - 40vw - 45px) / 4);
+        height: calc((calc((100vw - 40vw - 45px) / 4))/ 9 * 16);
+        float: left;
+        padding: 10px;
+        font-size: 15px;
+    }
+    .block-video{
+        width: 100%;
+        height: calc(100% - 60px);
+        text-align: center;
+        border: 1px solid #CCC;
+    }
+    .block .block-video video{
+        width: 100% !important;
+        height: 100% !important;
+        object-fit: fill;
+        margin-left: auto;
+        margin-right: auto;
+        margin-bottom: 50px;
+    }
+    .block .block-time{
+        font-size: 14px;
+        height: 40px;
+        line-height: 20px;
+    }
+    #openLive{
+        position: fixed;
+        top: 20%;
+        left: 30%;
+        padding: 15px;
+        z-index: 1000;
+        width: 500px;
+        height: 300px;
+        text-align: center;
+    }
+    #openLive .qrcode{
+        width: 200px;
+        height: 200px;
+    }
+    #openLive img{
+        width: 100%;
+        height: 100%;
+    }
+    #openLive .openLive_close{
+        margin-top: 25px;
+        text-align: right;
+
+    }
+</style>
+<ul class="nav nav-tabs" id="myTab">
+    <li class="active"><a href="javascript:;">直播间列表</a></li>
+</ul>
+<!-- 直播间信息列表 -->
+<div class="app-content">
+    <div class="app-filter">
+        <div class="alert alert-warning">
+            注意事项：<br />
+            1、如果发现直播间信息有异常，请点击信息同步。<br />
+            2、直播信息接口每天最多只能使用100000次(查看直播回放、信息同步消耗一定次数)<br>
+            3、信息同步所需时间根据直播间总数量决定。请定期删除无效或者无用的直播间<br />
+        </div>
+        <div class="filter-action">
+            <a href="{php echo web_url('live/live/addLive');}" class="btn btn-primary">添加直播间</a>
+            <a href="javascript:;" class="btn btn-info" id="infoSynchronization">信息同步</a>
+        </div>
+    </div>
+    <div class="app-table-list">
+        <div class="table-responsive order-list">
+            <table class="table table-hover">
+                <thead>
+                    <tr>
+                        <th class="text-center" width="5%">ID</th>
+                        <th class="text-center" width="10%">直播间名称</th>
+                        <th class="text-center" width="10%">背景图</th>
+                        <th class="text-center" width="10%">分享图</th>
+                        <th class="text-center" width="20%">商品信息</th>
+                        <th class="text-center" width="5%">状态</th>
+                        <th class="text-center" width="20%">直播时间</th>
+                        <th class="text-center" width="10%">主播</th>
+                        <th class="text-center" width="10%">操作</th>
+                    </tr>
+                </thead>
+                <tbody>
+                {loop $list $val}
+                    <tr class="text-center">
+                        <td>{$val['roomid']}</td>
+                        <td>{$val['name']}</td>
+                        <td>
+                            <img class="scrollLoading" src="{$val['cover_img']}" data-url="{php echo tomedia($mem['avatar'])}" onerror="this.src='{IMAGE_NOPIC_SMALL}'" height="50" width="50"/>
+                        </td>
+                        <td>
+                            <img class="scrollLoading" src="{$val['share_img']}" data-url="{php echo tomedia($mem['avatar'])}" onerror="this.src='{IMAGE_NOPIC_SMALL}'" height="50" width="50"/>
+                        </td>
+                        <td>
+                            {if $val['goods']}
+                                <a href="javascript:;" class="btn btn-sm btn-info goodsInfo">查看商品</a>
+                                <div class="goods_list hide">
+                                    <table class="table table-hover">
+                                        <thead>
+                                            <tr>
+                                                <th class="text-center">商品名称</th>
+                                                <th class="text-center">封面图</th>
+                                                <th class="text-center">商品类型</th>
+                                                <th class="text-center">售价</th>
+                                            </tr>
+                                        </thead>
+                                        <tbody>
+                                        {loop $val['goods'] $good}
+                                            <tr class="text-center">
+                                                <td>{$good['title']}</td>
+                                                <td>
+                                                    <img class="scrollLoading" src="{$good['goods_img']}" onerror="this.src='{IMAGE_NOPIC_SMALL}'" height="30" width="30"/>
+                                                </td>
+                                                <td>
+                                                    {if $good['goods_plugin'] == 'rush'}
+                                                        抢购商品
+                                                    {elseif $good['goods_plugin'] == 'groupon'}
+                                                        团购商品
+                                                    {elseif $good['goods_plugin'] == 'wlfightgroup'}
+                                                        拼团商品
+                                                    {elseif $good['goods_plugin'] == 'coupon'}
+                                                        优惠券
+                                                    {elseif $good['goods_plugin'] == 'bargain'}
+                                                        砍价商品
+                                                    {else}
+                                                        ——
+                                                    {/if}
+                                                </td>
+                                                <td>
+                                                    {if $good['price_type'] == 1}
+                                                        <label class="label label-success">{$good['price']}</label>
+                                                    {elseif $good['price_type'] == 2}
+                                                        <label class="label label-info">{$good['price']} ~ {$good['price2']}</label>
+                                                    {else}
+                                                        <label class="label label-primary">原价：{$good['price']}</label><br />
+                                                        <label class="label label-danger" style="display: inline-block;margin-top: 5px;">现价：{$good['price2']}</label>
+                                                    {/if}
+                                                </td>
+                                            </tr>
+                                        {/loop}
+                                        <!-- 关闭按钮 -->
+                                        <tr class="text-center">
+                                            <td></td>
+                                            <td></td>
+                                            <td></td>
+                                            <td><a href="javascript:;" class="btn btn-sm btn-danger closeGoodsInfo">关闭</a></td>
+                                        </tr>
+                                        </tbody>
+                                    </table>
+                                </div>
+                            {/if}
+                        </td>
+                        <td class="text-center">
+                            {if $val['live_status'] == 101}
+                                <span class="label label-success">直播中</span>
+                            {elseif $val['live_status'] == 102}
+                                <span class="label label-primary">未开始</span>
+                            {elseif $val['live_status'] == 103}
+                                <span class="label label-warning">已结束</span>
+                            {elseif $val['live_status'] == 104}
+                                <span class="label label-danger">禁播</span>
+                            {elseif $val['live_status'] == 105}
+                                <span class="label label-default">暂停</span>
+                            {elseif $val['live_status'] == 106}
+                                <span class="label label-info">异常</span>
+                            {elseif $val['live_status'] == 107}
+                                <span class="label label-danger">已过期</span>
+                            {/if}
+                        </td>
+                        <td>{$val['start_time']} - {$val['end_time']}</td>
+                        <td>{$val['anchor_name']}</td>
+                        <td>
+                            {if $val['is_playback'] == 1}
+                                <a href="javascript:;" class="btn btn-sm btn-primary playbackList" data-roomid="{$val['roomid']}">回放列表</a>
+                            {/if}
+                            {if in_array($val['live_status'],[101,102])}
+                                <a href="{php echo web_url('live/live/getOpenLiveQrCode',array('id'=>$val['roomid']))}" data-toggle="ajaxModal" class="btn btn-sm btn-default">直播二维码</a>
+                            {/if}
+                        </td>
+                    </tr>
+                {/loop}
+                </tbody>
+            </table>
+        </div>
+        <div class="app-table-foot clearfix">
+            <div class="pull-left"></div>
+            <div class="pull-right">{$pager}</div>
+        </div>
+    </div>
+</div>
+<!-- 直播间回放列表 -->
+<div id="playback" class="hide">
+    <!--回放列表-->
+    <div id="playbacklist"></div>
+    <!--取消按钮-->
+    <div class="playback_close">
+        <a href="javascript:;" class="btn btn-sm btn-danger closePlayback">关闭</a>
+    </div>
+</div>
+<!--开始直播二维码弹框-->
+<div id="openLive" class="hide">
+    <div class="qrcode">
+        <img src="" id="openLiveQrCode"/>
+    </div>
+    <!--取消按钮-->
+    <div class="openLive_close">
+        <a href="javascript:;" class="btn btn-sm btn-danger closeOpenLive">关闭</a>
+    </div>
+</div>
+<script>
+    /**
+     * 商品信息查看模态框的弹出&关闭
+     */
+    $(".goodsInfo").on('click',function () {
+        //基本信息处理
+        let _this = $(this),
+            position = _this.siblings('.goods_list');
+        //打开模态框
+        position.modal();
+        position.removeClass('hide');
+        //点击关闭模态框
+        $(".closeGoodsInfo").on('click',function () {
+            position.modal('hide');
+            position.addClass('hide');
+        });
+    });
+    /**
+     * 获取当前直播间回放视频列表
+     */
+    $(".playbackList").on('click',function () {
+        //基本参数信息获取
+        let _this = $(this),
+            playback = $("#playback"),
+            playbacklist = $("#playbacklist"),
+            id = _this.data("roomid");
+        //请求获取信息
+        $.ajax({
+            url: "{php echo web_url('live/live/getPlayback')}",
+            type: "post",
+            data: {id : id},
+            dataType: "html",
+            success:function (res) {
+                //判断是否为json格式数据
+                try {
+                    //如果能够成功转换 则为json格式数据信息
+                    let obj = JSON.parse(res);
+                    if(obj){
+                        tip.alert(obj.message)
+                    }
+                } catch(e) {
+                    //json 转换失败  为html格式数据
+                    playbacklist.html(res);
+                    playback.modal();
+                    playback.removeClass('hide');
+                    //点击关闭当前模态框
+                    $(".closePlayback").on('click',function () {
+                        playback.modal('hide');
+                        playback.addClass('hide');
+                        playbacklist.html('');
+                    });
+                }
+            },
+        });
+    });
+    /**
+     * 信息同步
+     */
+    $("#infoSynchronization").on('click',function () {
+        $('#page-loading').show();
+        let synchronizatio = function(page){
+            $.post("{php echo web_url('live/live/infoSynchronization')}",{page:page},function (res) {
+                if(res.errno == 0){
+                    page++;
+                    if(res.data['total_page'] >= page){
+                        //总页数大于等于 下一页则继续进行信息同步
+                        synchronizatio(page);
+                    }else{
+                        //信息同步完成
+                        tip.alert("同步完成",function () {
+                            history.go(0);
+                        });
+                    }
+                }else{
+                    tip.alert(res.message,function () {
+                        history.go(0);
+                    });
+                }
+            },'json');
+        }
+        synchronizatio(1);
+    });
+</script>
+{php include wl_template('common/footer');}

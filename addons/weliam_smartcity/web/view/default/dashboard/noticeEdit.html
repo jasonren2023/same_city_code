@@ -1,0 +1,67 @@
+{php include wl_template('common/header');}
+<ul class="nav nav-tabs">
+	<li ><a href="{php echo web_url('dashboard/notice/index')}">公告列表</a></li>
+	<li class="active"><a href="{php echo web_url('dashboard/notice/edit')}">{if !empty($notice['id'])}编辑公告{else}添加公告{/if}</a></li>
+</ul>
+<div class="app-content">
+	<div class="app-form">
+		<div class="panel panel-default">
+			<form action="" method="post" class="form-horizontal form form-validate">
+				<input type="hidden" name="id" value="{$notice['id']}" />
+				<div class="panel panel-default">
+					<div class="panel-heading">公告设置</div>
+					<div class="form-group">
+						<label class="col-sm-2 control-label">公告标题<span class="must-fill">*</span></label>
+						<div class="col-sm-9">
+							<input type="text" name="notice[title]" value="{$notice['title']}" required autocomplete="off" class="form-control" placeholder="请输入公告标题" >
+						</div>
+					</div>
+					<div class="form-group">
+						<label class="col-sm-2 control-label">公告内容</label>
+						<div class="col-sm-9">
+							{php echo tpl_diy_editor_create('notice[content]', $notice['content']);}
+						</div>
+					</div>
+					<div class="form-group">
+						<label class="col-sm-2 control-label" >公告连接</label>
+						<div class="col-sm-9">
+							<div class="input-group">
+								<input type="text" value="{$notice['link']}" class="form-control valid" name="notice[link]" readonly="readonly" id="advlink">
+								<span data-input="#advlink" data-toggle="selectUrl" class="input-group-addon btn btn-default">选择链接</span>
+								<span class="input-group-addon btn btn-default clearinput">X</span>
+							</div>
+							<div class="help-block">若设置了跳转链接则无法显示公告内容</div>
+						</div>
+					</div>
+					<div class="form-group">
+						<label class="col-sm-2 control-label">是否显示</label>
+						<div class="col-sm-9">
+							<label class="radio-inline">
+								<input type="radio" name='notice[enabled]' value='1' {if $notice['enabled']==1}checked{/if}>是
+							</label>
+							<label class="radio-inline">
+								<input type="radio" name='notice[enabled]' value='0' {if $notice['enabled']==0}checked{/if}>否
+							</label>
+						</div>
+					</div>
+				</div>
+				<div class="form-group">
+					<label class="col-sm-2 control-label"></label>
+					<div class="col-sm-9">
+						<input type="submit" name="submit" value="提交" class="btn btn-primary min-width" />
+						<input type="hidden" name="token" value="{$_W['token']}" />
+					</div>
+				</div>
+			</form>
+		</div>
+	</div>
+</div>
+<script>
+	/**
+	 * 点击删除图片或者链接
+	 */
+	$(".form").on('click','.clearinput',function () {
+		$(this).prev().prev().val('');
+	});
+</script>
+{php include wl_template('common/footer');}

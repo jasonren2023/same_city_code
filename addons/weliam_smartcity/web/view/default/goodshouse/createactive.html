@@ -1,0 +1,2329 @@
+{php include wl_template('common/header');}
+<style>
+	.region-goods-details{background: #f6f6f6;margin: 10px;padding: 0 10px;}
+	.region-goods-left{text-align: center;font-weight: bold;color: #333;font-size: 14px;padding: 20px 0;}
+	.region-goods-right{border-left: 3px solid #fff;padding: 10px 10px;}
+	#ld_content .ld_demoButton{
+		cursor: pointer;
+		color: #ff5e00;
+	}
+	textarea{resize: none}
+</style>
+<ul class="nav nav-tabs" id="myTab">
+	<li class="active"><a href="#tab_basic">基本信息</a></li>
+	<li><a href="#tab_option">价格库存</a></li>
+	<li><a href="#tab_detail">详情须知</a></li>
+	<li><a href="#tab_limit">购买售后</a></li>
+	{if !is_store() || $_W['storeinfo']['marketstatus'] > 0}
+	<li><a href="#tab_sale">活动营销</a></li>
+	<li><a href="#tab_settlement">分销结算</a></li>
+	{/if}
+	<li><a href="#tab_share">分享推广</a></li>
+	{if $goods['optionstatus'] > 0 && ($goods['vipstatus'] == 1 || empty($goods['isdistri'])) && ( !is_store() || $_W['storeinfo']['marketstatus'] > 0 )}
+	<li><a href="#tab_opvip">多规格细表</a></li>
+	{/if}
+</ul>
+<div class="app-content">
+	<div class="app-form">
+		<form action="" method="post" class="form-horizontal form form-validate" onsubmit="return formcheck(this);">
+			<div class="tab-content">
+				<div class="tab-pane active" id="tab_basic">
+					<div class="region-goods-details row">
+						<div class="region-goods-left col-sm-2">商品信息</div>
+						<div class="region-goods-right col-sm-9">
+							{if !is_store()}
+							<div class="form-group">
+								<label class="col-sm-2 control-label">商品排序</label>
+								<div class="col-sm-9">
+									<input type="text" name="goods[sort]" class="form-control" value="{$goods['sort']}" />
+									<span class="help-block">数字越大，排序越靠前</span>
+								</div>
+							</div>
+							{/if}
+							<div class="form-group">
+								<label class="col-sm-2 control-label">商品名称</label>
+								<div class="col-sm-9">
+									<input type="text" name="goods[name]" id="name" class="form-control" value="{$goods['name']}" />
+								</div>
+							</div>
+							<div class="form-group">
+								<label class="col-sm-2 control-label">活动时间</label>
+								<div class="col-sm-9">
+									{php echo tpl_select_time_info('time', array('starttime'=>date('Y-m-d H:i:s', $goods['starttime']),'endtime'=>date('Y-m-d H:i:s', $goods['endtime'])));}
+								</div>
+							</div>
+							{if !is_store() && empty($goods['pftid'])}
+							<div class="form-group">
+								<label class="col-sm-2 control-label">关联商家</label>
+								<div class="col-sm-9">
+									<div class='input-group'>
+										<div class="input-group">
+											<input type="text" class="form-control col-sm-9" id="namemerchant" name="" value="{$merchant['storename']}" disabled style="width: 460px;">
+											<span class="input-group-btn"><button class="btn btn-default" type="button" onclick="popwin = $('#modal-module-merchant').modal();">选择商家</button></span>
+										</div>
+										<div class="input-group " style="margin-top:.5em;">
+											<input type="hidden" value="{$merchant['id']}" name="goods[sid]" id="sidmerchant">
+											<img src="{if empty($merchant['logo'])}../web/resource/images/nopic.jpg{else}{php echo tomedia($merchant['logo'])}{/if}" class="img-responsive img-thumbnail" width="150" id="imgmerchant" />
+											<em class="close" style="position:absolute; top: 0px; right: -14px;" title="删除" onclick="remove_merchant(this)">×</em>
+										</div>
+									</div>
+								</div>
+							</div>
+							{/if}
+							<div class="form-group">
+								<label class="col-sm-2 control-label">商品图片</label>
+								<div class="col-sm-9">
+									{php echo attachment_select('goods[thumb]', $goods['thumb']);}
+									<span class="help-block">图片建议为640X640</span>
+								</div>
+							</div>
+							<div class="form-group">
+								<label class="col-sm-2 control-label">商品图集</label>
+								<div class="col-sm-9">
+									{php echo attachment_select_multi('goods[thumbs]',$goods['thumbs']);}
+									<span class="help-block">商品图集为商品详情幻灯片，建议750X560</span>
+								</div>
+							</div>
+							<div class="form-group">
+								<label class="col-sm-2 control-label">详情顶部视频</label>
+								<div class="col-sm-9">
+									<div class="input-group">
+										<input type="text" value="{$goods['videourl']}" name="goods[videourl]" class="form-control" autocomplete="off" id="cimg-videourl">
+										<span class="input-group-btn">
+											<button class="btn btn-default" type="button" data-toggle="selectVideo" data-input="#cimg-videourl" data-img="#pimg-videourl" >选择媒体文件</button>
+										</span>
+									</div>
+									<span class="help-block">显示在商品详情页面顶部的视频。</span>
+								</div>
+							</div>
+							<div class="form-group">
+								<label class="col-sm-2 control-label">背景音乐</label>
+								<div class="col-sm-9">
+									{php echo attachment_select_audio('goods[bgmusic]', $goods['bgmusic']);}
+									<div class="help-block">商品详情背景音乐</div>
+								</div>
+							</div>
+							<div class="form-group">
+								<label class="col-sm-2 control-label">商品分类</label>
+								<div class="col-sm-9">
+									<select name="cateid" class="form-control chosen-select" id="s">
+										<option value="" {if empty($goods['cateid'])}selected="selected"{/if}>请选择商品分类</option>
+										{loop $cate $row}
+										<option value="{$row['id']}" {if $goods['cateid'] == $row['id']}selected="selected"{/if}>{$row['name']}</option>
+										{/loop}
+									</select>
+								</div>
+							</div>
+							<div class="form-group">
+								<label class="col-sm-2 control-label">商品标签</label>
+								<div class="col-sm-9">
+									{loop $presettags $preset}
+									<label class="checkbox-inline">
+										<input type="checkbox" value="{$preset['id']}" name="tag[]" {if in_array($preset['id'],$tags)} checked="checked" {/if}  /> {$preset['title']}
+									</label>
+									{/loop}
+								</div>
+							</div>
+						</div>
+					</div>
+					<div class="region-goods-details row">
+						<div class="region-goods-left col-sm-2">其他信息</div>
+						<div class="region-goods-right col-sm-9">
+							<div class="form-group">
+								<label class="col-sm-2 control-label">消费方式</label>
+								<div class="col-sm-9">
+									<label class="radio-inline">
+										<input type="radio" value="0" onclick="express(0)" name="goods[usestatus]" {if $goods['usestatus'] == 0} checked {/if} /> 到店消费
+									</label>
+									{if empty($goods['pftid'])}
+									<label class="radio-inline">
+										<input type="radio" value="1" onclick="express(1)" name="goods[usestatus]" {if $goods['usestatus'] == 1} checked {/if} /> 快递上门
+									</label>
+									<label class="radio-inline">
+										<input type="radio" value="2" onclick="express(2)" name="goods[usestatus]" {if $goods['usestatus'] == 2} checked {/if} /> 同时支持快递与核销
+									</label>
+									<label class="radio-inline">
+										<input type="radio" value="3" onclick="express(3)" name="goods[usestatus]" {if $goods['usestatus'] == 3} checked {/if} /> 虚拟商品
+									</label>
+									<span class="help-block">虚拟商品即卡密商品,不支持退款,需要配合导入核销码使用。</span>
+									{/if}
+								</div>
+							</div>
+							<div class="form-group" id="expresstemplate" {if $goods['usestatus'] != 1 && $goods['usestatus'] != 2} style="display: none;"{/if}>
+							<label class="col-sm-2 control-label">运费模板</label>
+							<div class="col-sm-9">
+								<select name ='goods[expressid]' class="form-control" >
+									<option value="">请选择运费模板</option>
+									{loop $express $vv}
+									<option value="{$vv['id']}" {if $goods['expressid'] == $vv['id']}selected="selected"{/if}>{$vv['name']}</option>
+									{/loop}
+								</select>
+								<span class="help-block">不选择运费模板即为包邮。</span>
+							</div>
+						</div>
+						<div id="hexiaotemplate" {if $goods['usestatus'] != 0 && $goods['usestatus'] != 2} style="display: none;"{/if}  >
+						<div class="form-group">
+							<label class="col-sm-2 control-label">截止时间类型</label>
+							<div class="col-sm-9">
+								<label class="radio-inline" onclick="showcutoff(0)">
+									<input type="radio" value="0" name="cutoffstatus" {if $goods['cutoffstatus']!=1} checked {/if}>固定时间
+								</label>
+								<label class="radio-inline" onclick="showcutoff(1)">
+									<input type="radio" value="1" name="cutoffstatus" {if $goods['cutoffstatus']==1} checked {/if}>购买后有效
+								</label>
+							</div>
+						</div>
+						<div class="form-group" id="cutofftime" {if $goods['cutoffstatus'] !=1 } style="display: block;" {else} style="display: none;" {/if}>
+						<label class="col-sm-2 control-label">消费截止时间</label>
+						<div class="col-sm-9">
+							<div class="input-group">
+								{php echo tpl_form_field_date('cutofftime', date('Y-m-d H:i:s', $goods['cutofftime']),true);}
+								<span class="help-block">消费截止时间必须大于活动结束时间</span>
+							</div>
+						</div>
+					</div>
+					<div class="form-group" id="cutoffday" {if $goods['cutoffstatus'] ==1 } style="display: block;" {else} style="display: none;" {/if}>
+						<label class="col-sm-2 control-label">消费截止时间</label>
+						<div class="col-sm-9">
+							<div class="input-group">
+								<span class="input-group-addon">购买后</span>
+								<input type="number" min="0" name="goods[cutoffday]" class="form-control" value="{$goods['cutoffday']}" />
+								<span class="input-group-addon">天</span>
+							</div>
+						</div>
+					</div>
+			</div>
+			<div class="form-group">
+				<label class="col-sm-2 control-label">上架状态</label>
+				<div class="col-sm-9">
+					<label class="radio-inline">
+						<input type="radio" value="1" name="tostatus" {if $goods['status']==1 || $goods['status']==2} checked {/if}>上架中
+					</label>
+					<label class="radio-inline">
+						<input type="radio" value="0" name="tostatus" {if $goods['status'] != 1 && $goods['status'] != 2  } checked {/if}>暂不上架
+					</label>
+				</div>
+			</div>
+	</div>
+</div>
+</div>
+<div class="tab-pane" id="tab_option">
+	<div class="region-goods-details row">
+		<div class="region-goods-left col-sm-2">价格库存</div>
+		<div class="region-goods-right col-sm-9">
+			{if $plugin == 'fightgroup'}
+				<div class="form-group">
+					<label class="col-sm-2 control-label">是否允许单购</label>
+					<div class="col-sm-9">
+						<label class="radio-inline optionstatusButton">
+							<input type="radio" value="0" onclick="$('.fightgroup_aloneprice').removeClass('hide');"  name="goods[aloneprice_switch]" {if $goods['aloneprice_switch'] != 1} checked {/if}> 允许
+						</label>
+						<label class="radio-inline">
+							<input type="radio" value="1" onclick="$('.fightgroup_aloneprice').addClass('hide');" name="goods[aloneprice_switch]" {if $goods['aloneprice_switch'] == 1} checked {/if}> 不允许
+						</label>
+
+						<span class="help-block">关闭后商品只能进行拼团购买,不能进行单独购买!</span>
+					</div>
+				</div>
+			{/if}
+			<div class="form-group">
+				<label class="col-sm-2 control-label">商品价格</label>
+				<div class="col-sm-9">
+					<div class="input-group">
+						{if $plugin == 'fightgroup'}
+						<span class="input-group-addon">拼团价</span>
+						<input type="number" name="goods[price]" class="form-control" min="0" value="{$goods['price']}" />
+						<span class="input-group-addon fightgroup_aloneprice {if $goods['aloneprice_switch'] == 1}hide{/if}">元，单购价</span>
+						<input type="number"  name="goods[aloneprice]" class="form-control fightgroup_aloneprice {if $goods['aloneprice_switch'] == 1}hide{/if}"  min="0" value="{$goods['aloneprice']}" />
+						<span class="input-group-addon">元，市场价</span>
+						<input type="number" name="goods[oldprice]" class="form-control"  min="0" value="{$goods['oldprice']}" />
+						<span class="input-group-addon">元</span>
+						{else if $plugin == 'bargain'}
+						<span class="input-group-addon">活动底价</span>
+						<input type="number" name="goods[price]" class="form-control"  min="0" value="{$goods['price']}" />
+						<span class="input-group-addon">元，市场价</span>
+						<input type="number" name="goods[oldprice]" class="form-control" min="0" value="{$goods['oldprice']}" />
+						<span class="input-group-addon">元，允许提交订单金额</span>
+						<input type="number" name="goods[submitmoneylimit]" min="0" class="form-control" value="{$goods['submitmoneylimit']}" />
+						<span class="input-group-addon">元</span>
+						{else}
+						<span class="input-group-addon">活动价</span>
+						<input type="number" name="goods[price]" class="form-control" min="0" value="{$goods['price']}" />
+						<span class="input-group-addon">元，市场价</span>
+						<input type="number" name="goods[oldprice]" class="form-control" min="0" value="{$goods['oldprice']}" />
+						<span class="input-group-addon">元，商品尾款</span>
+						<input type="number" name="goods[retainage]" class="form-control" value="{$goods['retainage']}" />
+						<span class="input-group-addon">元</span>
+						{/if}
+					</div>
+					<span class="help-block">价格最多保留两位小数，{if $plugin == 'rush' || $plugin == 'groupon'}尾款不填或填0即为不需要付尾款{else if $plugin == 'bargain'}允许提交金额指参与用户的商品金额必须砍到此金额以下才允许提交订单,例如设置100，用户必须商品金额砍到100或100以下，才可以提交订单。{/if}</span>
+				</div>
+			</div>
+			{if $plugin != 'bargain'}
+			<div class="form-group">
+				<label class="col-sm-2 control-label">商品库存</label>
+				<div class="col-sm-9">
+					<div class="input-group">
+						<input type="number" min="0" onkeyup="this.value=this.value.replace(/\D/g,'')" name="goods[num]" class="form-control" value="{$goods['num']}" />
+						<span class="input-group-addon">个{if !is_store() || $_W['storeinfo']['marketstatus'] > 0}，虚拟销量</span>
+						<input type="text" onkeyup="this.value=this.value.replace(/\D/g,'')" name="goods[allsalenum]" class="form-control" value="{$goods['allsalenum']}" />
+						<span class="input-group-addon">个</span>{/if}
+					</div>
+					<span class="help-block">商品库存，请谨慎修改</span>
+				</div>
+			</div>
+			{else}
+			<div class="form-group">
+				<label class="col-sm-2 control-label">商品库存</label>
+				<div class="col-sm-9">
+					<div class="input-group">
+						<input type="number" min="0" onkeyup="this.value=this.value.replace(/\D/g,'')" name="goods[num]" class="form-control" value="{$goods['num']}" />
+						<span class="input-group-addon">个，参加人数限制</span>
+						<input type="number" min="0" onkeyup="this.value=this.value.replace(/\D/g,'')" name="goods[joinlimit]" class="form-control" value="{$goods['joinlimit']}" />
+						<span class="input-group-addon">人</span>
+					</div>
+					<span class="help-block">商品库存只可以购买的数量，需填入正整数；参与人数限制指可以发起砍价活动的人数，填0或不填则不限制参与人数。</span>
+				</div>
+			</div>
+			<!--<div class="form-group">-->
+				<!--<label class="col-sm-2 control-label">虚拟数据</label>-->
+				<!--<div class="col-sm-9">-->
+					<!--<div class="input-group">-->
+						<!--<span class="input-group-addon">虚拟参与人数</span>-->
+						<!--<input type="number" min="0" onkeyup="this.value=this.value.replace(/\D/g,'')" name="goods[allsalenum]" class="form-control" value="{$goods['allsalenum']}" />-->
+						<!--<span class="input-group-addon">人，虚拟浏览量</span>-->
+						<!--<input type="number" min="0" onkeyup="this.value=this.value.replace(/\D/g,'')" name="goods[falselooknum]" class="form-control" value="{$goods['falselooknum']}" />-->
+						<!--<span class="input-group-addon">次，虚拟分享数</span>-->
+						<!--<input type="number" min="0" onkeyup="this.value=this.value.replace(/\D/g,'')" name="goods[falsesharenum]" class="form-control" value="{$goods['falsesharenum']}" />-->
+						<!--<span class="input-group-addon">次</span>-->
+					<!--</div>-->
+				<!--</div>-->
+			<!--</div>-->
+			{/if}
+			{if $plugin == 'fightgroup'}
+			<div class="form-group">
+				<label class="col-sm-2 control-label">组团信息</label>
+				<div class="col-sm-9">
+					<div class="input-group">
+						<span class="input-group-addon">成团人数</span>
+						<input type="number" min="2" onkeyup="this.value=this.value.replace(/\D/g,'')" name="goods[peoplenum]" class="form-control" value="{$goods['peoplenum']}" />
+						<span class="input-group-addon">人，组团时间</span>
+						<input type="number" min="1" onkeyup="this.value=this.value.replace(/\D/g,'')" name="goods[grouptime]" class="form-control" value="{$goods['grouptime']}" />
+						<span class="input-group-addon">小时</span>
+					</div>
+					<span class="help-block">拼团成团人数与组团时间</span>
+				</div>
+			</div>
+			{/if}
+			{if ($plugin == 'rush' || $plugin == 'groupon' || $plugin == 'fightgroup')}
+			<div class="form-group">
+				<label class="col-sm-2 control-label">每日限量</label>
+				<div class="col-sm-9">
+					<input type="number" min="0" step="0" name="goods[alldaylimit]" class="form-control" value="{$goods['alldaylimit']}"/>
+					<span class="help-block">商品每天可购买的商品数量,填0或不填则不限量，每天0点更新。</span>
+				</div>
+			</div>
+			{/if}
+			{if ($plugin == 'rush' || $plugin == 'groupon' || $plugin == 'fightgroup')}
+			<div class="form-group">
+				<label class="col-sm-2 control-label">每人每日限量</label>
+				<div class="col-sm-9">
+					<input type="number" min="0" step="0" name="goods[daylimit]" class="form-control" value="{$goods['daylimit']}"/>
+					<span class="help-block">每人每天可购买的商品数量,填0或不填则不限量，每天0点更新。</span>
+				</div>
+			</div>
+			{/if}
+			{if $plugin == 'rush' }
+			<div class="form-group">
+				<label class="col-sm-2 control-label">每人每月限量</label>
+				<div class="col-sm-9">
+					<input type="number" min="0" step="0" name="goods[monthlimit]" class="form-control" value="{$goods['monthlimit']}"/>
+					<span class="help-block">每人每月可购买的商品数量,填0或不填则不限量，每月1号0点更新。</span>
+				</div>
+			</div>
+			{/if}
+			<div class="form-group">
+				<label class="col-sm-2 control-label">商品编码</label>
+				<div class="col-sm-9">
+					<input type="text" name="goods[code]" class="form-control" value="{$goods['code']}" id="goodscode" />
+				</div>
+			</div>
+		</div>
+	</div>
+	{if $plugin != 'bargain' && empty($pftid)}
+	<div class="region-goods-details row usestatus3div"  {if $goods['usestatus'] == 3} style="display: none;"{/if} >
+		<div class="region-goods-left col-sm-2">规格设置</div>
+		<div class="region-goods-right col-sm-9">
+			<div class="form-group">
+				<label class="col-sm-2 control-label">商品规格</label>
+				<div class="col-sm-9">
+					<label class="radio-inline optionstatusButton" onclick="$('#tboption').hide();">
+						<input type="radio" value="0"  name="optionstatus" {if $goods['optionstatus']==0 || empty($goods['optionstatus'])} checked {/if}>单规格
+					</label>
+					<label class="radio-inline" onclick="$('#tboption').show();">
+						<input type="radio" value="1"  name="optionstatus" {if $goods['optionstatus']==1} checked {/if}>多规格
+					</label>
+					<span class="help-block">开启规格后，商品价格与库存以规格项为准</span>
+				</div>
+			</div>
+			<div id='tboption' style="padding-left:15px;{if $goods['optionstatus']!=1}display:none{/if}">
+				<div class="alert alert-info">
+					1. 拖动规格可调整规格显示顺序, 更改规格及规格项后请点击下方的【刷新规格项目表】来更新数据。<br/>
+					2. 每一种规格代表不同型号，例如颜色为一种规格，尺寸为一种规格，如果设置多规格，手机用户必须每一种规格都选择一个规格项，才能进行购买。<br/>
+					3. 设置多规格后，订单的价格，结算，分销金额全部按照核销设置处理，多规格分销不区分一般活动价与会员价。<br/>
+					<span style="color: orangered;">重要：请勿在商品销售中修改规格参数，刷新规格项目表。</span>
+				</div>
+				<div id='specs'>
+					{loop $allspecs $spec}
+					{php include wl_template('goodshouse/spec');}
+					{/loop}
+				</div>
+				{if empty($goods['pftid'])}
+				<table class="table">
+					<tr>
+						<td>
+							<h4><a href="javascript:;" class='btn btn-primary' id='add-spec' onclick="addSpec()" style="margin:10px 10px 10px -8px;" title="添加规格"><i class='fa fa-plus'></i> 添加规格</a><a href="javascript:;" onclick="refreshOptions();" title="刷新规格项目表" class="btn btn-primary"><i class="fa fa-refresh"></i> 刷新规格项目表</a></h4>
+						</td>
+					</tr>
+				</table>
+				{/if}
+				<div id="options" style="padding:0;">{$html}</div>
+			</div>
+		</div>
+	</div>
+	{else}
+	<div class="region-goods-details row" id="bargain_rules">
+		<div class="region-goods-left col-sm-2">砍价规则</div>
+		<div class="region-goods-right col-sm-9">
+			<div class="alert alert-warning">
+				<b>规则说明:</b><br/>
+				<b>1.价格大于栏请<span style="color: orangered;">从大到小</span>设置</b><br/>
+				<b>2.砍价范围请按照<span style="color: orangered;">第一个空小于第二个空</span>设置</b><br/>
+				<b>例：设置的两条规则为：100,5,10和50,2,3。当商品当前金额大于100元时，每个好友砍价金额为5-10的随机数；当商品金额被砍到100元以下50元以上时，每个好友砍价金额为2-3的随机数；当商品金额被砍到50元以下时，未找到匹配的规则项，每个好友砍价金额为会按照默认的0.5-1元取随机数。</b>
+			</div>
+			<div class="form-group">
+				<div class="col-md-12">
+					<div id="datas" class="sms-template-1" style="display:block;">
+						{if !empty($goods['rules'])}
+						{loop $goods['rules'] $data}
+						{php include wl_template('goodshouse/rules');}
+						{/loop}
+						{/if}
+					</div>
+					<div class="form-group sms-template-1" style="display:block;">
+						<label class="col-sm-2 control-label"></label>
+						<div class="col-sm-9">
+							<a class="btn btn-default btn-add-type" href="javascript:;" onclick="addType();">
+								<i class="fa fa-plus" title=""></i>增加一条规则</a>
+						</div>
+					</div>
+				</div>
+			</div>
+		</div>
+	</div>
+	<div class="region-goods-details row">
+		<div class="region-goods-left col-sm-2">活动设置</div>
+		<div class="region-goods-right col-sm-9">
+			<div class="form-group">
+				<label class="col-sm-2 control-label">好友帮砍限制数量</label>
+				<div class="col-sm-9">
+					<div class="input-group">
+						<input type="text" min="0" name="goods[helplimit]" class="form-control" value="{$goods['helplimit']}" />
+						<span class="input-group-addon">人</span>
+					</div>
+					<span class="help-block">限制当前活动商品,最多几个好友帮忙砍价.填0或不填则无限制</span>
+				</div>
+			</div>
+			<div class="form-group">
+				<label class="col-sm-2 control-label">每天帮砍好友人数限制</label>
+				<div class="col-sm-9">
+					<div class="input-group">
+						<input type="text" min="0"  name="goods[dayhelpcount]" class="form-control" value="{$goods['dayhelpcount']}" />
+						<span class="input-group-addon">人</span>
+					</div>
+					<span class="help-block">限制每天帮助的好友数量.填0或不填则无限制</span>
+				</div>
+			</div>
+			<div class="form-group">
+				<label class="col-sm-2 control-label">该商品每人可砍价次数</label>
+				<div class="col-sm-9">
+					<div class="input-group">
+						<input type="text"  min="0"  name="goods[onlytimes]" class="form-control" value="{$goods['onlytimes']}" />
+						<span class="input-group-addon">次</span>
+					</div>
+					<span class="help-block">限制每个用户对此商品可以砍价的次数，如：设置为3，如果有5个好友同时邀请同一个用户帮砍，该用户只能帮助其中三人砍价.填0或不填则无限制</span>
+				</div>
+			</div>
+		</div>
+	</div>
+	{/if}
+	<!-- 阶梯价编辑 -->
+	{if $plugin == 'rush'}
+		<div class="region-goods-details row" id="ladder_price">
+			<div class="region-goods-left col-sm-2">阶梯价设置</div>
+			<div class="region-goods-right col-sm-9">
+				<!-- 开关设置 -->
+				<div class="form-group">
+					<label class="col-sm-2 control-label">是否使用</label>
+					<div class="col-sm-9">
+						<label class="radio-inline">
+							<input type="radio" value="0" name="lp_status" {if $goods['lp_status'] != 1} checked {/if}>关闭
+						</label>
+						<label class="radio-inline">
+							<input type="radio" value="1" name="lp_status" {if $goods['lp_status'] == 1} checked {/if}>开启
+						</label>
+						<span class="help-block">开启阶梯价后商品规格只能是单规格商品,并且阶梯价格最大五级</span>
+					</div>
+				</div>
+				<!-- 具体信息 -->
+				<div id="ld_content" class="{if $goods['lp_status'] != 1} hide {/if}">
+					<!-- 说明 -->
+					<div class="form-group">
+						<label class="col-sm-2 control-label"></label>
+						<div class="col-sm-9">
+							<div class="alert alert-info">
+								1. 销售区间上限请按照从小到大设置，并且不能大于商品总库存。<span class="ld_demoButton">点击查看示例</span><br/>
+								2. 开启阶梯价后，如果销售区间上限没有包含所有库存，则区间外的商品以普通价格销售<br/>
+								3. 开启阶梯价后，区间上限在移动端显示时，会自动将虚拟销量添加上<br/>
+								<span style="color: orangered;">请勿在商品销售中时修改阶梯价信息，否则造成的任何后果请自行负责!</span>
+							</div>
+						</div>
+					</div>
+					<!--阶梯价列表-->
+					<div id="ld_list">
+						{if is_array($goods['lp_set']) && count($goods['lp_set']) > 0}
+							{loop $goods['lp_set'] $index $item}
+								<div class="form-group">
+									<label class="col-sm-2 control-label"></label>
+									<div class="col-sm-9">
+										<div class="input-group">
+											<span class="input-group-addon">销售区间上限</span>
+											<input type="number" name="ld[{$index}][max]" class="form-control ld_max" min="0" value="{$item['max']}">
+											<span class="input-group-addon">阶梯价格</span>
+											<input type="number" name="ld[{$index}][price]" class="form-control" min="0" value="{$item['price']}">
+											<span class="input-group-addon">元</span>
+											<span class="input-group-addon btn btn-sm btn-danger deleteLpRow">删除</span>
+										</div>
+									</div>
+								</div>
+							{/loop}
+						{else}
+							<div class="form-group">
+								<label class="col-sm-2 control-label"></label>
+								<div class="col-sm-9">
+									<div class="input-group">
+										<span class="input-group-addon">销售区间上限</span>
+										<input type="number" name="ld[0][max]" class="form-control ld_max" min="0" value="">
+										<span class="input-group-addon">阶梯价格</span>
+										<input type="number" name="ld[0][price]" class="form-control" min="0" value="">
+										<span class="input-group-addon">元</span>
+										<span class="input-group-addon btn btn-sm btn-danger deleteLpRow">删除</span>
+									</div>
+								</div>
+							</div>
+						{/if}
+					</div>
+					<!--阶梯价示例列表-->
+					<div id="ld_demoList" class="hide">
+						<div class="form-group">
+							<label class="col-sm-2 control-label"></label>
+							<div class="col-sm-9">
+								<div class="input-group">
+									<span class="input-group-addon">销售区间上限</span>
+									<input  class="form-control" disabled="disabled" value="100">
+									<span class="input-group-addon">阶梯价格</span>
+									<input  class="form-control" disabled="disabled" value="10">
+									<span class="input-group-addon">元</span>
+								</div>
+								<span class="help-block">当前设置为：0-100件商品售价为10元</span>
+							</div>
+						</div>
+						<div class="form-group">
+							<label class="col-sm-2 control-label"></label>
+							<div class="col-sm-9">
+								<div class="input-group">
+									<span class="input-group-addon">销售区间上限</span>
+									<input  class="form-control" disabled="disabled" value="255">
+									<span class="input-group-addon">阶梯价格</span>
+									<input  class="form-control" disabled="disabled" value="20">
+									<span class="input-group-addon">元</span>
+								</div>
+								<span class="help-block">当前设置为：101-255件商品售价为20元</span>
+							</div>
+						</div>
+						<div class="form-group">
+							<label class="col-sm-2 control-label"></label>
+							<div class="col-sm-9">
+								<div class="input-group">
+									<span class="input-group-addon">销售区间上限</span>
+									<input  class="form-control" disabled="disabled" value="386">
+									<span class="input-group-addon">阶梯价格</span>
+									<input  class="form-control" disabled="disabled" value="30">
+									<span class="input-group-addon">元</span>
+								</div>
+								<span class="help-block">当前设置为：256-386件商品售价为30元</span>
+								<span class="help-block">这里只设置了三项阶梯价信息，最大数量为386，则从第387件开始按照一般售价进行售卖</span>
+							</div>
+						</div>
+					</div>
+					<!--阶梯价格添加按钮-->
+					<div class="form-group">
+						<label class="col-sm-2 control-label"></label>
+						<div class="col-sm-9">
+							<div class="input-group">
+								<span class="btn btn-primary" id="addLd"><i class='fa fa-plus'></i> 添加</span>
+							</div>
+						</div>
+					</div>
+				</div>
+			</div>
+		</div>
+	{/if}
+</div>
+<div class="tab-pane" id="tab_detail">
+	<div class="region-goods-details row">
+		<div class="region-goods-left col-sm-2">购买须知</div>
+		<div class="region-goods-right col-sm-9">
+			<div class="form-group">
+				<label class="col-sm-2 control-label">是否开启购买须知提醒</label>
+				<div class="col-sm-9">
+					<label class="radio-inline">
+						<input type="radio" value="0"  name="goods[is_describe_tip]" {if $goods['is_describe_tip'] != 1} checked {/if}>关闭
+					</label>
+					<label class="radio-inline">
+						<input type="radio" value="1"  name="goods[is_describe_tip]" {if $goods['is_describe_tip'] == 1} checked {/if}>开启
+					</label>
+					<span class="help-block">开启提醒后，须知详情存在内容时会在用户点击购买商品时会弹出购买须知详情提示框</span>
+				</div>
+			</div>
+			<div class="form-group">
+				<label class="col-sm-2 control-label">须知详情</label>
+				<div class="col-sm-9">
+					<div class="input-group"  style="width: 100%;">
+						{php echo tpl_diy_editor_create('goods[describe]', $goods['describe']);}
+					</div>
+					<span class="help-block">购买须知可不填，不填则不显示</span>
+				</div>
+			</div>
+		</div>
+	</div>
+	<div class="region-goods-details row">
+		<div class="region-goods-left col-sm-2">商品详情</div>
+		<div class="region-goods-right col-sm-9">
+			<div class="form-group">
+				<label class="col-sm-2 control-label">详情信息</label>
+				<div class="col-sm-9">
+					<div class="input-group diy-ueditor-setting" style="width: 100%;">
+						{php echo tpl_diy_editor_create('goods[detail]', $goods['detail']);}
+					</div>
+					<a data-toggle="importTextInfo" href="javascript:;" class="btn btn-primary min-width margin-t-20 ">一键导入</a>
+				</div>
+			</div>
+		</div>
+	</div>
+</div>
+<div class="tab-pane" id="tab_limit">
+	<div class="region-goods-details row">
+		<div class="region-goods-left col-sm-2">预约限购</div>
+		<div class="region-goods-right col-sm-9">
+			<div class="form-group usestatus3div" {if $goods['usestatus'] == 3} style="display: none;"{/if}>
+				<label class="col-sm-2 control-label">核销预约</label>
+				<div class="col-sm-9">
+					<label class="radio-inline" onclick="$('#appointdiv').show();">
+						<input type="radio" value="1"  name="goods[appointstatus]" {if $goods['appointstatus']==1} checked {/if}>需审核
+					</label>
+					<label class="radio-inline" onclick="$('#appointdiv').show();">
+						<input type="radio" value="2"  name="goods[appointstatus]" {if $goods['appointstatus']==2} checked {/if}>免审核
+					</label>
+					<label class="radio-inline optionstatusButton" onclick="$('#appointdiv').hide();">
+						<input type="radio" value="0"  name="goods[appointstatus]" {if $goods['appointstatus']==0 || empty($goods['appointstatus'])} checked {/if}>无需预约
+					</label>
+					<span class="help-block">开启预约后,核销商品必须要经过买家预约才能够核销使用;需审核时，用户的预约申请需要商家同意后才可以核销使用。</span>
+				</div>
+			</div>
+			<div id="appointdiv" {if $goods['appointstatus']==0 || empty($goods['appointstatus'])} style="display:none;"  {/if} >
+				<div class="form-group">
+					<label class="col-sm-2 control-label">预约小时</label>
+					<div class="col-sm-9">
+						<div class="input-group">
+							<span class="input-group-addon">请于</span>
+							<input type="number" name="goods[appointment]" min="0" class="form-control" value="{$goods['appointment']}" />
+							<span class="input-group-addon">小时前预约</span>
+						</div>
+						<span class="help-block">不填或填0即可立即预约。</span>
+					</div>
+				</div>
+				<div class="form-group">
+					<label class="col-sm-2 control-label">最近预约天数</label>
+					<div class="col-sm-9">
+						<div class="input-group">
+							<span class="input-group-addon">最近可预约</span>
+							<input type="number" name="goods[appointdays]" min="0" class="form-control" value="{$goods['appointdays']}" />
+							<span class="input-group-addon">天</span>
+						</div>
+						<span class="help-block">不填或填0即可预约当前时间到过期时间之前的每一天,最多显示30天;如果填1，只能预约当天与明天的位置，填2即可预约当天,明天和后天的位置，以此类推。</span>
+					</div>
+				</div>
+				<div class="form-group">
+					<label class="col-sm-2 control-label">每日预约详情</label>
+					<div class="col-sm-9" id="appointarray">
+						{if !empty($goods['appointarray'])}
+						{loop $goods['appointarray'] $appli}
+						{php include wl_template('goodshouse/appointhtml');}
+						{/loop}
+						{/if}
+					</div>
+					<div class="form-group sms-template-1" style="display:block;">
+						<label class="col-sm-2 control-label"></label>
+						<div class="col-sm-9">
+							<a class="btn btn-default btn-add-type" href="javascript:;" onclick="addAppoint();">
+								<i class="fa fa-plus" title=""></i>增加一个时间段
+							</a>
+							<span class="help-block">接待人数填0或者不填即代表不限人数。</span>
+						</div>
+					</div>
+				</div>
+
+
+
+
+			</div>
+			{if $plugin != 'bargain'}
+			<div class="form-group">
+				<label class="col-sm-2 control-label">单人限购</label>
+				<div class="col-sm-9">
+					<div class="input-group">
+						<input type="number" min="0" name="goods[op_one_limit]" class="form-control" value="{$goods['op_one_limit']}" />
+						<span class="input-group-addon">个</span>
+					</div>
+					<span class="help-block">购买数量上限,如果不填或者填0，则默认为“不限制购买数量”。</span>
+				</div>
+			</div>
+			{/if}
+		</div>
+	</div>
+	<div class="region-goods-details row">
+		<div class="region-goods-left col-sm-2">订单售后</div>
+		<div class="region-goods-right col-sm-9">
+			<div class="form-group usestatus3div" {if $goods['usestatus'] == 3} style="display: none;"{/if}>
+				<label class="col-sm-2 control-label">买家申请退款</label>
+				<div class="col-sm-9">
+					<label class="radio-inline">
+						<input type="radio" name="goods[allowapplyre]" value="0" {if $goods['allowapplyre']  != 1 } checked {/if} > 允许
+					</label>
+					<label class="radio-inline">
+						<input type="radio" name="goods[allowapplyre]" value="1" {if $goods['allowapplyre']  == 1 } checked {/if} > 禁止
+					</label>
+				</div>
+			</div>
+			<div class="form-group usestatus3div" {if $goods['usestatus'] == 3} style="display: none;"{/if}>
+				<label class="col-sm-2 control-label">过期订单自动退款</label>
+				<div class="col-sm-9">
+					<label class="radio-inline">
+						<input type="radio" name="goods[overrefund]" value="1" {if $goods['overrefund']  == 1 } checked {/if} > 启用
+					</label>
+					<label class="radio-inline">
+						<input type="radio" name="goods[overrefund]" value="0" {if $goods['overrefund']  != 1 } checked {/if} > 禁用
+					</label>
+				</div>
+			</div>
+			{if in_array($plugin,['rush','groupon','fightgroup','bargain'])}
+				<div class="form-group">
+					<label class="col-sm-2 control-label">订单表单</label>
+					<div class="col-sm-6">
+						<select name="goods[diyformid]" class="form-control chosen-select" id="s">
+							<option value="" >请选择报名表单</option>
+							{loop $diyFormList $form}
+							<option value="{$form['id']}" {if $goods['diyformid'] == $form['id']}selected="selected"{/if}>{$form['title']}</option>
+							{/loop}
+						</select>
+					</div>
+				</div>
+			{/if}
+		</div>
+	</div>
+
+	{if p('cashback') && ($plugin == 'rush' OR $plugin == 'groupon')}
+		<div class="region-goods-details row">
+			<div class="region-goods-left col-sm-2">支付返现</div>
+			<div class="region-goods-right col-sm-9">
+				<div class="form-group">
+					<label class="col-sm-2 control-label">是否开启支付返现</label>
+					<div class="col-sm-9">
+						<label class="radio-inline">
+							<input type="radio" onclick="$('#returnProportion').hide()" value="0" name="cash_back" {if $goods['cash_back'] != 1}checked{/if}/> 关闭
+						</label>
+						<label class="radio-inline">
+							<input type="radio" onclick="$('#returnProportion').show()" value="1" name="cash_back" {if $goods['cash_back'] == 1}checked{/if}/> 开启
+						</label>
+					</div>
+				</div>
+				<div class="form-group" id="returnProportion" {if $goods['cash_back'] != 1}style="display: none;"{else}style="display: block;"{/if}>
+					<label class="col-sm-2 control-label">返现比例</label>
+					<div class="col-sm-9">
+						<div class="input-group">
+							<input type="number" name="return_proportion" min="1" max="100" class="form-control" required value="{$goods['return_proportion']}" />
+							<span class="input-group-addon">%</span>
+						</div>
+					</div>
+				</div>
+			</div>
+		</div>
+	{/if}
+
+	<div class="region-goods-details row">
+		<div class="region-goods-left col-sm-2">支付营销</div>
+		<div class="region-goods-right col-sm-9">
+			<div class="form-group">
+				<label class="col-sm-2 control-label">支付方式</label>
+				<div class="col-sm-9">
+					<label class="checkbox-inline">
+						<input type="checkbox" value="wechat" name="pay_type[]" {if in_array('wechat',$goods['pay_type'])}checked="checked"{/if}/> 微信支付
+					</label>
+					<label class="checkbox-inline">
+						<input type="checkbox" value="alipay" name="pay_type[]" {if in_array('alipay',$goods['pay_type'])}checked="checked"{/if}/> 支付宝支付
+					</label>
+					<label class="checkbox-inline">
+						<input type="checkbox" value="balance" name="pay_type[]" {if in_array('balance',$goods['pay_type'])}checked="checked"{/if}/> 余额支付
+					</label>
+					<span class="help-block">不选择则仅使用总后台设置项进行支付。选择支付方式后则只能使用总后台与当前商品都支持的支付方式进行支付</span>
+				</div>
+			</div>
+			{if Customized::init('yuecashback') > 0}
+			<div class="form-group">
+				<label class="col-sm-2 control-label">余额返现</label>
+				<div class="col-sm-9">
+					<div class="input-group data-item">
+						<span class="input-group-addon">普通用户</span>
+						<input type="number" min="0" name="goods[yuecashback]" class="form-control" value="{$goods['yuecashback']}">
+						<span class="input-group-addon">元,会员</span>
+						<input type="number" min="0" name="goods[vipyuecashback]" class="form-control" value="{$goods['vipyuecashback']}">
+						<span class="input-group-addon">元</span>
+					</div>
+					<span class="help-block">用户购买商品后,核销或确认收货可以使买家获得余额返现,填0或不填则不返现,小数点最多保留两位。</span>
+				</div>
+			</div>
+			<div class="form-group">
+				<label class="col-sm-2 control-label">支付立减</label>
+				<div class="col-sm-9">
+					<div class="input-group data-item">
+						<input type="text"  name="goods[goods_tag]" class="form-control" value="{$goods['goods_tag']}">
+					</div>
+					<span class="help-block">填入微信商户设置的订单优惠标记,即可支付立减。</span>
+				</div>
+			</div>
+			{/if}
+		</div>
+	</div>
+
+</div>
+<div class="tab-pane" id="tab_sale">
+	<div class="region-goods-details row">
+		<div class="region-goods-left col-sm-2">商品活动</div>
+		<div class="region-goods-right col-sm-9">
+			<div class="form-group">
+				<label class="col-sm-2 control-label">会员优惠</label>
+				<div class="col-sm-9">
+					<label class="radio-inline" onclick="$('#vipprice').hide();$('#viplevel').hide();" >
+						<input type="radio" value="0" name="vipstatus" {if $goods['vipstatus']==0} checked {/if}>无
+					</label>
+					<label class="radio-inline" onclick="$('#vipprice').show();$('#viplevel').hide();">
+						<input type="radio" value="1" name="vipstatus" {if $goods['vipstatus']==1} checked {/if}>会员减免
+					</label>
+					<label class="radio-inline" onclick="$('#vipprice').hide();$('#viplevel').show();">
+						<input type="radio" value="2" name="vipstatus" {if $goods['vipstatus']==2} checked {/if}>会员特供
+					</label>
+					<span class="help-block">{if $plugin == 'bargain'}砍价商品会员减免是减少底价,而不是直接减少支付金额;{/if}会员特供即只有会员可以购买</span>
+				</div>
+			</div>
+			<div class="form-group" id="vipprice" {if $goods['vipstatus'] != 1} style="display: none;"  {/if}>
+				<label class="col-sm-2 control-label">减免金额</label>
+				<div class="col-sm-9">
+					<div class="bigdata" style="margin-top: 10px;">
+						<div class="input-group data-item">
+							<span class="input-group-addon">[{$_W['wlsetting']['halflevel']['name']}]减</span>
+							<input type="hidden" name="vipleid[]" class="form-control" value="0">
+							<input type="number" min="0" name="vipprice[]" class="form-control" value="{$viparray[0]['vipprice']}">
+							{if is_store() }
+							<span class="input-group-addon">元(最多保留两位小数)</span>
+							{else}
+							<span class="input-group-addon">元,商户减少结算价</span>
+							<input type="number" min="0" name="storeset[]" class="form-control" value="{$viparray[0]['storeset']}">
+							<span class="input-group-addon">元(最多保留两位小数)</span>
+							{/if}
+						</div>
+					</div>
+					{loop $levels $lpr}
+					<div class="bigdata" style="margin-top: 10px;">
+						<div class="input-group data-item">
+							<span class="input-group-addon">[{$lpr['name']}]减</span>
+							<input type="hidden" name="vipleid[]" class="form-control" value="{$lpr['id']}">
+							<input type="number" min="0" name="vipprice[]" class="form-control" value="{$viparray[$lpr['id']]['vipprice']}">
+							{if is_store()}
+							<span class="input-group-addon">元(最多保留两位小数)</span>
+							{else}
+							<span class="input-group-addon">元,商户减少结算价</span>
+							<input type="number" min="0" name="storeset[]" class="form-control" value="{$viparray[$lpr['id']]['storeset']}">
+							<span class="input-group-addon">元(最多保留两位小数)</span>
+							{/if}
+						</div>
+					</div>
+					{/loop}
+				</div>
+			</div>
+			<div class="form-group" id="viplevel"   {if $goods['vipstatus'] != 2} style="display: none;"  {/if}>
+				<label class="col-sm-2 control-label">适用会员等级</label>
+				<div class="col-sm-9">
+					<label class="checkbox-inline">
+						<input type="checkbox" value="0" {if in_array(0,$goods['level'])} checked {/if}  name="level[]" />{$_W['wlsetting']['halflevel']['name']}
+					</label>
+					{loop $levels $level}
+					<label class="checkbox-inline">
+						<input type="checkbox" value="{$level['id']}" {if in_array($level['id'],$goods['level'])} checked {/if}  name="level[]" />{$level['name']}
+					</label>
+					{/loop}
+					<span class="help-block">如果全都不勾选则默认全等级可用</span>
+				</div>
+			</div>
+			<div class="form-group">
+				<label class="col-sm-2 control-label">积分抵扣</label>
+				<div class="col-sm-9">
+					<div class="input-group">
+						<span class="input-group-addon">每件商品可以使用积分抵扣</span>
+						<input type="number" min="0" name="goods[creditmoney]" class="form-control " value="{$goods['creditmoney']}" />
+						<span class="input-group-addon">元</span>
+					</div>
+					<div class="help-block">不填或填0时，商品将不参加积分抵扣</div>
+				</div>
+			</div>
+			{if !empty($fullreducelist)}
+			<div class="form-group">
+				<label class="col-sm-2 control-label">满减活动</label>
+				<div class="col-sm-9">
+					<select name="goods[fullreduceid]" class="form-control chosen-select">
+						<option value="" {if empty($goods['fullreduceid'])}selected="selected"{/if}>请选择满减活动</option>
+						{loop $fullreducelist $full}
+						<option value="{$full['id']}" {if $goods['fullreduceid'] == $full['id']}selected="selected"{/if}>{$full['title']}</option>
+						{/loop}
+					</select>
+				</div>
+			</div>
+			{/if}
+			{if !empty($paidlist) && !is_store()}
+			<div class="form-group">
+				<label class="col-sm-2 control-label">支付有礼</label>
+				<div class="col-sm-9">
+					<select name="goods[paidid]" class="form-control chosen-select">
+						<option value="" {if empty($goods['paidid'])}selected="selected"{/if}>请选择支付有礼活动</option>
+						{loop $paidlist $paid}
+						<option value="{$paid['id']}" {if $goods['paidid'] == $paid['id']}selected="selected"{/if}>{$paid['title']}</option>
+						{/loop}
+					</select>
+				</div>
+			</div>
+			{/if}
+			{if !empty($drawlist) && !is_store()}
+			<div class="form-group">
+				<label class="col-sm-2 control-label">锦鲤抽奖</label>
+				<div class="col-sm-9">
+					<select name="goods[drawid]" class="form-control chosen-select">
+						<option value="" {if empty($goods['drawid'])}selected="selected"{/if}>请选择锦鲤抽奖活动</option>
+						{loop $drawlist $drid}
+						<option value="{$drid['id']}" {if $goods['drawid'] == $drid['id']}selected="selected"{/if}>{$drid['title']}</option>
+						{/loop}
+					</select>
+				</div>
+			</div>
+			{/if}
+				<div class="form-group">
+					<label class="col-sm-2 control-label">限制活动时间</label>
+					<div class="col-sm-9">
+						<label class="radio-inline">
+							<input type="radio" value="1" id="wk" name="goods[usedatestatus]" {if $goods['usedatestatus'] == 1} checked {/if}>按星期
+						</label>
+						<label class="radio-inline">
+							<input type="radio" value="2" id="dd" name="goods[usedatestatus]" {if $goods['usedatestatus']==2} checked {/if}>按日期
+						</label>
+						<label class="radio-inline">
+							<input type="radio" value="0" id="cc" name="goods[usedatestatus]" {if $goods['usedatestatus']==0 || empty($goods['usedatestatus'])} checked {/if}>关闭
+						</label>
+						<span class="help-block">开启后，{if  $plugin == 'bargain'}砍价活动只能在活动时间内才能砍价。{else}商品只能在设置的时间才能下单购买。{/if}</span>
+					</div>
+				</div>
+				<script>
+					$('#wk').click(function(){
+						$('#weeke').show();
+						$('#activediscount').show();
+						$('#daily').hide();
+					});
+					$('#dd').click(function(){
+						$('#weeke').hide();
+						$('#activediscount').show();
+						$('#daily').show();
+					});
+					$('#cc').click(function(){
+						$('#weeke').hide();
+						$('#activediscount').hide();
+						$('#daily').hide();
+					});
+				</script>
+				<div class="form-group" {if $goods['usedatestatus'] != 1} style="display: none;"{/if} id="weeke">
+				<label class="col-sm-2 control-label">按星期</label>
+				<div class="col-sm-9">
+					{if $goods}
+					<label class="checkbox-inline">
+						<input type="checkbox" value="1" name="goods[week][]" id="wk1"  /> 星期一
+					</label>
+					<label class="checkbox-inline">
+						<input type="checkbox" value="2" name="goods[week][]" id="wk2"  /> 星期二
+					</label>
+					<label class="checkbox-inline">
+						<input type="checkbox" value="3" name="goods[week][]" id="wk3"  /> 星期三
+					</label>
+					<label class="checkbox-inline">
+						<input type="checkbox" value="4" name="goods[week][]" id="wk4"  /> 星期四
+					</label>
+					<label class="checkbox-inline">
+						<input type="checkbox" value="5" name="goods[week][]" id="wk5"  /> 星期五
+					</label>
+					<label class="checkbox-inline">
+						<input type="checkbox" value="6" name="goods[week][]" id="wk6"  /> 星期六
+					</label>
+					<label class="checkbox-inline">
+						<input type="checkbox" value="7" name="goods[week][]" id="wk7"  /> 星期日
+					</label>
+					{loop $goods['week'] $week}
+					<script type="text/javascript">
+						if({php echo $week}==1){
+							$('#wk1').attr('checked','true');
+						}
+						if({php echo $week}==2){
+							$('#wk2').attr('checked','true');
+						}
+						if({php echo $week}==3){
+							$('#wk3').attr('checked','true');
+						}
+						if({php echo $week}==4){
+							$('#wk4').attr('checked','true');
+						}
+						if({php echo $week}==5){
+							$('#wk5').attr('checked','true');
+						}
+						if({php echo $week}==6){
+							$('#wk6').attr('checked','true');
+						}
+						if({php echo $week}==7){
+							$('#wk7').attr('checked','true');
+						}
+
+					</script>
+					{/loop}
+					{else}
+					<label class="checkbox-inline">
+						<input type="checkbox" value="1" name="goods[week][]" /> 星期一
+					</label>
+					<label class="checkbox-inline">
+						<input type="checkbox" value="2" name="goods[week][]" /> 星期二
+					</label>
+					<label class="checkbox-inline">
+						<input type="checkbox" value="3" name="goods[week][]" /> 星期三
+					</label>
+					<label class="checkbox-inline">
+						<input type="checkbox" value="4" name="goods[week][]" /> 星期四
+					</label>
+					<label class="checkbox-inline">
+						<input type="checkbox" value="5" name="goods[week][]" /> 星期五
+					</label>
+					<label class="checkbox-inline">
+						<input type="checkbox" value="6" name="goods[week][]" /> 星期六
+					</label>
+					<label class="checkbox-inline">
+						<input type="checkbox" value="7" name="goods[week][]" /> 星期日
+					</label>
+					{/if}
+				</div>
+			</div>
+			<div class="form-group" {if $goods['usedatestatus'] != 2} style="display: none;"{/if} id="daily">
+			<label class="col-sm-2 control-label">按天数</label>
+			<div class="col-sm-9">
+				{if $goods['usedatestatus'] == 2}
+				<?php
+											for ($i=1;$i<32;$i++ ) {
+												if(in_array($i,$goods['day'])){
+													?>
+				<label class="checkbox-inline">
+					<input type="checkbox" value="{php echo $i}"  checked name="goods[day][]" />{php echo $i}
+				</label>
+				<?php
+											}else{
+											?>
+				<label class="checkbox-inline">
+					<input type="checkbox" value="{php echo $i}"  name="goods[day][]" />{php echo $i}
+				</label>
+				<?php
+											}}
+										  ?>
+				{else}
+				<?php
+										for ($i=1;$i<32;$i++ ) {
+									  ?>
+				<label class="checkbox-inline">
+					<input type="checkbox" value="{php echo $i}"  name="goods[day][]" />{php echo $i}
+				</label>
+				<?php
+										}
+									  ?>
+				{/if}
+			</div>
+			</div>
+			{if $plugin == 'fightgroup'}
+			<div class="form-group">
+				<label class="col-sm-2 control-label">团长优惠</label>
+				<div class="col-sm-9">
+					<label class="radio-inline">
+						<input type="radio" value="0" name="goods[is_com_dis]" onclick="$('.com_dis_price').hide()" {if empty($goods['is_com_dis'])} checked {/if}>关闭
+					</label>
+					<label class="radio-inline">
+						<input type="radio" value="1" name="goods[is_com_dis]" onclick="$('.com_dis_price').show()" {if $goods['is_com_dis'] == 1} checked {/if}>开启
+					</label>
+					<div class="help-block">开启团长优惠后,团长享受更优惠的拼团价格,有利于提高开团率或者成团率</div>
+				</div>
+			</div>
+			<div class="form-group com_dis_price" {if empty($goods['is_com_dis'])}style="display: none"{/if}>
+				<label class="col-sm-2 control-label">团长优惠金额</label>
+				<div class="col-sm-9">
+					<div class="input-group">
+						<input type="number" min="0" name="goods[com_dis_price]" class="form-control " value="{$goods['com_dis_price']}" />
+						<span class="input-group-addon">元</span>
+					</div>
+				</div>
+			</div>
+			{/if}
+		</div>
+	</div>
+	{if !is_store()}
+	<div class="region-goods-details row">
+		<div class="region-goods-left col-sm-2">营销工具</div>
+		<div class="region-goods-right col-sm-9">
+			<div class="form-group">
+				<label class="col-sm-2 control-label">社群服务</label>
+				<div class="col-sm-9">
+					<select name="goods[communityid]" class="form-control chosen-select">
+						<option value="" {if empty($goods['communityid'])}selected="selected"{/if}>请选择商品社群</option>
+						{loop $communitylist $comm}
+							<option value="{$comm['id']}" {if $goods['communityid'] == $comm['id']}selected="selected"{/if}>{$comm['communname']}</option>
+						{/loop}
+					</select>
+				</div>
+			</div>
+			<!--<div class="form-group">-->
+				<!--<label class="col-sm-2 control-label">首页推荐</label>-->
+				<!--<div class="col-sm-9">-->
+					<!--<label class="radio-inline">-->
+						<!--<input type="radio" value="1" name="is_indexshow" {if $goods['is_indexshow']==1} checked {/if}>启用-->
+					<!--</label>-->
+					<!--<label class="radio-inline">-->
+						<!--<input type="radio" value="0" name="is_indexshow" {if $goods['is_indexshow']==0} checked {/if}>禁用-->
+					<!--</label>-->
+				<!--</div>-->
+			<!--</div>-->
+			{if $specials}
+			<div class="form-group">
+				<label class="col-sm-2 control-label">抢购专题</label>
+				<div class="col-sm-9">
+					<select name="goods[specialid]" class="form-control" id="s">
+						<option value="" {if empty($goods['specialid'])}selected="selected"{/if}>请选择抢购专题</option>
+						{loop $specials $special}
+						<option value="{$special['id']}" {if $goods['specialid'] == $special['id']}selected="selected"{/if}>{$special['title']}</option>
+						{/loop}
+					</select>
+				</div>
+			</div>
+			{/if}
+			{if $plugin == 'fightgroup'}
+			<div class="form-group">
+				<label class="col-sm-2 control-label">凑团设置</label>
+				<div class="col-sm-9">
+					<label class="radio-inline">
+						<input type="radio" value="0" name="goods[is_pool]" {if empty($goods['is_pool'])} checked {/if}>开启
+					</label>
+					<label class="radio-inline">
+						<input type="radio" value="1" name="goods[is_pool]" {if $goods['is_pool'] == 1} checked {/if}>关闭
+					</label>
+					<div class="help-block">开启凑团后,对于未参团的买家,活动商品详情页会显示未成团的团列表,买家可以任意选一个参团,提升参团率</div>
+				</div>
+			</div>
+			<div class="form-group">
+				<label class="col-sm-2 control-label">模拟成团</label>
+				<div class="col-sm-9">
+					<label class="radio-inline">
+						<input type="radio" value="0" name="goods[is_imitate]" {if empty($goods['is_imitate'])} checked {/if}>关闭
+					</label>
+					<label class="radio-inline">
+						<input type="radio" value="1" name="goods[is_imitate]" {if $goods['is_imitate'] == 1} checked {/if}>开启
+					</label>
+					<div class="help-block">开启模拟成团后,拼团有效期内人数未满的团,系统将会模拟"匿名买家"凑满人数,使该团成团</div>
+				</div>
+			</div>
+			{/if}
+			<div class="form-group">
+				<label class="col-sm-2 control-label">商品人气</label>
+				<div class="col-sm-9">
+					<input type="number" min="0" name="goods[pv]" onkeyup="this.value=this.value.replace(/\D/g,'')" class="form-control" value="{$goods['pv']}" />
+					<div class="help-block">商品喜欢人数（商品浏览量）</div>
+				</div>
+			</div>
+			<div class="form-group">
+				<label class="col-sm-2 control-label">用户标签</label>
+				<div class="col-sm-9">
+					{loop $labels $label}
+					<label class="checkbox-inline">
+						<input type="checkbox" value="{$label['id']}" name="userlabel[]"  {if in_array($label['id'],$userlabel)}checked="checked"{/if} /> {$label['name']}
+					</label>
+					{/loop}
+					<div class="help-block">用户购买此商品时，会自动将标签与用户进行关联</div>
+				</div>
+			</div>
+		</div>
+	</div>
+	{if $plugin == 'bargain'}
+	<div class="region-goods-details row">
+		<div class="region-goods-left col-sm-2">活动页样式</div>
+		<div class="region-goods-right col-sm-9">
+			<div class="form-group">
+				<label class="col-sm-2 control-label">背景样式</label>
+				<div class="col-sm-9">
+					{php echo attachment_select('bar_image', $goods['bar_image']);}
+					<span class="help-block">建议尺寸375*45</span>
+				</div>
+			</div>
+			<div class="form-group">
+				<label class="col-sm-2 control-label">背景颜色</label>
+				<div class="col-sm-9">
+					<input type="color" style="max-width: 150px;" class="form-control" name="bar_bgc" value="{$goods['bar_bgc']}">
+				</div>
+			</div>
+		</div>
+	</div>
+	{/if}
+	{if $plugin == 'fightgroup' && Customized::init('luckygroup') > 0}
+	<div class="region-goods-details row">
+		<div class="region-goods-left col-sm-2">幸运团</div>
+		<div class="region-goods-right col-sm-9">
+			<div class="form-group">
+				<label class="col-sm-2 control-label">是否开启</label>
+				<div class="col-sm-9">
+					<label class="radio-inline">
+						<input type="radio" value="0" name="goods[is_lucky]" onclick="$('.is_lucky').hide()" {if empty($goods['is_lucky'])} checked {/if}>关闭
+					</label>
+					<label class="radio-inline">
+						<input type="radio" value="1" name="goods[is_lucky]" onclick="$('.is_lucky').show()" {if $goods['is_lucky'] == 1} checked {/if}>开启
+					</label>
+					<div class="help-block">开启幸运团后，只有部分用户可以获取商品，其他用户退款并返现。</div>
+				</div>
+			</div>
+			<div class="is_lucky"  {if empty($goods['is_lucky'])} style="display:none;" {/if}>
+				<div class="form-group">
+					<label class="col-sm-2 control-label">幸运人数</label>
+					<div class="col-sm-9">
+						<div class="input-group">
+							<input type="number" min="1" step="0" name="goods[luckynum]" class="form-control " value="{$goods['luckynum']}" />
+						</div>
+						<div class="help-block">幸运人数最少为1，最多不超过组团人数。</div>
+					</div>
+				</div>
+				<div class="form-group">
+					<label class="col-sm-2 control-label">退款红包</label>
+					<div class="col-sm-9">
+						<div class="input-group">
+							<input type="number" min="0" step="0.00" name="goods[luckymoney]" class="form-control " value="{$goods['luckymoney']}" />
+						</div>
+						<div class="help-block">非幸运用户的退款红包金额,不填或填0则不赠送红包</div>
+					</div>
+				</div>
+			</div>
+		</div>
+	</div>
+	{/if}
+	{/if}
+</div>
+<div class="tab-pane" id="tab_settlement">
+	<div class="region-goods-details row">
+		<div class="region-goods-left col-sm-2">分销结算</div>
+		<div class="region-goods-right col-sm-9">
+			{if !is_store()}
+			<div class="form-group">
+				<label class="col-sm-2 control-label">商品独立结算</label>
+				<div class="col-sm-9">
+					<label class="radio-inline" onclick="indepen(1)">
+						<input type="radio" value="0" name="independent" {if $goods['independent'] == 0 && !is_null($goods['independent'])} checked {/if}>开启
+					</label>
+					<label class="radio-inline" onclick="indepen(2)">
+						<input type="radio" value="1" name="independent" {if $goods['independent'] == 1 || is_null($goods['independent'])} checked {/if}>关闭
+					</label>
+				</div>
+			</div>
+			<div class="form-group" id="indediv" {if $goods['independent'] == 1 || is_null($goods['independent'])} style="display: none;" {/if}  >
+				<label class="col-sm-2 control-label">结算金额</label>
+				<div class="col-sm-9">
+					<div class="input-group">
+						<span class="input-group-addon">结算价</span>
+						<input type="number" min="0" name="goods[settlementmoney]" class="form-control " value="{$goods['settlementmoney']}" />
+						<span class="input-group-addon">元</span>
+					</div>
+					<div class="help-block">在用户核销以后，自动打入商家帐户余额，最多保留两位小数</div>
+				</div>
+			</div>
+			{/if}
+			{if $distriset['switch']}
+			<div class="form-group">
+				<label class="col-sm-2 control-label">是否参与分销</label>
+				<div class="col-sm-9">
+					<label class="radio-inline" onclick="distri(1)">
+						<input type="radio" value="0" name="isdistri" {if $goods['isdistri']==0 && !is_null($goods['isdistri'])} checked {/if}>参与
+					</label>
+					<label class="radio-inline" onclick="distri(2)">
+						<input type="radio" value="1" name="isdistri" {if $goods['isdistri']==1 || is_null($goods['isdistri'])} checked {/if}>不参与
+					</label>
+				</div>
+			</div>
+			<div id="distridiv" {if $goods['isdistri'] == 1 || is_null($goods['isdistri'])} style="display: none;" {/if} >
+				<div class="form-group">
+					<label class="col-sm-2 control-label">佣金设置方式</label>
+					<div class="col-sm-9">
+						<label class="radio-inline" onclick="distritext(1)" >
+							<input type="radio"  name="isdistristatus" value="0" title="百分比" {if $goods['isdistristatus'] == 0 || empty($goods['isdistristatus'])}checked{/if}>百分比
+						</label>
+						<label class="radio-inline" onclick="distritext(2)" >
+							<input type="radio"  name="isdistristatus" value="1" title="固定金额" {if $goods['isdistristatus'] == 1}checked{/if}>固定金额
+						</label>
+						<span class="help-block">按百分比计算时，基础价按照商品售价减去会员减免计算，不受积分抵扣，满减活动，在线红包影响。</span>
+					</div>
+				</div>
+				<div class="form-group">
+					<label class="col-sm-2 control-label">分销佣金详情</label>
+					<div class="col-sm-9">
+						{loop $dislevel $dislpr}
+						<div class="bigdata" style="margin-top: 10px;">
+							<div class="input-group data-item">
+								<span class="input-group-addon">[{$dislpr['name']}]一级</span>
+								<input type="hidden" name="disleid[]" class="form-control" value="{$dislpr['id']}">
+								<input type="number" min="0" name="onedismoney[]" class="form-control" value="{$disarray[$dislpr['id']]['onedismoney']}">
+								<span class="input-group-addon"><span class="isdistritext">{if $goods['isdistristatus'] == 1}元{else}%{/if}</span>,二级</span>
+								<input type="number" min="0" name="twodismoney[]" class="form-control" value="{$disarray[$dislpr['id']]['twodismoney']}">
+								<span class="input-group-addon"><span class="isdistritext">{if $goods['isdistristatus'] == 1}元{else}%{/if}</span>(最多保留两位小数)</span>
+							</div>
+						</div>
+						{/loop}
+						<span class="help-block">一级填0或不填则按分销商等级默认比例计算,填写一级佣金后二级佣金填0或不填则此商品没有二级分佣,最多保留两位小数</span>
+					</div>
+				</div>
+				<div class="form-group">
+					<label class="col-sm-2 control-label">分销佣金结算时间</label>
+					<div class="col-sm-9">
+						<label class="radio-inline">
+							<input type="radio" value="0" name="goods[dissettime]" {if $goods['dissettime']==0 || empty($goods['dissettime'])} checked {/if}>订单完成时结算
+						</label>
+						<label class="radio-inline">
+							<input type="radio" value="1" name="goods[dissettime]" {if $goods['dissettime']==1 } checked {/if}>订单支付时结算
+						</label>
+						<span class="help-block">注：若订单支付时结算，在订单退款时会扣除分销商对应的佣金，如果分销商可提现佣金不足，会扣至负数</span>
+					</div>
+				</div>
+				{if agent_p('disgroup') && $plugin != 'groupon' && $plugin != 'bargain' }
+				<div class="form-group">
+					<label class="col-sm-2 control-label">团长分红</label>
+					<div class="col-sm-9">
+						<label class="radio-inline" onclick="$('#groupdiv').show();">
+							<input type="radio" value="1" name="goods[disgroup]" {if $goods['disgroup'] == 1} checked {/if}>开启
+						</label>
+						<label class="radio-inline" onclick="$('#groupdiv').hide();">
+							<input type="radio" value="0" name="goods[disgroup]" {if $goods['disgroup'] != 1} checked {/if}>关闭
+						</label>
+					</div>
+				</div>
+				<div id="groupdiv"  {if $goods['disgroup'] != 1} style="display: none;" {/if}>
+					<div class="form-group">
+						<label class="col-sm-2 control-label">分红设置方式</label>
+						<div class="col-sm-9">
+							<label class="radio-inline" onclick="grouptritext(1)" >
+								<input type="radio"  name="goods[disgroupstatus]" value="0" title="百分比"   {if $goods['disgroupstatus'] != 1 }checked{/if}>百分比
+							</label>
+							<label class="radio-inline" onclick="grouptritext(2)" >
+								<input type="radio"  name="goods[disgroupstatus]" value="1" title="固定金额" {if $goods['disgroupstatus'] == 1}checked{/if}>固定金额
+							</label>
+							<span class="help-block">按百分比计算时，基础价按照商品售价减去会员减免计算，不受积分抵扣，满减活动，在线红包影响。</span>
+						</div>
+					</div>
+					<div class="form-group">
+						<label class="col-sm-2 control-label">团长分红详情</label>
+						<div class="col-sm-9">
+							{loop $grouplevel $grouplpr}
+							<div class="bigdata" style="margin-top: 10px;">
+								<div class="input-group data-item">
+									<span class="input-group-addon">[{$grouplpr['name']}]直属</span>
+									<input type="hidden" name="groupleid[]" class="form-control" value="{$grouplpr['id']}">
+									<input type="number" min="0" name="onegroupmoney[]" class="form-control" value="{$grouparray[$grouplpr['id']]['onegroupmoney']}">
+									<span class="input-group-addon"><span class="disgrouptext">{if $goods['disgroupstatus'] == 1}元{else}%{/if}</span>,子团队</span>
+									<input type="number" min="0" name="twogroupmoney[]" class="form-control" value="{$grouparray[$grouplpr['id']]['twogroupmoney']}">
+									<span class="input-group-addon"><span class="disgrouptext">{if $goods['disgroupstatus'] == 1}元{else}%{/if}</span>(最多保留两位小数)</span>
+								</div>
+							</div>
+							{/loop}
+							<span class="help-block">一级填0或不填则按分销商等级默认比例计算,填写一级佣金后二级佣金填0或不填则此商品没有二级分佣,最多保留两位小数</span>
+						</div>
+					</div>
+					<div class="form-group">
+						<label class="col-sm-2 control-label">股东分红</label>
+						<div class="col-sm-9">
+							<div class="input-group">
+								<input type="number" min="0" name="goods[shareholdermoney]" class="form-control" value="{$goods['shareholdermoney']}" />
+								<span class="input-group-addon"><span class="disgrouptext">{if $goods['disgroupstatus'] == 1}元{else}%{/if}</span>(最多保留两位小数)</span>
+							</div>
+							<span class="help-block">商品股东分红，不填或填0即为没有股东分红。</span>
+						</div>
+					</div>
+				</div>
+				{/if}
+			</div>
+			{/if}
+		</div>
+	</div>
+</div>
+<div class="tab-pane" id="tab_share">
+	<div class="region-goods-details row">
+		<div class="region-goods-left col-sm-2">分享设置</div>
+		<div class="region-goods-right col-sm-9">
+			<div class="alert alert-info">
+				<b>适用模板变量：[昵称] [时间] [商品名称] [原价] [特权类型] {if $plugin == 'fightgroup'}[拼团价] [单购价] [会员减免金额] [开团人数]{else if $plugin == 'bargain'}[会员底价] [底价] {else}[活动价] [会员价]{/if} </b>
+			</div>
+			<div class="form-group">
+				<label class="col-sm-2 control-label">公众号分享图片</label>
+				<div class="col-sm-9">
+					{php echo attachment_select('goods[share_image]', $goods['share_image']);}
+					<span class="help-block">大小2M以下，建议尺寸500*500，如果不选择，默认为商品缩略图片</span>
+				</div>
+			</div>
+			{if p('wxapp')}
+			<div class="form-group">
+				<label class="col-sm-2 control-label">小程序分享图片</label>
+				<div class="col-sm-9">
+					{php echo attachment_select('goods[share_wxapp_image]', $goods['share_wxapp_image']);}
+					<span class="help-block">大小2M以下，建议尺寸500*400，如果不选择，默认为商品缩略图片</span>
+				</div>
+			</div>
+			{/if}
+			<div class="form-group">
+				<label class="col-sm-2 control-label">分享标题</label>
+				<div class="col-sm-9">
+					<input type="text" name="goods[share_title]" class="form-control" value="{$goods['share_title']}" />
+					<span class="help-block">如果不填写，默认为商品名称</span>
+				</div>
+			</div>
+			<div class="form-group">
+				<label class="col-sm-2 control-label">分享描述</label>
+				<div class="col-sm-9">
+					<input type="text" name="goods[share_desc]" class="form-control" value="{$goods['share_desc']}" />
+					<span class="help-block">如果不填写，默认为分享描述</span>
+				</div>
+			</div>
+			{if p('diyposter')}
+			<div class="form-group">
+				<label class="col-sm-2 control-label">商品海报</label>
+				<div class="col-sm-9">
+					<select name="goods[diyposter]" class="form-control">
+						<option value="0">默认海报</option>
+						{loop $posters $poster}
+						<option value="{$poster['id']}" {if $goods['diyposter'] == $poster['id']}selected="selected"{/if}>{$poster['title']}</option>
+						{/loop}
+					</select>
+				</div>
+			</div>
+			{/if}
+		</div>
+	</div>
+	<div class="region-goods-details row">
+		<div class="region-goods-left col-sm-2">推广设置</div>
+		<div class="region-goods-right col-sm-9">
+			<div class="alert alert-info">
+				<b>
+					适用模板变量：[昵称] [时间] [商品名称] [原价] [特权类型]
+					{if $plugin == 'fightgroup'}
+						[拼团价] [单购价] [会员减免金额] [开团人数]
+					{else if $plugin == 'bargain'}
+						[会员底价] [底价]
+					{else}
+						[活动价] [会员价]
+					{/if}
+				</b>
+			</div>
+			<div class="form-group">
+				<label class="col-sm-2 control-label">推广文案</label>
+				<div class="col-sm-9">
+					<textarea name="goods[extension_text]" class="form-control" rows="15" placeholder="请输入推广文案.....">{$goods['extension_text']}</textarea>
+					<span class="help-block">推广文案为空则默认使用商品名称作为发圈文案</span>
+				</div>
+			</div>
+			<div class="form-group">
+				<label class="col-sm-2 control-label">推广图集</label>
+				<div class="col-sm-9">
+					{php echo attachment_select_multi('goods[extension_img]',$goods['extension_img']);}
+					<span class="help-block">图片数量建议8张。图片比例建议400*400px,发圈图片为空则默认使用商品图片</span>
+				</div>
+			</div>
+		</div>
+	</div>
+</div>
+<div class="tab-pane" id="tab_opvip">
+	<div class="alert alert-info">
+		<b>说明：此页面可以设置多规格商品的每种规格组合的会员减免金额与分销佣金设置，如果需要更改基础多规格设置请先保存多规格内容再进入此页面修改细表内容，此页面设置项填0或者不填会自动调用商品设置相关项。 </b>
+	</div>
+	{loop $options $opkey $opt}
+	<div class="region-goods-details row">
+		<div class="region-goods-left col-sm-2">{$opt['title']}</div>
+		<div class="region-goods-right col-sm-9">
+			{if $goods['vipstatus'] == 1}
+			<div class="form-group">
+				<label class="col-sm-2 control-label">会员优惠</label>
+				<div class="col-sm-7">
+					<div class="bigdata" style="margin-top: 10px;">
+						<div class="input-group data-item">
+							<span class="input-group-addon">[{$_W['wlsetting']['halflevel']['name']}]减</span>
+							<input type="hidden" name="vipleid{$opt['id']}[]" class="form-control" value="0">
+							<input type="number" min="0" name="vipprice{$opt['id']}[]" class="form-control" value="{$opt['viparray'][0]['vipprice']}">
+							{if is_store() }
+							<span class="input-group-addon">元(最多保留两位小数)</span>
+							{else}
+							<span class="input-group-addon">元,商户减少结算价</span>
+							<input type="number" min="0" name="storeset{$opt['id']}[]" class="form-control" value="{$opt['viparray'][0]['storeset']}">
+							<span class="input-group-addon">元</span>
+							{/if}
+						</div>
+					</div>
+					{loop $levels $lpr}
+					<div class="bigdata" style="margin-top: 10px;">
+						<div class="input-group data-item">
+							<span class="input-group-addon">[{$lpr['name']}]减</span>
+							<input type="hidden" name="vipleid{$opt['id']}[]" class="form-control" value="{$lpr['id']}">
+							<input type="number" min="0" name="vipprice{$opt['id']}[]" class="form-control" value="{$opt['viparray'][$lpr['id']]['vipprice']}">
+							{if is_store() }
+							<span class="input-group-addon">元(最多保留两位小数)</span>
+							{else}
+							<span class="input-group-addon">元,商户减少结算价</span>
+							<input type="number" min="0" name="storeset{$opt['id']}[]" class="form-control" value="{$opt['viparray'][$lpr['id']]['storeset']}">
+							<span class="input-group-addon">元</span>
+							{/if}
+						</div>
+					</div>
+					{/loop}
+				</div>
+			</div>
+			{/if}
+			{if empty($goods['isdistri'])}
+			<div class="form-group">
+				<label class="col-sm-2 control-label">分销金详情</label>
+				<div class="col-sm-7">
+					{loop $dislevel $dislprop}
+					<div class="bigdata" style="margin-top: 10px;">
+						<div class="input-group data-item">
+							<span class="input-group-addon">[{$dislprop['name']}]一级</span>
+							<input type="hidden" name="disleid{$opt['id']}[]" class="form-control" value="{$dislprop['id']}">
+							<input type="number" min="0" name="onedismoney{$opt['id']}[]" class="form-control" value="{$opt['disarray'][$dislprop['id']]['onedismoney']}">
+							<span class="input-group-addon"><span class="isdistritext">{if $goods['isdistristatus'] == 1}元{else}%{/if}</span>,二级</span>
+							<input type="number" min="0" name="twodismoney{$opt['id']}[]" class="form-control" value="{$opt['disarray'][$dislprop['id']]['twodismoney']}">
+							<span class="input-group-addon"><span class="isdistritext">{if $goods['isdistristatus'] == 1}元{else}%{/if}</span></span>
+						</div>
+					</div>
+					{/loop}
+				</div>
+			</div>
+			{/if}
+			{if $goods['disgroup'] > 0}
+			<div class="form-group">
+				<label class="col-sm-2 control-label">团长分红详情</label>
+				<div class="col-sm-7">
+					{loop $grouplevel $grouplpr}
+					<div class="bigdata" style="margin-top: 10px;">
+						<div class="input-group data-item">
+							<span class="input-group-addon">[{$grouplpr['name']}]直属</span>
+							<input type="hidden" name="groupleid{$opt['id']}[]" class="form-control" value="{$grouplpr['id']}">
+							<input type="number" min="0" name="onegroupmoney{$opt['id']}[]" class="form-control" value="{$opt['grouparray'][$grouplpr['id']]['onegroupmoney']}">
+							<span class="input-group-addon"><span class="disgrouptext">{if $goods['disgroupstatus'] == 1}元{else}%{/if}</span>,子团队</span>
+							<input type="number" min="0" name="twogroupmoney{$opt['id']}[]" class="form-control" value="{$opt['grouparray'][$grouplpr['id']]['twogroupmoney']}">
+							<span class="input-group-addon"><span class="disgrouptext">{if $goods['disgroupstatus'] == 1}元{else}%{/if}</span></span>
+						</div>
+					</div>
+					{/loop}
+				</div>
+			</div>
+			<div class="form-group">
+				<label class="col-sm-2 control-label">股东分红</label>
+				<div class="col-sm-7">
+					<div class="input-group data-item">
+						<span class="input-group-addon">股东分红金额</span>
+						<input type="number" min="0" name="shareholdermoney{$opt['id']}" class="form-control" value="{$opt['shareholdermoney']}">
+						<span class="input-group-addon"><span class="disgrouptext">{if $goods['disgroupstatus'] == 1}元{else}%{/if}</span></span>
+					</div>
+				</div>
+			</div>
+			{/if}
+		</div>
+	</div>
+	{/loop}
+</div>
+</div>
+
+<div class="form-group">
+	<label class="col-sm-2 control-label"></label>
+	<div class="col-sm-9">
+		<input type="hidden" id="optionArray" name="optionArray" value=''>
+		<input type="hidden" name="id" value="{$id}" id="id"/>
+		<input type="hidden" name="goods[pftid]" value="{$goods['pftid']}" id="pftid"/>
+		<input type="hidden" name="page" value="{$_GPC['page']}" />
+		<input type="submit" name="submit" value="提交" class="btn btn-primary min-width" />
+		<input type="hidden" name="token" value="{$_W['token']}" />
+		<input type="hidden" name="plugin" value="{$plugin}" />
+	</div>
+</div>
+<div id="modal-module-merchant" class="modal fade" tabindex="-1">
+	<div class="modal-dialog" style='width: 920px;'>
+		<div class="modal-content">
+			<div class="modal-header">
+				<button aria-hidden="true" data-dismiss="modal" class="close" type="button">×</button>
+				<h3>选取</h3></div>
+			<div class="modal-body">
+				<div class="row">
+					<div class="input-group">
+						<input type="text" class="form-control" name="keyword" value="" id="search-kwd-merchant" placeholder="请输入商家名称，不输入任何内容搜索结果为所有商家。" />
+						<span class='input-group-btn'><button type="button" class="btn btn-default" onclick="search_merchant();">搜索</button></span>
+					</div>
+				</div>
+				<div id="module-merchant" style="padding-top:5px;"></div>
+			</div>
+			<div class="modal-footer"><a href="#" class="btn btn-default" data-dismiss="modal" aria-hidden="true">关闭</a></div>
+		</div>
+	</div>
+</div>
+</form>
+</div>
+</div>
+<script>
+	function showcutoff(flag){
+		if(flag){
+			$('#cutoffday').show();
+			$('#cutofftime').hide();
+		}else{
+			$('#cutoffday').hide();
+			$('#cutofftime').show();
+		}
+	}
+
+	function express(flag){
+		if(flag == 0){
+			$('#expresstemplate').hide();
+			$('#hexiaotemplate').show();
+			$('.usestatus3div').show();
+		}else if(flag == 1){
+			$('#expresstemplate').show();
+			$('#hexiaotemplate').hide();
+			$('.usestatus3div').show();
+		}else if(flag == 2){
+			$('#expresstemplate').show();
+			$('#hexiaotemplate').show();
+			$('.usestatus3div').show();
+		}else if(flag == 3){
+			$('#expresstemplate').hide();
+			$('#hexiaotemplate').hide();
+			$('.usestatus3div').hide();
+		}
+	}
+
+	function indepen(flag){
+		if (flag == 1) {
+			$('#indediv').show();
+		} else{
+			$('#indediv').hide();
+		}
+	}
+
+	function distri(flag){
+		if (flag == 1) {
+			$('#distridiv').show();
+		} else{
+			$('#distridiv').hide();
+		}
+	}
+
+	function distritext(flag){
+		if (flag == 1) {
+			$('.isdistritext').html('%');
+		} else{
+			$('.isdistritext').html('元');
+		}
+	}
+
+	function grouptritext(flag){
+        if (flag == 1) {
+            $('.disgrouptext').html('%');
+        } else{
+            $('.disgrouptext').html('元');
+        }
+    }
+
+	$('form').submit(function(){
+		optionArray();
+	});
+
+	function formcheck(){
+	/*	{if !is_store()}
+		if($("input[name='goods[sid]']").val() == ''){
+			layer.alert('请选择商户');
+			return false;
+		}
+		{/if}
+		if($("input[name='goods[price]']").val() == ''){
+			layer.alert('请填写市场价格');
+			return false;
+		}
+		if($("input[name='goods[name]']").val() == ''){
+			layer.alert('请填写商品名称');
+			return false;
+		}
+		if($("input[name='goods[num]']").val() == ''){
+			layer.alert('请填写抢购数量');
+			return false;
+		}*/
+		//判断是否添加多规格
+		return true;
+	}
+
+	window.onload=function (){
+		$('.spec_item_item .layui-unselect').remove();  //挽救规格页面的错误css
+	}
+
+	$(function () {
+		window.optionchanged = false;
+		$('#myTab a').click(function (e) {
+			e.preventDefault();//阻止a链接的跳转行为
+			$('.spec_item_item .layui-unselect').remove();  //挽救规格页面的错误css
+			$(this).tab('show');//显示当前选中的链接及关联的content
+		});
+
+		$("#chkoption").click(function(){
+			var obj =$(this);
+			if(obj.get(0).checked){
+				$("#tboption").show();
+				$(".trp").hide();
+			}
+			else{
+				$("#tboption").hide();
+				$(".trp").show();
+			}
+		});
+
+		require(['jquery.ui'],function(){
+			$("#specs").sortable({
+				handle:'.fa-arrows',
+				stop: function(){
+					refreshOptions();
+				}
+			});
+		});
+
+	});
+
+	function search_merchant() {
+		$("#module-merchant").html("正在搜索....")
+		$.get("{php echo web_url('goodshouse/goodshouse/selectMerchant')}", {
+			keyword: $.trim($('#search-kwd-merchant').val())
+		}, function(dat){
+			$('#module-merchant').html(dat);
+		});
+	}
+	function remove_merchant(obj){
+		$('#goodsidmerchant').val('');
+		$('#namemerchant').val('');
+		$('#imgmerchant').attr("src",'');
+	}
+	function select_merchant(o) {
+		$('#sidmerchant').val(o.id);
+		$('#namemerchant').val(o.storename);
+		$('#imgmerchant').attr("src",o.logo);
+		$('#modal-module-merchant').modal('hide');
+		util.tips("操作成功");
+	}
+
+	//添加与删除规则
+	var kw = 1;
+	function addType() {
+		$.ajax({
+			url: "{php echo web_url('goodshouse/goodshouse/rules')}&kw="+kw,
+			cache: false
+		}).done(function (html) {
+			$("#datas").append(html);
+		});
+		kw++;
+	}
+	$(document).on('click', '.data-item-delete', function () {
+		$(this).closest('.data-item').remove();
+	});
+
+	function addAppoint() {
+		$.ajax({
+			url: "{php echo web_url('goodshouse/goodshouse/appointarray')}&kw="+kw,
+			cache: false
+		}).done(function (html) {
+			$("#appointarray").append(html);
+		});
+		kw++;
+	}
+
+	$('.order-list').delegate('.js-delete', 'click', function(e){
+		e.stopPropagation();
+		var $this = $(this);
+		var id = $this.attr('orderid');
+		util.nailConfirm(this, function(state) {
+			if(!state) return;
+			$.post("{php echo web_url('rush/order/delefalseorder')}", {id:id}, function(data){
+				if(!data.errno){
+					util.tips("删除成功！");
+					location.reload();
+				};
+			}, 'json');
+		}, {html: '确认删除虚拟订单'});
+	});
+
+	//规格
+	function addSpec(){
+		var len = $(".spec_item").length;
+		$("#add-spec").html("正在处理...").attr("disabled", "true").toggleClass("btn-primary");
+		var url = "{php echo web_url('goodshouse/goodshouse/spec')}";
+		$.ajax({
+			"url": url,
+			success:function(data){
+				$("#add-spec").html('<i class="fa fa-plus"></i> 添加规格').removeAttr("disabled").toggleClass("btn-primary"); ;
+				$('#specs').append(data);
+				var len = $(".add-specitem").length -1;
+				$(".add-specitem:eq(" +len+ ")").focus();
+			}
+		});
+	}
+
+	function refreshOptions(){
+		var html = '<table class="table table-bordered table-condensed"><thead><tr class="active">';
+		var specs = [];
+		if($('.spec_item').length<=0){
+			$("#options").html('');
+		}
+		$(".spec_item").each(function(i){
+			var _this = $(this);
+
+			var spec = {
+				id: _this.find(".spec_id").val(),
+				title: _this.find(".spec_title").val()
+			};
+
+			var items = [];
+			_this.find(".spec_item_item").each(function(){
+				var __this = $(this);
+				var item = {
+					id: __this.find(".spec_item_id").val(),
+					title: __this.find(".spec_item_title").val(),
+					show:__this.find(".spec_item_show").get(0).checked?"1":"0"
+				}
+				items.push(item);
+			});
+			spec.items = items;
+			specs.push(spec);
+		});
+
+//		specs.sort(function(x,y){
+//			if (x.items.length > y.items.length){
+//				return 1;
+//			}
+//			if (x.items.length < y.items.length) {
+//				return -1;
+//			}
+//		});
+		var plugin = '{$plugin}';
+		var len = specs.length;
+		var newlen = 1;
+		var h = new Array(len);
+		var rowspans = new Array(len);
+		for(var i=0;i<len;i++){
+			html+="<th>" + specs[i].title + "</th>";
+			var itemlen = specs[i].items.length;
+			if(itemlen<=0) { itemlen = 1 };
+			newlen*=itemlen;
+
+			h[i] = new Array(newlen);
+			for(var j=0;j<newlen;j++){
+				h[i][j] = new Array();
+			}
+			var l = specs[i].items.length;
+			rowspans[i] = 1;
+			for(j=i+1;j<len;j++){
+				rowspans[i]*= specs[j].items.length;
+			}
+		}
+
+		if(plugin == 'fightgroup') {
+			html += '<th><div class=""><div style="padding-bottom:10px;text-align:center;">预览图</div></div></th>';
+			html += '<th><div class=""><div style="padding-bottom:10px;text-align:center;">库存</div><div class="input-group"><input type="number" min="0" class="form-control option_stock_all" value=""/><span class="input-group-addon"><a href="javascript:;" class="fa fa-angle-double-down" title="批量设置" onclick="setCol(\'option_stock\');"></a></span></div></div></th>';
+			html += '<th><div class=""><div style="padding-bottom:10px;text-align:center;">拼团价</div><div class="input-group"><input type="number" min="0" class="form-control option_price_all" value=""/><span class="input-group-addon"><a href="javascript:;" class="fa fa-angle-double-down" title="批量设置" onclick="setCol(\'option_price\');"></a></span></div></div></th>';
+			html += '<th><div class=""><div style="padding-bottom:10px;text-align:center;">单购价</div><div class="input-group"><input type="number" min="0" class="form-control option_vipprice_all" value=""/><span class="input-group-addon"><a href="javascript:;" class="fa fa-angle-double-down" title="批量设置" onclick="setCol(\'option_vipprice\');"></a></span></div></div></th>';
+			{if !is_store()}
+			html += '<th><div class=""><div style="padding-bottom:10px;text-align:center;">结算价</div><div class="input-group"><input type="number" min="0" class="form-control option_settlementmoney_all" value=""/><span class="input-group-addon"><a href="javascript:;" class="fa fa-angle-double-down" title="批量设置" onclick="setCol(\'option_settlementmoney\');"></a></span></div></div></th>';
+			{/if}
+			// html += '<th><div class=""><div style="padding-bottom:10px;text-align:center;">会员结算价</div><div class="input-group"><input type="number" min="0" class="form-control option_vipsettlementmoney_all" value=""/><span class="input-group-addon"><a href="javascript:;" class="fa fa-angle-double-down" title="批量设置" onclick="setCol(\'option_vipsettlementmoney\');"></a></span></div></div></th>';
+			// if(window.sysinfo['source'] != 'store'){
+			// 	html += '<th><div class=""><div style="padding-bottom:10px;text-align:center;">一级分销</div><div class="input-group"><input type="number" min="0" class="form-control option_onedismoney_all" value=""/><span class="input-group-addon"><a href="javascript:;" class="fa fa-angle-double-down" title="批量设置" onclick="setCol(\'option_onedismoney\');"></a></span></div></div></th>';
+			// }
+		}else{
+			html += '<th><div class=""><div style="padding-bottom:10px;text-align:center;">预览图</div></div></th>';
+			html += '<th><div class=""><div style="padding-bottom:10px;text-align:center;">库存</div><div class="input-group"><input type="number" min="0" class="form-control option_stock_all"  value=""/><span class="input-group-addon"><a href="javascript:;" class="fa fa-angle-double-down" title="批量设置" onclick="setCol(\'option_stock\');"></a></span></div></div></th>';
+			html += '<th><div class=""><div style="padding-bottom:10px;text-align:center;">活动价</div><div class="input-group"><input type="number" min="0" class="form-control option_price_all" value=""/><span class="input-group-addon"><a href="javascript:;" class="fa fa-angle-double-down" title="批量设置" onclick="setCol(\'option_price\');"></a></span></div></div></th>';
+			// html += '<th><div class=""><div style="padding-bottom:10px;text-align:center;">会员价</div><div class="input-group"><input type="number" min="0" class="form-control option_vipprice_all" value=""/><span class="input-group-addon"><a href="javascript:;" class="fa fa-angle-double-down" title="批量设置" onclick="setCol(\'option_vipprice\');"></a></span></div></div></th>';
+			{if !is_store()}
+			html += '<th><div class=""><div style="padding-bottom:10px;text-align:center;">结算价</div><div class="input-group"><input type="number" min="0" class="form-control option_settlementmoney_all" value=""/><span class="input-group-addon"><a href="javascript:;" class="fa fa-angle-double-down" title="批量设置" onclick="setCol(\'option_settlementmoney\');"></a></span></div></div></th>';
+			{/if}
+				// html += '<th><div class=""><div style="padding-bottom:10px;text-align:center;">会员结算价</div><div class="input-group"><input type="number" min="0" class="form-control option_vipsettlementmoney_all" value=""/><span class="input-group-addon"><a href="javascript:;" class="fa fa-angle-double-down" title="批量设置" onclick="setCol(\'option_vipsettlementmoney\');"></a></span></div></div></th>';
+			// if(window.sysinfo['source'] != 'store') {
+			// 	html += '<th><div class=""><div style="padding-bottom:10px;text-align:center;">一级分销</div><div class="input-group"><input type="number" min="0" class="form-control option_onedismoney_all" value=""/><span class="input-group-addon"><a href="javascript:;" class="fa fa-angle-double-down" title="批量设置" onclick="setCol(\'option_onedismoney\');"></a></span></div></div></th>';
+			// }
+		}
+
+			html+='</tr></thead>';
+
+			for(var m=0;m<len;m++){
+				var k = 0,kid = 0,n=0;
+				for(var j=0;j<newlen;j++){
+					var rowspan = rowspans[m];
+					if( j % rowspan==0){
+						h[m][j]={title: specs[m].items[kid].title, virtual: specs[m].items[kid].virtual,html: "<td class='full' rowspan='" +rowspan + "'>"+ specs[m].items[kid].title+"</td>\r\n",id: specs[m].items[kid].id};
+					}
+					else{
+						h[m][j]={title:specs[m].items[kid].title,virtual: specs[m].items[kid].virtual, html: "",id: specs[m].items[kid].id};
+					}
+					n++;
+					if(n==rowspan){
+						kid++; if(kid>specs[m].items.length-1) { kid=0; }
+						n=0;
+					}
+				}
+			}
+
+			var hh = "";
+			for(var i=0;i<newlen;i++){
+				hh+="<tr>";
+				var ids = [];
+				var titles = [];
+				var virtuals = [];
+				for(var j=0;j<len;j++){
+					hh+=h[j][i].html;
+					ids.push( h[j][i].id);
+					titles.push( h[j][i].title);
+					virtuals.push( h[j][i].virtual);
+				}
+				ids =ids.join('_');
+				titles= titles.join('+');
+
+				var val ={ id : "",title:titles, stock : "",thumb : "",price : "",vipsettlementmoney : "",settlementmoney : "",vipprice : "",threedismoney:"",twodismoney:"",onedismoney:"",virtual:virtuals };
+				if( $(".option_id_" + ids).length>0){
+					val ={
+						thumb :$(".option_thumb_" + ids+":eq(0)").val(),
+						id : $(".option_id_" + ids+":eq(0)").val(),
+						title: titles,
+						stock : $(".option_stock_" + ids+":eq(0)").val(),
+						price : $(".option_price_" + ids+":eq(0)").val(),
+						//vipsettlementmoney : $(".option_vipsettlementmoney_" + ids+":eq(0)").val(),
+						settlementmoney : $(".option_settlementmoney_" + ids+":eq(0)").val(),
+						vipprice : $(".option_vipprice_" + ids +":eq(0)").val(),
+						//onedismoney : $(".option_onedismoney_" + ids +":eq(0)").val(),
+						//twodismoney : $(".option_twodismoney_" + ids +":eq(0)").val(),
+						//threedismoney : $(".option_threedismoney_" + ids+":eq(0)").val(),
+						virtual : virtuals
+					}
+					val.usethumb = tomedia(val.thumb);
+				}
+
+
+				//预览图
+				hh += '<td>';
+				hh += '<input type="hidden" class = "option_thumb option_thumb_' + ids +'" data-name="option_thumb_' + ids +'" value="' +(val.thumb=='undefined'?'':val.thumb )+'" id="cimg-'+ ids +'" />';
+				hh += '<img style="width:32px;height:32px;cursor: pointer"';
+				hh += 'data-toggle="selectAttachment" data-input="#cimg-'+ ids +'" data-img="#pimg-'+ ids +'" id="pimg-'+ ids +'"';
+				hh += 'src="' +(val.usethumb=='undefined'? "{IMAGE_NOPIC_SMALL}" : val.usethumb )+'" style="width:100%;"';
+				hh += 'data-toggle="popover" data-html ="true" data-placement="top"  data-trigger ="hover" data-content="<img src='+ val.thumb +' style="width:100px;height:100px;" /> ';
+				hh += '</td>';
+
+				hh += '<td>';
+				hh += '<input min="0" data-name="option_stock_' + ids +'" type="text" class="form-control option_stock option_stock_' + ids +'" value="' +(val.stock=='undefined'?'':val.stock )+'"/></td>';
+				hh += '<input data-name="option_id_' + ids+'" type="hidden" class="form-control option_id option_id_' + ids +'" value="' +(val.id=='undefined'?'':val.id )+'"/>';
+				hh += '<input data-name="option_ids" type="hidden" class="form-control option_ids option_ids_' + ids +'" value="' + ids +'"/>';
+				hh += '<input data-name="option_title_' + ids +'" type="hidden" class="form-control option_title option_title_' + ids +'" value="' +(val.title=='undefined'?'':val.title )+'"/></td>';
+				hh += '</td>';
+				hh += '<td><input min="0" data-name="option_price_' + ids+'" type="text" class="form-control option_price option_price_' + ids +'" value="' +(val.price=='undefined'?'':val.price )+'"/></td>';
+				if(plugin == 'fightgroup') {
+					hh += '<td><input min="0" data-name="option_vipprice_' + ids + '" type="text" class="form-control option_vipprice option_vipprice_' + ids + '" value="' + (val.vipprice == 'undefined' ? '' : val.vipprice) + '"/></td>';
+				}
+				{if !is_store()}
+				hh += '<td><input min="0" data-name="option_settlementmoney_' + ids+'" type="text" class="form-control option_settlementmoney option_settlementmoney_' + ids +'" " value="' +(val.settlementmoney=='undefined'?'':val.settlementmoney )+'"/></td>';
+				{/if}
+				// hh += '<td><input min="0" data-name="option_vipsettlementmoney_' +ids+'" type="text" class="form-control option_vipsettlementmoney option_vipsettlementmoney_' + ids +'" " value="' +(val.vipsettlementmoney=='undefined'?'':val.vipsettlementmoney )+'"/></td>';
+				// if(window.sysinfo['source'] != 'store') {
+				// 	hh += '<td><input min="0" data-name="option_onedismoney_' + ids + '" type="text" class="form-control option_onedismoney option_onedismoney_' + ids + '" " value="' + (val.onedismoney == 'undefined' ? '' : val.onedismoney) + '"/></td>';
+				// }
+				// {if $distriset['ranknum']>1}
+				// if(window.sysinfo['source'] != 'store') {
+				// 	hh += '<td><input min="0" data-name="option_twodismoney_' + ids + '" type="text" class="form-control option_twodismoney option_twodismoney_' + ids + '" " value="' + (val.twodismoney == 'undefined' ? '' : val.twodismoney) + '"/></td>';
+				// }
+				// {/if}
+					hh += "</tr>";
+				}
+				html+=hh;
+				html+="</table>";
+				$("#options").html(html);
+			}
+
+			function tomedia(thumb){
+				var url = "{php echo web_url('goodshouse/goodshouse/jstomedia')}" + "&thumb=" + thumb;
+				var thumb = '';
+				$.ajax({
+					"async": false,
+					"url": url,
+					success:function(data){
+						thumb = data;
+					}
+				});
+				return thumb;
+			}
+
+			function removeSpec(specid){
+				if (confirm('确认要删除此规格?')){
+					$("#spec_" + specid).remove();
+				}
+			}
+
+			function addSpecItem(specid){
+				$("#add-specitem-" + specid).html("正在处理...").attr("disabled", "true");
+				var url = "{php echo web_url('goodshouse/goodshouse/spec_item')}" + "&specid=" + specid;
+				$.ajax({
+					"url": url,
+					success:function(data){
+						$("#add-specitem-" + specid).html('<i class="fa fa-plus"></i> 添加规格项').removeAttr("disabled");
+						$('#spec_item_' + specid).append(data);
+						var len = $("#spec_" + specid + " .spec_item_title").length -1;
+						$("#spec_" + specid + " .spec_item_title:eq(" +len+ ")").focus();
+					}
+				});
+			}
+
+			function removeSpecItem(obj){
+				$(obj).closest('.spec_item_item').remove();
+			}
+
+			function selectSpecItemImage(obj){
+				util.image('',function(val){
+					$(obj).attr('src',val.url).popover({
+						trigger: 'hover',
+						html: true,
+						container: $(document.body),
+						content: "<img src='" + val.url  + "' style='width:100px;height:100px;' />",
+						placement: 'top'
+					});
+
+					var group  =$(obj).parent();
+
+					group.find(':hidden').val(val.attachment), group.find('i').show().unbind('click').click(function(){
+						$(obj).attr('src',"{IMAGE_NOPIC_SMALL}");
+						group.find(':hidden').val('');
+						group.find('i').hide();
+						$(obj).popover('destroy');
+					});
+				});
+			}
+
+			$('.reimg').click(function(){
+				var group  =$(this).parent();
+				$(this).prev().attr('src',"{IMAGE_NOPIC_SMALL}");
+				group.find(':hidden').val('');
+				group.find('i').hide();
+				$(this).prev().popover('destroy');
+			});
+
+			function setCol(cls){
+				var val = $("."+cls+"_all").val();
+				if(val < 0){
+					tip.alert('值不能小于0',function () {
+						$("."+cls+"_all").val(0);
+					});
+					return false;
+				}
+				$("."+cls).val(val);
+			}
+
+			function optionArray(){
+				var option_thumb = new Array();
+				$('.option_thumb').each(function (index,item) {
+					option_thumb.push($(item).val());
+				});
+
+				var option_stock = new Array();
+				$('.option_stock').each(function (index,item) {
+					option_stock.push($(item).val());
+				});
+
+				var option_id = new Array();
+				$('.option_id').each(function (index,item) {
+					option_id.push($(item).val());
+				});
+
+				var option_ids = new Array();
+				$('.option_ids').each(function (index,item) {
+					option_ids.push($(item).val());
+				});
+
+				var option_title = new Array();
+				$('.option_title').each(function (index,item) {
+					option_title.push($(item).val());
+				});
+
+
+				var option_price = new Array();
+				$('.option_price').each(function (index,item) {
+					option_price.push($(item).val());
+				});
+				var option_vipprice = new Array();
+				$('.option_vipprice').each(function (index,item) {
+					option_vipprice.push($(item).val());
+				});
+
+				var option_settlementmoney = new Array();
+				$('.option_settlementmoney').each(function (index,item) {
+					option_settlementmoney.push($(item).val());
+				});
+
+				var option_vipsettlementmoney = new Array();
+				$('.option_vipsettlementmoney').each(function (index,item) {
+					option_vipsettlementmoney.push($(item).val());
+				});
+
+				// var option_onedismoney = new Array();
+				// $('.option_onedismoney').each(function (index,item) {
+				// 	option_onedismoney.push($(item).val());
+				// });
+				//
+				// var option_twodismoney = new Array();
+				// $('.option_twodismoney').each(function (index,item) {
+				// 	option_twodismoney.push($(item).val());
+				// });
+
+
+				var options = {
+					option_thumb : option_thumb,
+					option_stock : option_stock,
+					option_id : option_id,
+					option_ids : option_ids,
+					option_title : option_title,
+					option_price : option_price,
+					option_vipprice : option_vipprice,
+					option_settlementmoney : option_settlementmoney,
+					// option_vipsettlementmoney : option_vipsettlementmoney,
+					// option_onedismoney : option_onedismoney,
+					// option_twodismoney : option_twodismoney,
+				};
+				$("input[name='optionArray']").val(JSON.stringify(options));
+			}
+
+			function showItem(obj){
+				var show = $(obj).get(0).checked?"1":"0";
+				$(obj).parents('.spec_item_item').find('.spec_item_show:eq(0)').val(show);
+			}
+
+			$('.option_stock').keyup(function(){
+				var val = $(this).val();
+				if(!$.isNumeric(val)){
+					$(this).val(0);
+				}else{
+					val = parseInt(val);
+					if(val<0){val=0;}
+					$(this).val(val);
+				}
+			});
+
+
+</script>
+<script type="text/javascript">
+	$('body').on('click','.addshux',function(){
+		var valueinput = $(this).parent().find('input');
+		var value = valueinput.val();
+		if(value == ''){
+			util.tips('请在编辑框输入内容');return false;
+		}
+		var valueelemt = $(this).parents('.data-item').find('.rule_pro');
+		valueelemt.append(value+',');
+		var nowvalue = valueelemt.next().val();
+		valueelemt.next().val(nowvalue+value+',');
+		valueinput.val('').focus();
+	});
+	$('body').on('click','.chongzhi',function(){
+		$(this).parents('.data-item').find('.rule_pro').text('').next().val('');
+	});
+</script>
+<!-- 砍价规则判断 -->
+<script>
+	//判断  当前价格  是否按照从大到小的规则进行排序
+	$("#bargain_rules").on('change','.rule_pice',function () {
+		let _this = $(this),
+				keys = $("#bargain_rules .rule_pice").index(this);
+		if(keys > 0){
+			keys--;
+			let topValues = parseFloat($("#bargain_rules .rule_pice:eq("+keys+")").val()),//获取上一项的价格内容
+					value = parseFloat(_this.val());//获取当前输入的价格的内容
+			if(topValues <= value){
+				tip.alert('请严格按照从大到小的顺序输入价格！',function () {
+					_this.val(0);
+				});
+				return false;
+			}
+		}
+	});
+	//判断  当前砍价范围   是否按照	从小到大的写法,.rule_start
+	$("#bargain_rules").on('change','.rule_end',function () {
+		//keys 键值获取
+		let keys = $("#bargain_rules .rule_start").index(this);
+		if($(this).hasClass('rule_end')){
+			keys = $("#bargain_rules .rule_end").index(this);
+		}
+		//判断是否符合 结束价格大于开始价格的规则
+		let _startThis = $("#bargain_rules .rule_start:eq("+keys+")");
+		let	_endThis = $("#bargain_rules .rule_end:eq("+keys+")");
+		let startValues = parseFloat(_startThis.val()),//获取开始的金额
+				endValue = parseFloat(_endThis.val());//获取当前输入的金额(结束的金额)
+		console.log(startValues,endValue);
+		if(endValue <= startValues){
+			tip.alert('请严格按照砍价范围结束价格不能小于开始价格的规则填写金额！',function () {
+				_startThis.val(0);
+				_endThis.val(0);
+			});
+			return false;
+		}
+	});
+</script>
+<!-- 阶梯价相关操作 -->
+<script>
+	/**
+	 * 开启多规格时 关闭阶梯价设置
+	 */
+	$("[name='optionstatus']").on('click',function () {
+		let val = $("[name='optionstatus']:checked").val();
+		if(val == 1){
+			$("[name='lp_status']:eq(0)").click();
+		}
+	});
+	/**
+	 * 判断是否开启阶梯价设置   开启阶梯价时关闭多规格设置
+	 */
+	$("[name='lp_status']").on('change',function () {
+		let val = $("[name='lp_status']:checked").val();
+		//0=关闭 1=开启
+		if(val == 1){
+			$("#ld_content").removeClass('hide');
+			$(".optionstatusButton").click();
+			$("[name='optionstatus']:eq(0)").click();
+		}else{
+			$("#ld_content").addClass('hide');
+		}
+	});
+	/**
+	 * 添加一行阶梯价设置表
+	 */
+	$("#addLd").on('click',function () {
+		let lp_num = new Date().getTime();
+		let html = '<div class="form-group">\n' +
+				'\t\t\t\t\t\t<label class="col-sm-2 control-label"></label>\n' +
+				'\t\t\t\t\t\t<div class="col-sm-9">\n' +
+				'\t\t\t\t\t\t\t<div class="input-group">\n' +
+				'\t\t\t\t\t\t\t\t<span class="input-group-addon">销售区间上限</span>\n' +
+				'\t\t\t\t\t\t\t\t<input type="number" name="ld['+lp_num+'][max]" class="form-control ld_max" min="0" value="">\n' +
+				'\t\t\t\t\t\t\t\t<span class="input-group-addon">阶梯价格</span>\n' +
+				'\t\t\t\t\t\t\t\t<input type="number" name="ld['+lp_num+'][price]" class="form-control" min="0" value="">\n' +
+				'\t\t\t\t\t\t\t\t<span class="input-group-addon">元</span>\n' +
+				'\t\t\t\t\t\t\t\t<span class="input-group-addon btn btn-sm btn-danger deleteLpRow">删除</span>\n' +
+				'\t\t\t\t\t\t\t</div>\n' +
+				'\t\t\t\t\t\t</div>\n' +
+				'\t\t\t\t\t</div>';
+		//判断是否符合添加条件（小于5条阶梯价设置信息）`
+		let lengths = $('#ld_list .form-group').length;
+		if(lengths < 5){
+			$("#ld_list").append(html);
+		}else{
+			tip.alert('最大只能存在5条阶梯价规则!');
+		}
+	});
+	/**
+	 * 删除一条阶梯价规则
+	 */
+	$("#ld_list").on('click','.deleteLpRow',function () {
+		let lengths = $('#ld_list .form-group').length;
+		if(lengths > 1) {
+			$(this).closest(".form-group").remove();
+		}else{
+			tip.alert('请至少保留一条阶梯价规则');
+		}
+	});
+	/**
+	 * 修改数量 判断输入的销售区间是否合格
+	 */
+	$("#ld_list").on('change','.ld_max',function () {
+		let _this = $(this),
+				index = parseInt(_this.closest(".form-group").index()),
+				thisVal =  parseInt(_this.val()),
+				stk =  parseInt($("[name='goods[num]']").val()),
+				thisIndex = index;
+		//当前修改规则不是第一条判断规则是否大于上一条
+		if (index > 0) {
+			index--;
+			let upVal =  parseInt($("#ld_list .ld_max:eq("+index+")").val());//获取上一条输入的区间上限的值
+			if(upVal >= thisVal) {
+				tip.alert('当前区间上限不能小于或等于上一条区间', function () {
+					let newThisVal = parseInt(upVal) + parseInt(1);
+					if(newThisVal >= stk){
+						newThisVal = stk;
+					}
+					_this.val(newThisVal);
+				});
+			}
+		}
+		//判断当前输入的区间是否大于库存
+		if(thisVal > stk){
+			tip.alert('销售区间不能大于库存',function () {
+				_this.val(stk);
+			});
+		}else if(thisVal <= 0 && thisIndex == 0){
+			//判断当前输入的值是否大于0
+			tip.alert('销售区间上限必须大于0!',function () {
+				_this.val(1);
+			});
+		}
+	});
+	/**
+	 * 点击查看demo
+	 */
+	$("#ld_content").on('click','.ld_demoButton',function () {
+		if($("#ld_list").hasClass("hide")){
+			//示例已经显示  现在执行关闭操作
+			$("#ld_list").removeClass("hide");
+			$("#ld_demoList").addClass("hide");
+			$(this).html("点击开启示例");
+		}else{
+			//示例已经关闭 现在执行显示操作
+			$("#ld_list").addClass("hide");
+			$("#ld_demoList").removeClass("hide");
+			$(this).html("关闭示例");
+		}
+	});
+</script>
+
+{php include wl_template('common/footer');}

@@ -1,0 +1,228 @@
+{php include wl_template('common/header');}
+<ul class="nav nav-tabs" id="myTab">
+    <li  class="active"><a href="javascript:;">客户订单</a></li>
+</ul>
+<div class="app-content">
+    <div class="app-filter">
+        <div class="filter-list">
+            <form action="" method="get" class="form-horizontal" role="form" id="form1">
+                <input type="hidden" name="c" value="site" />
+                <input type="hidden" name="a" value="entry" />
+                <input type="hidden" name="m" value="{MODULE_NAME}" />
+                <input type="hidden" name="p" value="distribution" />
+                <input type="hidden" name="ac" value="dissysbase" />
+                <input type="hidden" name="do" value="loworder" />
+                <input type="hidden" name="memid" value="{$memid}" />
+                <input type="hidden" name="buymid" value="{$buymid}" />
+                <input type="hidden" name="ordertype" value="{$_GPC['ordertype']}" />
+                <input type="hidden" name="ordertype" value="{$_GPC['ordertype']}" />
+
+                <div class="form-group max-with-all">
+                    <label class="col-sm-2 control-label">订单类型</label>
+                    <div class="col-sm-9">
+                        <div class="btn-group">
+                            <a href="{php echo filter_url('ordertype:');}" class="btn {if $_GPC['ordertype'] == ''}btn-primary{else}btn-default{/if}">不限</a>
+                            <a href="{php echo filter_url('ordertype:rush');}" class="btn {if $_GPC['ordertype'] == 'rush'}btn-primary{else}btn-default{/if}">抢购</a>
+                            {if p('groupon')}
+                            <a href="{php echo filter_url('ordertype:groupon');}" class="btn {if $_GPC['ordertype'] == 'groupon'}btn-primary{else}btn-default{/if}">团购</a>
+                            {/if}
+                            {if p('wlfightgroup')}
+                            <a href="{php echo filter_url('ordertype:fightgroup');}" class="btn {if $_GPC['ordertype'] == 'fightgroup'}btn-primary{else}btn-default{/if}">拼团</a>
+                            {/if}
+                            {if p('wlcoupon')}
+                            <a href="{php echo filter_url('ordertype:coupon');}" class="btn {if $_GPC['ordertype'] == 'coupon'}btn-primary{else}btn-default{/if}">卡券</a>
+                            {/if}
+                            {if p('activity')}
+                            <a href="{php echo filter_url('ordertype:activity');}" class="btn {if $_GPC['ordertype'] == 'activity'}btn-primary{else}btn-default{/if}">活动</a>
+                            {/if}
+                            <a href="{php echo filter_url('ordertype:payonline');}" class="btn {if $_GPC['ordertype'] == 'payonline'}btn-primary{else}btn-default{/if}">在线买单</a>
+                            {if p('bargain')}
+                            <a href="{php echo filter_url('ordertype:bargain');}" class="btn {if $_GPC['ordertype'] == 'bargain'}btn-primary{else}btn-default{/if}">砍价</a>
+                            {/if}
+                            {if p('pocket')}
+                            <a href="{php echo filter_url('ordertype:pocket');}" class="btn {if $_GPC['ordertype'] == 'pocket'}btn-primary{else}btn-default{/if}">掌上信息</a>
+                            {/if}
+                            {if p('halfcard')}
+                            <a href="{php echo filter_url('ordertype:halfcard');}" class="btn {if $_GPC['ordertype'] == 'halfcard'}btn-primary{else}btn-default{/if}">一卡通充值</a>
+                            {/if}
+                            <a href="{php echo filter_url('ordertype:charge');}" class="btn {if $_GPC['ordertype'] == 'charge'}btn-primary{else}btn-default{/if}">付费入驻</a>
+                            <a href="{php echo filter_url('ordertype:distribution');}" class="btn {if $_GPC['ordertype'] == 'distribution'}btn-primary{else}btn-default{/if}">付费申请{if Customized::init('distributionText') > 0}共享股东{else}分销商{/if}</a>
+                            {if p('citycard')}
+                            <a href="{php echo filter_url('ordertype:citycard');}" class="btn {if $_GPC['ordertype'] == 'citycard'}btn-primary{else}btn-default{/if}">同城名片</a>
+                            {/if}
+                            {if p('citydelivery')}
+                            <a href="{php echo filter_url('ordertype:citydelivery');}" class="btn {if $_GPC['ordertype'] == 'citydelivery'}btn-primary{else}btn-default{/if}">同城配送</a>
+                            {/if}
+                            {if p('hotel')}
+                            <a href="{php echo filter_url('ordertype:hotel');}" class="btn {if $_GPC['ordertype'] == 'hotel'}btn-primary{else}btn-default{/if}">酒店</a>
+                            {/if}
+                        </div>
+                    </div>
+                </div>
+                <div class="form-group form-inline">
+                    <label class="col-sm-2 control-label">所属代理</label>
+                    <div class="col-sm-9">
+                        <select name="agentid" class="form-control" style="width: 300px;">
+                            <option value="0" {if empty($_GPC['agentid'])}selected="selected"{/if}>所有代理</option>
+                            <option value="-1" {if $_GPC['agentid']== -1 }selected="selected"{/if}>总后台</option>
+                            {loop $agentlist $agent}
+                            <option value="{$agent['id']}" {if $_GPC['agentid' ]== $agent['id']  }selected="selected"{/if}>{$agent['agentname']}</option>
+                            {/loop}
+                        </select>
+                    </div>
+                </div>
+                <div class="form-group">
+                    <label class="col-sm-2 control-label">下单时间</label>
+                    <div class="col-md-3">
+                        <select name="timetype" class="form-control">
+                            <option value=""  {if empty($_GPC['timetype'])}selected="selected"{/if}>关闭</option>
+                            <option value="1" {if $_GPC['timetype']==1}selected="selected"{/if}>开启</option>
+                        </select>
+                    </div>
+                    <div class="col-md-5">
+                        <div class="input-group">
+                            {php echo tpl_select_time_info('time', array('starttime'=>date('Y-m-d H:i:s', $starttime),'endtime'=>date('Y-m-d H:i:s', $endtime)));}
+                        </div>
+                    </div>
+                </div>
+                <div class="form-group">
+                    <label class="col-sm-2 control-label"></label>
+                    <div class="col-sm-9">
+                        <button class="btn btn-primary">筛选</button>
+                        <button class="btn btn-default" name="export" type="submit" value="export"><i class="fa fa-download"></i> 导出</button>
+                    </div>
+                </div>
+            </form>
+        </div>
+    </div>
+    <div class="app-table-list">
+        <div class="table-responsive collapse in" id="order-template-item-4">
+            <table class="table table-bordered">
+                <thead style="background-color: #FFFFFF;">
+                <tr>
+                    <th style="width:25px">序号</th>
+                    <th style="width:150px;">商品</th>
+                    <th style="width:80px; text-align:center;">单价/数量</th>
+                    <th style="width:80px; text-align:center;">所属商家</th>
+                    <th style="width:80px; text-align:center;">所属代理</th>
+                    <th style="width:100px; text-align:center;">买家</th>
+                    <th style="width:80px; text-align:center;">订单状态</th>
+                    <th style="width:150px; text-align:center;">{if Customized::init('distributionText') > 0}共享股东{else}分销商{/if}</th>
+                    <th style="width:130px; text-align:center;">提成金额</th>
+                </tr>
+                </thead>
+            </table>
+        </div>
+        {loop $loworder $y $item}
+        <div class="panel panel-default">
+            <div class="panel-heading clearfix" style="border: 1px solid #e5e5e5;border-bottom: 0;">
+                <div class="pull-left">
+                    <b>订单号: {$item['orderno']}</b>
+                    {if $item['plugin']=='rush'}
+                    <span class="label label-danger">抢购</span>
+                    {else if $item['plugin']=='groupon'}
+                    <span class="label label-success">团购</span>
+                    {else if $item['plugin']=='fightgroup'}
+                    <span class="label label-info">拼团</span>
+                    {else if $item['plugin']=='coupon'}
+                    <span class="label label-success">卡券</span>
+                    {else if $item['plugin']=='bargain'}
+                    <span class="label label-primary">砍价</span>
+                    {else if $item['plugin']=='activity'}
+                    <span class="label label-primary">活动</span>
+                    {else if $item['plugin']=='pocket'}
+                    <span class="label label-warning">掌上信息</span>
+                    {else if $item['plugin']=='halfcard'}
+                    <span class="label label-default">一卡通充值</span>
+                    {else if $item['plugin']=='charge'}
+                    <span class="label label-primary">付费入驻</span>
+                    {else if $item['plugin']=='distribution'}
+                    <span class="label label-primary">付费申请{if Customized::init('distributionText') > 0}共享股东{else}分销商{/if}</span>
+                    {else if $item['plugin']=='payonline'}
+                    <span class="label label-success">在线买单</span>
+                    {else if $item['plugin']=='citycard'}
+                    <span class="label label-primary">同城名片</span>
+                    {else if $item['plugin']=='citydelivery'}
+                    <span class="label label-success">同城配送</span>
+                    {else if $item['plugin']=='hotel'}
+                    <span class="label label-success">酒店预约</span>
+                    {/if}
+                </div>
+                <div class="pull-right">
+                    下单时间：{php echo date('Y-m-d H:i:s',$item['createtime']);}
+                    {if $item['plugin']=='groupon' || $item['plugin']=='citydelivery' || $item['plugin']=='rush' || $item['plugin']=='fightgroup' || $item['plugin']=='coupon' ||  $item['plugin']=='bargain'  ||  $item['plugin']=='activity'}
+                    - <a href="{php echo web_url('order/wlOrder/orderdetail',array('type'=>$item['ordertype'],'orderid'=>$item['orderid']))}">订单详情</a>
+                    {/if}
+                </div>
+            </div>
+            <div class="table-responsive">
+                <table class="table table-bordered">
+                    <tbody >
+                    <tr>
+                        <td style="width: 25px;" ><center>{php echo $y+1}</center></td>
+                        <td class="goods-info line-feed" style="width:150px;padding-left: 10px;">
+                            <div class="img" style="display: inline-block;">
+                                <img width="50" height="50" class="oscrollLoading" src="{php echo tomedia($item['gimg'])}" data-url="{php echo tomedia($item['gimg'])}" height="50" width="50" onerror="this.src='{IMAGE_NOPIC_SMALL}'" >
+                            </div>
+                            <div class="title" style="display: inline-block;">
+                                <span>{$item['gname']}</span>
+                            </div>
+                        </td>
+                        <td class="text-center" style="width:80px;">
+                            <p>￥{$item['goodsprice']}</p>
+                            <p>({$item['gnum']} {$item['unit']})</p>
+                        </td>
+                        <td class="text-center" style="width:80px;">{$item['merchantname']}</td>
+                        <td class="text-center" style="width:80px;">{$item['agentname']}</td>
+                        <td class="goods-info line-feed" style="width:100px;padding-left: 10px;">
+                            <div class="img" style="display: inline-block;"><img width="50" height="50" class="oscrollLoading" src="{php echo tomedia($item['avatar'])}" data-url="{php echo tomedia($item['avatar'])}"></div>
+                            <div class="title" style="display: inline-block;position: relative;top: 1rem;">
+                                <span>{$item['nickname']}</span><br />
+                                <span>{$item['mobile']}</span>
+                            </div>
+                        </td>
+                        <td class="text-center" style="width:80px;">
+                            <span class="label label-{$item['statusCss']}" style="margin-bottom: 10px;display: inline-block;">{$item['statusName']}</span>
+                            {if $item['paytype']==1}<br/><span class="label label-danger">余额支付</span>{/if}
+                            {if $item['paytype']==2}<br/><span class="label label-danger">微信支付</span>{/if}
+                            {if $item['paytype']==3}<br/><span class="label label-danger">支付宝</span>{/if}
+                            {if $item['paytype']==4}<br/><span class="label label-danger">货到付款</span>{/if}
+                            {if $item['paytype']==5}<br/><span class="label label-danger">小程序</span>{/if}
+                        </td>
+                        <td style="width:150px;">
+                            一级{if Customized::init('distributionText') > 0}共享股东{else}分销商{/if}:{$item['onename']} 佣金:{$item['onemoney']}
+                            {if $_W['wlsetting']['distribution']['ranknum']>1}
+                            <br/>二级{if Customized::init('distributionText') > 0}共享股东{else}分销商{/if}:{$item['twoname']} 佣金:{$item['twomoney']}
+                            {/if}
+                        </td>
+                        <td class="text-center" style="width:130px;">
+                           状态:{if $item['status'] == 0}<span class="text-primary">未结算</span>{else if $item['status'] == 1}<span class="text-warning">待结算</span>{else if $item['status'] == 2}<span class="text-info">已结算</span>{else if $item['status'] == 3}<span class="text-danger">已退款</span>{/if}
+                            {if $item['status'] == 0}
+                            <br/><a style="margin-bottom: 10px;display: inline-block;" href="{php echo web_url('distribution/dissysbase/cansett', array('id' => $item['id']))}" data-toggle="ajaxRemove" data-confirm="确定可结算此订单吗？">标记可结算</a>
+                            {else if $item['status'] == 2}
+                            <br/>结算时间:{php echo date('Y-m-d H:i:s',$item['setttime'])}
+                            {/if}
+                        </td>
+                    </tr>
+                    </tbody>
+                </table>
+            </div>
+            <div  class="panel-footer js-remark" {if empty($item['remark'])}style="display: none;"{/if}>
+                买家备注:{$item['remark']}
+            </div>
+            <div class="panel-footer js-admin-remark{$item['id']} js-admin-remark" order-id="{$item['id']}" {if empty($item['adminremark'])}style="display: none;"{/if} style="background-color:lightgoldenrodyellow">
+            卖家备注：<span id="js-admin-remark{$item['id']}" style="">{$item['adminremark']}</span>
+            </div>
+        </div>
+        {/loop}
+        <div class="app-table-foot clearfix">
+            <div class="pull-left">
+
+            </div>
+            <div class="pull-right">
+                {$pager}
+            </div>
+        </div>
+    </div>
+</div>
+{php include wl_template('common/footer');}

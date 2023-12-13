@@ -1,0 +1,114 @@
+{php include wl_template('common/header');}
+{if empty($_GPC['lct'])}
+<ul class="nav nav-tabs">
+	<li class="active"><a href="#">数据管理</a></li>
+</ul>
+{/if}
+<div class="app-content">
+	<div class="app-form">
+		<!-- 安装地区数据-->
+		<div class="panel panel-default">
+		    <div class="panel-heading">安装地区数据</div>
+		    <div class="panel-body">
+		        <div class="form-group">
+		            <label class="col-sm-2 control-label">使用说明</label>
+		            <div class="col-sm-9">
+		                <div class="help-block">使用前，请先安装地区数据，如您已执行过地区数据可不用重复执行</div>
+		            </div>
+		        </div>
+		        <div class="form-group">
+		        	<label class="col-sm-2 control-label"></label>
+		            <div class="col-sm-9">
+		                <button type="button" class="btn btn-w-m btn-primary" onclick="location.href='{php echo web_url('cloud/database/areadata',array('type'=>'install'))}'">安装地区数据</button>
+		                <button type="button" class="btn btn-w-m btn-danger" onclick="location.href='{php echo web_url('cloud/database/areadata',array('type'=>'clear'))}'">清空地区数据</button>
+		            </div>
+		        </div>
+		    </div>
+		</div>
+		<!-- 数据更新-->
+		<div class="panel panel-default margin-t-20">
+		    <div class="panel-heading">数据更新</div>
+		    <div class="panel-body">
+		        <div class="form-group">
+		            <label class="col-sm-2 control-label">使用说明</label>
+		            <div class="col-sm-9">
+		                <div class="help-block">当您由于缺少字段导致系统错误时，请执行一次数据更新</div>
+						<button type="button" class="btn btn-w-m btn-primary" onclick="upgrade_db()">数据更新</button>
+		            </div>
+		        </div>
+		    </div>
+		</div>
+		<!--<div class="panel panel-default margin-t-20">-->
+			<!--<div class="panel-heading">上传修复</div>-->
+			<!--<div class="panel-body">-->
+				<!--<div class="form-group">-->
+					<!--<label class="col-sm-2 control-label">使用说明</label>-->
+					<!--<div class="col-sm-9">-->
+						<!--<div class="help-block">当您由于代理或商户后台无法上传，显示图片时，请执行一次修复</div>-->
+						<!--<a href="{php echo web_url('cloud/database/permission')}" class="btn btn-w-m btn-primary">修复上传</a>-->
+					<!--</div>-->
+				<!--</div>-->
+			<!--</div>-->
+		<!--</div>-->
+		{if file_exists(PATH_MODULE . 'check.php')}
+		<!--生成数据更新文件-->
+		<div class="panel panel-default margin-t-20">
+			<div class="panel-heading">生成数据库更新文件</div>
+			<div class="panel-body">
+				<div class="form-group">
+					<label class="col-sm-2 control-label">更新文件</label>
+					<div class="col-sm-9">
+						{if file_exists(PATH_CORE . "common/dbfile.php")}
+						<div class="help-block">已生成，最近生成时间：<span class="label label-warning">{php echo date('Y-m-d H:i:s', filemtime(PATH_CORE . "common/dbfile.php"))}</span></div>
+						{else}
+						<div class="help-block">未生成数据库更新文件</div>
+						{/if}
+						<a href="{php echo web_url('cloud/database/upgrade_file')}" class="btn btn-w-m btn-primary">生成更新文件</a>
+					</div>
+				</div>
+			</div>
+		</div>
+		{/if}
+		<div class="upgrade-modal-page">
+			<div class="upgrade-modal-mask">
+				<div class="upgrade-modal">
+					<div>
+						<img src="{URL_WEB_RESOURCE}images/upgrade.png"/>
+					</div>
+					<div class="progress">
+						<div class="progress-bar" role="progressbar" aria-valuenow="0" aria-valuemin="0" aria-valuemax="100">0%</div>
+					</div>
+					<div class="upgrade-modal-tip">
+						系统正在为您更新数据库，请耐心等待~~~
+					</div>
+				</div>
+			</div>
+		</div>
+	</div>
+</div>
+<script>
+	function upgrade_db() {
+		var db = function() {
+			$.post("{php echo web_url('cloud/auth/upgrade_db');}", function (data) {
+				if(data.errno == 0){
+					$('.upgrade-modal-page').show();
+					upgrade_pragress(data.data.success/data.data.total*100);
+					db();
+				} else if (data.errno == 1) {
+					$('.upgrade-modal-page').hide();
+					tip.alert('数据更新成功', function () {
+						//location.href = "{php echo web_url('cloud/database/datemana');}";
+						location.reload();
+					});
+				}
+			},'json');
+		};
+		db();
+	}
+
+	function upgrade_pragress(pragress) {
+		$('.progress-bar').css('width', pragress + '%');
+		$('.progress-bar').html(pragress.toFixed(2) + '%');
+	}
+</script>
+{php include wl_template('common/footer');}

@@ -1,0 +1,167 @@
+{php include wl_template('common/header');}
+<style type='text/css'>
+    .order-rank img{width:16px; height:16px;}
+    .js-remark,.js-admin-remark{word-break:break-all; overflow:hidden; background: #FDEEEE;color: #ED5050;padding: 5px 10px;}
+    td.goods-info{position:relative; padding-left:60px;height: 60px;}
+    .goods-info .img{position:absolute;top:50%; margin-top:-25px; background: url({IMAGE_LOADING}) center center no-repeat; width:50px;height:50px; }
+    .goods-info span {white-space: nowrap;overflow: hidden;text-overflow: ellipsis;display: block;}
+    .status-text{cursor:pointer;}
+</style>
+<ul class="nav nav-tabs">
+    <li class="active"><a href="javascript:;">小区列表</a></li>
+</ul>
+<div class="app-content">
+    <div class="app-filter">
+        <div class="filter-action">
+            <a href="{php echo web_url('house/House/apartmentEdit')}" class="btn btn-primary">添加小区</a>
+        </div>
+        <div class="filter-list">
+            <form action="" method="get" class="form-horizontal" role="form" id="form1">
+                <input type="hidden" name="c" value="site" />
+                <input type="hidden" name="a" value="entry" />
+                <input type="hidden" name="m" value="{MODULE_NAME}" />
+                <input type="hidden" name="p" value="house" />
+                <input type="hidden" name="ac" value="House" />
+                <input type="hidden" name="do" value="apartmentList" />
+
+
+                <div class="form-group">
+                    <div class="col-sm-2 control-label">小区名称</div>
+                    <div class="col-sm-9">
+                        <input type="text" class="form-control" name="name" value="{$name}" placeholder="请输入小区名称">
+                    </div>
+                </div>
+
+                <div class="form-group">
+                    <label class="col-sm-2 control-label"></label>
+                    <div class="col-sm-9">
+                        <button class="btn btn-primary" id="search">筛选</button>
+                    </div>
+                </div>
+            </form>
+        </div>
+    </div>
+    <div class="app-table-list">
+        <div class="panel-body table-responsive collapse in order-list" id="order-template-item-4" style="padding: 0;">
+            <table class="table table-hover table-bordered">
+                <thead style="background-color: #FFFFFF;">
+                <tr>
+                    <th width="5%" class="text-center"><input type="checkbox" name="checkall" value="" id="checkall" class="checkboxall" onclick="var ck = this.checked; $(':checkbox').each(function(){this.checked = ck});"/></th>
+                    <th width="10%" style="text-align:center;">ID</th>
+                    <th width="35%" style="text-align:center;">小区信息</th>
+                    <!--<th width="15%" style="text-align:center;">商户名称</th>-->
+                    <!--<th width="15%" style="text-align:center;">封面图片</th>-->
+                    <th width="10%" style="text-align:center;">均价(元/㎡)</th>
+                    <th width="20%" style="text-align:center;">详细地址</th>
+                    <!--<th width="15%" style="text-align:center;">一级区域</th>-->
+                    <!--<th width="15%" style="text-align:center;">二级区域</th>-->
+                    <th width="20%" style="text-align:center;">操作</th>
+                </tr>
+                </thead>
+                <tbody>
+                {loop $list $item}
+                <tr>
+                    <td><center><input type="checkbox" name="items[]" value="{$item['id']}" class="checkbox" /></center></td>
+                    <td class="text-center">{$item['id']}</td>
+                    <td class="goods-info line-feed">
+                        <div class="img"><img class="scrollLoading" src="{IMAGE_PIXEL}" data-url="{php echo tomedia($item['cover_image'])}" height="50" width="50" onerror="this.src='{IMAGE_NOPIC_SMALL}'" ></div>
+                        <div class="title" style="padding-left: 60px;">
+                            <span>{$item['name']}</span>
+                        </div>
+                    </td>
+                    <td class="text-center"><label class="label label-success">{$item['averageprice']}</label></td>
+                    <td class="text-center">{$item['address']}</td>
+                    <!--<td class="text-center">{$pid_name_arr[$item['area_one_id']]}</td>-->
+                    <!--<td class="text-center">{$pid_name_arr[$item['area_two_id']]}</td>-->
+                    <td class="text-center" style="position: relative;">
+                        <p style="color: #428bca;display: inline-block;"><a class="js-clip" data-url="{php echo h5_url('pages/subPages2/houseproperty/residentialdetails/residentialdetails',['id'=>$item['id']])}" href="javascript:;">复制链接</a></p>
+                        <p style="color: #428bca;display: inline-block;"><a class="js-clip" data-url="pages/subPages2/houseproperty/residentialdetails/residentialdetails?&id={$item['id']}" href="javascript:;">复制路径</a></p>
+                        <p style="color: #428bca;display: inline-block;"><a href="{php echo web_url('house/House/apartmentEdit', array('id' => $item['id']))}">编辑</a> </p>
+                        <p style="color: #428bca;display: inline-block;"><a href="{php echo web_url('house/House/apartmentDel', array('ids'=>($item['id'])))}" data-toggle="ajaxRemove" data-confirm="确定删除此小区？">删除</a></p>
+                    </td>
+                </tr>
+                {/loop}
+                </tbody>
+            </table>
+        </div>
+        <div class="app-table-foot clearfix">
+            <div class="pull-left">
+                <button class="btn btn-default btn-sm" type="button" onclick="location.reload();"><i class="fa fa-refresh"></i></button>
+                <!--<div class="btn-group btn-group-sm">-->
+                <!--    <button  class="btn btn-default" disabled="disabled" id="checkYse" onclick="checkOrDelete(1);">批量上架</button>-->
+                <!--    <button  class="btn btn-default" disabled="disabled" id="checkNo" onclick="checkOrDelete(0);">批量下架</button>-->
+                <!--</div>-->
+                <button class="btn btn-default btn-sm" type="button" disabled="disabled" id="delete" onclick="checkOrDelete(4);"><i class="fa fa-trash"></i> 批量删除</button>
+            </div>
+            <div class="pull-right">
+                {$pager}
+            </div>
+        </div>
+    </div>
+
+
+</div>
+<script>
+
+    function checkOrDelete(check){
+        var content = '';
+        if(check==1) content = '确认上架选中小区信息？';
+        if(check==0) content = '确认下架选中小区信息？';
+        if(check==4) content = '确认把选中的小区数据删除？';
+        layer.open({
+            title: [
+                '提示',
+                'background-color:#18A689; color:#fff;'
+            ]
+            ,anim: 'up'
+            ,content: content
+            ,btn: ['确认', '取消']
+            ,yes:function(index){
+                $('.layer-anim').remove();
+                var ids = [];
+                var $checks=$('.checkbox:checkbox:checked');
+                $checks.each(function() {
+                    if (this.checked) {
+                        ids.push(this.value);
+                    };
+                });
+                //处理
+                $.post("{php echo web_url('house/House/apartmentDel')}", { ids : ids ,status:check}, function(data){
+                    if(!data.errno){
+                        util.tips("操作成功！");
+                        location.reload();
+                    }else{
+                        util.tips(data.message);
+                    };
+                }, 'json');
+            }
+        });
+    }
+
+    $(function(){
+        $('.checkbox,.checkboxall').click(function(){
+            var $checks=$('.checkbox:checkbox:checked');
+            $('#check').attr('disabled','');
+            if($checks.length>0) {
+                $('#checkYse').attr('disabled',false);
+                $('#checkNo').attr('disabled',false);
+                $('#delete').attr('disabled',false);
+            }else{
+                $('#checkYse').attr('disabled',true);
+                $('#checkNo').attr('disabled',true);
+                $('#delete').attr('disabled',true);
+            }
+        });
+
+        //驳回申请理由
+        $('.rejectdis').click(function(){
+            var appid = $(this).attr('appid');
+            $('.js-order-id-post').attr("order-id",appid);
+            popwin = $('#modal-module-gift22').modal();
+        });
+
+
+
+    });
+</script>
+{php include wl_template('common/footer');}

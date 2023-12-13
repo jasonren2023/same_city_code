@@ -1,0 +1,330 @@
+{php include wl_template('common/header');}
+<div class="app-content">
+	<ul class="nav nav-tabs" id="myTab">
+		<li class="active"><a href="#tab_basic">基本设置</a></li>
+		<li><a href="#tab_top">价格设置</a></li>
+		<!--<li><a href="#tab_redpaper">红包设置</a></li>-->
+		<li><a href="#tab_share">分享设置</a></li>
+		<!--<li><a href="#tab_kefu">管理员设置</a></li>-->
+	</ul>
+	<div class="app-form">
+		<form action="" method="post" class="form-horizontal form form-validate">
+			<div class="panel panel-default">
+				<div class="panel-body">
+					<div class="tab-content">
+						<div class="tab-pane active" id="tab_basic">
+							<div class="panel-heading">模块设置</div>
+							<div class="form-group">
+								<label class="col-sm-2 control-label">房产开关</label>
+								<div class="col-sm-9">
+									<label class="radio-inline">
+										<input type="radio" value="1" name="data[status]" {if $data['status']==1} checked {/if}>启用
+									</label>
+									<label class="radio-inline">
+										<input type="radio" value="0" name="data[status]" {if $data['status']==0} checked {/if}>禁用
+									</label>
+								</div>
+							</div>
+							<div class="form-group">
+								<label class="col-sm-2 control-label">免审核</label>
+								<div class="col-sm-9">
+									<label class="radio-inline">
+										<input type="radio" value="1" name="data[passstatus]" {if $data['passstatus']==1} checked {/if}>启用
+									</label>
+									<label class="radio-inline">
+										<input type="radio" value="0" name="data[passstatus]" {if $data['passstatus']==0} checked {/if}>禁用
+									</label>
+									<span class="help-block">开启后发布免审核</span>
+								</div>
+							</div>
+							<div class="form-group">
+								<label class="col-sm-2 control-label">会员查阅</label>
+								<div class="col-sm-9">
+									<label class="radio-inline">
+										<input type="radio" value="1" name="data[vipsee]" {if $data['vipsee']==1} checked {/if}>启用
+									</label>
+									<label class="radio-inline">
+										<input type="radio" value="0" name="data[vipsee]" {if $data['vipsee']==0} checked {/if}>禁用
+									</label>
+									<span class="help-block">开启后仅会员可以查阅房源信息页面。</span>
+								</div>
+							</div>
+						</div>
+						<div class="tab-pane" id="tab_top">
+							<!--<div class="panel-heading">价格设置</div>
+							<div class="form-group">
+								<label class="col-sm-2 control-label">发布新房价格</label>
+								<div class="col-sm-9">
+									<div class="bigdata" style="margin-top: 10px;">
+										<div class="input-group data-item">
+											<span class="input-group-addon">非会员</span>
+											<input type="hidden" name="vipleid[]" class="form-control" value="no">
+											<input type="number" min="0" name="vipprice[]" class="form-control" value="{$viparray1['no']}">
+											<span class="input-group-addon">元(最多保留两位小数)</span>
+										</div>
+									</div>
+									<div class="bigdata" style="margin-top: 10px;">
+										<div class="input-group data-item">
+											<span class="input-group-addon">[{$_W['wlsetting']['halflevel']['name']}]</span>
+											<input type="hidden" name="vipleid[]" class="form-control" value="0">
+											<input type="number" min="0" name="vipprice[]" class="form-control" value="{$viparray1[0]}">
+											<span class="input-group-addon">元(最多保留两位小数)</span>
+										</div>
+									</div>
+									{loop $levels $lpr}
+									<div class="bigdata" style="margin-top: 10px;">
+										<div class="input-group data-item">
+											<span class="input-group-addon">[{$lpr['name']}]</span>
+											<input type="hidden" name="vipleid[]" class="form-control" value="{$lpr['id']}">
+											<input type="number" min="0" name="vipprice[]" class="form-control" value="{$viparray1[$lpr['id']]}">
+											<span class="input-group-addon">元(最多保留两位小数)</span>
+										</div>
+									</div>
+									{/loop}
+									<span class="help-block">价格不填或填0即为免费发布，价格保留两位小数。</span>
+								</div>
+							</div>-->
+							<div class="form-group">
+								<label class="col-sm-2 control-label">发布二手房价格</label>
+								<div class="col-sm-9">
+									<div class="bigdata" style="margin-top: 10px;">
+										<div class="input-group data-item">
+											<span class="input-group-addon">非会员</span>
+											<input type="hidden" name="vipleid2[]" class="form-control" value="no">
+											<input type="number" min="0" name="vipprice2[]" class="form-control" value="{$viparray2['no']}">
+											<span class="input-group-addon">元(最多保留两位小数)</span>
+										</div>
+									</div>
+									<div class="bigdata" style="margin-top: 10px;">
+										<div class="input-group data-item">
+											<span class="input-group-addon">[{$_W['wlsetting']['halflevel']['name']}]</span>
+											<input type="hidden" name="vipleid2[]" class="form-control" value="0">
+											<input type="number" min="0" name="vipprice2[]" class="form-control" value="{$viparray2[0]}">
+											<span class="input-group-addon">元(最多保留两位小数)</span>
+										</div>
+									</div>
+									{loop $levels $lpr}
+									<div class="bigdata" style="margin-top: 10px;">
+										<div class="input-group data-item">
+											<span class="input-group-addon">[{$lpr['name']}]</span>
+											<input type="hidden" name="vipleid2[]" class="form-control" value="{$lpr['id']}">
+											<input type="number" min="0" name="vipprice2[]" class="form-control" value="{$viparray2[$lpr['id']]}">
+											<span class="input-group-addon">元(最多保留两位小数)</span>
+										</div>
+									</div>
+									{/loop}
+									<span class="help-block">价格不填或填0即为免费发布，价格保留两位小数。</span>
+								</div>
+							</div>
+							<div class="form-group">
+								<label class="col-sm-2 control-label">发布租房价格</label>
+								<div class="col-sm-9">
+									<div class="bigdata" style="margin-top: 10px;">
+										<div class="input-group data-item">
+											<span class="input-group-addon">非会员</span>
+											<input type="hidden" name="vipleid3[]" class="form-control" value="no">
+											<input type="number" min="0" name="vipprice3[]" class="form-control" value="{$viparray3['no']}">
+											<span class="input-group-addon">元(最多保留两位小数)</span>
+										</div>
+									</div>
+									<div class="bigdata" style="margin-top: 10px;">
+										<div class="input-group data-item">
+											<span class="input-group-addon">[{$_W['wlsetting']['halflevel']['name']}]</span>
+											<input type="hidden" name="vipleid3[]" class="form-control" value="0">
+											<input type="number" min="0" name="vipprice2[]" class="form-control" value="{$viparray3[0]}">
+											<span class="input-group-addon">元(最多保留两位小数)</span>
+										</div>
+									</div>
+									{loop $levels $lpr}
+									<div class="bigdata" style="margin-top: 10px;">
+										<div class="input-group data-item">
+											<span class="input-group-addon">[{$lpr['name']}]</span>
+											<input type="hidden" name="vipleid3[]" class="form-control" value="{$lpr['id']}">
+											<input type="number" min="0" name="vipprice3[]" class="form-control" value="{$viparray3[$lpr['id']]}">
+											<span class="input-group-addon">元(最多保留两位小数)</span>
+										</div>
+									</div>
+									{/loop}
+									<span class="help-block">价格不填或填0即为免费发布，价格保留两位小数。</span>
+								</div>
+							</div>
+						</div>
+						<div class="tab-pane" id="tab_share">
+							<div class="panel-heading">分享设置</div>
+							<div class="alert alert-info">
+								<b>适用模板变量：[昵称] [时间] [系统名称]</b>
+							</div>
+							<div class="form-group">
+								<label class="col-sm-2 control-label">分享标题</label>
+								<div class="col-sm-9">
+									<input type="text" name="data[share_title]" class="form-control" value="{$data['share_title']}" />
+								</div>
+							</div>
+							<div class="form-group">
+								<label class="col-sm-2 control-label">分享图片</label>
+								<div class="col-sm-9">
+									{php echo attachment_select('data[share_image]', $data['share_image']);}
+									<span class="help-block">推荐图片尺寸500X500</span>
+								</div>
+							</div>
+							<div class="form-group">
+								<label class="col-sm-2 control-label">分享描述</label>
+								<div class="col-sm-9">
+									<input type="text" name="data[share_desc]" class="form-control" value="{$data['share_desc']}" />
+								</div>
+							</div>
+						</div>
+				</div>
+			</div>
+	</div>
+	<div class="form-group">
+		<label class="col-sm-2 control-label"></label>
+		<div class="col-sm-9">
+			<input type="submit" name="submit" value="提交" class="btn btn-primary min-width" />
+			<input type="hidden" name="token" value="{$_W['token']}" />
+		</div>
+	</div>
+	</form>
+</div>
+</div>
+<script>
+    $('.dede').delegate('.deteblack','click',function(e){
+        e.stopPropagation();
+        var mid = $(this).attr('inmid');
+        util.nailConfirm(this, function(state) {
+            if(!state) return;
+            $.post("{php echo web_url('pocket/Tiezi/deteblack')}", { mid : mid }, function(data){
+                if(!data.errno){
+                    util.tips("取消成功！");
+                    location.reload();
+                }else{
+                    util.tips(data.msg);
+                };
+            }, 'json');
+        }, {html: '确认把该用户取消黑名单?'});
+    });
+    $(function() {
+        window.optionchanged = false;
+        $('#myTab a').click(function(e) {
+            e.preventDefault(); //阻止a链接的跳转行为
+            $(this).tab('show'); //显示当前选中的链接及关联的content
+        })
+    });
+    var kw = 1;
+    function addType() {
+        $(".btn-add-type").button("loading");
+        $.ajax({
+            url: "{php echo web_url('house/BasicSetting/newhouseprice')}&kw="+kw,
+            cache: false
+        }).done(function (html) {
+            $(".btn-add-type").button("reset");
+            $("#datas").append(html);
+        });
+        kw++;
+    }
+    var kw2 = 1;
+    function addType2() {
+        $(".btn-add-type").button("loading");
+        $.ajax({
+            url: "{php echo web_url('house/BasicSetting/rentingprice')}&kw="+kw2,
+            cache: false
+        }).done(function (html) {
+            $(".btn-add-type").button("reset");
+            $("#datas2").append(html);
+        });
+        kw2++;
+    }
+    var kw3 = 1;
+    function addType3() {
+        $(".btn-add-type").button("loading");
+        $.ajax({
+            url: "{php echo web_url('house/BasicSetting/oldhouseprice')}&kw="+kw3,
+            cache: false
+        }).done(function (html) {
+            $(".btn-add-type").button("reset");
+            $("#datas3").append(html);
+        });
+        kw3++;
+    }
+    var nums = 1;
+    function addReds() {
+        $(".btn-add-type").button("loading");
+        $.ajax({
+            url: "{php echo web_url('pocket/BasicSetting/redEnvelopes')}&kw="+nums,
+            cache: false
+        }).done(function (html) {
+            $(".btn-add-type").button("reset");
+            $("#redEnvelopes").append(html);
+        });
+        nums++;
+    }
+    function removes(asd){
+        $(asd).closest('.data-item').remove();
+    }
+    function search_members() {
+        if( $.trim($('#search-kwd').val())==''){
+            Tip.focus('#search-kwd','请输入关键词');
+            return;
+        }
+
+        $("#module-menus").html("正在搜索....")
+        $.get('{php echo web_url('store/register/add',array('op'=>'selectnickname'))}', {
+            keyword: $.trim($('#search-kwd').val())
+        }, function(dat){
+            $('#module-menus').html(dat);
+        });
+    }
+    function select_member(o) {
+        $("#openid").val(o.openid);
+        $("#saler").val(o.nickname);
+        $('#search-kwd').val(o.nickname)
+        $('#module-menus').html('');
+        $("#modal-module-menus").modal("hide");
+    }
+    //监听搜索框是否启用
+    $("[name='search']").change(function () {
+        var val = $(this).val();
+        if(val == 1){
+            $(".form-group.search_float").hide();
+            $(".form-group.search_bgColor").hide();
+        }else{
+            $(".form-group.search_float").show();
+            if($("[name='search_float']:checked").val() == 1){
+                $(".form-group.search_bgColor").show();
+            }else{
+                $(".form-group.search_bgColor").hide();
+            }
+        }
+    });
+    //监听搜索框是否浮动
+    $("[name='search_float']").change(function () {
+        var val = $(this).val();
+        if(val == 1){
+            $(".form-group.search_bgColor").show();
+        }else{
+            $(".form-group.search_bgColor").hide();
+        }
+    });
+    //监听红包是否开启
+    $("[name='is_openRed']").change(function () {
+        var val = $(this).val();
+        if(val == 1){
+            $("#redSetList").removeClass("hide");
+            $("#redSetList").show();
+        }else{
+            $("#redSetList").hide();
+        }
+    });
+    //判断 浏览增量 最小值是否小于最大值
+    $('[name="data[maxup]"],[name="data[minup]"]').on('change',function () {
+        let minup = $('[name="data[minup]"]').val();
+        let maxup = $('[name="data[maxup]"]').val();
+        console.log(minup,maxup);
+        if(parseInt(minup) > parseInt(maxup)){
+            tip.alert('最小值不能大于最大值',function () {
+                $('[name="data[minup]"]').val(0);
+            });
+        }
+    });
+</script>
+{php include wl_template('common/footer');}

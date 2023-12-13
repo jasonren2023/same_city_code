@@ -1,0 +1,53 @@
+<?xml version="1.0" encoding="utf-8"?>
+<manifest>
+	<application>
+		<name><![CDATA[黄页114]]></name>
+		<identifie><![CDATA[yellowpage]]></identifie>
+		<version><![CDATA[1.0.0]]></version>
+		<type><![CDATA[interact]]></type>
+		<description><![CDATA[身边服务一目了然，尽在黄页114]]></description>
+		<author><![CDATA[微连科技]]></author>
+		<url><![CDATA[http://www.weliam.cn/]]></url>
+	</application>
+	<setting>
+		<agent embed="true" />
+		<system embed="true" />
+		<task embed="true" />
+	</setting>
+	<agentmenu>
+		<menu title="黄页" font="fa-inbox">
+			<entry title="黄页管理" ac="yellowpage" do="page_lists" actions='["do",["page_lists","page_lists"]]' iscover="true"/>
+			<entry title="黄页分类" ac="yellowpage" do="cate_lists" actions='["do",["cate_lists","cate_edit"]]' />
+		</menu>
+		<menu title="付费" font="fa-inbox">
+			<entry title="套餐管理" ac="yellowpage" do="meal_lists" actions='["do",["meal_lists","meal_edit"]]' />
+			<entry title="付费记录" ac="yellowpage" do="order_lists" actions='["do",["order_lists"]]' />
+		</menu>
+		<menu title="其他" font="fa-inbox">
+			<entry title="认领管理" ac="yellowpage" do="claim_lists" actions='["do",["claim_lists"]]' />
+			<entry title="纠错管理" ac="yellowpage" do="correction_lists" actions='["do",["correction_lists"]]' />
+			<entry title="举报管理" ac="yellowpage" do="report_lists" actions='["do",["report_lists"]]' />
+		</menu>
+		<menu title="设置" font="fa-inbox">
+			<entry title="黄页设置" ac="yellowpage" do="setting" />
+		</menu>
+	</agentmenu>
+	<systemmenu>
+		<menu title="黄页" font="fa-inbox">
+			<entry title="黄页管理" ac="yellowpage" do="page_lists" actions='["do",["page_lists","page_lists"]]' iscover="true"/>
+			<entry title="黄页分类" ac="yellowpage" do="cate_lists" actions='["do",["cate_lists","cate_edit"]]' />
+		</menu>
+		<menu title="付费" font="fa-inbox">
+			<entry title="套餐管理" ac="yellowpage" do="meal_lists" actions='["do",["meal_lists","meal_edit"]]' />
+			<entry title="付费记录" ac="yellowpage" do="order_lists" actions='["do",["order_lists"]]' />
+		</menu>
+		<menu title="其他" font="fa-inbox">
+			<entry title="认领管理" ac="yellowpage" do="claim_lists" actions='["do",["claim_lists"]]' />
+			<entry title="纠错管理" ac="yellowpage" do="correction_lists" actions='["do",["correction_lists"]]' />
+			<entry title="举报管理" ac="yellowpage" do="report_lists" actions='["do",["report_lists"]]' />
+		</menu>
+		<menu title="设置" font="fa-inbox">
+			<entry title="黄页设置" ac="yellowpage" do="setting" />
+		</menu>
+	</systemmenu>
+</manifest>

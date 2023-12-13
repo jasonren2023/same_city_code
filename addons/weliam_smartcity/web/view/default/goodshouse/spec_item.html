@@ -1,0 +1,27 @@
+{if empty($item)}
+{php $attId = bin2hex(random_bytes(15));}
+<div class="spec_item_item" style="float:left;margin:5px;width:250px; position: relative">
+	<input type="hidden" class="form-control spec_item_show" name="spec_item_show_{$spec['id']}[]" value="{$specitem['show']}" />
+	<input type="hidden" class="form-control spec_item_id" name="spec_item_id_{$spec['id']}[]" value="{$specitem['id']}" />
+	
+	<div class="input-group">
+		<span class="input-group-addon">
+			<input style="display:inline-block" type="checkbox" {if $specitem['show']==1}checked{/if} value="1" onclick='showItem(this)'>
+		</span>
+		<input type="text" class="form-control spec_item_title" name="spec_item_title_{$spec['id']}[]" VALUE="{$specitem['title']}" />
+		{if empty($goods['pftid'])}
+		<span class="input-group-addon">
+			<a href="javascript:;" onclick="removeSpecItem(this)" title='删除'><i class="fa fa-times"></i></a>
+		</span>
+		{/if}
+	</div>
+</div>
+{else}
+   <div class="multi-item" style='float:left' >
+        <img class="img-responsive img-thumbnail" src='{php echo tomedia($specitem['thumb'])}' onerror="this.src='./resource/images/nopic.jpg'; this.title='图片未找到.'">
+        <div class='img-nickname'>{$specitem['title']}</div>
+ </div>
+{/if}
+
+
+

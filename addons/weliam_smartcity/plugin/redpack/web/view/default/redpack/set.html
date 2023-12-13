@@ -1,0 +1,83 @@
+{php include wl_template('common/header');}
+<ul class="nav nav-tabs" id="myTab">
+	<li class="active"><a href="#tab_basic">基本设置</a></li>
+	<li ><a href="#tab_share">分享设置</a></li>
+</ul>
+<div class="app-content">
+	<div class="app-form">
+			<form action="" method="post" class="form-horizontal form-validate" id="setting-form">
+				<div class="panel panel-default">
+					<div class="panel-heading">基本设置</div>
+					<div class="panel-body">
+						<div class="tab-content">
+							<div class="tab-pane active" id="tab_basic">
+								<div class="form-group">
+									<label class="col-sm-2 control-label">是否开启红包</label>
+									<div class="col-xs-12 col-sm-8">
+										<div class="radio radio-success radio-inline">
+											<input type="radio" id="inlineRadioo2" name="set[switch]" value="0" {if $set['switch'] != 1}checked="checked"{/if}>
+											<label for="inlineRadioo2">关闭 </label>
+										</div>
+										<div class="radio radio-success radio-inline">
+											<input type="radio" id="inlineRadioo1" name="set[switch]" value="1" {if $set['switch'] == 1}checked="checked"{/if}>
+											<label for="inlineRadioo1">开启 </label>
+										</div>
+									</div>
+								</div>
+								<div class="form-group">
+									<label class="col-sm-2 control-label">关闭红包弹窗再次弹出时间</label>
+									<div class="col-sm-9">
+										<div class="input-group">
+											<input type="number" min="0" name="set[intervalmin]" class="form-control" value="{$set['intervalmin']}">
+											<span class="input-group-addon">分钟</span>
+										</div>
+										<span class="help-block">用户关闭首页领取红包弹出框后再次弹出的间隔时间，填0或不填默认为180分钟。</span>
+									</div>
+								</div>
+							</div>
+							<div class="tab-pane" id="tab_share">
+								<div class="alert alert-info">
+									<b>适用模板变量：[昵称] [时间] [系统名称]</b>
+								</div>
+								<div class="form-group">
+									<label class="col-sm-2 control-label">分享标题</label>
+									<div class="col-sm-9">
+										<input type="text" name="set[share_title]" class="form-control" value="{$set['share_title']}" />
+									</div>
+								</div>
+								<div class="form-group">
+									<label class="col-sm-2 control-label">分享图片</label>
+									<div class="col-sm-9">
+										{php echo attachment_select('set[share_image]', $set['share_image']);}
+									</div>
+								</div>
+								<div class="form-group">
+									<label class="col-sm-2 control-label">分享描述</label>
+									<div class="col-sm-9">
+										<input type="text" name="set[share_desc]" class="form-control" value="{$set['share_desc']}" />
+									</div>
+								</div>
+							</div>
+						</div>
+					</div>
+				</div>
+				<div class="form-group">
+					<label class="col-sm-2 control-label"></label>
+					<div class="col-sm-9">
+						<input type="submit" name="submit" value="提交" class="btn btn-primary min-width" />
+						<input type="hidden" name="token" value="{$_W['token']}" />
+					</div>
+				</div>
+			</form>
+	</div>
+</div>
+<script>
+	$(function() {
+		window.optionchanged = false;
+		$('#myTab a').click(function(e) {
+			e.preventDefault(); //阻止a链接的跳转行为
+			$(this).tab('show'); //显示当前选中的链接及关联的content
+		})
+	});
+</script>
+{php include wl_template('common/footer');}

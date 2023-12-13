@@ -1,0 +1,136 @@
+{php include wl_template('common/header');}
+<style type='text/css'>
+    .order-rank img{width:16px; height:16px;}
+    .js-remark,.js-admin-remark{word-break:break-all; overflow:hidden; background: #FDEEEE;color: #ED5050;padding: 5px 10px;}
+    td.goods-info{position:relative; padding-left:60px;}
+    .goods-info .img{position:absolute;top:50%; margin-top:-25px; background: url({IMAGE_LOADING}) center center no-repeat; width:50px;height:50px; }
+    .goods-info span {white-space: nowrap;overflow: hidden;text-overflow: ellipsis;display: block;}
+    .status-text{cursor:pointer;}
+</style>
+<ul class="nav nav-tabs">
+    <li class="active"><a href="{php echo wl_filter_url('status:0');}">服务商列表</a></li>
+</ul>
+<div class="app-content">
+    <div class="app-filter">
+        <div class="filter-list">
+            <form action="" method="get" class="form-horizontal" role="form" id="form1">
+                <input type="hidden" name="c" value="site" />
+                <input type="hidden" name="a" value="entry" />
+                <input type="hidden" name="m" value="{MODULE_NAME}" />
+                <input type="hidden" name="p" value="housekeep" />
+                <input type="hidden" name="ac" value="KeepWeb" />
+                <input type="hidden" name="do" value="storelist" />
+                <input type="hidden" name="status" value="{$_GPC['status']}" />
+                <div class="form-group">
+                    <label class="col-sm-2 control-label">关键字</label>
+                    <div class="col-md-3">
+                        <select name="keywordtype" class="form-control">
+                            <option value="">关键字类型</option>
+                            <option value="1" {if $_GPC['keywordtype']==1}selected="selected"{/if}>商户名</option>
+                            <option value="2" {if $_GPC['keywordtype']==2}selected="selected"{/if}>商户电话</option>
+                            <option value="3" {if $_GPC['keywordtype']==3}selected="selected"{/if}>店长姓名</option>
+                            <option value="4" {if $_GPC['keywordtype']==4}selected="selected"{/if}>店长电话</option>
+                            <option value="5" {if $_GPC['keywordtype']==5}selected="selected"{/if}>服务类目</option>
+                        </select>
+                    </div>
+                    <div class="col-md-4">
+                        <input type="text" name="keyword" class="form-control" value="{$_GPC['keyword']}"  placeholder="请输入关键字"/>
+                    </div>
+                </div>
+                <div class="form-group">
+                    <label class="col-sm-2 control-label"></label>
+                    <div class="col-sm-9">
+                        <button class="btn btn-primary" id="search">筛选</button>
+                    </div>
+                </div>
+            </form>
+        </div>
+    </div>
+    <div class="app-table-list">
+        <div class="panel-body table-responsive collapse in order-list" id="order-template-item-4" style="padding: 0;">
+            <table class="table table-hover table-bordered">
+                <thead style="background-color: #FFFFFF;">
+                <tr>
+                    <th width="5%" style="text-align:center;">ID</th>
+                    <th width="15%">商户</th>
+                    <th width="15%" style="text-align:center;">服务类目</th>
+                    {if $_W['wlsetting']['attestation']['switch'] > 0}
+                    <th width="10%" style="text-align:center;">认证</th>
+                    {/if}
+                    <th width="15%" style="text-align:center;">店长</th>
+                    <th width="10%" style="text-align:center;">所属套餐</th>
+                    <th width="10%" style="text-align:center;">时间</th>
+                    <th width="10%" style="text-align:center;">状态</th>
+                    <th width="10%" style="text-align:center;">操作</th>
+                </tr>
+                </thead>
+                <tbody>
+                {loop $list $item}
+                <tr>
+                    <td class="text-center">{$item['id']}</td>
+                    <td class="goods-info line-feed">
+                        <div class="img"><img class="scrollLoading" src="{IMAGE_PIXEL}" data-url="{php echo tomedia($item['logo'])}" height="50" width="50" onerror="this.src='{IMAGE_NOPIC_SMALL}'" ></div>
+                        <div class="title" style="padding-left: 60px;">
+                            <span>{$item['storename']}</span>
+                            <span>{$item['mobile']}</span>
+                        </div>
+                    </td>
+                    <td class="text-center">
+                        {loop $item['levelarray'] $key $it}
+                        <span class="label {if $key%2 == 0} label-success {else if $key%3 == 0} label-info {else} label-warning {/if}">{$it['title']}</span>
+                        {/loop}
+                    </td>
+                    {if  $_W['wlsetting']['attestation']['switch'] > 0}
+                    <td class="text-center">
+                        {if $item['attestation']['attestation'] > 0}
+                        <img  title="已认证" src="../../../../addons/{MODULE_NAME}/plugin/housekeep/web/resource/image/arwebrz.png" height="30" width="30" >
+                        {else}
+                        <img  title="未认证" src="../../../../addons/{MODULE_NAME}/plugin/housekeep/web/resource/image/webrz.png" height="30" width="30" >
+                        {/if}
+                        {if $item['attestation']['bondflag'] > 0}
+                        <img  title="已缴纳保证金" src="../../../../addons/{MODULE_NAME}/plugin/housekeep/web/resource/image/arwebbzj.png" height="30" width="30" >
+                        {else}
+                        <img  title="未缴纳保证金" src="../../../../addons/{MODULE_NAME}/plugin/housekeep/web/resource/image/webbzj.png" height="30" width="30" >
+                        {/if}
+                    </td>
+                    {/if}
+                    <td class="text-center">
+                        <span>{$item['realname']}</span><br/>
+                        <span>{$item['tel']}</span>
+                    </td>
+                    <td class="text-center">
+                        {if $item['groupname']}<label class="label label-success">{$item['groupname']}</label>{/if}
+                    </td>
+                    <td class="text-center">
+                        <span>入驻：{php echo date('Y-m-d',$item['createtime'])}</span><br/>
+                        <span>到期：{php echo date('Y-m-d',$item['endtime'])}</span>
+                    </td>
+                    <td class="text-center">
+                        {if $item['enabled']==0}<label class="label label-primary">待入驻</label>
+                        {elseif $item['enabled']==1}<label class="label label-success">入驻中</label>
+                        {elseif $item['enabled']==2}<label class="label label-warning">暂停中</label>
+                        {elseif $item['enabled']==3}<label class="label label-danger">已到期</label>
+                        {elseif $item['enabled']==4}<label class="label label-danger">可彻底删除</label>
+                        {/if}
+                    </td>
+                    <td class="text-center" style="position: relative;">
+                        <p style="color: #428bca;display: inline-block;"><a href="{php echo web_url('store/merchant/edit',array('id'=>$item['id'],'houseflag'=>1))}">编辑</a> </p>
+                        <p style="color: #428bca;display: inline-block;"><a href="{php echo web_url('housekeep/KeepWeb/closeStore', array('id'=>$item['id']))}" data-toggle="ajaxRemove" data-confirm="确定关闭服务商的家政服务？关闭后只能在商户详情页面重新开启。">关闭</a></p>
+                    </td>
+                </tr>
+                {/loop}
+                </tbody>
+            </table>
+        </div>
+        <div class="app-table-foot clearfix">
+            <div class="pull-right">
+                {$pager}
+            </div>
+        </div>
+    </div>
+</div>
+
+
+
+
+{php include wl_template('common/footer');}

@@ -1,0 +1,89 @@
+{php include wl_template('common/header');}
+<ul class="nav nav-tabs" id="myTab">
+	<li class="active"><a href="#tab_basic">文字设置</a></li>
+</ul>
+<div class="app-content">
+<div class="app-form">
+	<form action="" method="post" class="form-horizontal form form-validate" id="setting-form">
+		<div class="panel panel-default">
+			<div class="panel-heading">文字设置</div>
+			<div class="tab-content">
+				<div class="form-group">
+					<label class="col-sm-2 control-label">文字</label>
+					<div class="col-sm-9">
+						<div class="input-group">
+							<span class="input-group-addon">积分=</span>
+							<input type="text" name="data[credittext]" class="form-control" value="{$settings['credittext']}">
+							<span class="input-group-addon">余额=</span>
+							<input type="text" name="data[moneytext]" class="form-control" value="{$settings['moneytext']}">
+						</div>
+						{if p('halfcard')}
+						<div class="input-group">
+							<span class="input-group-addon">一卡通=</span>
+							<input type="text" name="data[halfcardtext]" class="form-control valid" placeholder="一卡通" value="{$settings['halfcardtext']}">
+							<span class="input-group-addon">特权=</span>
+							<input type="text" name="data[privilege]" class="form-control valid" placeholder="特权" value="{$settings['privilege']}">
+							<span class="input-group-addon">立即开通=</span>
+							<input type="text" name="data[hljkttext]" class="form-control valid" placeholder="立即开通" value="{$settings['hljkttext']}">
+							<span class="input-group-addon">立即续费=</span>
+							<input type="text" name="data[hljxftext]" class="form-control valid" placeholder="立即续费" value="{$settings['hljxftext']}">
+						</div>
+						{/if}
+						{if p('distribution')}
+						<div class="input-group">
+							<span class="input-group-addon">{if Customized::init('distributionText') > 0}共享股东{else}分销{/if}=</span>
+							<input type="text" name="data[fxtext]" class="form-control valid" placeholder="{if Customized::init('distributionText') > 0}共享股东{else}分销{/if}" value="{$settings['fxtext']}">
+							<span class="input-group-addon">客户=</span>
+							<input type="text" name="data[xxtext]" class="form-control valid" placeholder="客户" value="{$settings['xxtext']}">
+							<span class="input-group-addon">上级=</span>
+							<input type="text" name="data[sjtext]" class="form-control valid" placeholder="上级" value="{$settings['sjtext']}">
+						</div>
+						<div class="input-group">
+							<span class="input-group-addon">佣金=</span>
+							<input type="text" name="data[yjtext]" class="form-control valid" placeholder="佣金" value="{$settings['yjtext']}">
+							<span class="input-group-addon">{if Customized::init('distributionText') > 0}共享股东{else}分销商{/if}=</span>
+							<input type="text" name="data[fxstext]" class="form-control valid" placeholder="{if Customized::init('distributionText') > 0}共享股东{else}分销商{/if}" value="{$settings['fxstext']}">
+							<span class="input-group-addon">我的海报=</span>
+							<input type="text" name="data[myposter]" class="form-control valid" placeholder="我的海报" value="{$settings['myposter']}">
+						</div>
+						<div class="input-group">
+							<span class="input-group-addon">使用流程=</span>
+							<input type="text" name="data[shiylctext]" class="form-control valid" placeholder="使用流程" value="{$settings['shiylctext']}">
+							<span class="input-group-addon">价格说明=</span>
+							<input type="text" name="data[jiagsmext]" class="form-control valid" placeholder="价格说明" value="{$settings['jiagsmext']}">
+						</div>
+						{/if}
+						<div class="input-group">
+							{if p('citydelivery')}
+							<span class="input-group-addon">商城=</span>
+							<input type="text" name="data[shangchengtext]" class="form-control valid" placeholder="商城" value="{$settings['shangchengtext']}">
+							<span class="input-group-addon">码科=</span>
+							<input type="text" name="data[maketext]" class="form-control valid" placeholder="码科" value="{$settings['maketext']}">
+							{/if}
+							<span class="input-group-addon">买单=</span>
+							<input type="text" name="data[maidantext]" class="form-control valid" placeholder="买单" value="{$settings['maidantext']}">
+						</div>
+					</div>
+				</div>
+			</div>
+		</div>
+		<div class="form-group">
+			<label class="col-sm-2 control-label"></label>
+			<div class="col-sm-9">
+				<input type="submit" name="submit" value="提交" class="btn btn-primary min-width" />
+				<input type="hidden" name="token" value="{$_W['token']}" />
+			</div>
+		</div>
+	</form>
+</div>
+</div>
+<script>
+$(function () {
+		window.optionchanged = false;
+		$('#myTab a').click(function (e) {
+			e.preventDefault();//阻止a链接的跳转行为
+			$(this).tab('show');//显示当前选中的链接及关联的content
+		})
+	});
+</script>
+{php include wl_template('common/footer');}

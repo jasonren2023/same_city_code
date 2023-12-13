@@ -1,0 +1,81 @@
+{php include wl_template('common/header');}
+<ul class="nav nav-tabs">
+    <li class="active"><a href="javascript:;">广告管理</a></li>
+</ul>
+<div class="app-content">
+    <div class="app-filter">
+        <div class="filter-action">
+            <a href="{php echo web_url('taxipay/taxipay/adv_edit')}" class="btn btn-primary">添加广告</a>
+        </div>
+    </div>
+    <div class="app-table-list">
+        {if !empty($lists)}
+        <div class="table-responsive">
+            <table class="table table-hover table-bordered">
+                <thead>
+                    <tr>
+                        <th class="text-center"><input type="checkbox" /></th>
+                        <th class="text-center">排序</th>
+                        <th class="text-center">广告名称</th>
+                        <th class="text-center">图片</th>
+                        <th class="text-center">总费用</th>
+                        <th class="text-center">每日单人次</th>
+                        <th class="text-center">计费人数/计费次数</th>
+                        <th class="text-center">状态</th>
+                        <th class="text-center">操作</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    {loop $lists $list}
+                    <tr class="text-center">
+                        <td>
+                            <input type="checkbox" value="{$list['id']}" />
+                        </td>
+                        <td>
+                            {$list['sort']}
+                        </td>
+                        <td>
+                            {$list['title']}
+                        </td>
+                        <td>
+                            <img class="scrollLoading" src="{php echo tomedia($list['thumb'])}" data-url="{php echo tomedia($list['thumb'])}" height="50">
+                        </td>
+                        <td>
+                            ￥{$list['cost']}
+                        </td>
+                        <td>
+                            {$list['cost_one']}
+                        </td>
+                        <td>
+                            {$list['adv_uv']}/{$list['adv_pv']}
+                        </td>
+                        <td>
+                            <span class='label {if $list['status']==1}label-primary{else}label-default{/if}'>
+                            {if $list['status']==1}启用{else}禁用{/if}</span>
+                        </td>
+                        <td>
+                            <a class="btn btn-sm btn-success" href="{php echo web_url('taxipay/taxipay/adv_log', array('id' => $list['id']))}">计费记录</a>
+                            <a class="btn btn-sm btn-primary" href="{php echo web_url('taxipay/taxipay/adv_edit', array('id' => $list['id']))}">编辑</a>
+                            <a class="btn btn-sm btn-danger"  data-toggle="ajaxRemove" href="{php echo web_url('taxipay/taxipay/adv_del', array('id' => $list['id']))}" data-confirm="确定删除当前广告？">删除</a>
+                        </td>
+                    </tr>
+                    {/loop}
+                </tbody>
+            </table>
+        </div>
+        <div class="app-table-foot clearfix">
+            <div class="pull-left">
+                <button class="btn btn-default" type="button" data-toggle='batch-remove' data-confirm="确定删除当前选择的广告？" data-href="{php echo web_url('taxipay/taxipay/adv_del')}">批量删除</button>
+            </div>
+            <div class="pull-right">
+                {$pager}
+            </div>
+        </div>
+        {else}
+        <div class="no-result">
+            <p>还没有相关数据</p>
+        </div>
+        {/if}
+    </div>
+</div>
+{php include wl_template('common/footer');}

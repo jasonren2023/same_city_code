@@ -1,0 +1,169 @@
+<!--------------------------  轮播图组件群  ----------------------------------->
+<!-- 风格一 -->
+<script type="text/html" id="tpl_edit_banner">
+    <div class="form-group">
+        <div class="col-sm-2 control-label">按钮形状</div>
+        <div class="col-sm-9">
+            <label class="radio-inline"><input type="radio" name="dotstyle" value="rectangle" class="diy-bind" data-bind-child="style" data-bind="dotstyle" <%if style.dotstyle=='rectangle'%>checked="checked"<%/if%> > 长方形</label>
+            <label class="radio-inline"><input type="radio" name="dotstyle" value="square" class="diy-bind" data-bind-child="style" data-bind="dotstyle" <%if style.dotstyle=='square'%>checked="checked"<%/if%>> 正方形</label>
+            <label class="radio-inline"><input type="radio" name="dotstyle" value="round" class="diy-bind" data-bind-child="style" data-bind="dotstyle" <%if style.dotstyle=='round'%>checked="checked"<%/if%>> 圆形</label>
+        </div>
+    </div>
+    <div class="form-group">
+        <div class="col-sm-2 control-label">按钮位置</div>
+        <div class="col-sm-9">
+            <label class="radio-inline"><input type="radio" name="dotalign" value="left" class="diy-bind" data-bind-child="style" data-bind="dotalign" <%if style.dotalign=='left'%>checked="checked"<%/if%> > 居左</label>
+            <label class="radio-inline"><input type="radio" name="dotalign" value="center" class="diy-bind" data-bind-child="style" data-bind="dotalign" <%if style.dotalign=='center'%>checked="checked"<%/if%>> 居中</label>
+            <label class="radio-inline"><input type="radio" name="dotalign" value="right" class="diy-bind" data-bind-child="style" data-bind="dotalign" <%if style.dotalign=='right'%>checked="checked"<%/if%>> 居右</label>
+        </div>
+    </div>
+    <div class="form-group">
+        <div class="col-sm-2 control-label">左右边距</div>
+        <div class="col-sm-9">
+            <label class="radio-inline"><input type="radio" name="side_margin" value="0" class="diy-bind" data-bind-child="style" data-bind="side_margin" <%if style.side_margin!='1'%>checked="checked"<%/if%> >无边距</label>
+            <label class="radio-inline"><input type="radio" name="side_margin" value="1" class="diy-bind" data-bind-child="style" data-bind="side_margin" <%if style.side_margin=='1'%>checked="checked"<%/if%>>有边距</label>
+        </div>
+    </div>
+    <div class="form-group">
+        <div class="col-sm-2 control-label">下边距</div>
+        <div class="col-sm-9">
+            <div class="form-group">
+                <div class="slider col-sm-8" data-value="<%style.bottom%>" data-min="0" data-max="30"></div>
+                <div class="col-sm-9 control-labe count"><span><%style.bottom%></span>px(像素)</div>
+                <input class="diy-bind input" data-bind-child="style" data-bind="bottom" value="<%style.bottom%>" type="hidden" />
+            </div>
+        </div>
+    </div>
+    <div class="form-group">
+        <div class="col-sm-2 control-label">图片比例</div>
+        <div class="col-sm-9">
+            <div class="input-group">
+                <span class="input-group-addon">宽</span>
+                <input class="form-control diy-bind"  data-bind-child="params" data-bind="img_width" value="<%params.img_width%>" type="number"/>
+                <span class="input-group-addon">高</span>
+                <input class="form-control diy-bind"  data-bind-child="params" data-bind="img_height" value="<%params.img_height%>" type="number"/>
+            </div>
+        </div>
+    </div>
+    <div class="indent form-items" data-min="1">
+        <div class="inner" id="form-items">
+            <%each data as child itemid %>
+            <div class="item" data-id="<%itemid%>">
+                <span class="btn-del" title="删除"></span>
+                <div class="item-image">
+                    <img src="<%imgsrc child.imgurl%>" onerror="this.src='../addons/{MODULE_NAME}/web/resource/images/nopic.jpg';" id="pimg-<%itemid%>" />
+                </div>
+                <div class="item-form">
+                    <div class="input-group" style="margin-bottom:0px; ">
+                        <input type="text" class="form-control diy-bind" data-bind-parent="data" data-bind-child="<%itemid%>" data-bind="imgurl"  id="cimg-<%itemid%>" placeholder="请选择图片或输入图片地址" value="<%child.imgurl%>" />
+                        <span class="input-group-addon btn btn-default" data-toggle="selectAttachment" data-input="#cimg-<%itemid%>" data-img="#pimg-<%itemid%>">选择图片</span>
+                    </div>
+                    <div class="input-group" style="margin-top:10px; margin-bottom:0px; ">
+                        <input type="text" class="form-control diy-bind" readonly="readonly"  data-bind-parent="data" data-bind-child="<%itemid%>" data-bind="linkurl" id="curl-<%itemid%>" placeholder="请选择链接或输入链接地址" value="<%child.linkurl%>" />
+                        <span class="input-group-addon btn btn-default" data-toggle="selectUrl" data-input="#curl-<%itemid%>">选择链接</span>
+                    </div>
+                </div>
+                <div class="tips-text">推荐图片比例750*560</div>
+            </div>
+            <%/each%>
+        </div>
+        <div class="btn btn-w-m btn-block btn-default btn-outline" id="addChild"><i class="fa fa-plus"></i> 添加一个</div>
+    </div>
+</script>
+<!-- 风格二 -->
+<script type="text/html" id="tpl_edit_banner2">
+    <div class="form-group">
+        <div class="col-sm-2 control-label">背景颜色</div>
+        <div class="col-sm-9">
+            <div class="input-group input-group-sm">
+                <input class="form-control diy-bind color" data-bind-child="style" data-bind="bgColor" value="<%style.bgColor%>" type="color" />
+                <span class="input-group-addon btn btn-default" onclick="$(this).prev().val('#ffffff').trigger('propertychange')">重置</span>
+            </div>
+        </div>
+    </div>
+    <div class="form-group">
+        <div class="col-sm-2 control-label">下边距</div>
+        <div class="col-sm-9">
+            <div class="form-group">
+                <div class="slider col-sm-8" data-value="<%style.marginBottom%>" data-min="0" data-max="30"></div>
+                <div class="col-sm-9 control-labe count"><span><%style.marginBottom%></span>px(像素)</div>
+                <input class="diy-bind input" data-bind-child="style" data-bind="marginBottom" value="<%style.marginBottom%>" type="hidden" />
+            </div>
+        </div>
+    </div>
+    <div class="form-group">
+        <div class="col-sm-2 control-label">标题</div>
+        <div class="col-sm-9">
+            <div class="form-group">
+                <input class="form-control diy-bind"  data-bind-child="params" data-bind="title" placeholder="请输入标题名称" value="<%params.title%>"/>
+            </div>
+        </div>
+    </div>
+    <div class="form-group">
+        <div class="col-sm-2 control-label">副标题</div>
+        <div class="col-sm-9">
+            <div class="form-group">
+                <input class="form-control diy-bind" data-bind-child="params" data-bind="text" placeholder="请输入副标题内容" value="<%params.text%>" />
+            </div>
+        </div>
+    </div>
+    <div class="form-group">
+        <div class="col-sm-2 control-label">图片比例</div>
+        <div class="col-sm-9">
+            <div class="input-group">
+                <span class="input-group-addon">宽</span>
+                <input class="form-control diy-bind"  data-bind-child="params" data-bind="img_width" value="<%params.img_width%>"/>
+                <span class="input-group-addon">高</span>
+                <input class="form-control diy-bind"  data-bind-child="params" data-bind="img_height" value="<%params.img_height%>"/>
+            </div>
+        </div>
+    </div>
+    <div class="line"></div>
+    <div class="form-group form-inline">
+        <div class="col-sm-2 control-label">标题颜色</div>
+        <div class="col-sm-9">
+            <div class="input-group input-group-sm">
+                <span class="input-group-addon">上标题</span>
+                <input class="form-control diy-bind color with100" data-bind-child="style" data-bind="titlecolor" value="<%style.titlecolor%>" type="color" />
+                <span class="input-group-addon btn btn-default" onclick="$(this).prev().val('#ffffff').trigger('propertychange')">重置</span>
+            </div>
+            <div class="input-group input-group-sm">
+                <span class="input-group-addon">下标题</span>
+                <input class="form-control diy-bind color with100" data-bind-child="style" data-bind="textcolor" value="<%style.textcolor%>" type="color" />
+                <span class="input-group-addon btn btn-default" onclick="$(this).prev().val('#666666').trigger('propertychange')">重置</span>
+            </div>
+        </div>
+    </div>
+    <div class="form-items indent" data-min="2">
+        <div class="inner" id="form-items">
+            <%each data as child itemid %>
+            <div class="item" data-id="<%itemid%>">
+                <span class="btn-del" title="删除"></span>
+                <div class="item-image">
+                    <img src="<%imgsrc child.imgurl%>" onerror="this.src='../addons/{MODULE_NAME}/web/resource/images/nopic.jpg';" id="pimg-<%itemid%>" />
+                </div>
+                <div class="item-form">
+                    <div class="input-group" style="margin-bottom:0px; ">
+                        <span class="input-group-addon">上标题</span>
+                        <input type="text" class="form-control diy-bind" data-bind-parent="data" data-bind-child="<%itemid%>" data-bind="title" placeholder="请输入上标题" value="<%child.title%>" />
+                        <span class="input-group-addon" style="border-right: 0; border-left: 0;">下标题</span>
+                        <input type="text" class="form-control diy-bind" data-bind-parent="data" data-bind-child="<%itemid%>" data-bind="text" placeholder="请输入下标题" value="<%child.text%>" />
+                    </div>
+                    <div class="input-group" style="margin-top:10px; margin-bottom:0px; ">
+                        <input type="text" class="form-control diy-bind" data-bind-parent="data" data-bind-child="<%itemid%>" data-bind="imgurl"  id="cimg-<%itemid%>" placeholder="请选择图片或输入图片地址" value="<%child.imgurl%>" />
+                        <span class="input-group-addon btn btn-default" data-toggle="selectAttachment" data-input="#cimg-<%itemid%>" data-img="#pimg-<%itemid%>">选择图片</span>
+                    </div>
+                    <div class="input-group" style="margin-top:10px; margin-bottom:0px; ">
+                        <input type="text" class="form-control diy-bind" readonly="readonly"  data-bind-parent="data" data-bind-child="<%itemid%>" data-bind="linkurl" id="curl-<%itemid%>" placeholder="请选择链接或输入链接地址" value="<%child.linkurl%>" />
+                        <span class="input-group-addon btn btn-default" data-toggle="selectUrl" data-input="#curl-<%itemid%>">选择链接</span>
+                    </div>
+                </div>
+                <div class="tips-text">推荐图片比例600*300</div>
+            </div>
+            <%/each%>
+        </div>
+        <div class="btn btn-w-m btn-block btn-default btn-outline" id="addChild"><i class="fa fa-plus"></i> 添加一个</div>
+    </div>
+
+    <div class="alert alert-warning" style="margin-top: 10px; margin-bottom: 0;">注意：如果上标题 、下标题为空则不显示</div>
+</script>

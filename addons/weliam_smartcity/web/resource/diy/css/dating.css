@@ -1,0 +1,180 @@
+/****************************************** 相亲交友组件样式 *************************************************************/
+/*统计*/
+.dating_statistics{
+    padding: 10px;
+    float: left;
+    width: 100%;
+}
+.dating_statistics .block{
+    float: left;
+    width: calc((100% - 20px) / 2);
+    margin: 0 5px;
+    border-radius: 15px;
+    height: 90px;
+    position: relative;
+}
+.dating_statistics .block .number{
+    margin-left: 15px;
+    margin-top: 20px;
+    font-size: 25px;
+    font-weight: bold;
+    height: 25px;
+    line-height: 25px;
+}
+.dating_statistics .block .title{
+    padding-left: 15px;
+    height: 20px;
+    line-height: 20px;
+    font-size: 15px;
+    margin-top: 10px;
+}
+.dating_statistics .block .img{
+    max-width: 35px;
+    max-height: 35px;
+    position: absolute;
+    right: 15px;
+    bottom: 15px;
+}
+.dating_statistics .block .img img{
+    width: 100%;
+    height: 100%;
+}
+/*会员*/
+.drag .dating_user{
+    padding-bottom: 0px!important;
+    float: left;
+    width: 100%;
+}
+.dating_user .block{
+    float: left;
+    width: calc((100% - 20px) / 2);
+    margin: 0 5px 10px 5px;
+    border-radius: 15px;
+    position: relative;
+    overflow: hidden;
+    background-color: #F8F8F8;
+}
+.dating_user .block .img{
+    height: 190px;
+    width: 100%;
+    position: relative;
+}
+.dating_user .block .img img{
+    width: 100%;
+    height: 100%;
+}
+.dating_user .block .img .top{
+    position: absolute;
+    top: 10px;
+    left: 10px;
+    background: #F65D17;
+    border-radius: 8px;
+    width: 55px;
+    text-align: center;
+    height: 20px;
+    font-size: 13px;
+    line-height: 18px;
+    color: #FFF;
+}
+.dating_user .block .img .top i{
+    font-size: 13px;
+    margin-right: 3px;
+    line-height: 19px;
+}
+.dating_user .block .img .pv{
+    position: absolute;
+    top: 5px;
+    right: 10px;
+    color: #FFF;
+    font-size: 13px;
+    text-align: center;
+}
+.dating_user .block .img .pv i{
+    font-size: 25px;
+    display: block;
+    line-height: 25px;
+}
+.dating_user .block .img .address{
+    position: absolute;
+    right: 10px;
+    bottom: 10px;
+    background-color: #ECEBEC;
+    border-radius: 7px;
+    padding: 0 8px;
+    font-size: 13px;
+    opacity: .8;
+    overflow: hidden;
+    white-space: nowrap;
+    text-overflow: ellipsis;
+    max-width: 80%;
+}
+.dating_user .block .img .address i{
+    font-size: 13px;
+}
+.dating_user .block .info .userInfo{
+    height: 35px;
+    line-height: 35px;
+    padding: 0 10px;
+}
+.dating_user .block .info .userInfo .name{
+    font-size: 17px;
+    font-weight: bold;
+    float: left;
+    max-width: calc(100% - 95px);
+    height: 100%;
+    overflow: hidden;
+}
+.dating_user .block .info .userInfo .age{
+    float: left;
+    height: 20px;
+    margin: 7px 5px 0 5px;
+    line-height: 19px;
+    font-size: 13px;
+    border-radius: 50px;
+    padding: 0 7px;
+    color: #FFF;
+}
+.dating_user .block .info .userInfo .male{
+    background-color: #0084FF;
+}
+.dating_user .block .info .userInfo .female{
+    background-color: #FE83AF;
+}
+.dating_user .block .info .userInfo .female i{
+    transform: rotate(  30deg) skew(  0deg);
+    display: inline-block;
+}
+.dating_user .block .info .userInfo .age i{
+    font-size: 13px;
+}
+.dating_user .block .info .userInfo .vip{
+    background-color: #DCC083;
+    float: left;
+    height: 20px;
+    margin: 7px 0 0 0;
+    line-height: 21px;
+    font-size: 13px;
+    border-radius: 50px;
+    padding: 0 9px;
+    color: #FFF;
+    text-align: center;
+}
+.dating_user .block .info .vehicleHouse{
+    line-height: 35px;
+}
+.dating_user .block .info .vehicleHouse .vehicleHouseBlock{
+    float: left;
+    height: 20px;
+    background-color: #FFFFFF;
+    line-height: 20px;
+    margin-right: 5px;
+    border-radius: 50px;
+    padding: 0 5px;
+    font-size: 13px;
+    text-align: center;
+    margin-left: 10px;
+    margin-bottom: 10px;
+}
+.dating_user .block .info .vehicleHouse .vehicleHouseBlock i{
+    font-size: 13px;
+}

@@ -1,0 +1,244 @@
+{php include wl_template('common/header');}
+<ul class="nav nav-tabs">
+    <li class="active"><a href="javascript:;">头条分类</a></li>
+</ul>
+<div class="app-content">
+    <div class="app-filter">
+        <div class="filter-action">
+            <a href="javascript:;" id="create_page" class="btn btn-primary addClass">新建一级分类</a>
+        </div>
+        <div class="filter-list">
+            <form class="form-horizontal" action="{php echo web_url('headline/headline/index')}" method="post">
+                <div class="form-group">
+                    <div class="col-sm-2 control-label">分类名称</div>
+                    <div class="col-sm-9">
+                        <input type="text" class="form-control" name="name" value="{$name}" placeholder="请输入分类名称">
+                    </div>
+                </div>
+                <div class="form-group">
+                    <div class="col-sm-2 control-label"></div>
+                    <div class="col-sm-6">
+                        <div class="input-group">
+                            <button class="btn btn-primary" type="submit" >搜索</button>
+                        </div>
+                    </div>
+                </div>
+            </form>
+        </div>
+    </div>
+    <div class="app-table-list">
+        <div id="list" class="panel tab-pane panel-default">
+            <div class="table-responsive">
+                <table class="table table-hover table-bordered">
+                    <thead>
+                    <tr>
+                        <th class="text-center" style="width:40%">分类</th>
+                        <th class="text-center" style="width:10%">排序</th>
+                        <th class="text-center" style="width:10%">状态</th>
+                        <th class="text-center" style="width:40%">操作</th>
+                    </tr>
+                    </thead>
+                    <tbody>
+                    {loop $list $k $v}
+                        <tr class="text-center">
+                            <td class="name text-left">
+                                <a  data-href="{php echo web_url('headline/headline/editField',array('id'=>$v['id'],'field'=>'name'))}" href="javascript:;" title="修改名称" data-toggle="ajaxEdit">{$v['name']}</a>
+                            </td>
+                            <td class="sort">
+                                {$v['sort']}
+                            </td>
+                            <td >
+                                {if $v['state'] == 1}
+                                <span class="label label-success">开启</span>
+                                {else}
+                                <span class="label label-danger">禁用</span>
+                                {/if}</td>
+                            <td>
+                                {if p('wxplatform')}
+                                <a class="btn btn-sm btn-info js-clip" href="javascript:;" data-url="{php echo h5_url('pages/mainPages/headline/index',['type'=>13,'cate_two'=>0,'title' => $v['name'],'cate_one'=>$v['id']])}" >复制链接</a>
+                                {/if}
+                                {if p('wxapp')}
+                                <a class="btn btn-sm btn-success js-clip" href="javascript:;" data-url="pages/mainPages/headline/index?cate_one={$v['id']}&type=13&cate_two=0&title={$v['name']}" >复制路径</a>
+                                {/if}
+                                <a class="btn btn-sm btn-warning editButton" href="javascript:;"  name="{$v['name']}" sort="{$v['sort']}"  head_id="{$v['head_id']}" classid="{$v['id']}" state="{$v['state']}">编辑</a>
+                                <a class="btn btn-sm btn-success addClass" onename = "{$v['name']}" oneid="{$v['id']}" >添加子分类</a>
+                                <a class="btn btn-sm btn-danger"  data-toggle="ajaxRemove" href="{php echo web_url('headline/headline/delClass',array('id'=>$v['id']))}" data-confirm="确定删除当前分类?{if !$v['headname']}删除后当前菜单下的所有菜单将失去上级菜单!{/if}">删除</a>
+                            </td>
+                        </tr>
+                        {loop $v['footer'] $index $item}
+                            <tr class="text-center">
+                                <td class="name text-left">
+                                    <a href="javascript:;" style="padding-left: 80px">
+                                        <span style="color: #CCC;">|——</span>
+                                        <span class="className" data-href="{php echo web_url('headline/headline/editField',array('id'=>$item['id'],'field'=>'name'))}" title="修改名称" data-toggle="ajaxEdit">{$item['name']}</span>
+                                    </a>
+                                </td>
+                                <td class="sort">
+                                    {$item['sort']}
+                                </td>
+                                <td>
+                                    {if $item['state'] == 1}
+                                    <span class="label label-success">开启</span>
+                                    {else}
+                                    <span class="label label-danger">禁用</span>
+                                    {/if}</td>
+                                <td>
+                                    {if p('wxplatform')}
+                                    <a class="btn btn-sm btn-info js-clip" href="javascript:;" data-url="{php echo h5_url('pages/mainPages/headline/index',['type'=>13,'cate_two'=>$item['id'],'title' => $item['name'],'cate_one'=>$item['head_id']])}" >复制链接</a>
+                                    {/if}
+                                    {if p('wxapp')}
+                                    <a class="btn btn-sm btn-success js-clip" href="javascript:;" data-url="pages/mainPages/headline/index?cate_one={$item['head_id']}&type=13&cate_two={$item['id']}&title={$item['name']}" >复制路径</a>
+                                    {/if}
+                                    <a class="btn btn-sm btn-warning editButton" href="javascript:;" name="{$item['name']}" onename="{$v['name']}" sort="{$item['sort']}" head_id="{$item['head_id']}" classid="{$item['id']}" state="{$item['state']}">编辑</a>
+                                    <a class="btn btn-sm btn-danger"  data-toggle="ajaxRemove" href="{php echo web_url('headline/headline/delClass',array('id'=>$item['id']))}" data-confirm="确定删除当前分类?">删除</a>
+                                </td>
+                            </tr>
+                        {/loop}
+                    {/loop}
+                    </tbody>
+                </table>
+            </div>
+            <div class="app-table-foot clearfix">
+                <div class="pull-left">
+                </div>
+                <div class="pull-right">
+                    {$pager}
+                </div>
+            </div>
+        </div>
+    </div>
+    <!-- 添加修改 -->
+    <div id="addFrom" class="modal fade" style="z-index: 9999;"  aria-hidden="false">
+        <div class="modal-dialog">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <button data-dismiss="modal" class="close" type="button">×</button>
+                    <h4 class="modal-title">新建分类</h4>
+                </div>
+                <div class="modal-body form-horizontal">
+                    <div class="form-group">
+                        <div class="col-sm-2 control-label must">分类名称</div>
+                        <div class="col-sm-9">
+                            <input class="form-control" type="text" maxlength="10" name="name" placeholder="请输入分类名称" />
+                        </div>
+                    </div>
+                    <div class="form-group" id="onediv">
+                        <label class="col-sm-2 control-label must">上级分类</label>
+                        <div class="col-sm-9">
+                            <input class="form-control" type="text"   id="onename" disabled />
+                        </div>
+                    </div>
+                    <div class="form-group">
+                        <div class="col-sm-2 control-label must">分类排序</div>
+                        <div class="col-sm-9">
+                            <input class="form-control" min="1" type="number" name="sort" sorts="{php echo $total+1}" value="{php echo $total+1}" placeholder="请输入分类排序"/>
+                        </div>
+                    </div>
+                    <div class="form-group">
+                        <div class="col-sm-2 control-label must">分类状态</div>
+                        <div class="col-sm-9" id="inlineRadio">
+                            <label class="radio-inline" for="inlineRadio1">
+                                <input type="radio" id="inlineRadio1" name="state" value="1" checked>开启
+                            </label>
+                            <label class="radio-inline" for="inlineRadio2">
+                                <input type="radio" id="inlineRadio2" name="state" value="0">禁用
+                            </label>
+                        </div>
+                    </div>
+                </div>
+                <div class="modal-footer">
+                    <div class="btn btn-primary" id="yesAdd" classid="" oneid="">保存</div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+<script>
+    //提示内容
+    function tips(info) {
+        tip.msgbox.err(info);
+    }
+    //分类操作
+    $(".addClass").on('click',function () {
+        //初始化内容
+        $("#addFrom #yesAdd").attr("classid",'');
+        $("#addFrom #yesAdd").attr("oneid",'');
+
+        $("#addFrom [name='name']").val('');
+        $("#addFrom [name='sort']").val($("#addFrom [name='sort']").attr("sorts"));
+        $("#inlineRadio1").click();
+        $("#headID").val(0);
+        var oneid =  $(this).attr("oneid");
+        if(oneid > 0){
+            $('#onediv').show();
+            var onename =  $(this).attr("onename");
+            $('#onename').val(onename);
+            $("#yesAdd").attr('oneid',oneid);
+        }else{
+            $('#onediv').hide();
+        }
+        //弹出内容
+        $("#addFrom").modal();
+        //点击提交内容
+        $("#yesAdd").on("click",function () {
+            //获取内容
+            var id = $(this).attr("classid");
+            updateData(id);
+        });
+    });
+    //编辑操作
+    $(".editButton").on('click',function () {
+        $("#addFrom #yesAdd").attr("classid",$(this).attr("classid"));
+        $("#addFrom [name='name']").val($(this).attr("name"));
+        $("#addFrom [name='sort']").val($(this).attr("sort"));
+
+        var oneid =  $(this).attr("head_id");
+        if(oneid > 0){
+            $('#onediv').show();
+            var onename =  $(this).attr("onename");
+            $('#onename').val(onename);
+            $("#yesAdd").attr('oneid',oneid);
+        }else{
+            $('#onediv').hide();
+        }
+
+        if(($(this).attr("state")) == 1){
+            $("#inlineRadio1").click();
+        }else{
+            $("#inlineRadio2").click();
+        }
+        $("#headID").val($(this).attr("head_id"));
+        //弹出内容
+        $("#addFrom").modal();
+        //点击提交内容
+        $("#yesAdd").on("click",function () {
+            //获取内容
+            var id = $(this).attr("classid");
+            updateData(id);
+        });
+    });
+    //提交分类的信息数据
+    function updateData(id) {
+        //获取内容
+        var name    = $("#addFrom [name = 'name']").val();
+        var head_id = $("#yesAdd").attr('oneid');
+        var sort    = $("[name = 'sort']").val();
+        var state   = $("#inlineRadio :checked").val();
+        if(!name || !sort || !state){
+            tips("请完整填写内容!");
+            return false;
+        }
+        var data = {name:name,head_id:head_id,sort:sort,state:state};
+        $.post("{php echo web_url('headline/headline/editClass');}",{data:data,id:id}, function (res) {
+            if(res.errno == 0){
+                tips(res.message);
+            }else{
+                tip.msgbox.suc(res.message);
+                setTimeout(function () {
+                    location.reload();
+                }, 500);
+            }
+        }, 'json');
+    }
+</script>
+{php include wl_template('common/footer');}

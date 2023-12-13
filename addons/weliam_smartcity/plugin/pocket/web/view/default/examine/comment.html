@@ -1,0 +1,71 @@
+{php include wl_template('common/header');}
+<ul class="nav nav-tabs">
+	<li><a href="javascript:;">评论审核</a></li>
+</ul>
+<div class="app-content">
+	<div class="app-filter">
+		<div class="filter-action">
+			<a href="{php echo web_url('pocket/ToExamine/comment')}" class="btn {if $status > 0}btn-default{else}btn-primary{/if}">全部回复</a>
+			<a href="{php echo web_url('pocket/ToExamine/comment',['status'=>3])}" class="btn {if $status == 3}btn-primary{else}btn-default{/if}">待审核</a>
+			<a href="{php echo web_url('pocket/ToExamine/comment',['status'=>1])}" class="btn {if $status == 1}btn-primary{else}btn-default{/if}">已通过</a>
+			<a href="{php echo web_url('pocket/ToExamine/comment',['status'=>2])}" class="btn {if $status == 2}btn-primary{else}btn-default{/if}">未通过</a>
+		</div>
+		<div class="filter-list"></div>
+	</div>
+	<div class="app-table-list">
+		<div class="panel-body table-responsive collapse in" id="order-template-item-4" style="padding: 0;">
+			<table class="table table-bordered">
+				<thead>
+					<tr>
+						<th class="text-center"><input type="checkbox" /></th>
+						<th class="text-left">评论内容</th>
+						<th class="text-center">评论时间</th>
+						<th class="text-center">评论人</th>
+						<th class="text-center">状态</th>
+						<th class="text-center">操作</th>
+					</tr>
+				</thead>
+				<tbody >
+				{loop $list $item}
+					<tr class="text-center">
+						<td>
+							<input type="checkbox" value="{$item['id']}" />
+						</td>
+						<td class="text-left">{$item['content']}</td>
+						<td>{$item['createtime']}</td>
+						<td>{$item['nickname']}</td>
+						<td>
+							{if $item['status'] == 1}
+								<label class="label label-success">通过</label>
+							{elseif  $item['status'] == 2}
+								<label class="label label-danger">未通过</label>
+							{else}
+								<label class="label label-default">待审核</label>
+							{/if}
+						</td>
+						<td>
+							{if $item['status'] != 1 && $item['status'] != 2}
+								<a  href="{php echo web_url('pocket/ToExamine/commentToExamine',['ids'=>$item['id'],'status'=>1])}" data-toggle="ajaxPost" class="btn btn-sm btn-primary">通过</a>
+								<a  href="{php echo web_url('pocket/ToExamine/commentToExamine',['ids'=>$item['id'],'status'=>2])}" data-toggle="ajaxPost" class="btn btn-sm btn-warning">驳回</a>
+							{/if}
+							<a class="btn btn-sm btn-danger" data-toggle="ajaxRemove" href="{php echo web_url('pocket/ToExamine/delComment',['ids'=>$item['id']])}" data-confirm="确定删除当前评论?">删除</a>
+							<a href="{php echo web_url('pocket/Tiezi/details',['id'=>$item['tid']])}" class="btn btn-sm btn-info" >查看帖子</a>
+						</td>
+					</tr>
+				{/loop}
+				</tbody>
+			</table>
+		</div>
+		<div class="app-table-foot clearfix">
+			<div id="de1" class="pull-left">
+				<button class="btn btn-default" type="button" data-toggle='batch-remove' data-confirm="确定删除当前选择的评论？" data-href="{php echo web_url('pocket/ToExamine/delComment')}">批量删除</button>
+				<button class="btn btn-default" type="button" data-toggle='batch' data-href="{php echo web_url('pocket/ToExamine/commentToExamine',['status'=>1])}">批量通过</button>
+				<button class="btn btn-default" type="button" data-toggle='batch' data-href="{php echo web_url('pocket/ToExamine/commentToExamine',['status'=>2])}">批量驳回</button>
+			</div>
+			<div class="pull-right">
+				{$pager}
+			</div>
+		</div>
+	</div>
+</div>
+{php include wl_template('common/footer');}

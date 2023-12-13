@@ -1,0 +1,24 @@
+<!--------------------------  标题组件群  ----------------------------------->
+<!-- 风格一 -->
+<script type="text/html" id="tpl_show_title">
+    <div class="drag" data-itemid="<%itemid%>" group_name="<%group_name%>" group_key="<%group_key%>" data-id="<%group_name%>">
+        <div class="fui-title" style="margin-bottom: <%style.paddingBottom||5%>px;background: <%style.background||''%>; color: <%style.color||''%>;text-align: <%style.textalign||''%>; padding:5px;">
+            <%params.title||'请输入标题内容'%>
+        </div>
+        <%if params.link%>
+        <div class="fui-title-more"><%params.butname%><i class="icon icon-right"></i></div>
+        <%/if%>
+    </div>
+</script>
+<!-- 风格二 -->
+<script type="text/html" id="tpl_show_title2">
+    <div class="drag" data-itemid="<%itemid%>" group_name="<%group_name%>" group_key="<%group_key%>" data-id="<%group_name%>">
+        <div class="fui-title2" style="margin-bottom: <%style.marginBottom||1%>px;background-color: <%style.bgColor%>">
+            <div class="main_title" style="color: <%style.mainColor%>;text-align: <%style.mainAlign%>"><%params.mainText||'请输入标题内容'%></div>
+            <div class="vice_title" style="color: <%style.viceColor%>;text-align: <%style.mainAlign%>"><%params.viceText||'请输入副标题内容'%></div>
+        </div>
+        <%if params.link%>
+        <div class="fui-title2-more"><%params.butname%><i class="icon icon-right"></i></div>
+        <%/if%>
+    </div>
+</script>

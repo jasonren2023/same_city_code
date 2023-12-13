@@ -1,0 +1,245 @@
+{php include wl_template('common/header');}
+<style>
+	.express_main{border: 1px solid #f3f4f9;}
+	.express_body_top{background:#f4f5f9;padding:10px;}
+	.express_btn_out,.area_item{line-height: 34px;}
+	.area_item{padding-left: 130px;}
+	.express_btn_money{padding: 0 10px;}
+	.express_main_item{padding: 10px;border-bottom: 1px solid #f7f7f7;}
+	.express_main_item:last-child{border-bottom:0px;}
+	.express_modal .province{padding: 5px 10px;border: 1px solid #eee;color: #666666;white-space: nowrap;overflow: hidden;cursor: pointer;margin-bottom: 0;font-weight: normal;border-radius: 2px;}
+	.express_modal .province input{display:none;}
+	.modal-body{overflow:hidden;}
+	.express_modal .province_btn{margin-bottom: 9px;}
+	.area_selected{background: #44b549;color: #fff!important;border: 1px solid #44b549!important;}
+	.item_cell_box{display: flex;}
+	.item_cell_flex{-webkit-box-flex: 1;-webkit-flex: 1;-ms-flex: 1;flex: 1;}
+	.form-group{max-width: 1980px!important;}
+</style>
+<ul class="nav nav-tabs">
+	<li ><a href="{php echo web_url('order/orderFreightTemplate/freightlist')}">模板列表</a></li>
+	<li class="active"><a href="{php echo web_url('order/orderFreightTemplate/creatfreight')}">添加模板</a></li>
+</ul>
+<div class="app-content">
+	<div class="app-form">
+		<form method="post" action="" class="form-horizontal form form-validate">
+			<div class="form-group-title">运费模板</div>
+			<div class="form-group">
+				<label class="col-sm-1 control-label">运费名称</label>
+				<div class="col-sm-10">
+					<input type="text" class="form-control" name="expressname" value="{$info['name']}">
+					<p class="help-block"> 填入文字，便于辨识</p>
+				</div>
+			</div>
+			{if empty($_W['aid']) && !is_store()}
+			<div class="form-group">
+				<label class="col-sm-1 control-label">适用代理</label>
+				<div class="col-sm-10">
+					<select name="aid" class="form-control">
+						<option value="0"{if $info['aid'] == $agent['id'] }selected="selected"{/if}>总平台</option>
+						{loop $agents $agent}
+						<option value="{$agent['id']}"  {if $info['aid'] == $agent['id'] }selected="selected"{/if}>{$agent['agentname']}</option>
+						{/loop}
+					</select>
+				</div>
+			</div>
+			{/if}
+			<div class="form-group">
+				<label class="col-sm-1 control-label"></label>
+				<div class="col-sm-10 express_body">
+					<div class="express_body_top">
+						设置运费
+					</div>
+					<div class="express_main">
+						<div class="express_main_item">
+							<div class="item_cell_box">
+								<li class="item_cell_flex express_btn_out">默认区域</li>
+								<li class="express_btn_money input-group col-sm-10">
+									<span class="input-group-addon">下单量</span>
+									<input type="number" class="form-control" name="defaultnum" value="{$info['defaultnum']}">
+									<span class="input-group-addon">件内，邮费</span>
+									<input type="number" class="form-control" name="defaultmoney" value="{$info['defaultmoney']}">
+									<span class="input-group-addon">元，每增加</span>
+									<input type="number" class="form-control" name="defaultnumex" value="{$info['defaultnumex']}">
+									<span class="input-group-addon">件，加邮费</span>
+									<input type="number" class="form-control" name="defaultmoneyex" value="{$info['defaultmoneyex']}">
+									<span class="input-group-addon">元,订单满</span>
+									<input type="number" class="form-control" name="freenumber" value="{$info['freenumber']}">
+									<span class="input-group-addon">件包邮</span>
+								</li>
+							</div>
+						</div>
+						{if $info['expressarray']}
+						{loop $info['expressarray'] $list}
+						<div class="express_main_item">
+							<div class="item_cell_box">
+								<li class="item_cell_flex express_btn_out">
+									<a href="javascript:;" class="a_href edit_province" data-toggle="modal" data-target="#myModal">编辑地区 </a>
+									<input type="hidden" name="express[area][]" class="col-sm-2 area_value_input"  value="{$list['area']}" />
+									- <a href="javascript:;" class="delete_express">删除</a>
+								</li>
+								<li class="express_btn_money input-group col-sm-10">
+									<span class="input-group-addon"> 下单量 </span>
+									<input type="number" class="form-control" name="express[num][]" value="{$list['num']}">
+									<span class="input-group-addon"> 件内，邮费 </span>
+									<input type="number" class="form-control" name="express[money][]" value="{$list['money']}">
+									<span class="input-group-addon"> 元，每增加 </span>
+									<input type="number" class="form-control" name="express[numex][]" value="{$list['numex']}">
+									<span class="input-group-addon"> 件，加邮费 </span>
+									<input type="number" class="form-control" name="express[moneyex][]" value="{$list['moneyex']}">
+									<span class="input-group-addon">元,订单满</span>
+									<input type="number" class="form-control" name="express[freenumber][]" value="{$list['freenumber']}">
+									<span class="input-group-addon">件包邮</span>
+								</li>
+							</div>
+							<div class="area_item">
+								<span class="help-block">{$list['area']}</span>
+							</div>
+						</div>
+						{/loop}
+						{/if}
+					</div>
+					<p class="help-block">提示：当下单地址不在相应区域内时，会使用默认区域费用。</p>
+				</div>
+			</div>
+			<div class="form-group">
+				<label class="col-sm-2 control-label"></label>
+				<div class="col-sm-9">
+					<input class="btn btn-success btn-sm min-width" value="增加一个区域" type="button" id="addonearea">
+				</div>
+			</div>
+			<div class="form-group">
+				<label class="col-sm-2 control-label"></label>
+				<div class="col-sm-9">
+					<input type="submit" name="submit" value="提交" class="btn btn-primary min-width" />
+					<input type="hidden" name="token" value="{$_W['token']}" />
+				</div>
+			</div>
+		</form>
+	</div>
+	{php $areaArray = array('北京','天津','河北','山西','内蒙古自治区','辽宁','吉林','黑龙江','上海','江苏','浙江','安徽','福建','江西','山东','河南','湖北','湖南','广东','广西壮族自治区','海南','重庆','四川','贵州','云南','西藏自治区','陕西','甘肃','青海','宁夏回族自治区','新疆维吾尔自治区','台湾','香港特别行政区','澳门特别行政区','海外')};
+	<div class="modal fade express_modal " id="myModal" tabindex="-1" role="dialog" aria-labelledby="myModalLabel">
+		<div class="modal-dialog" role="document">
+			<div class="modal-content">
+				<div class="modal-header">
+					<button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">&times;</span></button>
+					<h4 class="modal-title" id="myModalLabel">选择地区</h4>
+				</div>
+				<div class="modal-body">
+					{loop $areaArray $item}
+					<div class="col-sm-3 province_btn"><label class="province">{$item} <input type="checkbox" value="{$item}"></label></div>
+					{/loop}
+				</div>
+				<div class="modal-footer">
+					<button type="button"data-dismiss="modal" aria-label="Close" class="btn btn-primary area_confirm">确定</button>
+				</div>
+			</div>
+		</div>
+	</div>
+</div>
+<script>
+	/*运费模板*/
+	var province = ['北京市','天津市','河北','山西','内蒙古','辽宁','吉林','黑龙江','上海市','江苏','浙江','安徽','福建','江西','山东','河南','湖北','湖南','广东','广西','海南','重庆市','四川','贵州','云南','西藏','陕西','甘肃','青海','宁夏','新疆','台湾','香港','澳门','海外'];
+	
+	//添加一个地区
+	$('#addonearea').click(function(){ 
+		var addstr = 
+					'<div class="express_main_item">'
+						+'<div class="item_cell_box">'
+							+'<li class="item_cell_flex express_btn_out">'
+								+'<a href="javascript:;" class="a_href edit_province" data-toggle="modal" data-target="#myModal">编辑地区 </a>'
+								+'<input type="hidden" name="express[area][]" class="col-sm-2 area_value_input"  value="" />'
+								+' - <a href="javascript:;" class="a_href delete_express">删除</a>'
+							+'</li>'
+							+'<li class="express_btn_money input-group col-sm-10">'
+								+'<span class="input-group-addon"> 下单量 </span>'
+								+'<input type="number" class="form-control" name="express[num][]" value="">'
+								+'<span class="input-group-addon"> 件内，邮费 </span>'
+								+'<input type="number" class="form-control" name="express[money][]" value="">'
+								+'<span class="input-group-addon"> 元，每增加 </span>'
+								+'<input type="number" class="form-control" name="express[numex][]" value="">'
+								+'<span class="input-group-addon"> 件，加邮费 </span>'
+								+'<input type="number" class="form-control" name="express[moneyex][]" value="">'
+								+'<span class="input-group-addon"> 元,订单满 </span>'
+								+'<input type="number" class="form-control" name="express[freenumber][]" value="">'
+								+'<span class="input-group-addon">件包邮</span>'
+							+'</li>'
+						+'</div>'
+						+'<div class="area_item">'
+							+'<span class="help-block"></span>'
+						+'</div>'
+					+'</div>';
+		$('.express_main').append(addstr);
+	});
+	
+	//删除地区选择项
+	$('body').on('click','.delete_express',function(){
+		$(this).parents('.express_main_item').remove();
+	})
+
+	//编辑地区
+	$('body').on('click','.edit_province',function(){
+		thisclass = $(this);
+		thisinput = thisclass.next();
+		var areaArrayed = [];
+		var selected = '';
+		$('.area_value_input').not(thisinput).each(function(){
+			selected += $(this).val();
+		});
+		selected = selected.replace(/,$/,'');
+		selectedArray=selected.split(","); //其余的值,数组
+	
+		selfvalue = thisinput.val();
+		selfvalue = selfvalue.replace(/,$/,'');
+		selfArray=selfvalue.split(","); //自己的值，数组
+		
+		$('.express_modal .province').each(function(){
+			$(this).removeClass('area_selected');
+			if($.inArray($(this).find('input').val(),selectedArray) >= 0){
+			
+				$(this).parent().hide();
+			}
+			if($.inArray($(this).find('input').val(),selfArray) >= 0){
+				$(this).addClass('area_selected').find('input').attr('checked',true);
+				$(this).parent().show();
+			}			
+		});
+	});
+
+	$('body').on('click','.express_modal .province',function(){
+		var ischecked = $(this).find('input').is(':checked');
+		if(ischecked){
+			$(this).addClass('area_selected');
+		}else{
+			$(this).removeClass('area_selected');
+		}
+		
+	});	
+	$('.area_confirm').click(function(){
+		var str = '';
+		$('.express_modal .area_selected input:checked').each(function(){
+			str += $(this).val() + ',';
+		});
+		thisclass.next().val(str);
+		thisclass.parents('.express_main_item').find('.area_item span').text(str);
+		//$('#myModal').modal('hide');
+	});
+	
+	//提交
+	$('input[name=addexpress').click(function(){
+		var expressname = $('input[name=expressname]').val();
+		if(expressname == ''){
+			alert('请填写模板名称');return false;
+		}
+		var isempty = 0;
+		$('.express_main_item input').each(function(){
+			if($(this).val() == ''){
+				isempty = 1;return;
+			}
+		});
+		if(isempty == 1){
+			alert('区域运费不能存在空项');return false;
+		}
+	});
+</script>
+{php include wl_template('common/footer');}

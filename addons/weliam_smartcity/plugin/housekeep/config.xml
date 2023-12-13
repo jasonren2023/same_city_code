@@ -1,0 +1,59 @@
+<?xml version="1.0" encoding="utf-8"?>
+<manifest>
+	<application>
+		<name><![CDATA[家政服务]]></name>
+		<identifie><![CDATA[housekeep]]></identifie>
+		<version><![CDATA[1.0.0]]></version>
+		<type><![CDATA[expand]]></type>
+		<description><![CDATA[家政服务]]></description>
+		<author><![CDATA[微连科技]]></author>
+		<url><![CDATA[http://www.weliam.cn/]]></url>
+	</application>
+	<setting>
+		<agent embed="true" />
+		<store embed="true" />
+		<system embed="true" />
+		<task embed="false" />
+	</setting>
+	<storemenu>
+		<menu title="活动" font="fa-inbox">
+			<entry title="项目列表" ac="KeepWeb" do="serviceList" iscover="true"></entry>
+		</menu>
+	</storemenu>
+	<agentmenu>
+		<menu title="信息" font="fa-inbox" >
+			<entry title="项目列表" ac="KeepWeb" do="serviceList" iscover="true"></entry>
+			<entry title="需求列表" ac="KeepWeb" do="demandList"></entry>
+			<entry title="服务者列表" ac="KeepWeb" do="artificerList"></entry>
+			<entry title="服务商列表" ac="KeepWeb" do="storelist"></entry>
+		</menu>
+		<menu title="分类" font="fa-inbox">
+			<entry title="服务类型" ac="KeepType" do="typelists"></entry>
+			<entry title="入驻套餐" ac="KeepType" do="mealLists"></entry>
+		</menu>
+		<menu title="订单" font="fa-inbox">
+			<entry title="订单列表" ac="KeepType" do="orderlists"></entry>
+		</menu>
+		<menu title="设置" font="fa-inbox" >
+			<entry title="基础设置" ac="KeepWeb" do="basicsetting"></entry>
+		</menu>
+	</agentmenu>
+	<systemmenu>
+		<menu title="信息" font="fa-inbox" >
+			<entry title="项目列表" ac="KeepWeb" do="serviceList" iscover="true"></entry>
+			<entry title="需求列表" ac="KeepWeb" do="demandList"></entry>
+			<entry title="服务者列表" ac="KeepWeb" do="artificerList"></entry>
+			<entry title="服务商列表" ac="KeepWeb" do="storelist"></entry>
+		</menu>
+		<menu title="分类" font="fa-inbox">
+			<entry title="服务类型" ac="KeepType" do="typelists"></entry>
+			<entry title="入驻套餐" ac="KeepType" do="mealLists"></entry>
+		</menu>
+		<menu title="订单" font="fa-inbox">
+			<entry title="订单列表" ac="KeepType" do="orderlists"></entry>
+		</menu>
+		<menu title="设置" font="fa-inbox" >
+			<entry title="基础设置" ac="KeepWeb" do="basicsetting"></entry>
+		</menu>
+	</systemmenu>
+</manifest>

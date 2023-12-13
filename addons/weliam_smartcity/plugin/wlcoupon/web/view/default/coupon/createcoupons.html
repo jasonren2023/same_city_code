@@ -1,0 +1,1171 @@
+{php include wl_template('common/header');}
+<style>
+	#coupon-form{
+		display: block!important;
+		visibility:unset!important;
+	}
+</style>
+<ul class="nav nav-tabs" id="myTab">
+	<li class="active">
+		<a href="#tab_basic">编辑超级券</a>
+	</li>
+</ul>
+<div class="app-content">
+		<div class="app-form">
+				<form action="" method="post" id="coupon-form" class="form-horizontal form form-validate">
+					<div class="panel panel-default" id="step1">
+						<div class="panel-heading">
+							编辑超级券
+						</div>
+						<div class="panel-body">
+							<div class="pull-left" style="width:320px;background:#F4F5F9;margin-right:20px;border:1px solid #E7E7EB">
+								<div class="card-title">{$coupon_title}</div>
+								<div class="card_section area" style="position: relative">
+									<div class="shop-panel" id="color-purview" style="background: #a9d92d">
+										<div class="logo-area">
+											{if $coupons}
+											<span class="logo pull-left"><img src="{php echo tomedia($coupons['logolist'])}" alt="" id="storelogo"/></span>
+											<div class="pull-left" style="height:38px;line-height:38px" id="brand_name">{$coupons['storename']}</div>
+											{else}
+											<span class="logo pull-left"><img src="{URL_WEB_IMAGE}youhuiquan_logo.jpg" alt="" id="storelogo"/></span>
+											<div class="pull-left" style="height:38px;line-height:38px" id="brand_name">欢迎使用</div>
+											{/if}
+											<div class="clear"></div>
+										</div>
+										<div class="msg-area">
+											<div class="tick-msg">
+												<p><b id="title-purview">{$coupon_title}标题</b></p>
+												<p id="sub-title-purview">{$coupon_title}简介</p>
+											</div>
+											<p id="sub-time-purview" style="text-align: center">有效期:{php echo date('Y-m-d')} ~ {php echo date('Y-m-d', time() + 30 * 86400)}</p>
+										</div>
+										<div class="deco"></div>
+										<div class="cicon">
+											<a href="javascript:;" id="fr1" data-id="form1"><i class="fa fa-pencil"></i></a>
+										</div>
+									</div>
+								</div>
+								<div class="card-dispose area">
+									<div class="unset" id="destroy_title">
+										<p>销券设置</p>
+									</div>
+									<div class="destroy_type_preview" id="fr2">
+										<div class="barcode-area code_preview code_preview_3"  style="display: block">
+											<div style="text-align: center;height: 120px;"><img style="height: 100%;" src="{php echo web_url('wlcoupon/couponlist/qrcodeimg',array('url' => $url))}"/></div>
+										</div>
+										<p style="text-align: center" id="notice-purview">请在付款时出示此券</p>
+									</div>
+									<div class="cicon">
+										<a href="javascript:;"  data-id="form2"><i class="fa fa-pencil"></i></a>
+									</div>
+								</div>
+								<div class="shop-detail" style="margin-bottom: 15px;">
+									<ul class="list">
+										<li>
+											<div class="li-panel area" id="fr3">
+												<div class="li-content">购买须知</div>
+												<span class="ricon fa fa-angle-right"></span>
+												<div class="cicon">
+													<a href="javascript:;"  data-id="form3"><i class="fa fa-pencil"></i></a>
+												</div>
+											</div>
+										</li>
+										{if !is_store()}
+										<li>
+											<div class="li-panel area" id="fr4">
+												<div class="li-content">适用商户</div>
+												<span class="ricon fa fa-angle-right"></span>
+												<div class="cicon">
+													<a href="javascript:;"  data-id="form4"><i class="fa fa-pencil"></i></a>
+												</div>
+											</div>
+										</li>
+										{/if}
+
+										{if !is_store() || $_W['storeinfo']['marketstatus'] > 0}
+										<li>
+											<div class="li-panel area" >
+												<div class="li-content" id="promotion_url_name">营销设置</div>
+												<span class="ricon fa fa-angle-right"></span>
+												<div class="cicon">
+													<a href="javascript:;" data-id="form6"><i class="fa fa-pencil"></i></a>
+												</div>
+											</div>
+										</li>
+										{/if}
+										{if Customized::init('transfergift') > 0}
+										<li>
+											<div class="li-panel area" style="border-bottom: none">
+												<div class="li-content" id="promotion_transfer">转赠设置</div>
+												<span class="ricon fa fa-angle-right"></span>
+												<div class="cicon">
+													<a href="javascript:;" data-id="form8"><i class="fa fa-pencil"></i></a>
+												</div>
+											</div>
+										</li>
+										{/if}
+									</ul>
+								</div>
+							</div>
+							<div class="pull-left alert form form-area" style="width:650px;position:relative;display:block;" id="form1">
+								<div class="arrow_in"></div>
+								<h4 style="margin-top:20px;">券面信息</h4>
+								<div class="form-group">
+									<label class="col-sm-2 control-label">是否上架</label>
+									<div class="col-sm-9">
+										<label class="radio-inline">
+											<input type="radio" value="1" name="status" {if $coupons['status'] == 1 || $coupons['status'] == 2 || empty($coupons)} checked {/if} /> 启用
+										</label>
+										<label class="radio-inline">
+											<input type="radio" value="4" name="status" {if $coupons['status'] == 4} checked {/if} /> 禁用
+										</label>
+									</div>
+								</div>
+								<div class="form-group">
+									<label class="col-sm-2 control-label">是否收费</label>
+									<div class="col-sm-9">
+										<label class="radio-inline">
+											<input type="radio" value="1" name="is_charge" {if $coupons['is_charge'] == 1} checked {/if} onclick="charge(1)" /> 收费
+										</label>
+										<label class="radio-inline">
+											<input type="radio" value="0" name="is_charge" {if $coupons['is_charge'] == 0} checked {/if} onclick="charge(2)"/> 免费
+										</label>
+									</div>
+								</div>
+								<div id="price"  {if $coupons['is_charge'] == 0} style="display: none;" {/if}>
+									<div class="form-group">
+										<label class="col-sm-2 control-label">卡券价格</label>
+										<div style="position: relative;left: 5px;" class="input-group col-sm-9 col-xs-5">
+											<span class="input-group-addon">￥</span>
+											<input type="text" class="form-control" name="price" placeholder="最多保留两位小数"  value="{$coupons['price']}"/>
+										</div>
+									</div>
+									<div class="form-group">
+										<label class="col-sm-2 control-label">买家申请退款</label>
+										<div class="col-sm-9">
+											<label class="radio-inline">
+							    				<input type="radio" name="allowapplyre" value="0" {if $coupons['allowapplyre']  != 1 } checked {/if} > 允许
+							    			</label>
+											<label class="radio-inline">
+							    				<input type="radio" name="allowapplyre" value="1" {if $coupons['allowapplyre']  == 1 } checked {/if} > 禁止
+							    			</label>
+										</div>
+									</div>
+									{if !is_store()}
+									<div class="form-group">
+										<label class="col-sm-2 control-label">独立结算规则</label>
+										<div class="col-sm-9">
+											<label class="radio-inline" onclick="indepen(1)">
+												<input type="radio" value="0" name="independent" {if $coupons['independent']==0 && !is_null($coupons['independent'])} checked {/if}>开启
+											</label>
+											<label class="radio-inline" onclick="indepen(2)">
+												<input type="radio" value="1" name="independent" {if $coupons['independent'] ==1 || is_null($coupons['independent'])} checked {/if}>关闭
+											</label>
+										</div>
+									</div>
+									<div class="form-group indediv" {if $coupons['independent'] || is_null($coupons['independent'])} style="display: none;" {/if}   >
+										<label class="col-sm-2 control-label">结算金额</label>
+										<div style="position: relative;left: 5px;" class="input-group col-sm-9 col-xs-5">
+											<span class="input-group-addon">￥</span>
+											<input type="text" class="form-control" name="settlementmoney" placeholder="最多保留两位小数"  value="{$coupons['settlementmoney']}"/>
+										</div>
+									</div>
+									{if $distriset['switch']}
+									<div class="form-group">
+										<label class="col-sm-2 control-label">是否参与分销</label>
+										<div class="col-sm-9">
+											<label class="radio-inline">
+												<input type="radio" value="0" name="isdistri" {if $coupons['isdistri'] == 0 && !is_null($coupons['isdistri'])} checked {/if} onclick="distri(1)" /> 参与
+											</label>
+											<label class="radio-inline">
+												<input type="radio" value="1" name="isdistri" {if $coupons['isdistri'] == 1 || is_null($coupons['isdistri'])} checked {/if} onclick="distri(2)"/> 不参与
+											</label>
+										</div>
+									</div>
+									<div id="distridiv" {if $coupons['isdistri'] || is_null($coupons['isdistri'])}style="display: none;"{/if} >
+										<div class="form-group">
+											<label class="col-sm-2 control-label">佣金设置方式</label>
+											<div class="col-sm-9">
+												<label class="radio-inline" onclick="distritext(1)" >
+													<input type="radio"  name="isdistristatus" value="0" title="百分比" {if $coupons['isdistristatus'] == 0 || empty($coupons['isdistristatus'])}checked{/if}>百分比
+												</label>
+												<label class="radio-inline" onclick="distritext(2)" >
+													<input type="radio"  name="isdistristatus" value="1" title="固定金额" {if $coupons['isdistristatus'] == 1}checked{/if}>固定金额
+												</label>
+												<span class="help-block">按百分比计算时，基础价按照商品售价减去会员减免计算，不受积分抵扣，满减活动，在线红包影响。</span>
+											</div>
+										</div>
+										<div class="form-group">
+											<label class="col-sm-2 control-label">分销结算比例</label>
+											<div class="col-sm-9">
+												{loop $dislevel $dislpr}
+												<div class="bigdata" style="margin-top: 10px;">
+													<div class="input-group data-item">
+														<span class="input-group-addon">[{$dislpr['name']}]一级</span>
+														<input type="hidden" name="disleid[]" class="form-control" value="{$dislpr['id']}">
+														<input type="number" min="0" name="oneratio[]" class="form-control" value="{$disarray[$dislpr['id']]['onedismoney']}">
+														<span class="input-group-addon"><span class="isdistritext">{if $coupons['isdistristatus'] == 1}元{else}%{/if}</span>,二级</span>
+														<input type="number" min="0" name="tworatio[]" class="form-control" value="{$disarray[$dislpr['id']]['twodismoney']}">
+														<span class="input-group-addon"><span class="isdistritext">{if $coupons['isdistristatus'] == 1}元{else}%{/if}</span></span>
+													</div>
+												</div>
+												{/loop}
+												<span class="help-block">一级填0或不填则按分销商等级默认比例计算,填写一级比例后二级比例填0或不填则此商品没有二级分佣,最多保留两位小数</span>
+											</div>
+										</div>
+										<div class="form-group">
+											<label class="col-sm-2 control-label">佣金结算时间</label>
+											<div class="col-sm-9">
+												<label class="radio-inline">
+													<input type="radio" value="0" name="dissettime" {if $coupons['dissettime']==0 || empty($coupons['dissettime'])} checked {/if}>订单完成时结算
+												</label>
+												<label class="radio-inline">
+													<input type="radio" value="1" name="dissettime" {if $coupons['dissettime']==1 } checked {/if}>订单支付时结算
+												</label>
+												<span class="help-block">注：若订单支付时结算，在订单退款时会扣除分销商对应的佣金，如果分销商可提现佣金不足，会扣至负数</span>
+											</div>	
+										</div>
+										{if agent_p('disgroup')}
+										<div class="form-group">
+											<label class="col-sm-2 control-label">团长分红</label>
+											<div class="col-sm-9">
+												<label class="radio-inline" onclick="$('#groupdiv').show();">
+													<input type="radio" value="1" name="goods[disgroup]" {if $coupons['disgroup'] == 1} checked {/if}>开启
+												</label>
+												<label class="radio-inline" onclick="$('#groupdiv').hide();">
+													<input type="radio" value="0" name="goods[disgroup]" {if $coupons['disgroup'] != 1} checked {/if}>关闭
+												</label>
+											</div>
+										</div>
+										<div id="groupdiv"  {if $coupons['disgroup'] != 1} style="display: none;" {/if}>
+											<div class="form-group">
+												<label class="col-sm-2 control-label">分红设置方式</label>
+												<div class="col-sm-9">
+													<label class="radio-inline" onclick="grouptritext(1)" >
+														<input type="radio"  name="goods[disgroupstatus]" value="0" title="百分比"   {if $coupons['disgroupstatus'] != 1 }checked{/if}>百分比
+													</label>
+													<label class="radio-inline" onclick="grouptritext(2)" >
+														<input type="radio"  name="goods[disgroupstatus]" value="1" title="固定金额" {if $coupons['disgroupstatus'] == 1}checked{/if}>固定金额
+													</label>
+													<span class="help-block">按百分比计算时，基础价按照商品售价减去会员减免计算，不受积分抵扣，满减活动，在线红包影响。</span>
+												</div>
+											</div>
+											<div class="form-group">
+												<label class="col-sm-2 control-label">团长分红详情</label>
+												<div class="col-sm-9">
+													{loop $grouplevel $grouplpr}
+													<div class="bigdata" style="margin-top: 10px;">
+														<div class="input-group data-item">
+															<span class="input-group-addon">[{$grouplpr['name']}]直属</span>
+															<input type="hidden" name="groupleid[]" class="form-control" value="{$grouplpr['id']}">
+															<input type="number" min="0" name="onegroupmoney[]" class="form-control" value="{$grouparray[$grouplpr['id']]['onegroupmoney']}">
+															<span class="input-group-addon"><span class="disgrouptext">{if $coupons['disgroupstatus'] == 1}元{else}%{/if}</span>,子团队</span>
+															<input type="number" min="0" name="twogroupmoney[]" class="form-control" value="{$grouparray[$grouplpr['id']]['twogroupmoney']}">
+															<span class="input-group-addon"><span class="disgrouptext">{if $coupons['disgroupstatus'] == 1}元{else}%{/if}</span></span>
+														</div>
+													</div>
+													{/loop}
+													<span class="help-block">一级填0或不填则按分销商等级默认比例计算,填写一级佣金后二级佣金填0或不填则此商品没有二级分佣,最多保留两位小数</span>
+												</div>
+											</div>
+											<div class="form-group">
+												<label class="col-sm-2 control-label">股东分红</label>
+												<div class="col-sm-9">
+													<div class="input-group">
+														<input type="number" min="0" name="goods[shareholdermoney]" class="form-control" value="{$coupons['shareholdermoney']}" />
+														<span class="input-group-addon"><span class="disgrouptext">{if $coupons['disgroupstatus'] == 1}元{else}%{/if}</span></span>
+													</div>
+													<span class="help-block">商品股东分红，不填或填0即为没有股东分红。</span>
+												</div>
+											</div>
+										</div>
+
+									{/if}
+									</div>
+									{/if}
+									{/if}
+									<div class="form-group">
+										<label class="col-sm-2 control-label">过期订单退款</label>
+										<div class="col-sm-9">
+											<label class="radio-inline">
+							    				<input type="radio" name="overrefund" value="1" {if $coupons['overrefund']  == 1 } checked {/if} > 启用
+							    			</label>
+											<label class="radio-inline">
+							    				<input type="radio" name="overrefund" value="0" {if $coupons['overrefund']  != 1 } checked {/if} > 禁用
+							    			</label>
+										</div>
+									</div>
+									<div class="form-group">
+										<label class="col-sm-2 control-label">积分抵扣</label>
+										<div class="col-sm-9">
+											<div class="input-group">
+												<span class="input-group-addon">每张卡券可以使用积分抵扣</span>
+												<input type="number" min="0" name="goods[creditmoney]" class="form-control " value="{$coupons['creditmoney']}" />
+												<span class="input-group-addon">元</span>
+											</div>
+											<div class="help-block">不填或填0时，商品将不参加积分抵扣</div>
+										</div>
+									</div>
+								</div>
+								<!--<div class="form-group">-->
+									<!--<label class="col-sm-2 control-label">首页展示</label>-->
+									<!--<div class="col-sm-9">-->
+										<!--<label class="radio-inline">-->
+											<!--<input type="radio" value="1" name="is_indexshow" {if $coupons['is_indexshow'] == 1} checked {/if} onclick="indexshow(1)"/> 启用-->
+										<!--</label>-->
+										<!--<label class="radio-inline">-->
+											<!--<input type="radio" value="0" name="is_indexshow" {if $coupons['is_indexshow'] == 0} checked {/if} onclick="indexshow(2)"/> 禁用-->
+										<!--</label>-->
+										<!--<div class="help-block">开启后，会在首页显示卡券，默认关闭</div>-->
+									<!--</div>-->
+								<!--</div>-->
+								<div class="form-group">
+									<label class="col-sm-2 control-label">商户展示</label>
+									<div class="col-sm-9">
+										<label class="radio-inline">
+											<input type="radio" value="0" name="nostoreshow" {if $coupons['nostoreshow'] == 0} checked {/if} /> 启用
+										</label>
+										<label class="radio-inline">
+											<input type="radio" value="1" name="nostoreshow" {if $coupons['nostoreshow'] == 1} checked {/if} /> 禁用
+										</label>
+										<div class="help-block">开启后，会在商户详情页面显示卡券，默认开启</div>
+									</div>
+								</div>
+								{if !is_store()}
+								<div id="indexshow" class="form-group">
+									<label class="col-sm-2 control-label">首页排序</label>
+									<div class="col-sm-9">
+										<input type="number" min="0" class="form-control" name="indexorder" placeholder="数字越大越靠前，最多展示五张。"  value="{$coupons['indexorder']}"/>
+									</div>
+								</div>
+								<div class="form-group">
+									<label class="col-sm-2 control-label">卡券人气</label>
+									<div class="col-sm-9">
+										<input type="number" min="0" class="form-control" name="pv" value="{$coupons['pv']}"/>
+									</div>
+								</div>
+								<div class="form-group">
+									<label class="col-sm-2 control-label">列表显示</label>
+									<div class="col-sm-9">
+										<label class="radio-inline">
+											<input type="radio" value="0" name="is_show" {if $coupons['is_show'] == 0} checked {/if} /> 显示
+										</label>
+										<label class="radio-inline">
+											<input type="radio" value="1" name="is_show" {if $coupons['is_show'] == 1} checked {/if} /> 隐藏
+										</label>
+									</div>
+								</div>
+								{/if}
+								<div class="form-group">
+									<label class="col-sm-2 control-label"><span class="text-danger">*</span>卡券logo</label>
+									<div class="col-sm-9" id="logo_upload">
+										{php echo attachment_select('logo_url', $coupons['logo'])}
+										<div class="help-block">卡券缩略图大小不超过1M。像素为：300*300。仅支持JPG格式</div>
+									</div>
+								</div>
+								{if p('wxapp')}
+								<div class="form-group">
+									<label class="col-sm-2 control-label">小程序分享图</label>
+									<div class="col-sm-9" id="wxapp_shareimg_upload">
+										{php echo attachment_select('wxapp_shareimg', $coupons['wxapp_shareimg'])}
+										<div class="help-block">用于小程序分享图片。像素为：500*400。</div>
+									</div>
+								</div>
+								{/if}
+								<div class="form-group">
+									<label class="col-sm-2 control-label"><span class="text-danger">*</span>幻灯片</label>
+									<div class="col-sm-9">
+										{php echo attachment_select_multi('adv',$coupons['adv']);}
+										<span class="help-block">建议大小750X560</span>
+									</div>
+								</div>
+								<div class="form-group">
+									<label class="col-sm-2 control-label"><span class="text-danger">*</span> {$coupon_title}标题</label>
+									<div class="col-sm-9">
+										<input type="text" class="form-control" name="title" value="{$coupons['title']}" required />
+										<div class="help-block">建议填写{$coupon_title}主要内容或商户名称。不超过9个字符</div>
+									</div>
+								</div>
+								<div class="form-group">
+									<label class="col-sm-2 control-label"><span class="text-danger">*</span>{$coupon_title}简介</label>
+									<div class="col-sm-9">
+										<input type="text" class="form-control" name="sub_title"  value="{$coupons['sub_title']}" required/>
+										<div class="help-block">不超过18个字符，简介卡券内容</div>
+									</div>
+								</div>
+								<div class="form-group">
+									<label class="col-sm-2 control-label"><span class="text-danger">*</span> {$coupon_title}详情</label>
+									<div class="col-sm-9">
+										{php echo tpl_diy_editor_create('goodsdetail',$coupons['goodsdetail']);}
+									</div>
+								</div>
+								<div class="form-group">
+									<label class="col-sm-2 control-label" style="padding-top:15px"> 有效期</label>
+									<div class="col-sm-9">
+										<div class="input-group">
+											<span class="input-group-addon">
+												<label class="radio-inline padding-t-0">
+													<input type="radio" value="1" name="time_type" {if $coupons['time_type'] == 1 || empty($coupons)} checked {/if}/>&nbsp;固定日期</label>
+											</span>
+											{if $coupons}
+											{php echo tpl_select_time_info('time_limit', array('start' => date('Y-m-d H:i:s',$coupons['starttime']), 'end' => date('Y-m-d H:i:s', $coupons['endtime'])),true);}
+											{else}
+											{php echo tpl_select_time_info('time_limit', array('start' => date('Y-m-d'), 'end' => date('Y-m-d', time() + 30*86400)));}
+											{/if}
+										</div>
+										<div class="input-group margin-t-5">
+											<span class="input-group-addon">
+												<label class="radio-inline padding-t-0"><input type="radio" value="2" name="time_type" {if $coupons['time_type'] == 2} checked {/if} />领取后</label>
+											</span>
+											{if $coupons}
+											<input name="deadline" id="deadline" class="form-control" value="{$coupons['deadline']}">
+											{else}
+											<input name="deadline" id="deadline" class="form-control" value="" placeholder="请输入">
+											{/if}
+											<span class="input-group-addon">天有效</span>
+										</div>
+									</div>
+								</div>
+							</div>
+							<div class="pull-left alert form hidden form-area" style="width:650px;position:relative;" id="form2">
+								<div class="arrow_in"></div>
+								<h4 style="margin-top:20px;">领券设置</h4>
+								<div class="form-group">
+									<label class="col-sm-2 control-label"><span class="text-danger">*</span>库存</label>
+									<div class="col-sm-9">
+										<div class="input-group">
+											{if $coupons}
+												<input type="text" class="form-control" name="quantity" required value="{$coupons['quantity']}"/>
+											{else}
+												<input type="text" class="form-control" name="quantity" required value="999"/>
+											{/if}
+												<span class="input-group-addon">份</span>
+										</div>
+										<div class="help-block">库存只能是大于0的数字</div>
+									</div>
+								</div>
+								<div class="form-group">
+									<label class="col-sm-2 control-label"><span class="text-danger"></span>领券限制</label>
+									<div class="col-sm-9">
+										<div class="input-group">
+											<input type="text" class="form-control" name="get_limit" value="{$coupons['get_limit']}"/>
+											<span class="input-group-addon">份</span>
+										</div>
+										<div class="help-block">默认领券限制为0，即无限制</div>
+									</div>
+								</div>
+								<div class="form-group">
+									<label class="col-sm-2 control-label"><span class="text-danger"></span>每日限量</label>
+									<div class="col-sm-9">
+										<div class="input-group">
+											<input type="text" class="form-control" name="goods[alldaylimit]" value="{$coupons['alldaylimit']}"/>
+											<span class="input-group-addon">份</span>
+										</div>
+										<div class="help-block">每日限量指每天提供的卡券数量，默认为0，即无限制</div>
+									</div>
+								</div>
+								<div class="form-group">
+									<label class="col-sm-2 control-label"><span class="text-danger"></span>每人每日限量</label>
+									<div class="col-sm-9">
+										<div class="input-group">
+											<input type="text" class="form-control" name="goods[daylimit]" value="{$coupons['daylimit']}"/>
+											<span class="input-group-addon">份</span>
+										</div>
+										<div class="help-block">每人每日限量指每人每天可以获取的卡券数量，默认为0，即无限制</div>
+									</div>
+								</div>
+								<div class="form-group">
+									<label class="col-sm-2 control-label">用户标签</label>
+									<div class="col-sm-9">
+										<div class="input-group">
+											{loop $labels $label}
+											<label class="checkbox-inline">
+												<input type="checkbox" value="{$label['id']}" {if in_array($label['id'],$userlabel)} checked="checked" {/if} name="userlabel[]">{$label['name']}
+											</label>
+											{/loop}
+										</div>
+									</div>
+								</div>
+							</div>
+							<div class="pull-left alert form hidden form-area" style="width:650px;position:relative;" id="form3">
+								<div class="arrow_in"></div>
+								<h4 style="margin-top:20px;">购买须知</h4>
+								<div class="form-group">
+									<label class="col-sm-2 control-label">购买弹出须知</label>
+									<div class="col-sm-9">
+										<label class="radio-inline">
+											<input type="radio" value="0" name="is_describe_tip" {if $coupons['is_describe_tip'] == 0 || is_null($coupons['is_describe_tip'])} checked {/if}  /> 关闭
+										</label>
+										<label class="radio-inline">
+											<input type="radio" value="1" name="is_describe_tip" {if $coupons['is_describe_tip'] == 1} checked {/if} /> 开启
+										</label>
+									</div>
+								</div>
+								<div class="form-group">
+									<label class="col-sm-2 control-label"><span class="text-danger">*</span> 购买须知</label>
+									<div class="col-sm-9">
+										{php echo tpl_diy_editor_create('description', $coupons['description']);}
+										<span class="help-block">购买须知可不填，不填则不显示</span>
+									</div>
+								</div>
+								<div class="form-group">
+									<label class="col-sm-2 control-label"><span class="text-danger">*</span> 使用次数</label>
+									<div class="col-sm-9">
+										<input type="number" min="0" class="form-control" required name="usetimes" {if empty($coupons)} value="1" {else} value="{$coupons['usetimes']}" {/if}/>
+										<div class="help-block">卡券使用次数，默认只能使用一次</div>
+									</div>
+								</div>
+							</div>
+							<div class="pull-left alert form hidden form-area" style="width:650px;position:relative;min-height: 140px;" id="form4">
+								<input type="hidden" name="location-select" value="" autocomplete="off"/>
+								<input type="hidden" name="groups" value="" autocomplete="off"/>
+								<div class="arrow_in"></div>
+								<h4 style="margin-top:20px;">服务信息</h4>
+								<div class="form-group">
+									<label class="col-sm-2 control-label"><span class="text-danger"></span> 适用商户</label>
+									<div class="col-sm-9">
+										<label class="radio"><a onclick="popwin = $('#modal-module-merchant').modal();" href="javascript:;" data-toggle="modal" class="js-location-store-modal">选择适用商户</a></label>
+										<div style="margin-top: 10px;margin-left: 17px;" class="js-location-contain"></div>
+									{if $coupons}
+										<span class="label label-success" id="old-name" style="display: inline-block;margin-left: 35px;">{$coupons['storename']}</span>
+									{/if}
+									</div>
+								</div>
+							</div>
+							<div class="pull-left alert form hidden form-area" style="width:650px;position:relative;" id="form6">
+								<div class="arrow_in"></div>
+								<h4 style="margin-top:20px;">会员设置</h4>
+								<div class="form-group">
+									<label class="col-sm-2 control-label">会员特权</label>
+									<div class="col-sm-9">
+										<label class="radio-inline">
+											<input type="radio" value="0" onclick="vipchang(0)" name="vipstatus" {if $coupons['vipstatus'] == 0} checked {/if} /> 关闭
+										</label>
+										<label class="radio-inline">
+											<input type="radio" value="1" onclick="vipchang(2)" name="vipstatus" {if $coupons['vipstatus'] == 1} checked {/if} /> 会员减免
+										</label>
+										<label class="radio-inline">
+											<input type="radio" value="2" onclick="vipchang(1)" name="vipstatus" {if $coupons['vipstatus'] == 2} checked {/if} /> 会员特供
+										</label>
+										<div id="viphelp0" {if $coupons['vipstatus'] != 0} style="display: none;" {/if}class="help-block">无会员特权</div>
+										<div id="viphelp1" {if $coupons['vipstatus'] != 2} style="display: none;" {/if}class="help-block">只有会员可以领取或购买</div>
+										<div id="viphelp2" {if $coupons['vipstatus'] != 1} style="display: none;" {/if}class="help-block">会员减免，请在下框输入各个等级会员减免的具体金额</div>
+									</div>
+								</div>
+								<div id="vipprice"  {if $coupons['vipstatus'] != 1} style="display: none;" {/if}>
+									<div class="form-group">
+										<div class="col-sm-11">
+											<div class="bigdata" style="margin-top: 10px;">
+												<div class="input-group data-item">
+													<span class="input-group-addon">[{$_W['wlsetting']['halflevel']['name']}]减</span>
+													<input type="hidden" name="vipleid[]" class="form-control" value="0">
+													<input type="number" min="0" name="vipprice[]" class="form-control" value="{$viparray[0]['vipprice']}">
+													{if is_store()}
+													<span class="input-group-addon">元</span>
+													{else}
+													<span class="input-group-addon">元,商户减少结算价</span>
+													<input type="number" min="0" name="storeset[]" class="form-control" value="{$viparray[0]['storeset']}">
+													<span class="input-group-addon">元</span>
+													{/if}
+												</div>
+											</div>
+											{loop $levels $lpr}
+											<div class="bigdata" style="margin-top: 10px;">
+												<div class="input-group data-item">
+													<span class="input-group-addon">[{$lpr['name']}]减</span>
+													<input type="hidden" name="vipleid[]" class="form-control" value="{$lpr['id']}">
+													<input type="number" min="0" name="vipprice[]" class="form-control" value="{$viparray[$lpr['id']]['vipprice']}">
+													{if is_store()}
+													<span class="input-group-addon">元</span>
+													{else}
+													<span class="input-group-addon">元,商户减少结算价</span>
+													<input type="number" min="0" name="storeset[]" class="form-control" value="{$viparray[$lpr['id']]['storeset']}">
+													<span class="input-group-addon">元</span>
+													{/if}
+												</div>
+											</div>
+											{/loop}
+											<span class="help-block">金额最多保留两位小数</span>
+										</div>
+									</div>
+								</div>
+								<div class="form-group" id="viplevel"   {if $coupons['vipstatus'] != 2} style="display: none;"  {/if}>
+									<label class="col-sm-2 control-label">适用会员等级</label>
+									<div class="col-sm-9">
+										<label class="checkbox-inline">
+											<input type="checkbox" value="0" {if in_array(0,$coupons['level'])} checked {/if}  name="level[]" />{$_W['wlsetting']['halflevel']['name']}
+										</label>
+										{loop $levels $level}
+										<label class="checkbox-inline">
+											<input type="checkbox" value="{$level['id']}" {if in_array($level['id'],$coupons['level'])} checked {/if}  name="level[]" />{$level['name']}
+										</label>
+										{/loop}
+										<span class="help-block">如果全都不勾选则默认全等级可用</span>
+									</div>
+								</div>
+								<div {if $coupons['is_charge'] == 0} style="display: none;" {/if} class = "chargediv" >
+								{if !empty($fullreducelist)}
+								<h4 style="margin-top:20px;">满减活动</h4>
+								<div class="form-group">
+									<label class="col-sm-2 control-label">满减活动</label>
+									<div class="col-sm-9">
+										<select name="fullreduceid" class="form-control chosen-select">
+											<option value="" {if empty($coupons['fullreduceid'])}selected="selected"{/if}>请选择满减活动</option>
+											{loop $fullreducelist $full}
+											<option value="{$full['id']}" {if $coupons['fullreduceid'] == $full['id']}selected="selected"{/if}>{$full['title']}</option>
+											{/loop}
+										</select>
+									</div>
+								</div>
+								{/if}
+								{if !empty($paidlist) && !is_store() }
+								<h4 style="margin-top:20px;">支付有礼</h4>
+								<div class="form-group">
+									<label class="col-sm-2 control-label">支付有礼</label>
+									<div class="col-sm-9">
+										<select name="paidid" class="form-control chosen-select">
+											<option value="" {if empty($coupons['paidid'])}selected="selected"{/if}>请选择支付有礼</option>
+											{loop $paidlist $pai}
+											<option value="{$pai['id']}" {if $coupons['paidid'] == $pai['id']}selected="selected"{/if}>{$pai['title']}</option>
+											{/loop}
+										</select>
+									</div>
+								</div>
+								{/if}
+								</div>
+								{if !empty($drawlist) && !is_store()}
+								<h4 style="margin-top:20px;">锦鲤抽奖</h4>
+								<div class="form-group">
+									<label class="col-sm-2 control-label">锦鲤抽奖</label>
+									<div class="col-sm-9">
+										<select name="goods[drawid]" class="form-control chosen-select">
+											<option value="" {if empty($coupons['drawid'])}selected="selected"{/if}>请选择锦鲤抽奖活动</option>
+											{loop $drawlist $draw}
+											<option value="{$draw['id']}" {if $coupons['drawid'] == $draw['id']}selected="selected"{/if}>{$draw['title']}</option>
+											{/loop}
+										</select>
+										<span class="help-block">卡券商品每核销一次都会赠送一个抽奖码。</span>
+									</div>
+								</div>
+								{/if}
+								<h4 style="margin-top:20px;">订单表单</h4>
+								<div class="form-group">
+									<label class="col-sm-2 control-label">订单表单</label>
+									<div class="col-sm-9">
+										<select name="goods[diyformid]" class="form-control chosen-select">
+											<option value="" {if empty($coupons['diyformid'])}selected="selected"{/if}>请选择报名表单</option>
+											{loop $diyFormList $form}
+											<option value="{$form['id']}" {if $coupons['diyformid'] == $form['id']}selected="selected"{/if}>{$form['title']}</option>
+											{/loop}
+										</select>
+										<span class="help-block">卡券商品每核销一次都会赠送一个抽奖码。</span>
+									</div>
+								</div>
+								<h4 style="margin-top:20px;">定时发售</h4>
+								<div class="form-group">
+									<label class="col-sm-2 control-label">限制购买时间</label>
+									<div class="col-sm-9">
+										<label class="radio-inline">
+											<input type="radio" value="1" id="wk" name="goods[usedatestatus]" {if $coupons['usedatestatus'] == 1} checked {/if}>按星期
+										</label>
+										<label class="radio-inline">
+											<input type="radio" value="2" id="dd" name="goods[usedatestatus]" {if $coupons['usedatestatus']==2} checked {/if}>按日期
+										</label>
+										<label class="radio-inline">
+											<input type="radio" value="0" id="cc" name="goods[usedatestatus]" {if $coupons['usedatestatus']==0 || empty($coupons['usedatestatus'])} checked {/if}>关闭
+										</label>
+										<span class="help-block">开启后，商品只能在设置的时间才能下单购买</span>
+									</div>
+								</div>
+								<script>
+									$('#wk').click(function(){
+										$('#weeke').show();
+										$('#activediscount').show();
+										$('#daily').hide();
+									});
+									$('#dd').click(function(){
+										$('#weeke').hide();
+										$('#activediscount').show();
+										$('#daily').show();
+									});
+									$('#cc').click(function(){
+										$('#weeke').hide();
+										$('#activediscount').hide();
+										$('#daily').hide();
+									});
+								</script>
+								<div class="form-group" {if $coupons['usedatestatus'] != 1} style="display: none;"{/if} id="weeke">
+								<label class="col-sm-2 control-label">按星期</label>
+								<div class="col-sm-9">
+									{if $coupons}
+									<label class="checkbox-inline">
+										<input type="checkbox" value="1" name="goods[week][]" id="wk1"  /> 星期一
+									</label>
+									<label class="checkbox-inline">
+										<input type="checkbox" value="2" name="goods[week][]" id="wk2"  /> 星期二
+									</label>
+									<label class="checkbox-inline">
+										<input type="checkbox" value="3" name="goods[week][]" id="wk3"  /> 星期三
+									</label>
+									<label class="checkbox-inline">
+										<input type="checkbox" value="4" name="goods[week][]" id="wk4"  /> 星期四
+									</label>
+									<label class="checkbox-inline">
+										<input type="checkbox" value="5" name="goods[week][]" id="wk5"  /> 星期五
+									</label>
+									<label class="checkbox-inline">
+										<input type="checkbox" value="6" name="goods[week][]" id="wk6"  /> 星期六
+									</label>
+									<label class="checkbox-inline">
+										<input type="checkbox" value="7" name="goods[week][]" id="wk7"  /> 星期日
+									</label>
+									{loop $coupons['week'] $week}
+									<script type="text/javascript">
+										if({php echo $week}==1){
+											$('#wk1').attr('checked','true');
+										}
+										if({php echo $week}==2){
+											$('#wk2').attr('checked','true');
+										}
+										if({php echo $week}==3){
+											$('#wk3').attr('checked','true');
+										}
+										if({php echo $week}==4){
+											$('#wk4').attr('checked','true');
+										}
+										if({php echo $week}==5){
+											$('#wk5').attr('checked','true');
+										}
+										if({php echo $week}==6){
+											$('#wk6').attr('checked','true');
+										}
+										if({php echo $week}==7){
+											$('#wk7').attr('checked','true');
+										}
+
+									</script>
+									{/loop}
+									{else}
+									<label class="checkbox-inline">
+										<input type="checkbox" value="1" name="goods[week][]" /> 星期一
+									</label>
+									<label class="checkbox-inline">
+										<input type="checkbox" value="2" name="goods[week][]" /> 星期二
+									</label>
+									<label class="checkbox-inline">
+										<input type="checkbox" value="3" name="goods[week][]" /> 星期三
+									</label>
+									<label class="checkbox-inline">
+										<input type="checkbox" value="4" name="goods[week][]" /> 星期四
+									</label>
+									<label class="checkbox-inline">
+										<input type="checkbox" value="5" name="goods[week][]" /> 星期五
+									</label>
+									<label class="checkbox-inline">
+										<input type="checkbox" value="6" name="goods[week][]" /> 星期六
+									</label>
+									<label class="checkbox-inline">
+										<input type="checkbox" value="7" name="goods[week][]" /> 星期日
+									</label>
+									{/if}
+								</div>
+								</div>
+								<div class="form-group" {if $coupons['usedatestatus'] != 2} style="display: none;"{/if} id="daily">
+								<label class="col-sm-2 control-label">按天数</label>
+								<div class="col-sm-9">
+									{if $coupons['usedatestatus'] == 2}
+									<?php
+																											for ($i=1;$i<32;$i++ ) {
+																												if(in_array($i,$coupons['day'])){
+																													?>
+									<label class="checkbox-inline">
+										<input type="checkbox" value="{php echo $i}"  checked name="goods[day][]" />{php echo $i}
+									</label>
+									<?php
+																											}else{
+																											?>
+									<label class="checkbox-inline">
+										<input type="checkbox" value="{php echo $i}"  name="goods[day][]" />{php echo $i}
+									</label>
+									<?php
+																											}}
+																										  ?>
+									{else}
+									<?php
+																										for ($i=1;$i<32;$i++ ) {
+																									  ?>
+									<label class="checkbox-inline">
+										<input type="checkbox" value="{php echo $i}"  name="goods[day][]" />{php echo $i}
+									</label>
+									<?php
+																										}
+																									  ?>
+									{/if}
+								</div>
+								</div>
+								{if !is_store()}
+								<h4 style="margin-top:20px;">支付营销</h4>
+								<div class="form-group">
+									<label class="col-sm-2 control-label">支付方式</label>
+									<div class="col-sm-9">
+										<label class="checkbox-inline">
+											<input type="checkbox" value="wechat" name="pay_type[]" {if in_array('wechat',$coupons['pay_type'])}checked="checked"{/if}/> 微信支付
+										</label>
+										<label class="checkbox-inline">
+											<input type="checkbox" value="alipay" name="pay_type[]" {if in_array('alipay',$coupons['pay_type'])}checked="checked"{/if}/> 支付宝支付
+										</label>
+										<label class="checkbox-inline">
+											<input type="checkbox" value="balance" name="pay_type[]" {if in_array('balance',$coupons['pay_type'])}checked="checked"{/if}/> 余额支付
+										</label>
+										<span class="help-block">不选择则仅使用总后台设置项进行支付。选择支付方式后则只能使用总后台与当前商品都支持的支付方式进行支付</span>
+									</div>
+								</div>
+								{if Customized::init('yuecashback') > 0}
+								<div class="form-group">
+									<label class="col-sm-2 control-label">余额返现</label>
+									<div class="col-sm-9">
+										<div class="input-group data-item">
+											<span class="input-group-addon">普通用户</span>
+											<input type="number" min="0" name="goods[yuecashback]" class="form-control" value="{$coupons['yuecashback']}">
+											<span class="input-group-addon">元,会员</span>
+											<input type="number" min="0" name="goods[vipyuecashback]" class="form-control" value="{$coupons['vipyuecashback']}">
+											<span class="input-group-addon">元</span>
+										</div>
+										<span class="help-block">用户购买商品后,核销或确认收货可以使买家获得余额返现,填0或不填则不返现,小数点最多保留两位,如果设置了多次使用导致每次核销返现金额无法均分，实际金额可能与设置金额有出入。</span>
+									</div>
+								</div>
+								<div class="form-group">
+									<label class="col-sm-2 control-label">支付立减</label>
+									<div class="col-sm-9">
+										<div class="input-group data-item">
+											<input type="text"  name="goods[goods_tag]" class="form-control" value="{$coupons['goods_tag']}">
+										</div>
+										<span class="help-block">填入微信商户设置的订单优惠标记,即可支付立减。</span>
+									</div>
+								</div>
+								{/if}
+								{/if}
+							</div>
+
+							<div class="pull-left alert form hidden form-area" style="width:650px;position:relative;min-height: 140px;" id="form8">
+								<input type="hidden" name="location-select" value="" autocomplete="off"/>
+								<input type="hidden" name="groups" value="" autocomplete="off"/>
+								<div class="arrow_in"></div>
+								<h4 style="margin-top:20px;">转赠设置</h4>
+								<div class="form-group">
+									<label class="col-sm-2 control-label">卡券转赠</label>
+									<div class="col-sm-9">
+										<label class="radio-inline">
+											<input type="radio" value="0" name="transferstatus" onclick="$('#trans').hide();" {if $coupons['transferstatus'] == 0} checked {/if} /> 禁止
+										</label>
+										<label class="radio-inline">
+											<input type="radio" value="1" name="transferstatus" onclick="$('#trans').show();" {if $coupons['transferstatus'] == 1} checked {/if} /> 允许
+										</label>
+										<span class="help-block">允许转赠后用户可以将卡券赠送给其他用户。</span>
+									</div>
+								</div>
+								<div id="trans"  {if empty($coupons['transferstatus'])} style="display: none" {/if}>
+								<div class="form-group">
+									<label class="col-sm-2 control-label">多次转赠</label>
+									<div class="col-sm-9">
+										<label class="radio-inline">
+											<input type="radio" name="transfermore" value="1" {if !empty($coupons['transfermore'])}checked{/if}>允许
+										</label>
+										<label class="radio-inline">
+											<input type="radio" name="transfermore" value="0" {if empty($coupons['transfermore'])}checked{/if}>禁止
+										</label>
+										<span class="help-block">允许多次转赠后用户可以将别人赠送的卡券再赠送给其他用户。</span>
+									</div>
+								</div>
+								<div class="form-group">
+									<label class="col-sm-2 control-label">转赠适用会员等级</label>
+									<div class="col-sm-9">
+										<label class="checkbox-inline">
+											<input type="checkbox" value="-1" {if in_array(-1,$coupons['trtlevel'])} checked {/if}  name="trtlevel[]" />非会员
+										</label>
+										<label class="checkbox-inline">
+											<input type="checkbox" value="0" {if in_array(0,$coupons['trtlevel'])} checked {/if}  name="trtlevel[]" />{$_W['wlsetting']['halflevel']['name']}
+										</label>
+										{loop $levels $level}
+										<label class="checkbox-inline">
+											<input type="checkbox" value="{$level['id']}" {if in_array($level['id'],$coupons['trtlevel'])} checked {/if}  name="trtlevel[]" />{$level['name']}
+										</label>
+										{/loop}
+										<span class="help-block">设置后需要有所设置的会员等级才可以发起转赠,不勾选即所有用户可用。</span>
+									</div>
+								</div>
+							</div>
+							</div>
+
+						</div>
+					</div>
+					<div class="form-group" style="margin-top: 1rem;">
+						<label class="col-sm-9 control-label"></label>
+						<div class="col-sm-6">
+							<input type="hidden" name="page" value="{$_GPC['page']}" />
+							<input type="submit" name="submit" value="提交" class="btn btn-primary min-width" />
+							<input type="hidden" name="token" value="{$_W['token']}" />
+							<input type="hidden" id="merchantid" name="merchantid" value="{$coupons['merchantid']}" />
+						</div>
+					</div>
+				</form>
+		</div>
+	<div id="footer-location" class="hide">
+		<span name="submit" id="submit" class="pull-right btn btn-primary">保存</span>
+	</div>
+	<!--选择门店弹出窗-->
+	<div id="modal-module-merchant" class="modal fade" tabindex="-1">
+		<div class="modal-dialog" style='width: 920px;'>
+			<div class="modal-content">
+				<div class="modal-header">
+					<button aria-hidden="true" data-dismiss="modal" class="close" type="button">×</button>
+					<h3>选取</h3></div>
+				<div class="modal-body">
+					<div class="row">
+						<div class="input-group">
+							<input type="text" class="form-control" name="keyword" value="" id="search-kwd-merchant" placeholder="请输入商家名称，不输入任何内容搜索结果为所有商家。" />
+							<span class='input-group-btn'><button type="button" class="btn btn-default" onclick="search_merchant();">搜索</button></span>
+						</div>
+					</div>
+					<div id="module-merchant" style="padding-top:5px;"></div>
+				</div>
+				<div class="modal-footer"><a href="#" class="btn btn-default" data-dismiss="modal" aria-hidden="true">关闭</a></div>
+			</div>
+		</div>
+	</div>
+</div>
+
+
+
+
+
+<script>
+    var color = "{php echo $coupons['color']}";
+    dsa();
+    function dsa(){
+    	if (color == 'Color010') {
+			$('#color-purview').css('background-color','#63B359');
+		}else if(color == 'Color020'){
+			$('#color-purview').css('background-color','#2c9f67');
+		}else if(color == 'Color030'){
+			$('#color-purview').css('background-color','#509fc9');
+		}else if(color == 'Color040'){
+			$('#color-purview').css('background-color','#5885cf');
+		}else if(color == 'Color050'){
+			$('#color-purview').css('background-color','#9062c0');
+		}else if(color == 'Color060'){
+			$('#color-purview').css('background-color','#d09a45');
+		}else if(color == 'Color070'){
+			$('#color-purview').css('background-color','#e4b138');
+		}else if(color == 'Color080'){
+			$('#color-purview').css('background-color','#ee903c');
+		}else if(color == 'Color081'){
+			$('#color-purview').css('background-color','#f08500');
+		}else if(color == 'Color082'){
+			$('#color-purview').css('background-color','#a9d92d');
+		}else if(color == 'Color090'){
+			$('#color-purview').css('background-color','#dd6549');
+		}else if(color == 'Color100'){
+			$('#color-purview').css('background-color','#cc463d');
+		}else if(color == 'Color101'){
+			$('#color-purview').css('background-color','#cf3e36');
+		}else if(color == 'Color102'){
+			$('#color-purview').css('background-color','#5e6671');
+		}
+    }
+	$(document).on('click', '.js-modules-modal', function() {
+		$('#modules-modal').modal('show');
+	});
+	$(document).on('click', '.js-groups-modal', function() {
+		$('#groups-modal').modal('show');
+	});
+	$('.list li,.card-dispose,.shop-panel').hover(function(){
+		$(this).find('.cicon').show();
+		$(this).addClass('hover');
+	}, function(){
+		$(this).find('.cicon').hide();
+		$(this).removeClass('hover');
+	});
+	$('#form1').mouseover(function(){
+		var bg_color = $(':input[name="color-value"]').val();
+		if(!bg_color) {
+			bg_color = '#a9d92d';
+		}
+		$('#color-purview').css('background-color', bg_color);
+		if($(':input[name="title"]').val()) {
+			$('#title-purview').html($(':input[name="title"]').val());
+		}
+		if($(':input[name="sub_title"]').val()) {
+			$('#sub-title-purview').html($(':input[name="sub_title"]').val());
+		}
+		if($(':input[name="brand_name"]').val()) {
+			$('#brand_name').html($(':input[name="brand_name"]').val());
+		}
+	//	$('.logo-area img').attr('src', $('#logo_upload img').attr('src'));
+		var result=$('')
+		var time_type = $(':radio[name="time_type"]:checked').val();
+		var time = '';
+		if(time_type == 1) {
+			var startime = $("input[name='time_limit[start]']").val();
+			var endtime = $("input[name='time_limit[end]']").val();
+			time = '有效期:'+startime+'~'+endtime;
+		} else if(time_type == 2) {
+			var deadline = parseInt($('#deadline').val());
+			time = '有效期:领取后'+deadline+'天';
+		}
+		$('#sub-time-purview').html(time);
+	});
+
+	$('.area').click(function() {
+		$(this).find('.cicon a').children().trigger('click');
+	});
+	$('.cicon a').click(function(){
+		$('.form').addClass('hidden');
+		var top = $(this).offset().top;
+		$('#'+$(this).attr('data-id')).css('margin-top',(top-265))
+		$('#'+$(this).attr('data-id')).removeClass('hidden');
+		return false;
+	})
+
+	$('#form2').mouseover(function(){
+		var code_type = $('#form2 :radio[name="code_type"]:checked').val() || 0;
+		if(code_type) {
+			$('#destroy_title').hide();
+			$('.code_preview').hide();
+			$('.code_preview_' + code_type).show();
+		}
+		$('#notice-purview').html($('#form2 :text[name="notice"]').val());
+	});
+
+	//选择门店
+	function search_merchant() {
+		$("#module-merchant").html("正在搜索....");
+		$.get("{php echo web_url('goodshouse/goodshouse/selectMerchant')}", {
+			keyword: $.trim($('#search-kwd-merchant').val())
+		}, function(dat){
+			$('#module-merchant').html(dat);
+		});
+	}
+	function select_merchant(o) {
+		$('#old-name').hide();
+		$('.js-location-contain').html('');
+        $('#merchantid').val(o.id);
+        $('#brand_name').text(o.storename);
+        $('#storelogo').attr("src",o.logo);
+		$('.js-location-contain').append('<span class="label label-success">'+o.storename+'</span>&nbsp;');
+	    $('#modal-module-merchant').modal('hide');
+	    util.tips("操作成功");
+	}
+	
+	//选择可用用户组
+	$('.js-select-groups').click(function(){
+		var chks = $('input[name="groupids[]"]:checked');
+		var groupids = [];
+		$('.js-groups-contain').html('');
+		if (chks) {
+			$.each(chks, function(){
+				$('.js-groups-contain').append('<span class="label label-success">'+$(this).data('name')+'</span>&nbsp;');
+				groupids.push($(this).val());
+			});
+			$('input[name=groups]').val(groupids.join('-'));
+		} else {
+			$('input[name=groups]').val('');
+		}
+	});
+	//选择模块
+	$('.js-select-modules').click(function(){
+		var chks = $('input[name="modules[]"]:checked');
+		var moduleids = [];
+		$('.js-modules-contain').html('');
+		if (chks) {
+			$.each(chks, function(){
+				$('.js-modules-contain').append('<span class="label label-success pull-left" style="margin:5px ;">'+$(this).data('name')+'</span>&nbsp;');
+				moduleids.push($(this).val());
+			});
+			$('input[name=module-select]').val(moduleids.join('@'));
+		} else {
+			$('input[name=module-select]').val('');
+		}
+	});
+	
+	setInterval('asd()',1000);
+	function asd(){
+		if($(':input[name="promotion_url_name"]').val()) {
+			$('#promotion_url_name').html($(':input[name="promotion_url_name"]').val());
+		}
+		if($(':input[name="promotion_url_sub_title"]').val()) {
+			$('#promotion_url_sub_title').html($(':input[name="promotion_url_sub_title"]').val());
+		}
+	}
+	function charge(asd){
+		if (asd == 1) {
+			$('#price').show();
+			$('.chargediv').show();
+		} else{
+			$('#price').hide();
+			$('.chargediv').hide();
+		}
+	}
+	
+	function distri(flag){
+		if (flag == 1) {
+			$('#distridiv').show();
+		} else{
+			$('#distridiv').hide();
+		}
+	}
+
+	function distritext(flag){
+		if (flag == 1) {
+			$('.isdistritext').html('%');
+		} else{
+			$('.isdistritext').html('元');
+		}
+	}
+
+    function grouptritext(flag){
+        if (flag == 1) {
+            $('.disgrouptext').html('%');
+        } else{
+            $('.disgrouptext').html('元');
+        }
+    }
+	
+	function indepen(flag){
+		if (flag == 1) {
+			$('.indediv').show();
+		} else{
+			$('.indediv').hide();
+		}
+	}
+	
+	function indexshow(asd){
+		if (asd == 1) {
+			$('#indexshow').show();
+		} else{
+			$('#indexshow').hide();
+		}
+	}
+	function vipchang(asd){
+		if (asd == 0) {
+			$('#viphelp0').show();
+			$('#viphelp1').hide();
+			$('#viphelp2').hide();
+			$('#vipprice').hide();
+			$('#viplevel').hide();
+		} else if(asd == 1){
+			$('#viphelp0').hide();
+			$('#viphelp1').show();
+			$('#viphelp2').hide();
+			$('#vipprice').hide();	
+			$('#viplevel').show();
+		} else if(asd == 2){
+			$('#viphelp0').hide();
+			$('#viphelp1').hide();
+			$('#viphelp2').show();
+			$('#vipprice').show();
+			$('#viplevel').hide();
+		}
+	}
+</script>
+{php include wl_template('common/footer');}

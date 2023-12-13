@@ -1,0 +1,110 @@
+{php include wl_template('common/header');}
+<ul class="nav nav-tabs" id="myTab">
+	<li class="active"><a href="#tab_basic">基本设置</a></li>
+	<li><a href="#tab_share">列表分享</a></li>
+</ul>
+<div class="app-content">
+	<div class="app-form">
+		<form action="" method="post" class="form-horizontal" id="setting-form">
+			<div class="panel panel-default">
+				<div class="panel-heading">模块设置</div>
+				<div class="panel-body">
+					<div class="tab-content">
+						<div class="tab-pane active" id="tab_basic">
+							<div class="form-group">
+								<label class="col-sm-2 control-label">首页社群</label>
+								<div class="col-sm-9">
+									<select name="base[communityid]" class="form-control chosen-select">
+										<option value="0" >不显示社群</option>
+										{loop $communitylist $key $val}
+										<option value="{$val['id']}" {if $val['id'] == $base['communityid']}selected{/if}>{$val['communname']}</option>
+										{/loop}
+									</select>
+									<span class="help-block">请选择首页是否显示社群</span>
+								</div>
+							</div>
+							<div class="form-group hide">
+								<label class="col-sm-2 control-label">选项卡分类是否显示图片</label>
+								<div class="col-xs-12 col-sm-8">
+									<div class="radio radio-success radio-inline">
+										<input type="radio" id="inlineRadioo2" name="base[img_switch]" value="0" {if $base['img_switch'] != 1}checked="checked"{/if}>
+										<label for="inlineRadioo2">关闭 </label>
+									</div>
+									<div class="radio radio-success radio-inline">
+										<input type="radio" id="inlineRadioo1" name="base[img_switch]" value="1" {if $base['img_switch'] == 1}checked="checked"{/if}>
+										<label for="inlineRadioo1">开启 </label>
+									</div>
+									<span class="help-block">开启后，所有团购选项卡下面的分类都会显示图片</span>
+								</div>
+							</div>
+						</div>
+						<div class="tab-pane" id="tab_share">
+							<div class="alert alert-info">
+								<b>适用模板变量：[昵称] [时间] [系统名称]</b>
+							</div>
+							<div class="form-group">
+								<label class="col-sm-2 control-label">分享标题</label>
+								<div class="col-sm-9">
+									<input type="text" name="base[share_title]" class="form-control" value="{$base['share_title']}" />
+								</div>
+							</div>
+							<div class="form-group">
+								<label class="col-sm-2 control-label">分享图片</label>
+								<div class="col-sm-9">
+									{php echo attachment_select('base[share_image]', $base['share_image']);}
+								</div>
+							</div>
+							<div class="form-group">
+								<label class="col-sm-2 control-label">分享描述</label>
+								<div class="col-sm-9">
+									<input type="text" name="base[share_desc]" class="form-control" value="{$base['share_desc']}" />
+								</div>
+							</div>
+						</div>
+					</div>
+				</div>
+			</div>
+			<div class="form-group">
+				<label class="col-sm-2 control-label"></label>
+				<div class="col-sm-9">
+					<input type="submit" name="submit" value="提交" class="btn btn-primary min-width" />
+					<input type="hidden" name="token" value="{$_W['token']}" />
+				</div>
+			</div>
+		</form>
+	</div>
+</div>
+<script>
+	$(function() {
+		window.optionchanged = false;
+		$('#myTab a').click(function(e) {
+			e.preventDefault(); //阻止a链接的跳转行为
+			$(this).tab('show'); //显示当前选中的链接及关联的content
+		})
+	});
+	//监听搜索框是否启用
+	$("[name='base[search]']").change(function () {
+		var val = $(this).val();
+		if(val == 1){
+            $(".form-group.search_float").hide();
+            $(".form-group.search_bgColor").hide();
+		}else{
+            $(".form-group.search_float").show();
+            if($("[name='base[search_float]']:checked").val() == 1){
+                $(".form-group.search_bgColor").show();
+			}else{
+                $(".form-group.search_bgColor").hide();
+			}
+		}
+    });
+	//监听搜索框是否浮动
+    $("[name='base[search_float]']").change(function () {
+        var val = $(this).val();
+        if(val == 1){
+            $(".form-group.search_bgColor").show();
+        }else{
+            $(".form-group.search_bgColor").hide();
+        }
+    });
+</script>
+{php include wl_template('common/footer');}

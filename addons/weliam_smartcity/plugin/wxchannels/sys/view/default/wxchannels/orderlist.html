@@ -1,0 +1,134 @@
+{php include wl_template('common/header');}
+<style type='text/css'>
+    .order-rank img{width:16px; height:16px;}
+    .js-remark,.js-admin-remark{word-break:break-all; overflow:hidden; background: #FDEEEE;color: #ED5050;padding: 5px 10px;}
+    td.goods-info{position:relative; padding-left:60px;}
+    .goods-info .img{position:absolute;top:50%; margin-top:-25px; background: url({IMAGE_LOADING}) center center no-repeat; width:50px;height:50px; }
+    .goods-info span {white-space: nowrap;overflow: hidden;text-overflow: ellipsis;display: block;}
+    .status-text{cursor:pointer;}
+</style>
+<ul class="nav nav-tabs">
+    <li class="active"><a href="javascript:;">订单列表</a></li>
+</ul>
+<div class="app-content">
+
+    <div class="app-table-list">
+        <div class="panel-body table-responsive collapse in order-list" id="order-template-item-4" style="padding: 0;">
+            <table class="table table-hover table-bordered">
+                <thead style="background-color: #FFFFFF;">
+                <tr>
+                    <th width="15%" style="text-align:center;">微信/商家订单号</th>
+                    <th width="15%" style="text-align:center;">商品信息</th>
+                    <th width="15%" style="text-align:center;">买家信息</th>
+                    <th width="15%" style="text-align:center;">配送信息</th>
+                    <th width="10%" style="text-align:center;">订单状态</th>
+                    <th width="10%" style="text-align:center;">订单金额</th>
+                    <th width="20%" style="text-align:center;">操作</th>
+                </tr>
+                </thead>
+                <tbody>
+                {loop $list $item}
+                <tr>
+                    <td class="text-center">
+                        {$item['order_id']}<be/>
+                        {$item['out_order_id']}
+                    </td>
+                    <td class="goods-info line-feed">
+                        <div class="img"><img class="scrollLoading" src="{IMAGE_PIXEL}" data-url="{$item['order_detail']['product_infos'][0]['head_img']}" height="50" width="50" onerror="this.src='{IMAGE_NOPIC_SMALL}'" ></div>
+                        <div class="title" style="padding-left: 60px;">
+                            <span>{$item['order_detail']['product_infos'][0]['title']}</span>
+                        </div>
+                    </td>
+                    <td class="goods-info line-feed">
+                        <div class="img"><img class="scrollLoading" src="{IMAGE_PIXEL}" data-url="{$item['avatar']}" height="50" width="50" onerror="this.src='{IMAGE_NOPIC_SMALL}'" ></div>
+                        <div class="title" style="padding-left: 60px;">
+                            <span>{$item['nickname']}</span>
+                            <span>{$item['openid']}</span>
+                        </div>
+                    </td>
+                    <td class="text-center">
+                        {if empty($item['order_detail']['delivery_detail']['finish_all_delivery'])}
+                        <span class="label label-warning">未发货</span>
+                        {/if}
+                    </td>
+
+                    <td class="text-center">
+                        {if $item['status'] == 10 || $item['status'] == 11}
+                        <span class="label label-default">待付款</span>
+                        {else if $item['status'] == 20}
+                        <span class="label label-warning">待发货</span><br/>
+                        {else if $item['status'] == 30}
+                        <span class="label label-info">待收货</span><br/>
+                        {else if $item['status'] == 100}
+                        <span class="label label-success">已完成</span><br/>
+                        {else if $item['status'] == 181 }
+                        <span class="label label-danger">超时未支付取消</span><br/>
+                        {else if $item['status'] == 200 }
+                        <span class="label label-danger">全部商品售后之后取消</span><br/>
+                        {else if $item['status'] == 250 }
+                        <span class="label label-danger">用户取消</span><br/>
+                        {/if}
+                    </td>
+
+                    <td class="text-center">
+                        总价:￥{php echo  sprintf("%.2f",$item['order_detail']['price_info']['order_price']/100);}
+                        {if $item['order_detail']['price_info']['freight'] > 0}
+                        <br/>运费:￥{php echo  sprintf("%.2f",$item['order_detail']['price_info']['freight']/100);}
+                        {/if}
+                    </td>
+                    <td class="text-center" style="position: relative;">
+                        {if $item['status'] == 10 || $item['status'] == 11}
+                        <p style="color: #428bca;display: inline-block;"><a href="{php echo web_url('wxchannels/channelweb/closeOrder', array('id'=>$item['order_id'],'openid' => $item['openid']))}" data-toggle="ajaxRemove" data-confirm="确定关闭此订单？">关闭</a></p>
+                        {/if}
+                        {if $item['status'] == 20}
+                        <p style="color: #428bca;display: inline-block;"><a href="{php echo web_url('wxchannels/channelweb/sendDelivery', array('id'=>$item['order_id'],'openid' => $item['openid']))}" >发货</a></p>
+                        {/if}
+                        {if $item['status'] == 30}
+                        <p style="color: #428bca;display: inline-block;"><a href="{php echo web_url('wxchannels/channelweb/recieveOrder', array('id'=>$item['order_id'],'openid' => $item['openid']))}" data-toggle="ajaxRemove" data-confirm="确定用户已收货？">确认收货</a></p>
+                        {/if}
+
+                        {if  !empty($item['related_aftersale_info'])}
+                        <p style="color: #428bca;display: inline-block;"><a href="{php echo web_url('wxchannels/channelweb/ecaftersalelist', array('id'=>$item['order_id']))}" >售后记录</a></p>
+                        {/if}
+                    </td>
+                </tr>
+                {/loop}
+                </tbody>
+            </table>
+        </div>
+        <div class="app-table-foot clearfix">
+            <div class="pull-right">
+                {$pager}
+            </div>
+        </div>
+    </div>
+
+    <div id="modal-module-gift22" class="modal fade" tabindex="-1">
+        <div class="modal-dialog" style='width: 920px;'>
+            <div class="modal-content">
+                <div class="modal-header">
+                    <button aria-hidden="true" data-dismiss="modal" class="close" type="button">×</button>
+                    <h3>驳回理由</h3>
+                </div>
+                <div class="modal-body" style="padding: 0;">
+                    <div class="modal-body">
+                        <textarea id="remark" name="admin_remark" class="form-control" rows="5"></textarea>
+                    </div>
+                </div>
+                <div class="modal-footer" style="padding:15px;">
+                    <a class="btn btn-default js-cancel" aria-hidden="true" data-dismiss="modal">关闭</a>
+                </div>
+            </div>
+        </div>
+    </div>
+
+</div>
+<script>
+    //驳回理由查看
+    $('.rejectdis').click(function(){
+        var reason = $(this).attr('reason');
+        $('#remark').value(reason);
+        popwin = $('#modal-module-gift22').modal();
+    });
+</script>
+{php include wl_template('common/footer');}

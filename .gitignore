@@ -1,0 +1,16 @@
+/api
+/addons/weliam_smartcity/data
+/error
+/payment
+/.htaccess
+/nginx.htaccess
+/.idea
+/addons/weliam_smartcity/log
+/addons/weliam_shiftcar
+runtime
+/addons/weliam_smartcity/plugin/weliam_house
+/data/tpl
+/attachment
+data
+log
+/addons/weliam_smartcity/core/common/im_ids.php

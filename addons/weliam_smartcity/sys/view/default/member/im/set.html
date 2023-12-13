@@ -1,0 +1,147 @@
+{php include wl_template('common/header');}
+<ul class="nav nav-tabs" id="myTab">
+    <li class="active"><a href="#tab_basic">通信设置</a></li>
+</ul>
+<div class="app-content">
+    <div class="app-form">
+        <form action="" method="post" class="form-horizontal form form-validate">
+            <div class="panel panel-default">
+                <div class="form-group">
+                    <label class="col-sm-2 control-label">通信方式</label>
+                    <div class="col-sm-9">
+                        <label class="radio-inline">
+                            <input type="radio" name="data[type]" onclick="$('#imParams').addClass('hide')" value="0" {if $set['type'] != 1} checked {/if}> 普通通信
+                        </label>
+                        <label class="radio-inline">
+                            <input type="radio" name="data[type]" onclick="$('#imParams').removeClass('hide')" value="1" {if $set['type'] == 1} checked {/if}> 多功能通信
+                        </label>
+                        <div class="help-block">
+                            普通通信：即旧的通讯方式，仅支持发送文本信息。<br />
+                            多功能通信：新的通讯方式支持文本、表情、图片、视频等等。但是配置复杂，需要修改服务器配置。多功能通信必须配置ssl证书！
+                        </div>
+                    </div>
+                </div>
+                <!--  多功能通知基本设置内容  -->
+                <div id="imParams" class="{if $set['type'] != 1}hide{/if}">
+                    <div class="form-group">
+                        <label class="col-sm-2 control-label">请求端口</label>
+                        <div class="col-sm-9">
+                            <input type="number" name="data[port]" class="form-control" value="{$set['port']}">
+                            <span class="help-block">请求时使用的端口。需要在服务器放行</span>
+                        </div>
+                    </div>
+                    <div class="form-group">
+                        <label class="col-sm-2 control-label">公钥文件路径(.pem文件)</label>
+                        <div class="col-sm-9">
+                            <input type="text" name="data[pem_path]" class="form-control" value="{$set['pem_path']}">
+                            <div class="help-block">公钥在服务器的绝对路径，例如：/www/server/data/ssl/pem.pem</div>
+                        </div>
+                    </div>
+                    <div class="form-group">
+                        <label class="col-sm-2 control-label">私钥文件路径(.key文件)</label>
+                        <div class="col-sm-9">
+                            <input type="text" name="data[key_path]" class="form-control" value="{$set['key_path']}">
+                            <div class="help-block">私钥在服务器的绝对路径，例如：/www/server/data/ssl/pem.key</div>
+                        </div>
+                    </div>
+                    {if $set['port'] && $set['key_path'] && $set['pem_path']}
+                        <div class="form-group"  id="testSocket">
+                            <label class="col-sm-2 control-label">通信测试</label>
+                            <div class="col-sm-9">
+                                <input v-if="status != 1 && status != 2" type="button" @click="startLink()" value="链接测试" class="btn btn-info min-width" />
+                                <div class="help-block" style="display: inline-block;color: #f16060;font-weight: bolder;">
+                                    <!-- 状态：0=未链接，1=链接中，2=通讯中，3=断开链接，可重连 -->
+                                    <span v-if="status == 0">未链接...</span>
+                                    <span v-if="status == 1">正在请求，链接中...</span>
+                                    <span v-if="status == 2">请求成功，通讯中...</span>
+                                    <span v-if="status == 3">断开链接...</span>
+                                    <span v-if="status == 4">链接失败，通讯不可用...</span>
+                                    <span v-if="status == 5">链接失败，当前浏览器不支持WebSocket通讯...</span>
+                                </div>
+                            </div>
+                        </div>
+                    {/if}
+                </div>
+                <div class="form-group">
+                    <label class="col-sm-2 control-label"></label>
+                    <div class="col-sm-9">
+                        <input type="submit" name="submit" value="提交" class="btn btn-primary min-width" />
+                        <input type="hidden" name="token" value="{$_W['token']}" />
+                    </div>
+                </div>
+            </div>
+        </form>
+    </div>
+</div>
+<script>
+    let port = "{$set['port']}";
+    //判断是否支持websocket
+    new Vue({
+        el:"#testSocket",
+        data:{
+            wsUrl: '',
+            status: 0,//状态  0=未链接，1=链接中，2=通讯中，3=断开链接，可重连，4=链接失败，通讯不可用，5=不支持WebSocket
+            linkTimes: 0,//当前重连次数
+            max: 3,//最大重连次数
+        },
+        watch: {
+            'status'(){
+                //根据状态进行对应的操作
+                if(this.status == 0 && this.max > this.linkTimes){
+                    this.linkTimes++;
+                    this.startLink();
+                }
+            },
+        },
+        methods:{
+            //开始链接
+            startLink(){
+                //判断是否支持webSocket
+                if(!'WebSocket' in window) {
+                    _this.status = 5;
+                    return false;
+                }
+                //开始通信操作
+                let _this = this;
+                _this.status = 1;
+                _this.ws = new WebSocket(_this.wsUrl);
+                //链接成功
+                _this.ws.onopen = function (){
+                    _this.status = 2;
+                    console.log("通讯成功");
+                }
+                //获取返回的数据信息
+                _this.ws.onmessage = function(event){
+                    //信息拼接
+                    console.log(event);
+                }
+                //链接已关闭
+                _this.ws.onclose = function(event){
+                    console.log(event);
+                    //再次请求
+                    if(_this.max > _this.linkTimes){
+                        if(_this.status == 1) {
+                            _this.status = 0;//链接中断开  请求运行PHP文件
+                        } else {
+                            _this.status = 3; //通讯中断开  断开链接，可以从新链接
+                        }
+                    }else{
+                        //重连超出  链接失败  通讯不可用
+                        _this.status = 4;
+                    }
+                }
+                //错误抛出
+                _this.ws.error = function (e){
+                    console.log('链接报错');
+                    console.log(e);
+                }
+            },
+        },
+        mounted() {
+            //获取请求地址
+            let domain = document.domain;
+            this.wsUrl = 'wss://'+domain+':'+port;
+        }
+    });
+</script>
+{php include wl_template('common/footer');}

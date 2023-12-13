@@ -1,0 +1,519 @@
+{php include wl_template('common/header');}
+<style type='text/css'>
+	.certification-materials{cursor: pointer}
+</style>
+<ul class="nav nav-tabs">
+	<li class="active"><a href="">订单详情</a></li>
+</ul>
+<div class="app-content">
+	<div class="order-detail">
+		<div class="col-md-6 padding-0">
+			<div class="panel panel-display">
+				<div class="panel-heading"><h3>订单信息</h3></div>
+				<div class="panel-body">
+					<table class="table">
+						<tr>
+							<td width="150">下单人微信：</td>
+							<td><img src="{php echo tomedia($order['avatar'])}" style="width: 30px;height: 30px;margin-right: 5px;" >{$member['nickname']}</td>
+						</tr>
+						{if $member['mobile']}
+						<tr>
+							<td width="150">下单人手机：</td>
+							<td>{$member['mobile']}</td>
+						</tr>
+						{/if}
+						{if $order['username']}
+						<tr>
+							<td width="150">提货人姓名：</td>
+							<td>{$order['username']}</td>
+						</tr>
+						{/if}
+						{if $order['mobile']}
+						<tr>
+							<td width="150">提货人电话：</td>
+							<td>{$order['mobile']}</td>
+						</tr>
+						{/if}
+						{if $order['address']}
+						<tr>
+							<td width="150">提货人地址：</td>
+							<td>{$order['address']}</td>
+						</tr>
+						{/if}
+						{if $type == 17}
+						<tr>
+							<td width="150">入住时长：</td>
+							<td>{php echo date('y/m/d H:i',$order['strattime'])} - {php echo date('y/m/d H:i',$order['endtime'])}</td>
+						</tr>
+						{/if}
+						<tr>
+							<td width="150">订单编号：</td>
+							<td>{$order['orderno']}</td>
+						</tr>
+						{if $order['transid']}
+						<tr>
+							<td width="150">第三方支付单号：</td>
+							<td>{$order['transid']}</td>
+						</tr>
+						{/if}
+						<tr>
+							<td>下单时间：</td>
+							<td>{php echo date('Y-m-d H:i:s', $order['createtime']);}</td>
+						</tr>
+						<tr>
+							<td>订单状态：</td>
+							<td><span class="label label-{$order['statuscss']}">{$order['statustext']}</span></td>
+						</tr>
+						<tr>
+							<td>付款方式：</td>
+							<td>
+								{if !$order['paytype']}
+									<span class="label label-danger">未支付</span>
+								{else}
+									<span class="label label-{$order['paytypecss']}">{$order['paytypetext']}</span>{if $order['paytype'] == 7}(微信{$order['blendwx']}+余额{$order['blendcredit']}){/if}
+								{/if}
+							</td>
+						</tr>
+						{if $order['checkcode']}
+						<tr>
+							<td width="150">订单核销码：</td>
+							<td>{$order['checkcode']}</td>
+						</tr>
+						{/if}
+						<tr>
+							<td>买家备注：</td>
+							<td>
+								{if !empty($order['buyremark'])}{$order['buyremark']}{else}无{/if}
+							</td>
+						</tr>
+						<tr>
+							<td>卖家备注：</td>
+							<td>
+								<a href='javascript:;' data-toggle='ajaxEdit' data-href="{php echo web_url('finace/newCash/editremark',array('id'=>$order['id'],'type'=>$type))}">
+									{if !empty($order['remark'])}{$order['remark']}{else}无{/if}
+								</a>
+							</td>
+						</tr>
+						{if !empty($moinfo)}
+							{loop $moinfo $key $mo}
+								<tr>
+									<td>{$mo['title']}：</td>
+									<td>
+										{if $mo['id'] == 'text'}
+											{$mo['data']}
+										{elseif $mo['id'] == 'textarea'}
+										<textarea style="width: 100%;height: 150px;resize: none;" disabled="disabled">{$mo['data']}</textarea>
+										{elseif $mo['id'] == 'select'}
+										<span class="label label-primary">{$mo['data']}</span>
+										{elseif $mo['id'] == 'checkbox'}
+											{loop $mo['data'] $moItem}
+												<span class="label label-primary">{$moItem}</span>
+											{/loop}
+										{elseif $mo['id'] == 'img'}
+											{loop $mo['data'] $moItem}
+												<img src="{php echo tomedia($moItem)}" data-img="{php echo tomedia($moItem)}" style="float: left;margin: 2.5px;width: 80px;">
+											{/loop}
+										{elseif $mo['id'] == 'time'}
+											{$mo['data']}
+										{elseif $mo['id'] == 'datetime'}
+											{$mo['data'][0]}~{$mo['data'][1]}
+										{elseif $mo['id'] == 'city'}
+											{if is_array($mo['data'])}
+												{loop $mo['data'] $moItem}
+													{$moItem}
+												{/loop}
+											{else}
+												{$mo['data']}
+											{/if}
+										{/if}
+									</td>
+								</tr>
+							{/loop}
+						{/if}
+					</table>
+				</div>
+			</div>
+			<div class="panel panel-display">
+				<div class="panel-heading"><h3>订单日志</h3></div>
+				<div class="panel-body">
+					<table class="table">
+						{loop $logs $log}
+						<tr>
+							<td>
+								<p><i class="fa fa-info-circle"></i> <strong>{php echo date('Y-m-d H:i:s', $log['time']);} {$log['title']}</strong></p>
+								<p style="padding-left:15px;">
+									{$log['detail']}
+								</p>
+								{if !empty($log['thumbs'])}
+								<p style="padding-left:15px;">
+									{loop $log['thumbs'] $logimg}
+									<a href="{php echo tomedia($logimg)}" target="_blank"><img width="50" height = "50" src="{php echo tomedia($logimg)}"></a>
+									{/loop}
+								</p>
+								{/if}
+							</td>
+						</tr>
+						{/loop}
+					</table>
+				</div>
+			</div>
+		</div>
+		<div class="col-md-6 padding-r-0">
+			<div class="panel panel-display">
+				<div class="panel-heading"><h3>订单费用</h3></div>
+				<div class="panel-body">
+					<table class="table">
+						<tr>
+							<td width="150">商品价格：</td>
+							<td>+￥ {$goodsprice}</td>
+						</tr>
+
+						{if $order['deposit']>0}
+						<tr>
+							<td width="150">押金：</td>
+							<td>+￥{$order['deposit']}</td>
+						</tr>
+						{/if}
+						{if $order['packingmoney']>0}
+						<tr>
+							<td width="150">包装费：</td>
+							<td>+￥{$order['packingmoney']}</td>
+						</tr>
+						{/if}
+						{if $expressprice>0}
+						<tr>
+							<td width="150">{if $type == 14}配送费{else}快递费{/if}：</td>
+							<td>+￥{$expressprice}</td>
+						</tr>
+						{/if}
+						{if $vipCardPrice>0}
+						<tr>
+							<td width="150">会员开通：</td>
+							<td>+￥{$vipCardPrice}</td>
+						</tr>
+						{/if}
+						{if $vipdiscount>0}
+						<tr>
+							<td width="150">会员减免：</td>
+							<td>-￥{$vipdiscount}</td>
+						</tr>
+						{/if}
+						{if $dkmoney>0}
+						<tr>
+							<td width="150">积分抵扣：</td>
+							<td>-￥{$dkmoney} (花费{$dkcredit}积分)</td>
+						</tr>
+						{/if}
+						{if $fullreducemoney>0}
+						<tr>
+							<td width="150">满减优惠：</td>
+							<td>-￥{$fullreducemoney}</td>
+						</tr>
+						{/if}
+						{if $redpackmoney > 0}
+						<tr>
+							<td width="150">红包[{$packname}]：</td>
+							<td>-￥{$redpackmoney}</td>
+						</tr>
+						{/if}
+						{if $order['issettlement']}
+						<tr>
+							<td width="150">代理{if $agentmoney>0}抽佣{else}补贴{/if}：</td>
+							<td>{if $agentmoney>0}-￥{$agentmoney}{else}+￥{php echo abs($agentmoney)}{/if}</td>
+						</tr>
+						{if $distrimoney>0}
+						<tr>
+							<td width="150">分销抽佣：</td>
+							<td>-￥{$distrimoney}{if $disorder['oneleadid']} (一级:{$onename}￥{$leadmoney['one']} {if $disorder['twoleadid']}二级:{$twoname}￥{$leadmoney['two']} {/if}) {/if}</td>
+						</tr>
+						{/if}
+						{if $salesmoney>0}
+						<tr>
+							<td width="150">业务员抽佣：</td>
+							<td>-￥{$salesmoney}
+								({loop $salesarray $sa}
+								{$sa['nickname']}￥{$sa['salemoney']},
+								{/loop})
+							</td>
+						</tr>
+						{/if}
+						{if $sharemoney>0}
+						<tr>
+							<td width="150">分享{if $shares['type'] == 1}立减{else}分佣{/if}：</td>
+							<td>-￥{$sharemoney}{if $shares['type'] == 2}(分享人:{$sharename}){/if}</td>
+						</tr>
+						{/if}
+						{/if}
+						{if $refundmoney>0}
+						<tr>
+							<td width="150">退款金额</td>
+							<td>
+								-￥{$refundmoney}
+							</td>
+						</tr>
+						{/if}
+						{if $type != 4 && $type != 5 && $type != 6 && $type != 8 && $type != 15}
+						<tr>
+							<td width="150">商户实际收入：</td>
+							<td>
+								{if $order['issettlement'] || ( $order['status'] == 7 && $order['neworderflag']) }￥{$merchantmoney}{else}暂未结算{/if}  (本单客户实际支付:￥{$actualprice})</td>
+						</tr>
+						{else}
+						<tr>
+							<td width="150">代理订单</td>
+							<td>
+								本单客户实际支付:￥{$actualprice}
+							</td>
+						</tr>
+						{/if}
+
+	 				</table>
+	 			</div>
+			</div>
+			<div class="panel panel-display">
+				<div class="panel-heading"><h3>商品信息</h3></div>
+				<div class="panel-body">
+					<table class="table table-hover">
+						<thead>
+							<tr>
+								<th style="width: 20rem;">商品</th>
+								<th>规格</th>
+								<th>份数</th>
+								<th>小计(元)</th>
+								<th></th>
+							</tr>
+						</thead>
+							{if $type == 14}
+							{loop $delivery_orders $deli}
+							<tr>
+								<td><img src="{php echo tomedia($deli['good']['thumb'])}" style="width: 30px;height: 30px;margin-right: 5px;">{$deli['good']['name']}</td>
+								<td>{if !empty($deli['good']['specname'])} {$deli['good']['specname']} {else} 无 {/if}</td>
+								<td>{$deli['num']} 份</td>
+								<td>{$deli['price']} 元</td>
+								<td class="text-right">
+									<a class="btn btn-primary btn-sm" target="_blank" href="{$deli['good']['editurl']}">商品信息</a>
+								</td>
+							</tr>
+							{/loop}
+						    {else}
+							<tr>
+								<td>{if $goods['thumb']}<img src="{php echo tomedia($goods['thumb'])}" style="width: 30px;height: 30px;margin-right: 5px;"> {/if}{$goods['name']}</td>
+								<td>{if !empty($order['optiontitle'])} {$order['optiontitle']} {else} 无 {/if}</td>
+								<td>{$order['num']} 份</td>
+								<td>{$goodsprice} 元</td>
+								{if $editurl}
+								<td class="text-right">
+									<a class="btn btn-primary btn-sm" target="_blank" href="{$editurl}">商品信息</a>
+								</td>
+								{/if}
+							</tr>
+							{/if}
+					</table>
+				</div>
+			</div>
+			{if !empty($smallorders)}
+			<div class="panel panel-display">
+				<div class="panel-heading"><h3>核销码信息</h3></div>
+				<div class="panel-body">
+					<table class="table table-hover">
+						<thead>
+						<tr>
+							<th style="width: 20rem;">核销码</th>
+							<th>状态</th>
+							<th>金额</th>
+							<th>操作人</th>
+							<th>操作时间</th>
+							<th>操作</th>
+						</tr>
+						</thead>
+						{loop $smallorders $smaa}
+						<tr>
+							<td>{$smaa['checkcode']}</td>
+							<td>
+								{if $smaa['status'] == 1}
+								<span class='label label-success'>待核销</span>
+								{else if $smaa['status'] == 2}
+								<span class='label label-info'>已核销</span>
+								{else if $smaa['status'] == 3}
+								<span class='label label-primary'>已退款</span>
+								{else if $smaa['status'] == 4}
+								<span class='label label-danger'>申请退款</span>
+								{/if}
+							</td>
+							<td style="color: orangered">￥{$smaa['orderprice']}</td>
+							<td>{$smaa['douser']}</td>
+							<td>{$smaa['dotime']}</td>
+							<td>
+								{if $smaa['status'] == 1 || $smaa['status'] == 4}
+								<a class='op'  data-toggle='ajaxPost' href="{php echo web_url('order/wlOrder/fetchcheck',array('checkcode'=>$smaa['checkcode']))}" data-confirm="确认核销此核销码？" >核销</a>
+								- <a class='op'  data-toggle='ajaxModal' href="{php echo web_url('order/wlOrder/refund',array('id'=>$smaa['orderid'],'type'=>$order['ordera'],'checkcode'=>$smaa['checkcode']))}">退款</a>
+								{else}
+								- 无 -
+								{/if}
+							</td>
+						</tr>
+						{/loop}
+					</table>
+				</div>
+			</div>
+			{/if}
+			{if $order['expressid']}
+			<div class="panel panel-display">
+				<div class="panel-heading"><h3>快递信息</h3></div>
+				<div class="panel-body">
+					<table class="table">
+						<tr>
+							<td width="150">买家：</td>
+							<td><a href="{php echo web_url('member/wlMember/memberIndex',array('mid'=>$order['mid']))}"  target='_blank'> {$member['nickname']}</a>&nbsp;&nbsp;<a data-toggle='popover' data-trigger="hover" data-html='true' data-placement='right'
+                                                                                                                                                                      data-content="<table style='width:100%;'>
+                <tr>
+                    <td  style='border:none;text-align:right;' colspan='2'><img src='{php echo tomedia($member['avatar'])}' style='width:100px;height:100px;padding:1px;border:1px solid #ccc' /></td>
+                </tr>
+                <tr>
+                    <td  style='border:none;text-align:right;'>ID：</td>
+                    <td  style='border:none;text-align:right;'>{$member['id']}</td>
+                </tr>
+                <tr>
+                    <td  style='border:none;text-align:right;'>昵称：</td>
+                    <td  style='border:none;text-align:right;'>{$member['nickname']}</td>
+                </tr>
+                <tr>
+                    <td  style='border:none;text-align:right;'>姓名：</td>
+                    <td  style='border:none;text-align:right;'>{if $member['realname']}{$member['realname']}{else}未填写{/if}</td>
+                </tr>
+                <tr>
+                    <td  style='border:none;text-align:right;'>手机号：</td>
+                    <td  style='border:none;text-align:right;'>{if $member['mobile']}{$member['mobile']}{else}未填写{/if}</td>
+                </tr>
+                </table>
+"><i class='fa fa-question-circle'></i></a></td>
+						</tr>
+						<tr>
+							<td width="150">配送方式：</td>
+							<td>{if $type == 14}{if $order['fightstatus'] == 1}商家{else if $order['fightstatus'] == 2}平台{/if}配送{else}快递{/if}</td>
+						</tr>
+						<tr>
+							<td width="150">收货人：</td>
+							<td>{$express['address']},{$express['name']},{$express['tel']}&nbsp;&nbsp;<div style="display: inline;position: relative;"> <a href='javascript:;' class="js-clip" title='点击复制' data-url="{$express['address']},{$express['name']},{$express['tel']}">[复制]</a></div></td>
+						</tr>
+						<tr>
+							<td width="150"></td>
+							{if $type == 14}
+							<td>
+								{if $order['status'] == 4}
+									<a class="btn btn-primary btn-xs" data-toggle='ajaxModal'  href="{php echo web_url('order/wlOrder/changeexpress', array('expressid' => $express['id']))}">修改订单配送信息</a>
+									<a class="btn btn-primary btn-xs" data-toggle='ajaxPost' data-confirm="确定此订单商品已送达买家？" href="{php echo web_url('order/wlOrder/finishdelivery', array('id' => $order['id']))}">确认送达</a>
+								{/if}
+								{if $order['status'] == 1}
+									<a class="btn btn-primary btn-xs" data-toggle='ajaxPost' data-confirm="确定此订单商品买家已提货？" href="{php echo web_url('order/wlOrder/finishdelivery', array('id' => $order['id']))}">确认提货</a>
+								{/if}
+							</td>
+							{else}
+							<td>
+								<a class="btn btn-primary btn-xs" data-toggle='ajaxModal'  href="{php echo web_url('order/wlOrder/changeexpress', array('expressid' => $express['id']))}">修改订单收货信息</a>
+							{if $order['status'] == 8}
+								<a class="btn btn-primary btn-xs" data-toggle="ajaxModal"  href="{php echo web_url('order/wlOrder/send', array('id' => $order['id'],'type' => $order['ordera']))}">确认发货</a>
+							{/if}
+							{if $order['status'] == 4}
+								<a class="btn btn-warning btn-xs" data-toggle="ajaxModal"  href="{php echo web_url('order/wlOrder/send', array('id' => $order['id'],'type' => $order['ordera'],'edit_flag'=>1))}">修改物流</a>
+								<a class="btn btn-danger btn-xs" data-toggle='ajaxPost'  href="{php echo web_url('order/wlOrder/sendcancel', array('id' => $order['id'],'type' => $order['ordera']))}" data-confirm="确认取消发货？">取消发货</a>
+								<a class="btn btn-primary btn-xs" data-toggle="ajaxPost"  href="{php echo web_url('order/wlOrder/collect', array('id' => $order['id'],'type' => $order['ordera']))}" data-confirm="确认买家收货？">确认收货</a>
+							{/if}
+							</td>
+							{/if}
+						</tr>
+	 				</table>
+				</div>
+			</div>
+			{/if}
+			<!--售后-->
+			{if !empty($afters)}
+			<div class="panel panel-display">
+				<div class="panel-heading"><h3>售后信息</h3></div>
+				{loop $afters $aft}
+				<div class="panel-body">
+					<table class="table">
+						<tr>
+							<td width="150">申请时间：</td>
+							<td>{php echo date('Y-m-d H:i:s',$aft['createtime'])}</td>
+						</tr>
+						<tr>
+							<td width="150">售后状态：</td>
+							<td>{if $aft['status'] == 1}
+								<span class='label label-warning'>待处理</span>
+								{else if $aft['status'] == 2}
+								<span class='label label-success'>已完成</span>
+								{else if $aft['status'] == 3}
+								<span class='label label-danger'>已拒绝</span>
+								{else if $aft['status'] == 4}
+								<span class='label label-primary'>用户取消</span>
+								{/if}
+							</td>
+						</tr>
+						<tr>
+							<td width="150">申请原因：</td>
+							<td>{$aft['reason']}</td>
+						</tr>
+						<tr>
+							<td width="150">详细描述：</td>
+							<td>{$aft['detail']}</td>
+						</tr>
+						{if !empty($aft['checkcodes'])}
+						<tr>
+							<td width="150">售后核销码：</td>
+							<td>
+								{loop $aft['checkcodes'] $code}
+								{$code},
+								{/loop}
+							</td>
+						</tr>
+						{/if}
+						{if $aft['status'] == 1}
+						<tr>
+							<td width="150">操作：</td>
+							<td>
+								<a class='op'  data-toggle='ajaxModal' href="{$af['refundurl']}">退款</a>
+								- <a href="{php echo web_url('order/orderAfterSales/rejectafter',array('id'=>$aft['id']))}" data-toggle="ajaxModal">驳回</a>
+							</td>
+						</tr>
+						{/if}
+						{if $aft['status'] == 3}
+						<tr>
+							<td width="150">驳回原因：</td>
+							<td>{$aft['reply']}</td>
+						</tr>
+						{/if}
+						{if $aft['dotime'] > 0}
+						<tr>
+							<td width="150">操作时间：</td>
+							<td>{php echo date('Y-m-d H:i:s',$aft['dotime'])}</td>
+						</tr>
+						{/if}
+						{if !empty($aft['thumbs'])}
+						<tr>
+							<td width="150">上传图片：</td>
+							<td>
+								{loop $aft['thumbs'] $img}
+								<a href="{php echo tomedia($img)}" target="_blank"><img width="50" height = "50" src="{php echo tomedia($img)}"></a>
+								{/loop}
+							</td>
+						</tr>
+						{/if}
+					</table>
+				</div>
+				{/loop}
+			</div>
+			{/if}
+		</div>
+	</div>
+</div>
+<script>
+	$(".certification-materials").on('click',function () {
+		let _this = $(this),
+				link = _this.data("url");
+		window.open(link,"_blank");
+	});
+</script>
+
+
+{php include wl_template('common/footer');}

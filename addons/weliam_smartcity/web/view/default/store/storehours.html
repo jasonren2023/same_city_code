@@ -1,0 +1,7 @@
+<div class="input-group data-item">
+    <span class="input-group-addon">开始时间</span>
+    {php echo tpl_form_field_clock('startTime[]', $hour['startTime']);}
+    <span class="input-group-addon">结束时间</span>
+    {php echo tpl_form_field_clock('endTime[]', $hour['endTime']);}
+    <span onclick="removes(this)" style="border-left:1px solid #e8e9eb !important;" class="input-group-addon btn btn-default data-item-delete"><i class="fa fa-remove"></i> 删除</span>
+</div>

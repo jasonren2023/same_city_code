@@ -1,0 +1,22 @@
+<form class="form-horizontal" action="{php echo web_url('headline/headline/import')}" method="post" enctype="multipart/form-data">
+    <div class="modal-dialog">
+        <div class="modal-content">
+            <div class="modal-header">
+                <button data-dismiss="modal" class="close" type="button">×</button>
+                <h4 class="modal-title">一键导入微信图文</h4>
+            </div>
+            <div class="modal-body">
+                <div class="form-group">
+                    <label class="col-sm-2 control-label">图文链接</label>
+                    <div class="col-sm-9">
+                        <input class="form-control" type="text" name="wechat_url" placeholder="请输入微信图文链接" required />
+                    </div>
+                </div>
+            </div>
+            <div class="modal-footer">
+                <button class="btn btn-primary" type="submit">导入</button>
+                <button data-dismiss="modal" class="btn btn-default" type="button">取消</button>
+            </div>
+        </div>
+    </div>
+</form>

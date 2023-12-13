@@ -1,0 +1,72 @@
+{php include wl_template('common/header');}
+<ul class="nav nav-tabs" id="myTab">
+    <li class="active"><a href="#tab_basic">基础设置</a></li>
+<!--    <li ><a href="#tab_share">分享设置</a></li>-->
+</ul>
+<div class="app-content">
+    <div class="app-form">
+        <form action="" method="post" class="form-horizontal form form-validate">
+            <div class="panel panel-default">
+                <div class="panel-heading">锦鲤抽奖设置</div>
+                <div class="panel-body">
+                    <div class="tab-content">
+                        <div class="tab-pane active" id="tab_basic">
+                            <div class="form-group">
+                                <label class="col-sm-2 control-label">抽奖开关</label>
+                                <div class="col-sm-9">
+                                    <label class="radio-inline">
+                                        <input type="radio" value="1" name="set[status]" {if $settings['status']==1} checked {/if}>开启
+                                    </label>
+                                    <label class="radio-inline">
+                                        <input type="radio" value="0" name="set[status]" {if $settings['status']==0 || empty($settings) } checked {/if}>关闭
+                                    </label>
+                                </div>
+                            </div>
+                            <div class="form-group">
+                                <label class="col-sm-2 control-label">抽奖声明</label>
+                                <div class="col-sm-9">
+                                    <input type="text" name="set[statement]" placeholder="请输入抽奖声明声明" class="form-control" value="{$settings['statement']}" />
+                                    <span class="help-block">默认内容为：100%开奖·绝对公平公正·快来加入吧。</span>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                <div class="form-group">
+                    <label class="col-sm-2 control-label"></label>
+                    <div class="col-sm-9">
+                        <input type="submit" name="submit" value="提交" class="btn btn-primary min-width" />
+                        <input type="hidden" name="token" value="{$_W['token']}" />
+                    </div>
+                </div>
+            </div>
+        </form>
+    </div>
+</div>
+<script>
+    function divhs(flag){
+        if(flag == 1){
+            $('.sljdiv').show();
+        }else if(flag == 0){
+            $('.sljdiv').hide();
+        }
+    }
+
+    function disdiv(flag){
+        if(flag == 1){
+            $('.disdiv').show();
+        }else if(flag == 0){
+            $('.disdiv').hide();
+        }
+    }
+
+    $(function() {
+        window.optionchanged = false;
+        $('#myTab a').click(function(e) {
+            e.preventDefault(); //阻止a链接的跳转行为
+            $(this).tab('show'); //显示当前选中的链接及关联的content
+        })
+    });
+
+</script>
+{php include wl_template('common/footer');}

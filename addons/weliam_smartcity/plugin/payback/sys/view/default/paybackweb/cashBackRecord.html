@@ -1,0 +1,127 @@
+{php include wl_template('common/header');}
+<ul class="nav nav-tabs">
+    <li class="active"><a href="">返现记录</a></li>
+</ul>
+<div class="app-content">
+    <div class="app-filter">
+        <div class="filter-list">
+            <form action="" method="get" class="form-horizontal form" id="form1">
+                <input type="hidden" name="c" value="site" />
+                <input type="hidden" name="a" value="entry" />
+                <input type="hidden" name="m" value="{MODULE_NAME}" />
+                <input type="hidden" name="p" value="payback" />
+                <input type="hidden" name="ac" value="payback" />
+                <input type="hidden" name="do" value="cashBackRecord" />
+                <input type="hidden" name="plugin" value="{$plugin}"/>
+                <div class="form-group max-with-all">
+                    <label class="col-sm-2 control-label">类型</label>
+                    <div class="col-sm-9">
+                        <div class="btn-group">
+                            <a href="{php echo wl_filter_url('plugin:');}" class="btn {if  empty($plugin)}btn-primary{else}btn-default{/if}">全部</a>
+                            <a href="{php echo wl_filter_url('plugin:rush');}" class="btn {if $plugin == 'rush'}btn-primary{else}btn-default{/if}">抢购</a>
+                            <a href="{php echo wl_filter_url('plugin:groupon');}" class="btn {if $plugin == 'groupon'}btn-primary{else}btn-default{/if}">团购</a>
+                            <a href="{php echo wl_filter_url('plugin:wlfightgroup');}" class="btn {if $plugin == 'wlfightgroup'}btn-primary{else}btn-default{/if}">拼团</a>
+                            <a href="{php echo wl_filter_url('plugin:coupon');}" class="btn {if $plugin == 'coupon'}btn-primary{else}btn-default{/if}">卡券</a>
+                            <a href="{php echo wl_filter_url('plugin:bargain');}" class="btn {if $plugin == 'bargain'}btn-primary{else}btn-default{/if}">砍价</a>
+                            <a href="{php echo wl_filter_url('plugin:halfcard');}" class="btn {if $plugin == 'halfcard'}btn-primary{else}btn-default{/if}">在线买单</a>
+                            <a href="{php echo wl_filter_url('plugin:store');}" class="btn {if $plugin == 'store'}btn-primary{else}btn-default{/if}">店员调整</a>
+                            <a href="{php echo wl_filter_url('plugin:sys');}" class="btn {if $plugin == 'sys'}btn-primary{else}btn-default{/if}">银行卡返现</a>
+                        </div>
+                    </div>
+                </div>
+                <div class="form-group form-inline">
+                    <label class="col-sm-2 control-label">记录搜索</label>
+                    <div class="col-sm-9">
+                        <select name="keywordtype" class="form-control">
+                            <option value="1" {if $_GPC['keywordtype']==1}selected="selected"{/if}>店铺名称</option>
+                            <option value="2" {if $_GPC['keywordtype']==2}selected="selected"{/if}>店铺SID</option>
+                            <option value="3" {if $_GPC['keywordtype']==3}selected="selected"{/if}>操作员UID</option>
+                            <option value="4" {if $_GPC['keywordtype']==4}selected="selected"{/if}>用户MID</option>
+                            <option value="5" {if $_GPC['keywordtype']==5}selected="selected"{/if}>用户昵称</option>
+                            <option value="6" {if $_GPC['keywordtype']==6}selected="selected"{/if}>用户手机号</option>
+                        </select>
+                        <input type="text" name="keyword" class="form-control" value="{$_GPC['keyword']}"  placeholder="请输入关键字"/>
+                    </div>
+                </div>
+                <div class="form-group">
+                    <label class="col-sm-2 control-label">返现时间</label>
+                    <div class="col-sm-9">
+                        {php echo tpl_select_time_info('time_limit', array('starttime' => date('Y-m-d H:i',$starttime), 'endtime' => date('Y-m-d H:i', $endtime)));}
+                    </div>
+                </div>
+                <div class="form-group">
+                    <label class="col-sm-2 control-label"></label>
+                    <div class="col-sm-9">
+                        <button class="btn btn-primary" id="search">筛选</button>
+                        <button class="btn btn-default min-width" name="export" type="submit" value="export"><i class="fa fa-download"></i>  导出记录</button>
+                    </div>
+                </div>
+            </form>
+        </div>
+    </div>
+    <div class="app-table-list">
+        <div class="table-responsive">
+            <table class="table table-bordered table-hover">
+                <thead>
+                <tr>
+                    <th style="text-align:center;">店铺</th>
+                    <th style="text-align:center;">操作店员</th>
+                    <th style="text-align:center;">操作类型</th>
+                    <th style="text-align:center;">用户</th>
+                    <th style="text-align:center;">手机号</th>
+                    <th style="text-align:center;">金额</th>
+                    <th style="text-align:center;">时间</th>
+                    <th style="text-align:center;">备注</th>
+                </tr>
+                </thead>
+                <tbody>
+                {loop $records $re}
+                    <tr>
+                        <td>
+                            {$re['storename']}
+                            <br/>SID:{$re['sid']}
+                        </td>
+                        <td>
+                            {$re['username']}
+                            <br/>UID:{$re['doid']}
+                        </td>
+                        <td>
+                            <span class="label label-{$re['css']}">{$re['typename']}</span>
+                        </td>
+                        <td>
+                            <img src="{$re['avatar']}" style="width: 35px;height: 35px;position: relative;top: -10px;">
+                            <div style="width: 75%;display: inline-block;">
+                                {$re['nickname']}
+                                <br/>MID:{$re['mid']}
+                            </div>
+                        </td>
+                        <td>{$re['mobile']}</td>
+                        <td>
+                            <span {if $re['backmoney'] > 0 } class="label label-success" {else} class="label label-danger" {/if}>￥{$re['backmoney']}</span>
+                        </td>
+                        <td>
+                            {$re['createtime']}
+                        </td>
+                        <td>
+                            {$re['remark']}
+                        </td>
+                    </tr>
+                {/loop}
+                </tbody>
+            </table>
+        </div>
+        <div class="app-table-foot clearfix">
+            <div class="pull-left">
+
+            </div>
+            <div class="pull-right">
+                {$pager}
+            </div>
+        </div>
+    </div>
+</div>
+
+
+
+
+{php include wl_template('common/footer');}

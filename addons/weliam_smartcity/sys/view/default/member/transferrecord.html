@@ -1,0 +1,90 @@
+{php include wl_template('common/header');}
+<ul class="nav nav-tabs" id="myTab">
+    <li><a href="javascript:;">转赠活动</a></li>
+</ul>
+<div class="app-content">
+    <div class="app-filter">
+        <div class="filter-list">
+            <form action="" method="get" class="form-horizontal" role="form" id="form1">
+                <input type="hidden" name="c" value="site" />
+                <input type="hidden" name="a" value="entry" />
+                <input type="hidden" name="m" value="{MODULE_NAME}" />
+                <input type="hidden" name="p" value="member" />
+                <input type="hidden" name="ac" value="wlMember" />
+                <input type="hidden" name="do" value="transferrecord" />
+                <div class="form-group">
+                    <label class="col-sm-2 control-label">时间</label>
+                    <div class="col-sm-9">
+                        {php echo tpl_select_time_info('time_limit', array('starttime' => date('Y-m-d',$starttime), 'endtime' => date('Y-m-d', $endtime)));}
+                    </div>
+                </div>
+                <div class="form-group form-inline">
+                    <label class="col-sm-2 control-label">记录搜索</label>
+                    <div class="col-sm-9">
+                        <select name="keywordtype" class="form-control">
+                            <option value="1" {if $_GPC['keywordtype']==1}selected="selected"{/if}>领取人MID</option>
+                            <option value="2" {if $_GPC['keywordtype']==2}selected="selected"{/if}>领取人昵称</option>
+                            <option value="3" {if $_GPC['keywordtype']==3}selected="selected"{/if}>领取人手机</option>
+                            <option value="4" {if $_GPC['keywordtype']==4}selected="selected"{/if}>活动ID</option>
+                            <option value="5" {if $_GPC['keywordtype']==5}selected="selected"{/if}>活动标题</option>
+                        </select>
+                        <input type="text" name="keyword" class="form-control" value="{$_GPC['keyword']}"  placeholder="请输入关键字"/>
+                    </div>
+                </div>
+                <div class="form-group">
+                    <label class="col-sm-2 control-label"></label>
+                    <div class="col-sm-9">
+                        <button class="btn btn-primary" id="search">筛选</button>
+                    </div>
+                </div>
+            </form>
+        </div>
+    </div>
+    <div class="app-table-list">
+        <div class="table-responsive">
+            <table class="table table-hover">
+                <thead class="navbar-inner">
+                <tr>
+                    <th style="width:5%;">活动ID</th>
+                    <th style="width:15%;">活动标题</th>
+                    <th style="width:15%;">领取人信息</th>
+                    <th style="width:15%;">录入实名</th>
+                    <th style="width:15%;">录入手机号</th>
+                    <th style="width:15%;">领取金额</th>
+                    <th style="width:20%;">领取时间</th>
+                </tr>
+                </thead>
+                <tbody>
+                {loop $lists $de}
+                <tr>
+                    <td>{$de['tid']}</td>
+                    <td>{$de['title']}</td>
+                    <td>
+                        <img src="{$de['avatar']}" style="width: 35px;height: 35px;position: relative;top: -10px;">
+                        <div style="width: 75%;display: inline-block;">
+                            {$de['nickname']}
+                            <br/>MID:{$de['mid']}
+                        </div>
+                    </td>
+                    <td>{$de['realname']}</td>
+                    <td>{$de['mobile']}</td>
+                    <td><span style="color: orangered;font-weight: bolder;">{$de['money']}</span></td>
+                    <td>{php echo date('Y-m-d H:i:s',$de['createtime']);}</td>
+                </tr>
+                {/loop}
+                </tbody>
+            </table>
+        </div>
+        <div class="app-table-foot clearfix">
+            <div class="pull-left">
+
+            </div>
+            <div class="pull-right">
+                {$pager}
+            </div>
+        </div>
+    </div>
+</div>
+
+
+{php include wl_template('common/footer');}

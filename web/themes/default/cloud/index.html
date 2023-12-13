@@ -1,0 +1,15 @@
+{template 'common/header'}
+<iframe width="100%" frameborder="0" scrolling="no" src="{$url}" id="cloudif"></iframe>
+<script type="text/javascript">
+    function reinitIframe(){
+        var iframe = document.getElementById("cloudif");
+        try {
+            var bHeight = iframe.contentWindow.document.body.scrollHeight;
+            var dHeight = iframe.contentWindow.document.documentElement.scrollHeight;
+            var realheight = Math.max(bHeight, dHeight);
+            iframe.height = Math.max(realheight, 400);
+        } catch (ex){}
+    }
+    window.setInterval("reinitIframe()", 200);
+</script>
+{template 'common/footer'}

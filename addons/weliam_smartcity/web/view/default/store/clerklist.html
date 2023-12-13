@@ -1,0 +1,134 @@
+{php include wl_template('common/header');}
+<ul class="nav nav-tabs">
+    <li class="active"><a href="javascript:;">{$storename}</a></li>
+</ul>
+<div class="app-content">
+    <div class="app-filter">
+        <div class="filter-action">
+            <a href="{php echo web_url('store/merchant/editclerk',array('storeid'=>$storeid))}" data-toggle="ajaxModal" class="btn btn-primary">添加店员</a>
+        </div>
+        <div class="filter-list">
+            <form action="" method="get" class="form-horizontal" role="form" id="form1">
+                <input type="hidden" name="c" value="site" />
+                <input type="hidden" name="a" value="entry" />
+                <input type="hidden" name="m" value="{MODULE_NAME}" />
+                <input type="hidden" name="p" value="store" />
+                <input type="hidden" name="ac" value="merchant" />
+                <input type="hidden" name="do" value="clerkindex" />
+                <input type="hidden" name="storeid" value="{$storeid}" />
+                <div class="form-group form-inline">
+                    <label class="col-sm-2 control-label">搜索内容</label>
+                    <div class="col-sm-9">
+                        <select name="keywordtype" class="form-control">
+                            <option value="1" {if $_GPC['keywordtype']==1}selected="selected"{/if}>店员名称</option>
+                            <option value="2" {if $_GPC['keywordtype']==2}selected="selected"{/if}>店员电话</option>
+                        </select>
+                        <input type="text" name="keyword" class="form-control" value="{$_GPC['keyword']}"  placeholder="请输入关键字"/>
+                    </div>
+                </div>
+                <div class="form-group">
+                    <label class="col-sm-2 control-label"></label>
+                    <div class="col-sm-9">
+                        <button class="btn btn-primary" id="search">搜索</button>
+                    </div>
+                </div>
+            </form>
+        </div>
+        <div class="app-table-list">
+            <div class="table-responsive">
+                <table class="table table-hover">
+                    <thead>
+                    <tr>
+                        <th style="width: 30px;"><input type="checkbox" onclick="var ck = this.checked;$(':checkbox').each(function(){this.checked = ck});" /></th>
+                        <th>ID</th>
+                        <th style="width: 50px;">用户</th>
+                        <th></th>
+                        <th>姓名</th>
+                        <th>联系方式</th>
+                        <th>店员类型</th>
+                        <th>添加时间</th>
+                        <th>状态</th>
+                        <th>操作</th>
+                    </tr>
+                    </thead>
+                    <tbody>
+                    {loop $clerklist $clerk}
+                    <tr>
+                        <td>
+                            {if $clerk['ismain'] != 4}
+                            <input type="checkbox" name="checkbox[]" class="checkbox" value="{$clerk['id']}" />
+                            {else}
+                             --
+                            {/if}
+                        </td>
+                        <td>{$clerk['id']}</td>
+                        <td class="text-left"><img class="scrollLoading" src="{IMAGE_PIXEL}" data-url="{php echo empty($clerk['avatar']) ? IMAGE_NOPIC_SMALL : $clerk['avatar'];}" height="50" width="50"/></td>
+                        <td>{$clerk['nickname']}</td>
+                        <td>{$clerk['name']}</td>
+                        <td>{$clerk['mobile']}</td>
+                        <td>
+                            {if $clerk['ismain'] == 2}<label class="label label-success">核销员</label>{/if}
+                            {if $clerk['ismain'] == 3}<label class="label label-warning">管理员</label>{/if}
+                            {if $clerk['ismain'] == 4}<label class="label label-info">业务员</label>{/if}
+                        </td>
+                        <td>{php echo date('Y-m-d H:i:s',$clerk['createtime'])}</td>
+                        <td>
+                            {if $clerk['enabled'] == 1}
+                            <label class="label label-success">启用</label>
+                            {else}
+                            <label class="label label-danger">禁用</label>
+                            {/if}
+                        </td>
+                        <td>
+                            {if $clerk['ismain'] != 4}
+                            <a href="{php echo web_url('store/merchant/editclerk',array('id'=>$clerk['id']))}" data-toggle="ajaxModal">编辑</a>
+                            - <a href="{php echo web_url('store/merchant/deleteclerk',array('id'=>$clerk['id']))}"  data-toggle="ajaxRemove" data-confirm="确认删除此店员?">删除</a>
+                            {else}
+                            -- 无 --
+                            {/if}
+                        </td>
+                    </tr>
+                    {/loop}
+                    </tbody>
+                </table>
+            </div>
+        </div>
+        <div class="app-table-foot clearfix">
+            <div class="pull-left">
+                <div id="de1" class="pull-left">
+                    <a href="javascript:;" class="btn btn-default min-width js-batch js-delete pass">删除选中店员</a>
+                </div>
+            </div>
+            <div class="pull-right">
+                {$pager}
+            </div>
+        </div>
+    </div>
+</div>
+<script>
+    $('#de1').delegate('.pass','click',function(e){
+        e.stopPropagation();
+        var order_ids = [];
+        var $checks=$('.checkbox:checkbox:checked');
+        $checks.each(function() {
+            if (this.checked) {
+                order_ids.push(this.value);
+            };
+        });
+        var $this = $(this);
+        var ids = order_ids;
+        util.nailConfirm(this, function(state) {
+            if(!state) return;
+            $.post("{php echo web_url('store/merchant/deleteclerk')}", { ids : ids }, function(data){
+                if(!data.errno){
+                    util.tips("删除成功！");
+                    location.reload();
+                }else{
+                    util.tips(data.message);
+                };
+            }, 'json');
+        }, {html: '确认删除所选店员?'});
+    });
+</script>
+
+{php include wl_template('common/footer');}

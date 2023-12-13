@@ -1,0 +1,65 @@
+{php include wl_template('common/header');}
+<ul class="nav nav-tabs" id="myTab">
+    <li class="active"><a href="javascript:;">社群详情</a></li>
+</ul>
+<div class="app-content">
+    <div class="app-form">
+        <form action="" method="post" class="form-horizontal form form-validate" id="setting-form">
+            <div class="panel panel-default">
+                <div class="panel-heading">社群详情</div>
+                <div class="panel-body">
+                    <div class="form-group">
+                        <label class="col-sm-2 control-label">社群名称</label>
+                        <div class="col-sm-9">
+                            <input type="text" name="community[communname]" class="form-control" value="{$community['communname']}" />
+                        </div>
+                    </div>
+                    <div class="form-group">
+                        <label class="col-sm-2 control-label">社群描述</label>
+                        <div class="col-sm-9">
+                            <input type="text" name="community[commundesc]" class="form-control" value="{$community['commundesc']}" />
+                        </div>
+                    </div>
+                    <div class="form-group">
+                        <label class="col-sm-2 control-label">社群图标</label>
+                        <div class="col-sm-9">
+                            {php echo attachment_select('community[communimg]', $community['communimg']);}
+                            <span class="help-block">图片建议尺寸100X100</span>
+                        </div>
+                    </div>
+                    <div class="form-group">
+                        <label class="col-sm-2 control-label">社群二维码</label>
+                        <div class="col-sm-9">
+                            {php echo attachment_select('community[communqrcode]', $community['communqrcode']);}
+                            <span class="help-block">图片建议尺寸300X300,如不上传二维码默认不显示此社群</span>
+                        </div>
+                    </div>
+                    <div class="form-group">
+                        <label class="col-sm-2 control-label">客服电话</label>
+                        <div class="col-sm-9">
+                            <input type="text" name="community[systel]" class="form-control" value="{$community['systel']}" />
+                            <span class="help-block">如果不填则不显示客服电话</span>
+                        </div>
+                    </div>
+                    {if p('wxapp')}
+                        <div class="form-group">
+                            <label class="col-sm-2 control-label">小程序回复内容</label>
+                            <div class="col-sm-9">
+                                <input type="text" name="community[reply]" class="form-control" value="{$community['reply']}" />
+                                <span class="help-block">仅小程序有效，用于引导用户长按二维码进入客服后操作使用</span>
+                            </div>
+                        </div>
+                    {/if}
+                </div>
+            </div>
+            <div class="form-group">
+                <label class="col-sm-2 control-label"></label>
+                <div class="col-sm-9">
+                    <input type="submit" name="submit" value="提交" class="btn btn-primary min-width" />
+                    <input type="hidden" name="token" value="{$_W['token']}" />
+                </div>
+            </div>
+        </form>
+    </div>
+</div>
+{php include wl_template('common/footer');}

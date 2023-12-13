@@ -1,0 +1,86 @@
+{php include wl_template('common/header');}
+<ul class="nav nav-tabs">
+    <li class="active"><a href="{php echo web_url('yellowpage/yellowpage/meal_edit', array('id' => $item['id']))}">编辑套餐</a></li>
+</ul>
+<div class="app-content">
+    <div class="app-form">
+        <form action="" method="post" class="form-horizontal form form-validate">
+            <div class="form-group-title">套餐信息</div>
+            <div class="form-group">
+                <label class="col-sm-2 control-label">排序</label>
+                <div class="col-sm-9">
+                    <input type="text" name="item[sort]" class="form-control" value="{$item['sort']}" placeholder="排序">
+                    <div class="help-block">排序由大到小，数值越大，顺序越靠前</div>
+                </div>
+            </div>
+            <div class="form-group">
+                <label class="col-sm-2 control-label"><span class="form-must">*</span>套餐名称</label>
+                <div class="col-sm-9">
+                    <input type="text" name="item[name]" class="form-control" value="{$item['name']}" placeholder="请输入套餐名称" required>
+                </div>
+            </div>
+            <div class="form-group">
+                <label class="col-sm-2 control-label">套餐资费</label>
+                <div class="col-sm-9">
+                    <label class="radio-inline">
+                        <input type="radio" name="item[is_free]" value="0" onclick="$('.is_free').show()" {if empty($item['is_free'])}checked{/if}>付费
+                    </label>
+                    <label class="radio-inline">
+                        <input type="radio" name="item[is_free]" value="1" onclick="$('.is_free').hide()" {if !empty($item['is_free'])}checked{/if}>免费
+                    </label>
+                    <div class="help-block">黄页入驻是否需要付费</div>
+                </div>
+            </div>
+            <div class="form-group is_free" {if !empty($item['is_free'])}style="display: none;"{/if}>
+                <label class="col-sm-2 control-label"><span class="form-must">*</span>套餐金额</label>
+                <div class="col-sm-9">
+                    <div class="input-group">
+                        <input type="number" class="form-control" name="item[price]" value="{$item['price']}" placeholder="请输入套餐金额" required>
+                        <span class="input-group-addon">元</span>
+                    </div>
+                </div>
+            </div>
+            <div class="form-group">
+                <label class="col-sm-2 control-label"><span class="form-must">*</span>套餐时间</label>
+                <div class="col-sm-9">
+                    <div class="input-group">
+                        <input type="text" class="form-control" name="item[day]" value="{$item['day']}" placeholder="请输入套餐时间" digits="true" required>
+                        <span class="input-group-addon">天</span>
+                    </div>
+                </div>
+            </div>
+            <div class="form-group">
+                <label class="col-sm-2 control-label">入驻审核</label>
+                <div class="col-sm-9">
+                    <label class="radio-inline">
+                        <input type="radio" name="item[check]" value="0" {if empty($item['check'])}checked{/if}>无需审核
+                    </label>
+                    <label class="radio-inline">
+                        <input type="radio" name="item[check]" value="1" {if !empty($item['check'])}checked{/if}>需要审核
+                    </label>
+                    <div class="help-block">黄页入驻是否需要审核</div>
+                </div>
+            </div>
+            <div class="form-group">
+                <label class="col-sm-2 control-label">状态</label>
+                <div class="col-sm-9">
+                    <label class="radio-inline">
+                        <input type="radio" name="item[status]" value="0" {if empty($item['status'])}checked{/if}>禁用
+                    </label>
+                    <label class="radio-inline">
+                        <input type="radio" name="item[status]" value="1" {if !empty($item['status'])}checked{/if}>启用
+                    </label>
+                </div>
+            </div>
+            <div class="form-group">
+                <label class="col-sm-2 control-label"></label>
+                <div class="col-sm-9">
+                    <input type="submit" name="submit" value="提交" class="btn btn-primary min-width" />
+                    <input type="hidden" name="token" value="{$_W['token']}" />
+                    <input type="hidden" name="id" value="{$item['id']}" />
+                </div>
+            </div>
+        </form>
+    </div>
+</div>
+{php include wl_template('common/footer');}

@@ -1,0 +1,736 @@
+<style>
+    #attachmentAdmin{
+        max-height: 1200px;
+        max-width: 1500px;
+        margin: auto;
+    }
+    .attachment-buttons{
+        margin-top: 15px;
+    }
+    .list-content{
+        min-height: 570px;
+    }
+    .list-content .group-content{
+        background-color: #f4f5f9;
+        font-size: 16px;
+        width: 160px;
+        max-height: 600px;
+        min-height: 500px;
+        cursor: pointer;
+        padding-top: 5px;
+        padding-right: 5px;
+        overflow-y: auto;
+        display: inline-block;
+    }
+    .list-content .group-content .group-title{
+        height: 40px;
+        line-height: 40px;
+        margin-bottom: 1px;
+        text-align: center;
+    }
+    .list-content .group-content .group-title:hover{
+        background: #FFF;
+    }
+    .list-content .group-content .group-title div{
+        float: left;
+        width: 110px;
+        overflow: hidden;
+        white-space: nowrap;
+        text-overflow: ellipsis;
+    }
+    .list-content .group-content .group-title i{
+        display: inline-block;
+        float: right;
+        line-height: 35px;
+        width: 20px;
+        text-align: center;
+    }
+    .list-content .group-content .group-title .icon-delete{
+        color: #ed5565!important;
+    }
+    .list-content .group-content .group-title .icon-edit{
+        color: #3296fa!important;
+    }
+    .list-content .group-content .active{
+        background: #FFF;
+    }
+    .list-content .app-table-list{
+        width: calc(100% - 180px)!important;
+        display: inline-block!important;
+        margin-left: 10px!important;
+        position: absolute;
+        overflow-y: auto;
+        height: 500px;
+    }
+    .pager-content{
+        width: calc(100% - 160px)!important;
+        position: absolute;
+        right: 0;
+        bottom: 10px;
+        padding: 0 30px;
+    }
+    .move-group{
+        display: inline-block;
+        position: relative;
+    }
+    .move-group:hover .move-gorup-list{
+        display: inline-block;
+    }
+    .move-group .move-gorup-list{
+        position: absolute;
+        left: 0;
+        top: 100%;
+        z-index: 9;
+        background: #fff;
+        border: medium none;
+        width: 110px;
+        line-height: 30px;
+        text-align: left;
+        font-size: 13px;
+        list-style: none outside none;
+        text-shadow: none;
+        border-radius: 0;
+        box-shadow: 0 0 3px rgba(86,96,117,.3);
+        color: #262626;
+        display: none;
+    }
+    .move-group .move-gorup-list .group-list-div{
+        cursor: pointer;
+        padding: 5px 15px;
+    }
+    .move-group .move-gorup-list .group-list-div:hover{
+        color: #262626;
+        text-decoration: none;
+        background-color: #f5f5f5;
+    }
+    #attList .att-block{
+        width: calc((100% - 70px) / 7);
+        display: inline-block;
+        padding-top: calc((100% - 70px) / 7);
+        height: 0px;
+        position: relative;
+        margin-right: 10px;
+        margin-bottom: 10px;
+        min-width: 130px;
+        min-height: 130px;
+        float: left;
+        border: 1px solid #CCC;
+    }
+    #attList .att-block-no{
+        width: calc((100% - 70px) / 7);
+    }
+    #attList .att-block-yes{
+        width: calc((100% - 30px) / 3);
+    }
+    #attList .att-block .img{
+        width: 100%;
+        height: 100%;
+        position: absolute;
+        top: 0;
+        left: 0;
+    }
+    #attList .att-block .img img{
+        max-height: 100%;
+        width: 100%;
+        cursor: pointer;
+        object-fit: contain;
+        position: absolute;
+        bottom: 0;
+    }
+    #attList .att-block .img video{
+        height: 100%!important;
+    }
+    #attList .att-block .img audio{
+        width: 100%;
+        margin-top: 35px;
+    }
+    #attList .att-icon-list{
+        position: absolute;
+        bottom: 0;
+        left: 0;
+        width: 100%;
+        line-height: 30px;
+        background: rgba(0,0,0,.5);
+        color: #fff;
+        padding: 0 10px;
+        z-index: 2;
+        text-align: right;
+    }
+    #attList .att-icon-list input{
+        float: left;
+        width: 15px;
+        height: 15px;
+        margin-top: 7.5px;
+        cursor: pointer;
+    }
+    #attList .att-icon-list i{
+        height: 30px;
+        width: 30px;
+        display: inline-block;
+        font-size: 25px;
+        text-align: center;
+        line-height: 25px;
+        float: right;
+        cursor: pointer;
+    }
+    #attList .att-icon-list .icon.icon-zhengque{
+        color: #1ab394;
+    }
+    #attList .att-icon-list .icon.icon-shibai1{
+        color: #ed5565;
+    }
+    #attList .att-icon-list .icon.icon-bangzhu1:hover .info{
+        text-decoration: none;
+        display: block;
+        padding: 5px 0 0 5px;
+        background: rgba(0,0,0,.5);
+        color: #FFF;
+        overflow-y: auto;
+    }
+    #attList .att-icon-list i .info{
+        position: absolute;
+        left: 0;
+        bottom: 30px;
+        z-index: 9;
+        width: 100%;
+        background: #FFF;
+        font-size: 13px;
+        line-height: 20px;
+        display: none;
+        text-align: left;
+        max-height: 100px;
+    }
+    #attList .att-name{
+        position: absolute;
+        top: 0;
+        left: 0;
+        overflow: hidden;
+        white-space: nowrap;
+        text-overflow: ellipsis;
+        width: 100%;
+        line-height: 20px;
+        background: rgba(0,0,0,.5);
+        color: #fff;
+        z-index: 2;
+        text-align: left;
+        font-size: 12px;
+    }
+    .page-num{
+        width: 150px;
+        float: right;
+        height: 31px;
+        line-height: 31px;
+    }
+    .page-num select{
+        width: 100px;
+        appearance: none;
+        background: none!important;
+    }
+    #agent{
+        float: right;
+        height: 31px;
+        line-height: 31px;
+    }
+    #agent span{
+        width: 30px;
+    }
+    #agent select{
+        width: 120px;
+        appearance: none;
+        background: none!important;
+    }
+    .fr{
+        float: right;
+        margin-left: 5px;
+    }
+</style>
+<div class="modal-dialog" style="width: 90%!important;max-width: 90%!important;">
+    <div class="modal-content" id="attachmentAdmin">
+        <div class="modal-header">
+            <button data-dismiss="modal" class="close" type="button">×</button>
+            <h4 class="modal-title">
+                <span v-if="params.mime_type == 'image'">请选择图片</span>
+                <span v-else-if="params.mime_type == 'video'">请选择视频</span>
+                <span v-else-if="params.mime_type == 'application'">请选择文件</span>
+            </h4>
+            <!-- 顶部操作按钮 -->
+            <div class="attachment-buttons">
+                <!-- 刷新操作 -->
+                <div class="btn btn-default" @click="refresh()" title="刷新当前页面列表信息">刷新列表</div>
+                <!-- 上传操作 -->
+                <input v-if="params.mime_type == 'image'" type="file" id="uploadFileOperation" @change="uploadFile()" accept="image/*" multiple="multiple" class="hide"/>
+                <input v-if="params.mime_type == 'video'" type="file" id="uploadFileOperation" @change="uploadFile()" accept="video/*" multiple="multiple" class="hide"/>
+                <input v-if="params.mime_type == 'application'" type="file" id="uploadFileOperation" @change="uploadFile()" accept="application/*" multiple="multiple" class="hide"/>
+                <input v-if="params.mime_type == 'audio'" type="file" id="uploadFileOperation" @change="uploadFile()" accept="audio/*" multiple="multiple" class="hide"/>
+                <div class="btn btn-primary fr" onclick="$('#uploadFileOperation').click();">上传文件</div>
+                <!-- 分组操作 -->
+                <div class="btn btn-info" @click="addGroup()">添加分组</div>
+                <!-- 导入微擎图片 -->
+                {if $_W['highest_role'] == 'founder'}
+                    <div class="btn btn-default"  v-if="params.mime_type == 'image'" id="importButton" @click="importImages()">导入旧版图片</div>
+                {/if}
+                <!-- 批量删除 -->
+                <div class="btn btn-danger" @click="batchDeletion()">批量删除</div>
+                <!-- 移动分组 -->
+                <div class="move-group">
+                    <div class="btn btn-success move-group-show-button">移动分组</div>
+                    <div class="move-gorup-list">
+                        <div v-for="(item,index) in groupList" class="group-list-div" @click="moveGroup(item)">{{item.name}}</div>
+                    </div>
+                </div>
+                <!-- 批量选择 -->
+                <div class="btn btn-warning selectedAttachmentMultiButton fr"  v-if="multi == 'multi' && params.mime_type == 'image'">批量选择</div>
+            </div>
+        </div>
+        <div class="modal-body form-horizontal" style="padding: 0!important;">
+            <!-- 具体内容信息 -->
+            <div class="list-content">
+                <!-- 分组内容 -->
+                <div class="group-content">
+                    <div :class="{active: (params.group_id == 0),'group-title':true}" @click="changeGroup(0)">全部</div>
+                    <div v-for="(item,index) in groupList" :class="{active: (params.group_id == item.id),'group-title':true}" >
+                        <div id="attachment_group" @click="changeGroup(item.id)">{{item.name}}</div>
+                        <i class="icon iconfont icon-delete" @click="deleteGroup(item.id)"></i>
+                        <i class="icon iconfont icon-edit" @click="editGroup(item.id,item.name)"></i>
+                    </div>
+                </div>
+                <!-- 列表内容 -->
+                <div class="app-table-list" id="attList">
+                    <div :class="{'att-block-yes': (params.mime_type == 'audio'),'att-block-no': (params.mime_type != 'audio'),'att-block':true}" v-for="(item,index) in list">
+                        <!--图片信息-->
+                        <div class="img">
+                            <!-- 图片信息 -->
+                            <img :src="item.http_url" v-if="params.mime_type == 'image'" @click="selectedImage(item.id)" @dblclick="yesSelectedImage(item.id)" onerror="this.src='{IMAGE_NOPIC_SMALL}'">
+                            <!-- 视频信息 -->
+                            <video :src="item.http_url" v-if="params.mime_type == 'video'" controls="controls">您的浏览器不支持 video 标签。</video>
+                            <!-- 音频信息 -->
+                            <audio :src="item.http_url" v-if="params.mime_type == 'audio'" controls="controls">您的浏览器不支持 audio 标签。</audio>
+                        </div>
+                        <!--按钮信息-->
+                        <div class="att-icon-list">
+                            <input name="attachment_check" type="checkbox" :value="item.id" :id="'select_'+item.id">
+                            <i class="icon icon-zhengque selectAttachmentButton" :data-url="item.url" :data-http_url="item.http_url" :id="'yes_select_'+item.id"></i>
+                            <i class="icon icon-shibai1" @click="delBtn(item.id)"></i>
+                            <i class="icon icon-bangzhu1">
+                                <!--附件基本信息-->
+                                <div class="info">
+                                    <!-- 附件宽高 -->
+                                    <span v-if="params.mime_type == 'image'">
+                                        宽：{{item.imagewidth}}<br />
+                                        高：{{item.imageheight}} <br />
+                                    </span>
+                                    <!-- 附件大小 -->
+                                    <span v-if="item.filesize > 0">大小：{{item.filesize}}KB<br /></span>
+                                    <!-- 上传人 -->
+                                    <span v-if="item.upload_user">上传方：{{item.upload_user}}<br /></span>
+                                    <!-- 储存位置 -->
+                                    <span v-if="item.storage == 0">存储位置：本地<br /></span>
+                                    <span v-else-if="item.storage == 1">存储位置：FTP服务器<br /></span>
+                                    <span v-else-if="item.storage == 2">存储位置：阿里云<br /></span>
+                                    <span v-else-if="item.storage == 3">存储位置：七牛云<br /></span>
+                                    <span v-else-if="item.storage == 4">存储位置：腾讯云<br /></span>
+                                    <!-- 上传时间 -->
+                                    <span v-if="item.uploadtime">上传时间：{{item.uploadtime}}</span>
+                                </div>
+                            </i>
+                        </div>
+                        <!--图片名称-->
+                        <div class="att-name">{{item.name}}</div>
+                    </div>
+                </div>
+                <!-- 分页信息 -->
+                <div class="pager-content">
+                    <!-- 分页 -->
+                    <ul class="pagination pagination-centered" v-if="total_page > 1">
+                        <!--分页前导-->
+                        <li v-if="params.page > 1">
+                            <a href="javascript:;" @click="paging(1)">首页</a>
+                        </li>
+                        <li v-if="params.page > 1">
+                            <a href="javascript:;" @click="paging(parseInt(params.page) - 1)">&laquo;上一页</a>
+                        </li>
+                        <!--分页中间内容-->
+                        <li v-for="index in total_page"
+                            v-if="(index >= (parseInt(params.page) - 2) && index <= (parseInt(params.page) + 2)) || (index <= 5 && total_page < 3)"
+                            :class="{active: (params.page == index)}">
+                            <a href="javascript:;" @click="paging(index)">{{index}}</a>
+                        </li>
+                        <!--分页后导-->
+                        <li v-if="params.page < total_page">
+                            <a href="javascript:;" @click="paging(parseInt(params.page)+1)">下一页&raquo;</a>
+                        </li>
+                        <li v-if="params.page < total_page">
+                            <a href="javascript:;" @click="paging(total_page)">尾页</a>
+                        </li>
+                    </ul>
+                    <!-- 代理商&商户选择 -->
+                    <div id="agent" class="input-group">
+                        <!-- 代理商筛选内容 -->
+                        <span class="input-group-addon btn btn-default {if $_W['aid'] > 0}hide{/if}">代理商</span>
+                        <select class="form-control diy-bind {if $_W['aid'] > 0}hide{/if}" @change="refresh()" v-model="params.aid">
+                            <option value="0">全部</option>
+                            <option v-for="(agent,index) in agentList" :value="agent.id">{{agent.agentname}}</option>
+                        </select>
+                        <!-- 商户筛选内容 -->
+                        <span class="input-group-addon btn btn-default {if $_W['storeid'] > 0}hide{/if}">商户</span>
+                        <select class="form-control diy-bind {if $_W['storeid'] > 0}hide{/if}" @change="refresh()" v-model="params.storeid">
+                            <option value="0">全部</option>
+                            <option value="-1">仅代理</option>
+                            <option v-for="(shop,index) in shopList" :value="shop.id">{{shop.storename}}</option>
+                        </select>
+                    </div>
+                    <!-- 设置每页的数量 -->
+                    <div class="page-num input-group">
+                        <span class="input-group-addon btn btn-default">每页数量</span>
+                        <select class="form-control" @change="refresh()" v-model="params.page_index">-->
+                            <option value="14">14</option>
+                            <option value="21">21</option>
+                            <option value="28">28</option>
+                            <option value="35">35</option>
+                            <option value="42">42</option>
+                            <option value="49">49</option>
+                            <option value="56">56</option>
+                            <option value="63">63</option>
+                            <option value="70">70</option>
+                            <option value="77">77</option>
+                            <option value="84">84</option>
+                            <option value="91">91</option>
+                            <option value="98">98</option>
+                        </select>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+<script>
+    new Vue({
+        el: "#attachmentAdmin",
+        data: {
+            multi: "{$multi}",
+            //参数信息
+            params: {
+                mime_type: "{$mimeType}",
+                page: "{$page}",
+                page_index: "{$pageIndex}",
+                storeid: "{$shop_id}",
+                aid: "{$aid}",
+                uniacid: "{$uniacid}",
+                group_id: "{$group_id}",
+            },
+            //总页数
+            total_page: 1,
+            //附件列表
+            list: {},
+            //分组列表
+            groupList: {},
+            //代理商列表
+            agentList:{},
+            //商户列表
+            shopList:{},
+        },
+        methods: {
+            /**
+             * 获取列表信息
+             */
+            getList() {
+                let _this = this,
+                    link = biz.url('utility/attachment/index');
+                $.post(link, this.params, function (data) {
+                    _this.list = data.data['list'];
+                    _this.total_page = data.data['total_page'];
+                    _this.$forceUpdate();
+                }, 'json');
+            },
+            /**
+             * 分页操作
+             */
+            paging(page) {
+                this.params['page'] = page;
+                this.refresh();
+            },
+            /**
+             * 删除单个附件信息
+             */
+            delBtn(id) {
+                let _this = this,
+                    link = biz.url('utility/attachment/delAttachment');
+                tip.confirm('是否确定删除当前附件？', function () {
+                    $.post(link, {ids: id}, function (res) {
+                        if (res.errno == 0) {
+                            tip.msgbox.suc(res.message);
+                            _this.refresh();
+                        } else {
+                            tip.msgbox.err(res.message);
+                        }
+                    }, 'json');
+                });
+            },
+            /**
+             * 批量删除
+             */
+            batchDeletion() {
+                let _this = this,
+                    link = biz.url('utility/attachment/delAttachment');
+                ids = [];
+                //获取选中的id数组列表
+                $("[name='attachment_check']:checked").each(function () {
+                    ids.push($(this).val());
+                });
+                //判断是否选中内容
+                if (ids.length <= 0) {
+                    tip.alert("请选中内容！");
+                    return false;
+                }
+                //请求进行删除
+                tip.confirm('是否确定删除选中的所有附件？', function () {
+                    $.post(link, {ids: ids}, function (res) {
+                        if (res.errno == 0) {
+                            tip.msgbox.suc(res.message);
+                            _this.refresh();
+                        } else {
+                            tip.msgbox.err(res.message);
+                        }
+                    }, 'json');
+                });
+            },
+            /**
+             * 获取分组列表信息
+             */
+            getGroupList() {
+                let _this = this,
+                    link = biz.url('utility/attachment/groupIndex');
+                $.post(link, this.params, function (data) {
+                    _this.groupList = data.data;
+                }, 'json');
+            },
+            /**
+             * 添加分组
+             */
+            addGroup() {
+                let _this = this;
+                tip.prompt('请输入组名称！', {
+                    maxlength: 5,
+                    callback: function (name) {
+                        let link = biz.url('utility/attachment/groupAdd');
+                        $.post(link, {name: name, mime_type: _this.params.mime_type}, function (res) {
+                            if (res.errno == 0) {
+                                //添加成功 重新渲染分组
+                                tip.msgbox.suc(res.message);
+                                _this.refresh();
+                            } else {
+                                tip.msgbox.err(res.message);
+                            }
+                        }, 'json');
+                    }
+                });
+            },
+            /**
+             * 点击换组
+             * @param id
+             */
+            changeGroup(id) {
+                this.params.group_id = id;
+                this.refresh()
+            },
+            /**
+             * 点击删除组
+             * @param id
+             */
+            deleteGroup(id) {
+                let _this = this;
+                tip.confirm('是否确定删除当前组？', function () {
+                    let link = biz.url('utility/attachment/groupDelete');
+                    $.post(link, {id: id}, function (res) {
+                        if (res.errno == 0) {
+                            tip.msgbox.suc(res.message);
+                            //判断删除组是否为当前组  是则默认更换到全部组  不是则无操作
+                            if (_this.params.group_id == id) {
+                                _this.params.group_id = 0;
+                            }
+                            _this.refresh();
+                        } else {
+                            tip.msgbox.err(res.message);
+                        }
+                    }, 'json');
+                });
+            },
+            /**
+             * 编辑组名称
+             */
+            editGroup(id, name) {
+                let _this = this;
+                tip.prompt('请输入组名称！', {
+                    maxlength: 5,
+                    default_value: name,
+                    callback: function (name) {
+                        let link = biz.url('utility/attachment/groupEdit');
+                        $.post(link, {id: id, name: name, mime_type: _this.params.mime_type}, function (res) {
+                            if (res.errno == 0) {
+                                //修改成功 重新渲染分组
+                                tip.msgbox.suc(res.message);
+                                _this.refresh();
+                            } else {
+                                tip.msgbox.err(res.message);
+                            }
+                        }, 'json');
+                    }
+                });
+            },
+            /**
+             * 移动附件到其他分组
+             */
+            moveGroup(item) {
+                let _this = this,
+                    link = biz.url('utility/attachment/moveAttachment'),
+                    ids = [];
+                //获取选中的id数组列表
+                $("[name='attachment_check']:checked").each(function () {
+                    ids.push($(this).val());
+                });
+                //判断是否选中内容
+                if (ids.length <= 0) {
+                    tip.alert("请选中内容！");
+                    return false;
+                }
+                //移动附件
+                tip.confirm('是否确定移动所有选中的附件到组【' + item.name + '】中？', function () {
+                    $.post(link, {ids: ids, group_id: item.id}, function (res) {
+                        console.log(res);
+                        if (res.errno == 0) {
+                            tip.msgbox.suc(res.message);
+                            _this.refresh();
+                        } else {
+                            tip.msgbox.err(res.message);
+                        }
+                    }, 'json');
+                });
+            },
+            /**
+             * 上传文件 - 点击上传按钮
+             */
+            uploadFile() {
+                //获取图片上传列表
+                let _this = this,
+                    files = $("#uploadFileOperation")[0].files,
+                    link = biz.url('utility/attachment/uploadFile');
+                //循环上传文件信息
+                $.each(files, function (k, v) {
+                    let info = new FormData(),
+                        index = parseInt(k) + parseInt(1);
+                    info.append("group_id", _this.params['group_id']);
+                    info.append("file", v);
+                    //上传图片
+                    $.ajax({
+                        type: "POST",
+                        url: link,
+                        data: info,
+                        dataType: "json",
+                        async: false,
+                        processData: false, // 使数据不做处理
+                        contentType: false, // 不要设置Content-Type请求头
+                        success: function (data) {
+                            if (data.errno == 1) {
+                                tip.msgbox.err(data.message);
+                            }else if(index === files.length){
+                                //上传完成  重新渲染列表信息
+                                $("#uploadFileOperation").val('');
+                                _this.getList();
+                            }
+                        },
+                    });
+                });
+            },
+            /**
+             * 刷新当前页面信息
+             */
+            refresh() {
+                //列表返回顶部
+                $("#attList").scrollTop(0);
+                //重新获取信息 并且重新渲染
+                this.getGroupList();
+                this.getList();
+                this.getAgentList();
+                this.getShopList();
+                this.$forceUpdate();
+                //取消多选操作
+                $(".attachment_check:checkbox").removeAttr("checked");
+            },
+            /**
+             * 导入微擎图片信息 —— 触发
+             */
+            importImages() {
+                let _this = this;
+                tip.confirm('是否确定导入旧版图片？', function () {
+                    $("#importButton").html('图片正在导入，请勿进行任何操作......');
+                    _this.importOperation();
+                });
+            },
+            /**
+             * 导入微擎图片信息 —— 导入操作
+             */
+            importOperation() {
+                let _this = this,
+                    link = biz.url('utility/attachment/importAttachment');
+                $.post(link, {}, function (res) {
+                    if (res.errno == 0) {
+                        console.log(res.data['surplus']);
+                        if (res.data['surplus'] > 0) {
+                            //未导入完  继续进行导入操作
+                            _this.importOperation();
+                        } else {
+                            $("#importButton").html('导入旧版图片');
+                            _this.refresh();
+                            tip.alert("导入完成！");
+                        }
+                    } else {
+                        tip.msgbox.err(res.message);
+                    }
+                }, 'json');
+            },
+            /**
+             * 图片反选
+             * @param id
+             */
+            selectedImage(id) {
+                let idName = '#select_' + id,
+                    status = $(idName).is(":checked");
+                $(idName).prop("checked", !status);
+            },
+            /**
+             * 双击确定选中图片
+             * @param id
+             */
+            yesSelectedImage(id) {
+                let idName = '#yes_select_' + id;
+                $(idName).click();
+            },
+            /**
+             * 获取代理商信息列表
+             */
+            getAgentList(){
+                let _this = this,
+                    link = biz.url('utility/attachment/getAgentList');
+                $.post(link, function (data) {
+                    _this.agentList = data.data['list'];
+                }, 'json');
+            },
+            /**
+             * 获取商户信息列表
+             */
+            getShopList(){
+                let _this = this,
+                    link = biz.url('utility/attachment/getShopList');
+                $.post(link,{aid:_this.params.aid}, function (data) {
+                    _this.shopList = data.data['list'];
+                }, 'json');
+            },
+        },
+        mounted() {
+            this.getGroupList();
+            this.getList();
+            this.getAgentList();
+            this.getShopList();
+        }
+    });
+</script>

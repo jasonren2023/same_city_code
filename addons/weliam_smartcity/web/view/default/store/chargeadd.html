@@ -1,0 +1,323 @@
+{php include wl_template('common/header');}
+<ul class="nav nav-tabs" id="myTab">
+	<li class="active"><a href="#">增加套餐</a></li>
+</ul>
+<div class="app-content">
+<div class="app-form">
+	<form action="" method="post" class="form-horizontal form form-validate" id="form">
+		<div class="panel panel-default">
+			<div class="panel-heading">商户入驻套餐</div>
+			<div class="panel-body">
+				<div class="form-group">
+					<label class="col-sm-2 control-label">套餐名称</label>
+					<div class="col-sm-9">
+						<input type="text" name="data[name]" id="name" class="form-control" value="{$data['name']}" />
+					</div>
+				</div>
+				<div class="form-group">
+					<label class="col-sm-2 control-label">时长</label>
+					<div class="col-sm-9">
+						<div class="input-group">
+							<input type="text" name="data[days]" class="form-control" value="{$data['days']}" />
+							<span class="input-group-addon">天</span>
+						</div>
+					</div>
+				</div>
+				<div class="form-group">
+					<label class="col-sm-2 control-label" >价格</label>
+					<div class="col-sm-9">
+						<div class="input-group">
+							<span class="input-group-addon">￥</span>
+							<input type="text" name="data[price]" class="form-control" value="{$data['price']}" />
+						</div>
+					</div>
+				</div>
+				<div class="form-group">
+					<label class="col-sm-2 control-label">商户组权限</label>
+					<div class="col-sm-9">
+						{if agent_p('rush')}
+						<label class="checkbox-inline">
+							<input class="defaultcheck" type="checkbox" {if in_array('rush',$data['authority'])} checked="checked" {/if} name="authority[]" value="rush">抢购
+						</label>
+						{/if}
+						{if agent_p('citydelivery')}
+						<label class="checkbox-inline">
+							<input class="defaultcheck" type="checkbox" {if in_array('citydelivery',$data['authority'])} checked="checked" {/if} name="authority[]" value="citydelivery">同城配送
+						</label>
+						{/if}
+						{if agent_p('groupon')}
+						<label class="checkbox-inline">
+							<input class="defaultcheck" type="checkbox" {if in_array('groupon',$data['authority'])} checked="checked" {/if} name="authority[]" value="groupon">团购
+						</label>
+						{/if}
+						{if agent_p('wlfightgroup')}
+						<label class="checkbox-inline">
+							<input class="defaultcheck" type="checkbox" {if in_array('wlfightgroup',$data['authority'])} checked="checked" {/if} name="authority[]" value="wlfightgroup">拼团
+						</label>
+						{/if}
+						{if agent_p('wlcoupon')}
+						<label class="checkbox-inline">
+							<input class="defaultcheck" type="checkbox" {if in_array('wlcoupon',$data['authority'])} checked="checked" {/if} name="authority[]" value="wlcoupon">卡券
+						</label>
+						{/if}
+						{if agent_p('bargain')}
+						<label class="checkbox-inline">
+							<input class="defaultcheck" type="checkbox" {if in_array('bargain',$data['authority'])} checked="checked" {/if} name="authority[]" value="bargain">砍价
+						</label>
+						{/if}
+						{if agent_p('halfcard')}
+						<label class="checkbox-inline">
+							<input class="defaultcheck" type="checkbox" {if in_array('halfcard',$data['authority'])} checked="checked" {/if} name="authority[]" value="halfcard">折扣活动
+						</label>
+						<label class="checkbox-inline">
+							<input class="defaultcheck" type="checkbox" {if in_array('package',$data['authority'])} checked="checked" {/if} name="authority[]" value="package">免费礼包
+						</label>
+						{/if}
+						{if agent_p('activity')}
+						<label class="checkbox-inline">
+							<input class="defaultcheck" type="checkbox" {if in_array('activity',$data['authority'])} checked="checked" {/if} name="authority[]" value="activity">活动
+						</label>
+						{/if}
+						{if agent_p('recruit')}
+						<label class="checkbox-inline">
+							<input class="defaultcheck" type="checkbox" {if in_array('recruit',$data['authority'])} checked="checked" {/if} name="authority[]" value="recruit">求职招聘
+						</label>
+						{/if}
+						{if agent_p('housekeep')}
+						<label class="checkbox-inline">
+							<input class="defaultcheck" type="checkbox" {if in_array('housekeep',$data['authority'])} checked="checked" {/if} name="authority[]" value="housekeep">家政服务
+						</label>
+						{/if}
+						{if agent_p('hhkapi')}
+						<label class="checkbox-inline">
+							<input class="defaultcheck" type="checkbox" {if in_array('hhkapi',$data['authority'])} checked="checked" {/if} name="authority[]" value="hhkapi">惠花卡会员
+						</label>
+						{/if}
+						{if agent_p('house')}
+						<label class="checkbox-inline">
+							<input class="defaultcheck" type="checkbox" {if in_array('house',$data['authority'])} checked="checked" {/if} name="authority[]" value="house">房产信息
+						</label>
+						{/if}
+						{if agent_p('hotel')}
+						<label class="checkbox-inline">
+							<input class="defaultcheck" type="checkbox" {if in_array('hotel',$data['authority'])} checked="checked" {/if} name="authority[]" value="hotel">酒店预约
+						</label>
+						{/if}
+						<label class="checkbox-inline">
+							<input class="defaultcheck" type="checkbox" {if in_array('comment',$data['authority'])} checked="checked" {/if} name="authority[]" value="comment">口碑管理
+						</label>
+						<label class="checkbox-inline">
+							<input class="defaultcheck" type="checkbox" {if in_array('dynamic',$data['authority'])} checked="checked" {/if} name="authority[]" value="dynamic">商户动态
+						</label>
+						<label class="checkbox-inline">
+							<input class="nocheck" type="checkbox" {if in_array('noau',$data['authority'])} checked="checked" {/if} name="authority[]" value="noau">无任何权限
+						</label>
+						<span class="help-block">全都不勾选则拥有所有权限;勾选无任何权限时请勿勾选其他权限,否则无效。</span>
+					</div>
+				</div>
+				<div class="form-group">
+					<label class="col-sm-2 control-label">入驻商家默认结算比例</label>
+					<div class="col-sm-9">
+						<div class="input-group">
+							<input type="text" name="data[defaultrate]" class="form-control" value="{$data['defaultrate']}">
+							<span class="input-group-addon">%</span>
+						</div>
+						<span class="help-block">商户详情默认结算比例未设置时，默认以此比例设置结算金额,保留两位小数。如填入70，商品售出时，会将70%的金额结算给商户（最大为100）。</span>
+					</div>
+				</div>
+				<div class="form-group">
+					<label class="col-sm-2 control-label">排序</label>
+					<div class="col-sm-9">
+						<input type="text" name="data[sort]" class="form-control" value="{$data['sort']}" />
+					</div>
+				</div>
+				{if $_W['wlsetting']['distribution']['switch']}
+					<div class="form-group">
+						<label class="col-sm-2 control-label">是否参与分销</label>
+						<div class="col-sm-9">
+							<label class="radio-inline" onclick="distri(1)">
+								<input type="radio" name="data[isdistri]" value="0" {if intval($data['isdistri']) != 1}checked="checked"{/if} >参与
+							</label>
+							<label class="radio-inline" onclick="distri(2)">
+								<input type="radio" name="data[isdistri]" value="1" {if intval($data['isdistri']) == 1}checked="checked"{/if}>不参与
+							</label>
+						</div>
+					</div>
+					<div id="distridiv" {if $data['isdistri']} style="display: none;" {/if} >
+						<div class="form-group">
+							<label class="col-sm-2 control-label" >一级分销结算金额</label>
+							<div class="col-sm-9">
+								<div class="input-group">
+									<span class="input-group-addon">￥</span>
+									<input type="text" name="data[onedismoney]" class="form-control" value="{$data['onedismoney']}" />
+								</div>
+							</div>
+						</div>
+						{if $_W['wlsetting']['distribution']['ranknum'] > 1}
+						<div class="form-group">
+							<label class="col-sm-2 control-label" >二级分销结算金额</label>
+							<div class="col-sm-9">
+								<div class="input-group">
+									<span class="input-group-addon">￥</span>
+									<input type="text" name="data[twodismoney]" class="form-control" value="{$data['twodismoney']}" />
+								</div>
+							</div>
+						</div>
+						{/if}
+
+						{if agent_p('disgroup')}
+						<div class="form-group">
+							<label class="col-sm-2 control-label">团长分红</label>
+							<div class="col-sm-9">
+								<label class="radio-inline" onclick="$('#groupdiv').show();">
+									<input type="radio" value="1" name="data[disgroup]" {if $data['disgroup'] == 1} checked {/if}>开启
+								</label>
+								<label class="radio-inline" onclick="$('#groupdiv').hide();">
+									<input type="radio" value="0" name="data[disgroup]" {if $data['disgroup'] != 1} checked {/if}>关闭
+								</label>
+							</div>
+						</div>
+						<div id="groupdiv"  {if $data['disgroup'] != 1} style="display: none;" {/if}>
+							<div class="form-group">
+								<label class="col-sm-2 control-label">团长分红详情</label>
+								<div class="col-sm-9">
+									{loop $grouplevel $grouplpr}
+									<div class="bigdata" style="margin-top: 10px;">
+										<div class="input-group data-item">
+											<span class="input-group-addon">[{$grouplpr['name']}]直属</span>
+											<input type="hidden" name="groupleid[]" class="form-control" value="{$grouplpr['id']}">
+											<input type="number" min="0" name="onegroupmoney[]" class="form-control" value="{$grouparray[$grouplpr['id']]['onegroupmoney']}">
+											<span class="input-group-addon"><span class="disgrouptext">元</span>,子团队</span>
+											<input type="number" min="0" name="twogroupmoney[]" class="form-control" value="{$grouparray[$grouplpr['id']]['twogroupmoney']}">
+											<span class="input-group-addon"><span class="disgrouptext">元</span></span>
+										</div>
+									</div>
+									{/loop}
+									<span class="help-block">一级填0或不填则按分销商等级默认比例计算,填写一级佣金后二级佣金填0或不填则此商品没有二级分佣,最多保留两位小数</span>
+								</div>
+							</div>
+							<div class="form-group">
+								<label class="col-sm-2 control-label">股东分红</label>
+								<div class="col-sm-9">
+									<div class="input-group">
+										<input type="number" min="0" name="data[shareholdermoney]" class="form-control" value="{$data['shareholdermoney']}" />
+										<span class="input-group-addon"><span class="disgrouptext">元</span></span>
+									</div>
+									<span class="help-block">商品股东分红，不填或填0即为没有股东分红。</span>
+								</div>
+							</div>
+						</div>
+					{/if}
+
+					</div>
+				{/if}
+				<div class="form-group">
+					<label class="col-sm-2 control-label">是否免审核</label>
+					<div class="col-sm-9">
+						<label class="radio-inline">
+							<input type="radio" name="data[audits]" value="1" {if intval($data['audits']) == 1}checked="checked"{/if}>是
+						</label>
+						<label class="radio-inline">
+							<input type="radio" name="data[audits]" value="0" {if intval($data['audits']) != 1}checked="checked"{/if} >否
+						</label>
+					</div>
+				</div>
+				<div class="form-group">
+					<label class="col-sm-2 control-label">是否用于续费</label>
+					<div class="col-sm-9">
+						<label class="radio-inline">
+							<input type="radio" name="data[renewstatus]" value="1" {if intval($data['renewstatus']) == 1}checked="checked"{/if}>是
+						</label>
+						<label class="radio-inline">
+							<input type="radio" name="data[renewstatus]" value="0" {if intval($data['renewstatus']) != 1}checked="checked"{/if} >否
+						</label>
+						<div class="help-block">开启后,该付费类型可以用于店铺续费增加入驻时间。</div>
+					</div>
+				</div>
+				<div class="form-group">
+					<label class="col-sm-2 control-label">是否启用</label>
+					<div class="col-sm-9">
+						<label class="radio-inline">
+							<input type="radio" name="data[status]" value="1" {if intval($data['status']) == 1}checked="checked"{/if}>是
+						</label>
+						<label class="radio-inline">
+							<input type="radio" name="data[status]" value="2" {if intval($data['status']) != 1}checked="checked"{/if} >否
+						</label>
+					</div>
+				</div>
+
+				{if p('recruit')}
+					<div class="form-group">
+						<label class="col-sm-2 control-label">求职招聘</label>
+						<div class="col-sm-9">
+							<div class="input-group">
+								<span class="input-group-addon">免费发布</span>
+								<input type="text" digits="true" name="data[release_number]" class="form-control" value="{$data['release_number']}">
+								<span class="input-group-addon">次后，每次</span>
+								<input type="text" name="data[release_price]" class="form-control" value="{$data['release_price']}">
+								<span class="input-group-addon">元</span>
+							</div>
+							<div class="help-block">发布招聘信息时在免费次数使用完后，每次发布都需要支付对应的金额；全部设置为0则每次发布都不需要付费。</div>
+						</div>
+					</div>
+				{/if}
+
+
+				<!--{if p('house')}-->
+					<!--<div class="form-group">-->
+						<!--<label class="col-sm-2 control-label">房产</label>-->
+						<!--<div class="col-sm-9">-->
+							<!--<div class="input-group">-->
+								<!--<span class="input-group-addon">新房价格</span>-->
+								<!--<input type="text" name="data[new_house_price]" class="form-control" value="{$data['new_house_price']}">-->
+								<!--<span class="input-group-addon">元</span>-->
+								<!--<span class="input-group-addon">租房价格</span>-->
+								<!--<input type="text" name="data[renting_price]" class="form-control" value="{$data['renting_price']}">-->
+								<!--<span class="input-group-addon">元</span>-->
+								<!--<span class="input-group-addon">二手房价格</span>-->
+								<!--<input type="text" name="data[old_house_price]" class="form-control" value="{$data['old_house_price']}">-->
+								<!--<span class="input-group-addon">元</span>-->
+							<!--</div>-->
+							<!--<div class="help-block">发布房产时，每次发布都需要支付对应的金额；全部设置为0则每次发布都不需要付费。</div>-->
+						<!--</div>-->
+					<!--</div>-->
+				<!--{/if}-->
+
+
+			</div>
+		</div>
+		<div class="form-group">
+			<label class="col-sm-2 control-label"></label>
+			<div class="col-sm-9">
+				<input type="hidden" name="id" value="{$data['id']}" />
+				<input type="hidden" name="postType" value="{$_GPC['postType']}" />
+				<input type="submit" name="submit" value="提交" class="btn btn-primary min-width" />
+				<input type="hidden" name="token" value="{$_W['token']}" />
+			</div>
+		</div>
+	</form>
+</div>
+</div>
+<script>
+	function distri(flag){
+		if (flag == 1) {
+			$('#distridiv').show();
+		} else{
+			$('#distridiv').hide();
+		}
+	}
+
+	$('.defaultcheck').click(function () {
+		if($(this).is(":checked")){
+			$('.nocheck').attr("checked",false);
+		}
+	});
+
+	$('.nocheck').click(function () {
+		if($(this).is(":checked")){
+			$('.defaultcheck').attr("checked",false);
+		}
+	});
+
+</script>
+{php include wl_template('common/footer');}

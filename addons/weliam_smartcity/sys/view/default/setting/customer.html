@@ -1,0 +1,164 @@
+{php include wl_template('common/header');}
+<ul class="nav nav-tabs" id="myTab">
+	<li class="active"><a href="#tab_basic">客服设置</a></li>
+</ul>
+<div class="app-content">
+	<div class="app-form">
+		<form action="" method="post" class="form-horizontal form form-validate" id="setting-form">
+			<div class="panel panel-default">
+				<div class="panel-heading">客服设置</div>
+				<div class="tab-content">
+					<div class="form-group">
+						<label class="col-sm-2 control-label">开启客服</label>
+						<div class="col-sm-9">
+							<label class="radio-inline">
+								<input type="radio" id="inlineRadio1" name="customer[status]" value="1" {if intval($settings['status']) == 1}checked="checked"{/if}>开启
+							</label>
+							<label class="radio-inline">
+								<input type="radio" id="inlineRadio2" name="customer[status]" value="0" {if intval($settings['status']) == 0 || empty($settings['status'])}checked="checked"{/if}>关闭
+							</label>
+						</div>
+					</div>
+					<div class="form-group">
+						<label class="col-sm-2 control-label">客服形式</label>
+						<div class="col-sm-9">
+							<label class="radio-inline" onclick="$('.sys-customer').show();$('.other-customer').hide();">
+								<input type="radio" id="inlineRadio3" name="customer[type]" value="0" {if intval($settings['type']) == 0 || empty($settings['type'])}checked="checked"{/if}>系统内部
+							</label>
+							<label class="radio-inline" onclick="$('.sys-customer').hide();$('.other-customer').show();">
+								<input type="radio" id="inlineRadio4" name="customer[type]" value="1" {if intval($settings['type']) == 1}checked="checked"{/if}>第三方链接
+							</label>
+							<span class="help-block">客服默认形式为系统内部</span>
+						</div>
+					</div>
+
+
+					<div class="form-group other-customer" {if intval($settings['type']) == 0 || empty($settings['type'])}style="display: none;"{/if}>
+						<label class="col-sm-2 control-label">第三方链接</label>
+						<div class="col-sm-9">
+							<input type="text" name="customer[url]" class="form-control" value="{$settings['url']}" />
+							<span class="help-block">该链接只能为第三方链接，不能填写本平台内部链接</span>
+						</div>
+					</div>
+					<div class="sys-customer" {if intval($settings['type']) == 1}style="display: none;"{/if}>
+						<div class="form-group">
+							<label class="col-sm-2 control-label">客服电话</label>
+							<div class="col-sm-9">
+								<input type="text" name="customer[tel]" class="form-control" value="{$settings['tel']}" />
+							</div>
+						</div>
+						<div class="form-group">
+							<label class="col-sm-2 control-label">客服二维码</label>
+							<div class="col-sm-9">
+								{php echo attachment_select('customer[qrcode]', $settings['qrcode']);}
+							</div>
+						</div>
+					</div>
+					<div class="form-group">
+						<label class="col-sm-2 control-label">客服悬浮框</label>
+						<div class="col-sm-9">
+							<label class="radio-inline">
+								<input type="radio" onclick="$('.susdiv').hide();" name="customer[suspension]" value="0" {if intval($settings['suspension']) == 0 || empty($settings['suspension'])}checked="checked"{/if}>关闭
+							</label>
+							<label class="radio-inline">
+								<input type="radio" onclick="$('.susdiv').show();" name="customer[suspension]" value="1" {if intval($settings['suspension']) == 1}checked="checked"{/if}>开启
+							</label>
+							<span class="help-block">开启后会在所有页面显示客服悬浮按钮图标</span>
+						</div>
+					</div>
+					<div class="susdiv" {if intval($settings['suspension']) != 1}style="display: none;"{/if}>
+						<div class="form-group">
+							<label class="col-sm-2 control-label">悬浮图标</label>
+							<div class="col-sm-9">
+								{php echo attachment_select('customer[susicon]',$settings['susicon']);}
+								<span class="help-block">默认宽度45px,高度与宽度自适应。</span>
+							</div>
+						</div>
+						<div class="form-group">
+							<label class="col-sm-2 control-label">悬浮图标大小</label>
+							<div class="col-sm-9">
+								<div class="input-group">
+									<span class="input-group-addon">图片宽度</span>
+									<input class="form-control" type="number" value="{$settings['logowidth']}" name="customer[logowidth]">
+									<span class="input-group-addon">PX</span>
+								</div>
+							</div>
+						</div>
+						<div class="form-group">
+							<label class="col-sm-2 control-label">悬浮图标位置</label>
+							<div class="col-sm-9">
+								<div class="input-group">
+									<span class="input-group-addon">距离底部</span>
+									<input class="form-control" style="height:39px;" type="number" value="{$settings['logobottom']}" name="customer[logobottom]">
+									<span class="input-group-addon">PX,距离边侧</span>
+									<input class="form-control" style="height:39px;" type="number" value="{$settings['logoleft']}" name="customer[logoleft]">
+									<span class="input-group-addon">PX,图标位置</span>
+									<span class="input-group-addon">
+										<label class="radio-inline">
+											<input type="radio" value="1" {if $settings['logoloca'] == 1} checked="checked" {/if} name="customer[logoloca]">靠左
+										</label>
+										<label class="radio-inline">
+											<input type="radio" value="0" {if $settings['logoloca'] != 1} checked="checked" {/if} name="customer[logoloca]">靠右
+										</label>
+									</span>
+								</div>
+							</div>
+						</div>
+						{if uniacid_p('wxapp')}
+						<div class="form-group">
+							<label class="col-sm-2 control-label">小程序在线客户</label>
+							<div class="col-sm-9">
+								<label class="radio-inline" >
+									<input type="radio" name="customer[wxapptype]" onclick="$('#wxapptype').hide();" value="1" {if intval($settings['wxapptype']) == 1 }checked="checked"{/if}>小程序客服
+								</label>
+								<label class="radio-inline" >
+									<input type="radio" name="customer[wxapptype]" onclick="$('#wxapptype').show();" value="2" {if intval($settings['wxapptype']) == 2 }checked="checked"{/if}>企业微信客服
+								</label>
+								<label class="radio-inline" >
+									<input type="radio" name="customer[wxapptype]" onclick="$('#wxapptype').hide();" value="0" {if intval($settings['wxapptype']) == 0 || empty($settings) }checked="checked"{/if}>关闭
+								</label>
+								<span class="help-block">小程序客服需要在小程序后台禁用消息推送配置才能生效，与小程序社群功能冲突，请选择使用。</span>
+							</div>
+						</div>
+						<div id="wxapptype"  {if intval($settings['wxapptype']) != 2}style="display: none;"{/if}  >
+							<div class="form-group">
+								<label class="col-sm-2 control-label">企业ID</label>
+								<div class="col-sm-9">
+									<div class="input-group"  style="width: 100%;">
+										<input class="form-control" type="text" value="{$settings['enterpriseid']}" name="customer[enterpriseid]">
+									</div>
+								</div>
+							</div>
+							<div class="form-group" >
+								<label class="col-sm-2 control-label">客服连接</label>
+								<div class="col-sm-9">
+									<div class="input-group"  style="width: 100%;">
+										<input class="form-control" type="text" value="{$settings['customerurl']}" name="customer[customerurl]">
+									</div>
+								</div>
+							</div>
+						</div>
+						{/if}
+					</div>
+				</div>
+			</div>
+			<div class="form-group">
+				<label class="col-sm-2 control-label"></label>
+				<div class="col-sm-9">
+					<input type="submit" name="submit" value="提交" class="btn btn-primary min-width" />
+					<input type="hidden" name="token" value="{$_W['token']}" />
+				</div>
+			</div>
+		</form>
+	</div>
+</div>
+<script>
+$(function () {
+		window.optionchanged = false;
+		$('#myTab a').click(function (e) {
+			e.preventDefault();//阻止a链接的跳转行为
+			$(this).tab('show');//显示当前选中的链接及关联的content
+		})
+	});
+</script>
+{php include wl_template('common/footer');}

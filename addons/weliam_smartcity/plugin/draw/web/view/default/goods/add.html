@@ -1,0 +1,193 @@
+{php include wl_template('common/header');}
+<style>
+    red{color: #ed5565;}
+</style>
+<ul class="nav nav-tabs">
+    <li><a href="{php echo web_url('draw/goods/goodsIndex')}">奖品列表</a></li>
+    <li class="active"><a href="javascript:;">添加奖品</a></li>
+</ul>
+<div class="app-content">
+    <div class="app-form">
+        <div class="panel panel-default">
+            <form class="form-horizontal form-validate" method="post">
+                <div class="form-group-title">奖品类型</div>
+                <!-- 奖品类型 -->
+                <div class="form-group">
+                    <label class="col-sm-2 control-label">奖品类型</label>
+                    <div class="col-sm-9">
+                        <label class="radio-inline"><input type="radio" name="data[type]" value="1" checked="checked"> 现金红包</label>
+                        {if p('redpack') && j('redpack')}
+                            <label class="radio-inline"><input type="radio" name="data[type]" value="2"> 线上红包</label>
+                        {/if}
+                        <label class="radio-inline"><input type="radio" name="data[type]" value="3"> 积分</label>
+                        <label class="radio-inline"><input type="radio" name="data[type]" value="4"> 激活码</label>
+                        <label class="radio-inline"><input type="radio" name="data[type]" value="5"> 商品</label>
+                        <div class="help-block">
+                            <span class="type-class type-red">中奖后将获得对应的<red>现金</red>奖励；请填写1-200之间的数据，否则红包会发送失败！</span>
+                            <span class="type-class type-onlineRed hide">中奖后将获得一个对应的线上红包</span>
+                            <span class="type-class type-integral hide">中奖后将获得对应的积分奖励</span>
+                            <span class="type-class type-code hide">中奖后将获得对应序列的一个激活码</span>
+                            <span class="type-class type-goods hide">中奖后将<red>免费</red>获得对应的商品</span>
+                        </div>
+                    </div>
+                </div>
+                <!-- 奖品类型为现金红包时 扩展内容 -->
+                <div class="type-class type-red">
+                    <div class="form-group">
+                        <label class="col-sm-2 control-label">领取方式</label>
+                        <div class="col-sm-9">
+                            <label class="radio-inline"><input type="radio" name="data[get_type]" value="1" checked="checked"> 发送现金红包</label>
+                            <label class="radio-inline"><input type="radio" name="data[get_type]" value="2"> 增加到余额</label>
+                            <div class="help-block">注意：选择发送现金红包时；请保证微信商户中余额充足！设置为发送现金红包时金额必须大于等于1！</div>
+                        </div>
+                    </div>
+                    <div class="form-group">
+                        <label class="col-sm-2 control-label">红包金额</label>
+                        <div class="col-sm-9">
+                            <input class="form-control" id="redPackageMoney" min="1" type="number" name="data[prize_number]"/>
+                        </div>
+                    </div>
+                </div>
+                <!-- 奖品类型为线上红包时 扩展内容 -->
+                <div class="type-class type-onlineRed hide">
+                    <div class="form-group">
+                        <label class="col-sm-2 control-label">选择红包</label>
+                        <div class="col-sm-9">
+                            {php echo tpl_select_redPack();}
+                        </div>
+                    </div>
+                </div>
+                <!-- 奖品类型为积分时 扩展内容 -->
+                <div class="type-class type-integral hide">
+                    <div class="form-group">
+                        <label class="col-sm-2 control-label">奖励积分</label>
+                        <div class="col-sm-9">
+                            <input class="form-control" type="number" name="data[prize_number]"/>
+                        </div>
+                    </div>
+                </div>
+                <!-- 奖品类型为激活码时 扩展内容 -->
+                <div class="type-class type-code hide">
+                    <div class="form-group">
+                        <label class="col-sm-2 control-label">激活码(组)</label>
+                        <div class="col-sm-9">
+                            <select name="data[code_keyword]" class="form-control">
+                                <option value="" selected>请选择一个激活码序列</option>
+                                {loop $codeList $vo}
+                                    <option value="{$vo['remark']}">{$vo['remark']}（{$vo['total']}份）</option>
+                                {/loop}
+                            </select>
+                        </div>
+                    </div>
+                </div>
+                <!-- 奖品类型为商品时 扩展内容 -->
+                <div class="type-class type-goods hide">
+                    <div class="form-group">
+                        <label class="col-sm-2 control-label">选择商品</label>
+                        <div class="col-sm-9 selectGoodsParams" params='{"is_optionstatus":1}'>
+                            {php echo tpl_select_goods($info);}
+                        </div>
+                    </div>
+                </div>
+                <!-- 公共设置内容 -->
+                <div class="form-group-title">基本设置</div>
+                <div class="form-group">
+                    <label class="col-sm-2 control-label">奖品状态</label>
+                    <div class="col-sm-9">
+                        <label class="radio-inline"><input type="radio" name="data[status]" value="1" checked="checked"> 上架</label>
+                        <label class="radio-inline"><input type="radio" name="data[status]" value="2"> 下架</label>
+                    </div>
+                </div>
+                <div class="form-group">
+                    <label class="col-sm-2 control-label">奖品名称</label>
+                    <div class="col-sm-9">
+                        <input class="form-control" type="text" required name="data[title]" maxlength="25"/>
+                    </div>
+                </div>
+                <div class="form-group">
+                    <label class="col-sm-2 control-label">中奖概率</label>
+                    <div class="col-sm-9">
+                        <input class="form-control" type="number"  required name="data[probability]" min="0.01" max="100"/>
+                        <div class="help-block">请填写0-100的数据</div>
+                    </div>
+                </div>
+                <div class="form-group">
+                    <label class="col-sm-2 control-label">总份数</label>
+                    <div class="col-sm-9">
+                        <input class="form-control" type="number" digits="true" required name="data[total_number]" value="0"/>
+                        <div class="help-block">为0则无限</div>
+                    </div>
+                </div>
+                <div class="form-group">
+                    <label class="col-sm-2 control-label">每日份数</label>
+                    <div class="col-sm-9">
+                        <input class="form-control" type="number" digits="true" required name="data[day_number]" value="0"/>
+                        <div class="help-block">为0则无限</div>
+                    </div>
+                </div>
+                <div class="form-group">
+                    <label class="col-sm-2 control-label">每人每天可中奖次数</label>
+                    <div class="col-sm-9">
+                        <input class="form-control" type="number" digits="true" required name="data[day_prize]" value="0"/>
+                        <div class="help-block">为0则无限</div>
+                    </div>
+                </div>
+                <div class="form-group">
+                    <label class="col-sm-2 control-label">每人总共可中奖次数</label>
+                    <div class="col-sm-9">
+                        <input class="form-control" type="number" digits="true" required name="data[total_prize]" value="0"/>
+                        <div class="help-block">为0则无限</div>
+                    </div>
+                </div>
+                <div class="form-group">
+                    <label class="col-sm-2 control-label">奖品logo</label>
+                    <div class="col-sm-9">
+                        {php echo attachment_select('data[image]', '');}
+                    </div>
+                </div>
+                <!-- 提交按钮 -->
+                <div class="form-group">
+                    <label class="col-sm-2 control-label"></label>
+                    <div class="col-sm-9">
+                        <input type="hidden" name="token" value="{$_W['token']}" />
+                        <input type="submit" name="submit" value="提交" class="btn btn-primary col-sm-1 min-width" />
+                    </div>
+                </div>
+            </form>
+        </div>
+    </div>
+</div>
+<script>
+    /**
+     * 点击更换类型
+     */
+    $("[name='data[type]']").on('click',function () {
+        //隐藏所有内容
+        $(".type-class").addClass('hide');
+        //根据type显示内容
+        let type = parseInt($(this).val());
+        switch (type) {
+            case 1:$(".type-red").removeClass('hide');break;//现金红包
+            case 2:$(".type-onlineRed").removeClass('hide');break;//线上红包
+            case 3:$(".type-integral").removeClass('hide');break;//积分奖励
+            case 4:$(".type-code").removeClass('hide');break;//激活码
+            case 5:$(".type-goods").removeClass('hide');break;//商品
+        }
+    });
+    /**
+     * 信息同步
+     */
+    $("[name='data[prize_number]']").on('change',function () {
+        let val  = $(this).val();
+        $("[name='data[prize_number]']").val(val);
+    });
+    /**
+     * 修改现金红包最小值
+     */
+    $("[name='data[get_type]']").on('change',function () {
+        let val = $(this).val();
+        if(val == 1) $("#redPackageMoney").attr('min',1);
+        else $("#redPackageMoney").attr('min',0.01);
+    });
+</script>
+{php include wl_template('common/footer');}

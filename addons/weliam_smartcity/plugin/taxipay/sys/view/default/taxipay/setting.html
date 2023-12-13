@@ -1,0 +1,77 @@
+{php include wl_template('common/header');}
+<ul class="nav nav-tabs" id="myTab">
+    <li class="active"><a href="#tab_basic">基础设置</a></li>
+</ul>
+<div class="app-content">
+    <div class="app-form">
+        <form action="" method="post" class="form-horizontal form form-validate">
+            <div class="tab-content">
+                <div class="tab-pane active" id="tab_basic">
+                    <div class="form-group-title">基础设置</div>
+                    <div class="form-group">
+                        <label class="col-sm-2 control-label">每日收款限制</label>
+                        <div class="col-sm-9">
+                            <label class="radio-inline">
+                                <input type="radio" name="settings[is_maxpay]" value="0" onclick="$('.is_maxpay').hide();" {if empty($settings['is_maxpay'])}checked{/if}>禁用
+                            </label>
+                            <label class="radio-inline">
+                                <input type="radio" name="settings[is_maxpay]" value="1" onclick="$('.is_maxpay').show()" {if !empty($settings['is_maxpay'])}checked{/if}>启用
+                            </label>
+                            <div class="help-block">禁用以后所有师傅将不再限制收款</div>
+                        </div>
+                    </div>
+                    <div class="form-group is_maxpay" {if empty($settings['is_maxpay'])}style="display: none;"{/if}>
+                        <label class="col-sm-2 control-label"><span class="form-must">*</span>每日收款金额限制</label>
+                        <div class="col-sm-9">
+                            <div class="input-group">
+                                <input type="number" name="settings[maxpay]" class="form-control" value="{$settings['maxpay']}" placeholder="每日收款金额限制" required>
+                                <div class="input-group-addon">元</div>
+                            </div>
+                            <div class="help-block">避免刷单，设置司机收款限额，超出限制无法收款</div>
+                        </div>
+                    </div>
+                    <div class="form-group">
+                        <label class="col-sm-2 control-label">自定义链接</label>
+                        <div class="col-sm-9">
+                            <div id="urls">
+                                {if empty($settings['urls'])}
+                                {php include wl_template('taxipay/url_tpl');}
+                                {else}
+                                {loop $settings['urls'] $data}
+                                {php include wl_template('taxipay/url_tpl');}
+                                {/loop}
+                                {/if}
+                            </div>
+                            <a class="btn btn-default btn-add-type " href="javascript:addUrls();" style="margin-top: 10px;">
+                                <i class="fa fa-plus" title=""></i>增加一条链接
+                            </a>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <div class="form-group">
+                <label class="col-sm-2 control-label"></label>
+                <div class="col-sm-9">
+                    <input type="submit" name="submit" value="提交" class="btn btn-primary min-width" />
+                    <input type="hidden" name="token" value="{$_W['token']}" />
+                </div>
+            </div>
+        </form>
+    </div>
+</div>
+<script>
+    function addUrls() {
+        $(".btn-add-type").button("loading");
+        $.ajax({
+            url: "{php echo web_url('taxipay/taxipay/url_tpl')}",
+            cache: false
+        }).done(function (html) {
+            $(".btn-add-type").button("reset");
+            $("#urls").append(html);
+        });
+    }
+    function removes(asd){
+        $(asd).closest('.data-item').remove();
+    }
+</script>
+{php include wl_template('common/footer');}

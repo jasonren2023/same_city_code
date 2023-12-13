@@ -1,0 +1,97 @@
+{php include wl_template('common/header');}
+<ul class="nav nav-tabs" id="myTab">
+    <li class="active"><a href="javascript:;">会员卡列表</a></li>
+</ul>
+<div class="app-content">
+    <!--顶部操作-->
+    <div class="app-filter">
+        <div class="filter-action">
+            <a href="{php echo web_url('dating/vip/vipEdit')}" class="btn btn-primary">添加会员卡</a>
+        </div>
+        <div class="filter-list">
+            <form action="" method="get" class="form-horizontal" role="form" id="form1">
+                <input type="hidden" name="c" value="site" />
+                <input type="hidden" name="a" value="entry" />
+                <input type="hidden" name="m" value="{MODULE_NAME}" />
+                <input type="hidden" name="p" value="dating" />
+                <input type="hidden" name="ac" value="vip" />
+                <input type="hidden" name="do" value="vipList" />
+                <div class="form-group">
+                    <div class="col-sm-2 control-label">会员卡标题</div>
+                    <div class="col-sm-9">
+                        <input type="text" class="form-control" name="title" value="{$title}" placeholder="请输入会员昵称...">
+                    </div>
+                </div>
+                <div class="form-group">
+                    <div class="col-sm-2 control-label"></div>
+                    <div class="col-sm-9">
+                        <button class="btn btn-primary" type="submit">搜索</button>
+                        <a href="{php echo web_url('dating/vip/vipList')}" class="btn btn-danger">清除</a>
+                    </div>
+                </div>
+            </form>
+        </div>
+    </div>
+    <!--表格信息-->
+    <div class="app-table-list">
+        <!--列表信息-->
+        <div class="table-responsive order-list">
+            <table class="table table-hover">
+                <thead>
+                    <tr>
+                        <th class="text-center">标题</th>
+                        <th class="text-center">类型</th>
+                        <th class="text-center">有效时间/使用次数</th>
+                        <th class="text-center">排序</th>
+                        <th class="text-center">添加时间</th>
+                        <th class="text-center">操作</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    {loop $list $key $item}
+                        <tr class="text-center">
+                            <td>{$item['title']}</td>
+                            <td>
+                                {if $item['type'] == 1}
+                                    <label class="label label-success">时限卡</label>
+                                {else}
+                                    <label class="label label-info">次数卡</label>
+                                {/if}
+                            </td>
+                            <td>
+                                {if $item['type'] == 1}
+                                    <label class="label label-success">
+                                        {if $item['day'] > 0}
+                                            {$item['day']}天
+                                        {else}
+                                            无限制
+                                        {/if}
+                                    </label>
+                                {else}
+                                    <label class="label label-info">
+                                        {if $item['second'] > 0}
+                                            {$item['second']}次
+                                        {else}
+                                            无限制
+                                        {/if}
+                                    </label>
+                                {/if}
+                            </td>
+                            <td>{$item['sort']}</td>
+                            <td>{php echo date('Y-m-d H:i',$item['create_time']);}</td>
+                            <td>
+                                <a href="{php echo web_url('dating/vip/vipEdit',['id'=>$item['id']])}" class="btn btn-primary btn-sm">编辑</a>
+                                <a href="{php echo web_url('dating/vip/vipDel',['ids'=>$item['id']])}" class="btn btn-danger btn-sm" data-toggle="ajaxRemove" data-confirm="确定删除当前会员卡信息？">删除</a>
+                            </td>
+                        </tr>
+                    {/loop}
+                </tbody>
+            </table>
+        </div>
+        <!--操作按钮 分页信息-->
+        <div class="app-table-foot clearfix">
+            <div class="pull-right">{$pager}</div>
+        </div>
+    </div>
+</div>
+{php include wl_template('common/footer');}

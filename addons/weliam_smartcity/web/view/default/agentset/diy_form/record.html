@@ -1,0 +1,127 @@
+{php include wl_template('common/header');}
+<style type='text/css'>
+    .goods-info{position:relative; padding-left:60px;}
+    .goods-info .img{position:absolute;top:50%; margin-top:-25px; background: url({IMAGE_LOADING}) center center no-repeat; width:50px;height:50px; }
+    .goods-info span {white-space: nowrap;overflow: hidden;text-overflow: ellipsis;display: block;}
+    .certification-materials{cursor: pointer}
+    .todetail{text-align: center;display: inline-block;font-size: 14px;width: 100%;overflow: hidden;text-overflow: ellipsis;color: deepskyblue;}
+    .todetail:hover{cursor:pointer;}
+    .newmater:hover{cursor:pointer;}
+</style>
+<ul class="nav nav-tabs">
+    <li class="active"><a href="#">表单记录</a></li>
+</ul>
+<div class="app-content">
+    <div class="app-filter">
+        <div class="filter-list">
+            <form action="" method="get" class="form-horizontal" role="form" id="form1">
+                <input type="hidden" name="c" value="site" />
+                <input type="hidden" name="a" value="entry" />
+                <input type="hidden" name="m" value="{MODULE_NAME}" />
+                <input type="hidden" name="p" value="agentset" />
+                <input type="hidden" name="ac" value="diyForm" />
+                <input type="hidden" name="do" value="record" />
+                <input type="hidden" name="id" value="{$id}" />
+                <div class="form-group form-inline">
+                    <label class="col-sm-2 control-label">关键字搜索</label>
+                    <div class="col-md-2">
+                        <select name="keywordtype" class="form-control">
+                            <option value="">关键字类型</option>
+                            <option value="1" {if $_GPC['keywordtype']==1}selected="selected"{/if}>用户昵称</option>
+                            <option value="2" {if $_GPC['keywordtype']==2}selected="selected"{/if}>用户id</option>
+                            <option value="3" {if $_GPC['keywordtype']==3}selected="selected"{/if}>用户手机号</option>
+                        </select>
+                    </div>
+                    <div class="col-sm-3">
+                        <input type="text" name="keyword" class="form-control" value="{$_GPC['keyword']}"  placeholder="请输入关键字"/>
+                    </div>
+                </div>
+                <div class="form-group">
+                    <label class="col-sm-2 control-label">时间筛选</label>
+                    <div class="col-md-2">
+                        <select name="timetype" class="form-control">
+                            <option value="0" {if $_GPC['timetype']==0}selected="selected"{/if}>关闭</option>
+                            <option value="1" {if $_GPC['timetype']==1}selected="selected"{/if}>开启</option>
+                        </select>
+                    </div>
+                    <div class="col-md-3">
+                        {php echo tpl_select_time_info('time_limit', array('starttime' => date('Y-m-d',$starttime), 'endtime' => date('Y-m-d', $endtime)));}
+                    </div>
+                </div>
+                <div class="form-group">
+                    <label class="col-sm-2 control-label"></label>
+                    <div class="col-sm-9">
+                        <button class="btn btn-primary" id="search">筛选</button>
+                        <button class="btn btn-warning" type="submit" name="export" value="1">导出</button>
+                    </div>
+                </div>
+            </form>
+        </div>
+    </div>
+    <div class="app-table-list">
+        <div class="table-responsive" style="min-height: 200px;">
+            <table class="table table-hover table-bordered order-list">
+                <thead style="background-color: #FFFFFF;">
+                <tr>
+                    <th class="text-center">记录ID</th>
+                    <th class="text-center">用户信息</th>
+                    <th class="text-center">手机号</th>
+                    <th class="text-center">填表时间</th>
+                    <th class="text-center">填表来源</th>
+                    <th class="text-center">操作</th>
+                </tr>
+                </thead>
+                <tbody>
+                {loop $list $item}
+                <tr class="text-center">
+                    <td>
+                        {$item['id']}
+                    </td>
+                    <td class="goods-info line-feed">
+                        <div class="img"><img class="scrollLoading" src="{IMAGE_PIXEL}" data-url="{php echo tomedia($item['avatar'])}" height="50" width="50" onerror="this.src='{IMAGE_NOPIC_SMALL}'" ></div>
+                        <div class="title" style="padding-left: 60px;float: left;">
+                            <span>{$item['nickname']}</span>
+                            <span>MID:{$item['mid']}</span>
+                        </div>
+                    </td>
+                    <td>
+                        {if empty($item['mobile'])}
+                        <span class="label label-warning">未绑定</span>
+                        {else}
+                        {$item['mobile']}
+                        {/if}
+                    </td>
+                    <td>
+                        {php echo date('Y-m-d H:i:s',$item['dotime'])}
+                    </td>
+
+                    <td>
+                        {if $item['plugin'] == 'pocket'}
+                        <a class="btn btn-sm btn-primary" href="{php echo web_url('pocket/Tiezi/details',['id'=>$item['infoid']])}">掌上信息</a>
+                        {else if $item['plugin'] == 'storeRed'}
+                        <a class="btn btn-sm btn-success" href="javascript:;">商户红包</a>
+                        {else}
+                        <a class="btn btn-sm btn-info" href="javascript:;">问卷调查</a>
+                        {/if}
+                    </td>
+
+                    <td>
+                        <a class="btn btn-sm btn-primary" href="{php echo web_url('agentset/diyForm/recordedit',['id'=>$item['id']])}">查看编辑</a>
+                        <a class="btn btn-sm btn-danger" data-toggle="ajaxRemove" data-confirm="确认删除此信息？"  href="{php echo web_url('agentset/diyForm/recordDelete',['id'=>$item['id']])}">删除</a>
+                    </td>
+                </tr>
+                {/loop}
+                </tbody>
+            </table>
+        </div>
+        <div class="app-table-foot clearfix">
+            <div class="pull-left"></div>
+            <div class="pull-right">
+                {$pager}
+            </div>
+        </div>
+    </div>
+</div>
+
+
+{php include wl_template('common/footer');}

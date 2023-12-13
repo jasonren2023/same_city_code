@@ -1,0 +1,347 @@
+{php include wl_template('common/header');}
+{if $memid}
+<ul class="nav nav-tabs" id="myTab">
+	<li {if $todo == 'base'} class="active" {/if} ><a href="{php echo web_url('distribution/dissysbase/adddistributor', array('todo'=>'base','memid'=>$memid));}">基本信息</a></li>
+	<li {if $todo == 'lowpeople'} class="active" {/if}><a href="{php echo web_url('distribution/dissysbase/adddistributor', array('todo'=>'lowpeople','memid'=>$memid));}">下级客户</a></li>
+	<li {if $todo == 'loworder'} class="active" {/if}><a href="{php echo web_url('distribution/dissysbase/adddistributor', array('todo'=>'loworder','memid'=>$memid));}">客户订单</a></li>
+	<li {if $todo == 'applylist'} class="active" {/if}><a href="{php echo web_url('distribution/dissysbase/adddistributor', array('todo'=>'applylist','memid'=>$memid));}">提现申请</a></li>
+</ul>
+{else}
+<ul class="nav nav-tabs" >
+	<li {if $todo == 'appdislist'} class="active" {/if} ><a href="{php echo web_url('distribution/dissysbase/adddistributor');}">申请列表</a></li>
+	{if $base['appdis'] == 3}
+	<li {if $todo == 'payrecord'} class="active" {/if} ><a href="{php echo web_url('distribution/dissysbase/adddistributor', array('todo'=>'payrecord'));}">支付记录</a></li>
+	{/if}
+</ul>
+{/if}
+
+<div class="app-content">
+	<div class="main" style="margin-top: 0;">
+		{if $todo == 'base'}
+			<div class="app-form">
+				<form action="" method="post" class="form-horizontal form" id="form">
+					<div class="tab-content">
+						<div class="tab-pane active" id="tab_basic">
+							<div class="panel panel-default">
+								<div class="panel-heading">基本信息</div>
+								<div class="panel-body">
+									<div class="table-responsive">
+										<table class="table table-hover">
+											<thead>
+											<tr>
+												<th class="text-center" style="width:40px;">MID</th>
+												<th class="text-center" style="width:60px;">头像<br />昵称</th>
+												<th class="text-center" style="width:60px;">姓名<br />电话</th>
+												<th class="text-center" style="width:50px;">团队消费金额</th>
+												<th class="text-center" style="width:50px;">申请中佣金</th>
+												<th class="text-center" style="width:60px;">待打款佣金</th>
+												<th class="text-center" style="width:60px;">已提现佣金</th>
+												<th class="text-center" style="width:60px;">现有佣金</th>
+												<th class="text-center" style="width:60px;">累计佣金</th>
+											</tr>
+											</thead>
+											<tbody>
+											<tr data-toggle="popover" data-trigger="hover" data-placement="left" class="js-goods-img">
+												<td class="text-center">
+													{$memid}
+												</td>
+												<td class="text-center">
+													<img class="scrollLoading" src="{php echo tomedia($messagesaler['avatar'])}" data-url="{php echo tomedia($messagesaler['avatar'])}" onerror="this.src='{IMAGE_NOPIC_SMALL}'" height="50" width="50"/>
+													<br />{php echo cutstr($messagesaler['nickname'], 30, true);}
+												</td>
+												<td class="text-center">
+													{php echo cutstr($messagesaler['realname'], 30, true);}<br />
+													{$messagesaler['mobile']}
+												</td>
+												<td class="text-center">
+													<span id="statistics" disid = "{$messagesaler['distributorid']}" class="label label-success">点击统计</span>
+												</td>
+												<td class="text-center">
+													<span class="label label-info">￥{$applymoney}</span>
+												</td>
+												<td class="text-center">
+													<span class="label label-default">￥{$cashmoney}</span>
+												</td>
+												<td class="text-center">
+													<span class="label label-success">￥{$successmoney}</span>
+												</td>
+												<td class="text-center">
+													<span class="label label-warning">￥{$messagesaler['nowmoney']}</span>
+												</td>
+												<td class="text-center">
+													<span class="label label-danger">￥{$messagesaler['dismoney']}</span>
+												</td>
+											</tr>
+											</tbody>
+										</table>
+									</div>
+								</div>
+							</div>
+						</div>
+					</div>
+				</form>
+			</div>
+		{/if}
+		{if $todo == 'applylist'}
+		<div class="app-table-list">
+			<div class="table-responsive">
+				<table class="table table-hover">
+					<thead class="navbar-inner">
+					<tr>
+						<th style="width:150px;text-align: center;">申请人信息</th>
+						<th style="width:65px;text-align: center;">申请金额</th>
+						<th style="width:65px;text-align: center;">申请状态</th>
+						<th style="width:110px;text-align: center;">申请时间</th>
+						<th style="width:100px;text-align: center;">操作时间</th>
+						<th style="width:120px;text-align: center;" class="text-center">操作</th>
+					</tr>
+					</thead>
+					<tbody>
+					{loop $applylist $li}
+					<tr id="{$li['id']}">
+						<td style="text-align: center;">
+							<img style="height: 50px;width: 50px;" src="{php echo tomedia($li['avatar'])}" >
+							<div style="display: inline-block;position: relative;top: .7rem;">
+								{$li['nickname']}<br />
+								{$li['mobile']}
+							</div>
+						</td>
+                        <td style="text-align: center;"><span class="label label-warning">￥{$li['sapplymoney']}</span></td>
+                        <td style="text-align: center;">
+                            {if $li['status'] == 6}
+                            <span class="label label-info">审核中</span>
+                            {else if $li['status']==7}
+                            <span class="label label-info">审核中</span>
+                            {else if $li['status']==8}
+                            <span class="label label-info">已审核</span>
+                            {else if $li['status'] ==9 && $li['settletype'] == 1}
+                            <span class="label label-success">手动完成</span>
+                            {else if $li['status'] ==9 && $li['settletype'] == 3}
+                            <span class="label label-success">已打款</span>
+                            {else if $li['status']==10}
+                            <span class="label label-danger">已驳回</span>
+                            {else if $li['status']==11}
+                            <span class="label label-danger">已驳回</span>
+                            {/if}
+                        </td>
+                        <td style="text-align: center;">{php echo date('Y-m-d H:i:s',$li['applytime'])}</td>
+                        <td style="text-align: center;">{if $li['updatetime']}{php echo date('Y-m-d H:i:s',$li['updatetime'])}{else} <span class="label label-warning">未操作</span> {/if}</td>
+                        <td class="text-center">
+							<a href="{php echo web_url('distribution/dissysbase/adddistributor',array('memid' => $li['mid']))}">用户详情</a>
+							{if $li['status'] == 1}<a href="javascript:;" appid = "{$li['id']}" class="pass"> - 审核通过</a>{/if}
+							{if $li['status'] == 1}<a href="javascript:;" appid = "{$li['id']}" class="reject"> - 驳回</a>{/if}
+						</td>
+					</tr>
+					{/loop}
+					</tbody>
+				</table>
+			</div>
+			<div class="app-table-foot clearfix">
+				<div class="pull-left">
+					
+				</div>
+				<div class="pull-right">
+					{$pager}
+				</div>
+			</div>
+		</div>
+		{/if}
+		{if $todo == 'appdislist'}
+		<div class="app-table-list">
+			<div class="table-responsive">
+				<table class="table table-hover">
+					<thead class="navbar-inner">
+					<tr>
+						<th style="width:50px;text-align: center;">MID</th>
+						<th style="width:115px;text-align: center;">头像/昵称</th>
+						<th style="width:65px;text-align: center;">真实姓名</th>
+						<th style="width:65px;text-align: center;">联系电话</th>
+						<th style="width:65px;text-align: center;">申请状态</th>
+						<th style="width:110px;text-align: center;">申请时间</th>
+						<th style="width:120px;text-align: center;" class="text-center">操作</th>
+					</tr>
+					</thead>
+					<tbody>
+					{loop $dislist $dis}
+					<tr id="{$dis['id']}">
+						<td style="text-align: center;">{$dis['mid']}</td>
+						<td style="text-align: center;">
+							<img style="height: 50px;width: 50px;" src="{php echo tomedia($dis['avatar'])}" >
+							<div style="display: inline-block;position: relative;top: .2rem;">
+								{$dis['nickname']}<br />
+							</div>
+						</td>
+						<td style="text-align: center;"><span class="label label-warning">{$dis['realname']}</span></td>
+						<td style="text-align: center;"><span class="label label-warning">{$dis['mobile']}</span></td>
+						<td style="text-align: center;">{if $dis['status'] == 0} <span class="label label-info">待审核</span>{else if $dis['status']==1}<span class="label label-success">已通过</span> {else if $dis['status']==2}<span class="label label-danger">已驳回</span>{/if}</td>
+						<td style="text-align: center;">{php echo date('Y-m-d H:i:s',$dis['createtime'])}</td>
+						<td class="text-center">
+							{if $dis['status'] == 0}
+							<a href="javascript:;" appid = "{$dis['id']}" class="passdis">审核通过</a>
+							<a href="javascript:;" appid = "{$dis['id']}" class="rejectdis"> - 驳回</a>
+							{else}
+							<span class="label label-default">无操作项</span>
+							{/if}
+						</td>
+					</tr>
+					{/loop}
+					</tbody>
+				</table>
+			</div>
+			<div class="app-table-foot clearfix">
+				<div class="pull-left">
+					
+				</div>
+				<div class="pull-right">
+					{$pager}
+				</div>
+			</div>
+		</div>
+		<div id="modal-module-gift" class="modal fade" tabindex="-1">
+			<div class="modal-dialog" style='width: 920px;'>
+				<div class="modal-content">
+					<div class="modal-header">
+						<button aria-hidden="true" data-dismiss="modal" class="close" type="button">×</button>
+						<h3>驳回理由</h3></div>
+					<div class="modal-body" style="padding: 0;">
+					   <div class="modal-body">
+							<textarea id="remark" name="admin_remark" class="form-control" rows="5"></textarea>
+						</div>
+					</div>
+					<div class="modal-footer" style="padding:15px;">
+						<a class="btn btn-default js-cancel" aria-hidden="true" data-dismiss="modal">取消</a>
+						<a class="btn btn-primary js-order-remark-post" order-id="" data-dismiss="modal" aria-hidden="true">确定</a>
+					</div>
+				</div>
+			</div>
+		</div>
+		{/if}
+		{if $todo == 'payrecord'}
+		<div class="app-table-list">
+			<div class="table-responsive">
+				<table class="table table-hover">
+					<thead class="navbar-inner">
+					<tr>
+						<th style="width:40px;">MID</th>
+						<th style="width:60px;">头像</th>
+						<th style="width:90px;">昵称</th>
+						<th style="width:80px;">支付金额</th>
+						<th style="width:120px;">支付时间</th>
+						<th style="width:120px;" class="text-center">支付方式</th>
+					</tr>
+					</thead>
+					<tbody>
+					{loop $payrecord $pay}
+					<tr>
+						<td>{$pay['mid']}</td>
+						<td><img style="height: 50px;width: 50px;" src="{php echo tomedia($pay['avatar'])}" ></td>
+						<td>{$pay['nickname']}</td>
+						<td>￥{$pay['price']}</td>
+						<td>{php echo date('Y-m-d H:i:s',$pay['paytime'])}</td>
+						<td class="text-center">
+							{if $pay['paytype']==1}<span class="label label-info">余额支付</span>{/if}
+							{if $pay['paytype']==2}<span class="label label-success">微信支付</span>{/if}
+							{if $pay['paytype']==3}<span class="label label-warning">支付宝</span>{/if}
+							{if $pay['paytype']==4}<span class="label label-danger">货到付款</span>{/if}
+							{if $pay['paytype']==5}<span class="label label-danger">小程序支付</span>{/if}
+						</td>
+					</tr>
+					{/loop}
+					</tbody>
+				</table>
+			</div>
+			<div class="app-table-foot clearfix">
+				<div class="pull-left">
+					
+				</div>
+				<div class="pull-right">
+					{$pager}
+				</div>
+			</div>
+		</div>
+		{/if}
+	</div>
+</div>
+<script type="text/javascript">
+	 
+	 $('#statistics').click(function(){
+		$('#statistics').text('请稍等...');
+		var disid = $(this).attr('disid');
+		$.post("{php echo web_url('distribution/dissysbase/statistics')}",{disid:disid},function(d){
+          	if(d.errno == 0){
+          		$('#statistics').text('￥'+d.message);
+          	}
+	    },"json");		
+	}); 
+	
+	$("#submit2").click(function(){
+		$('#form2')[0].submit();
+	});
+	$('.js-recharge2').click(function() {
+		$('#modal-message2').show();
+		var topfx = $(this).attr('leadname');
+		$('#topfx').text(topfx);
+		var leaduid = $(this).attr('leaduid');
+		$('#leaduid').val(leaduid);
+		var leadmid = $(this).attr('leadmid');
+		$('#leadmid').val(leadmid);
+		var memid = $(this).attr('memid');
+		$('#memid').val(memid);
+		$('.panel').css("opacity","0.2");$('.nav').css("opacity","0.2");$('.pagination').css("opacity","0.2");
+	});
+	$('.close').click(function() {
+		$('#modal-message').hide();
+		$('#modal-message2').hide();
+		$('.panel').css("opacity","1");$('.nav').css("opacity","1");$('.pagination').css("opacity","1");
+	});
+	
+	$('.pass').click(function(e) {
+		e.stopPropagation();
+		var id = $(this).attr('appid');
+		util.nailConfirm(this, function(state) {
+			if(!state) return;
+			location.href = "{php echo web_url('distribution/dissysbase/pass')}id="+id;
+		}, {html: "确认审核通过?"});
+	});
+	
+	$('.passdis').click(function(e){
+		e.stopPropagation();
+		var id = $(this).attr('appid');
+		util.nailConfirm(this, function(state) {
+			if(!state) return;
+			location.href = "{php echo web_url('distribution/dissysbase/passdis')}id="+id;
+		}, {html: "确认审核通过?"});
+	});
+	
+	$('.reject').click(function(e) {
+		e.stopPropagation();
+		var id = $(this).attr('appid');
+		util.nailConfirm(this, function(state) {
+			if(!state) return;
+			location.href = "{php echo web_url('distribution/dissysbase/reject')}id="+id;
+		}, {html: "确认驳回申请?"});
+	});
+	//驳回申请理由
+	$('.rejectdis').click(function(){
+  		var appid = $(this).attr('appid');
+		$('.js-order-remark-post').attr("order-id",appid);
+		popwin = $('#modal-module-gift').modal();
+	});
+	$('.js-cancel,.close').click(function() {
+			$('#order-remark-container').hide();
+			$('.main').css("opacity","1");$('.nav').css("opacity","1");$('.big-menu').css("opacity","1");
+		});
+	$('.js-order-remark-post').click(function() {
+		var order_id = $(this).attr('order-id');
+		var remark = $('#remark').val();
+		$.post("{php echo web_url('distribution/dissysbase/rejectreason')}",{id:order_id,reason:remark},function(d){
+			if(!d.errno){
+				util.tips('驳回成功!');
+				location.reload();
+			}
+		},"json");
+		$('#order-remark-container').hide();
+		$('.main').css("opacity","1");$('.nav').css("opacity","1");$('.big-menu').css("opacity","1");
+	});
+</script>	 
+{php include wl_template('common/footer');}

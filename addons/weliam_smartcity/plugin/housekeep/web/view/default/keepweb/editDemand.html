@@ -1,0 +1,93 @@
+{php include wl_template('common/header');}
+<ul class="nav nav-tabs">
+    <li class="active"><a href="javascript:;">需求详情</a></li>
+</ul>
+<div class="app-content">
+    <div class="app-form">
+        <form action="" method="post" class="form-horizontal form form-validate">
+            <div class="form-group-title">需求信息</div>
+            <div class="form-group">
+                <label class="col-sm-2 control-label">发布用户</label>
+                <div class="col-sm-9">
+                    <input type="text" name="nothing"  class="form-control" value="{$demand['nickname']}" readonly="readonly">
+                </div>
+            </div>
+            <div class="form-group">
+                <label class="col-sm-2 control-label"><span class="form-must">*</span>服务类目</label>
+                <div class="col-sm-9">
+                    <select name="demand[type]" class="form-control select2">
+                        {loop $categoryes $parent}
+                        <optgroup label="{$parent['title']}">
+                            {loop $parent['list'] $children}
+                            <option value="{$children['id']}" {if $demand['type'] == $children['id']}selected{/if}>{$children['title']}</option>
+                            {/loop}
+                        </optgroup>
+                        {/loop}
+                    </select>
+                </div>
+            </div>
+            <div class="form-group">
+                <label class="col-sm-2 control-label"><span class="form-must">*</span>上门地址</label>
+                <div class="col-sm-9">
+                    {php echo tpl_select_address('demand[address]','demand[lng]','demand[lat]',$demand['address'],$demand['lng'],$demand['lat'])}
+                </div>
+            </div>
+            <div class="form-group">
+                <label class="col-sm-2 control-label">上门时间</label>
+                <div class="col-sm-9">
+                    <div class="input-group">
+                        {php echo tpl_form_field_date('demand[visitingtime]', date('Y-m-d H:i', $demand['visitingtime']),true);}
+                    </div>
+                </div>
+            </div>
+            <div class="form-group">
+                <label class="col-sm-2 control-label">图集</label>
+                <div class="col-sm-9">
+                    {php echo attachment_select_multi('demand[thumbs]',$demand['thumbs']);}
+                </div>
+            </div>
+            <div class="form-group">
+                <label class="col-sm-2 control-label">详情描述</label>
+                <div class="col-sm-9">
+                    <textarea name="demand[detail]" class="form-control" rows="8">{$demand['detail']}</textarea>
+                </div>
+            </div>
+            <div class="form-group">
+                <label class="col-sm-2 control-label">服务者状态</label>
+                <div class="col-sm-9">
+                    <label class="radio-inline">
+                        <input type="radio" name="demand[status]" value="1" {if $demand['status'] == 1}checked{/if}> 发布中
+                    </label>
+                    <label class="radio-inline">
+                        <input type="radio" name="demand[status]" value="0" {if empty($demand['status'])} checked{/if}> 已关闭
+                    </label>
+                    {if $demand['status'] == 4}
+                    <label class="radio-inline">
+                        <input type="radio" name="demand[status]" value="4" {if $demand['status'] == 4} checked{/if}> 被删除
+                    </label>
+                    {/if}
+                    {if $demand['status'] == 5}
+                    <label class="radio-inline">
+                        <input type="radio" name="demand[status]" value="5" {if $demand['status'] == 5} checked{/if}> 待审核
+                    </label>
+                    {/if}
+                    {if $demand['status'] == 6}
+                    <label class="radio-inline">
+                        <input type="radio" name="demand[status]" value="6" {if $demand['status'] == 6} checked{/if}> 被驳回
+                    </label>
+                    {/if}
+                </div>
+            </div>
+            <div class="form-group">
+                <label class="col-sm-2 control-label"></label>
+                <div class="col-sm-9">
+                    <input type="submit" name="submit" value="提交" class="btn btn-primary min-width" />
+                    <input type="hidden" name="token" value="{$_W['token']}" />
+                    <input type="hidden" name="id" value="{$demand['id']}" />
+                </div>
+            </div>
+        </form>
+    </div>
+</div>
+
+{php include wl_template('common/footer');}

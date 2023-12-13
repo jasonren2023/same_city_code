@@ -1,0 +1,300 @@
+{php include wl_template('common/header');}
+<ul class="nav nav-tabs">
+    <li class="active"><a href="{php echo web_url('redpack/redpack/pack_edit', array('id' => $item['id']))}">编辑红包</a></li>
+</ul>
+<div class="app-content">
+    <div class="app-form">
+        <form action="" method="post" class="form-horizontal form form-validate">
+            <div class="form-group-title">红包信息</div>
+            <div class="form-group">
+                <label class="col-sm-2 control-label">排序</label>
+                <div class="col-sm-9">
+                    <input type="number" name="item[sort]" class="form-control" value="{$item['sort']}" placeholder="排序" >
+                    <div class="help-block">排序由大到小，数值越大，顺序越靠前</div>
+                </div>
+            </div>
+            <div class="form-group">
+                <label class="col-sm-2 control-label"><span class="form-must">*</span>红包名称</label>
+                <div class="col-sm-9">
+                    <input type="text" name="item[title]" maxlength="16" class="form-control" value="{$item['title']}" placeholder="请输入红包名称" required>
+                </div>
+            </div>
+            <div class="form-group">
+                <label class="col-sm-2 control-label"><span class="form-must">*</span>领取场景</label>
+                <div class="col-sm-9">
+                    <label class="radio-inline">
+                        <input type="radio" name="item[scene]"  {if !empty($id)}disabled="disabled"{/if} value="0" onclick="$('#limit_count').show();$('#all_count').show();" {if empty($item['scene'])}checked{/if}>自助领取
+                    </label>
+                    <label class="radio-inline">
+                        <input type="radio" name="item[scene]" {if !empty($id)}disabled="disabled"{/if} value="1" onclick="$('#limit_count').hide();$('#all_count').hide();" {if !empty($item['scene'])}checked{/if}>系统发放
+                    </label>
+                    <div class="help-block">如果设置节日红包、新人红包时，建议领取场景选择系统发放。注意:设置后不可修改</div>
+                </div>
+            </div>
+            <div class="form-group">
+                <label class="col-sm-2 control-label"><span class="form-must">*</span>优惠信息</label>
+                <div class="col-sm-9">
+                    <div class="input-group">
+                        <span class="input-group-addon">满</span>
+                        <input type="number" class="form-control" name="item[full_money]" value="{$item['full_money']}" min="0" required {if !empty($id)}readonly{/if}>
+                        <span class="input-group-addon">元，减</span>
+                        <input type="number" class="form-control" name="item[cut_money]" value="{$item['cut_money']}" min="0" required {if !empty($id)}readonly{/if}>
+                        <span class="input-group-addon">元</span>
+                    </div>
+                    <div class="help-block">设置为0则为无门槛使用券。注意:设置后不可修改</div>
+                </div>
+            </div>
+            <div class="form-group" id="all_count" {if !empty($item['scene'])}style="display: none"{/if}>
+                <label class="col-sm-2 control-label"><span class="form-must">*</span>红包总量</label>
+                <div class="col-sm-9">
+                    <div class="input-group">
+                        <input type="number" class="form-control" name="item[all_count]" value="{$item['all_count']}" min="0" required>
+                        <span class="input-group-addon">个</span>
+                    </div>
+                    <div class="help-block">0表示无限</div>
+                </div>
+            </div>
+            <div class="form-group" id="limit_count" {if !empty($item['scene'])}style="display: none"{/if}>
+                <label class="col-sm-2 control-label"><span class="form-must">*</span>每人限领</label>
+                <div class="col-sm-9">
+                    <div class="input-group">
+                        <input type="number" class="form-control" name="item[limit_count]" value="{$item['limit_count']}" min="0" required>
+                        <span class="input-group-addon">个</span>
+                    </div>
+                    <div class="help-block">0表示无限,但受到总数的限制</div>
+                </div>
+            </div>
+            <div class="form-group">
+                <label class="col-sm-2 control-label"><span class="form-must">*</span>有效期</label>
+                <div class="col-sm-9">
+                    <div class="input-group">
+                        <span class="input-group-addon" style="padding-top: 3px;">
+                            <label class="radio-inline" onclick="$('.usetime_day1').attr('disabled','disabled');$('.usetime_day2').attr('disabled','disabled');">
+                                <input type="radio" name="item[usetime_type]" value="0" {if empty($item['usetime_type'])}checked{/if}>固定时间有效
+                            </label>
+                        </span>
+                        {php echo tpl_select_time_info('usetime', array('starttime' => date('Y-m-d H:i:s', $item['use_start_time']), 'endtime' => date('Y-m-d H:i:s', $item['use_end_time'])));}
+                    </div>
+                </div>
+            </div>
+            <div class="form-group">
+                <label class="col-sm-2 control-label"></label>
+                <div class="col-sm-9">
+                    <div class="input-group">
+                        <span class="input-group-addon" style="padding-top: 3px;">
+                            <label class="radio-inline" onclick="$('.usetime_day1').removeAttr('disabled');$('.usetime_day2').attr('disabled','disabled');">
+                                <input type="radio" name="item[usetime_type]" value="1" {if $item['usetime_type'] == 1}checked{/if}>领取当日起
+                            </label>
+                        </span>
+                        <input type="number" class="form-control usetime_day1" name="item[usetime_day1]" min="1" max="365" {if $item['usetime_type'] != 1}disabled{else}value="{$item['usetime_day1']}"{/if}>
+                        <span class="input-group-addon">天内有效</span>
+                    </div>
+                    <div class="help-block">    有效期按自然天计算。举例：如设置领券当日起2天内可用，用户在5月21日14:00时领取优惠券，则该优惠券的可用时间为5月21日的14:00:00至5月22日的23:59:59。</div>
+                </div>
+            </div>
+            <div class="form-group">
+                <label class="col-sm-2 control-label"></label>
+                <div class="col-sm-9">
+                    <div class="input-group">
+                        <span class="input-group-addon" style="padding-top: 3px;">
+                            <label class="radio-inline" onclick="$('.usetime_day2').removeAttr('disabled');$('.usetime_day1').attr('disabled','disabled');">
+                                <input type="radio" name="item[usetime_type]" value="2" {if $item['usetime_type'] == 2}checked{/if}>领取次日起
+                            </label>
+                        </span>
+                        <input type="number" class="form-control usetime_day2" name="item[usetime_day2]" min="1" max="365" {if $item['usetime_type'] != 2}disabled{else}value="{$item['usetime_day2']}"{/if}>
+                        <span class="input-group-addon">天内有效</span>
+                    </div>
+                    <div class="help-block">有效期按自然天计算。举例：如设置领券次日起2天内可用，用户在5月21日的14:00领取优惠券，则该优惠券的可用时间为5月22日的00:00:00到5月23日的23:59:59。</div>
+                </div>
+            </div>
+            <div class="form-group">
+                <label class="col-sm-2 control-label"><span class="form-must">*</span>红包类型</label>
+                <div class="col-sm-9">
+                    <label class="radio-inline">
+                        <input type="radio" name="item[redpack_type]" onclick="$('#secGood').show();" value="0" {if empty($item['redpack_type'])}checked{/if}>通用红包
+                    </label>
+                    <label class="radio-inline">
+                        <input type="radio" name="item[redpack_type]" onclick="$('#secGood').show();" value="1" {if $item['redpack_type'] == 1}checked{/if}>商品红包
+                    </label>
+                    <label class="radio-inline">
+                        <input type="radio" name="item[redpack_type]" onclick="$('#secGood').hide();" value="2" {if $item['redpack_type'] == 2}checked{/if}>买单红包
+                    </label>
+                </div>
+            </div>
+            <div class="form-group">
+                <label class="col-sm-2 control-label"><span class="form-must">*</span>使用限制</label>
+                <div class="col-sm-9">
+                    {if !is_agent()}
+                        <label class="radio-inline">
+                            <input type="radio" name="item[usegoods_type]" value="0" {if empty($item['usegoods_type'])}checked{/if}>全平台通用
+                        </label>
+                        <label class="radio-inline">
+                            <input type="radio" name="item[usegoods_type]" value="1" {if $item['usegoods_type'] == 1}checked{/if}>指定代理
+                        </label>
+                    {/if}
+                    {if is_agent()}
+                        <label class="radio-inline">
+                            <input type="radio" name="item[usegoods_type]" value="1" {if $item['usegoods_type'] == 1}checked{/if}>当前代理可用
+                        </label>
+                    {/if}
+                    <label class="radio-inline">
+                        <input type="radio" name="item[usegoods_type]" value="2" {if $item['usegoods_type'] == 2}checked{/if}>指定商家
+                    </label>
+                    <label class="radio-inline" id="secGood">
+                        <input type="radio" name="item[usegoods_type]" value="3" {if $item['usegoods_type'] == 3}checked{/if}>指定商品
+                    </label>
+                    <!--总平台可用-->
+                    <div class="help-block useGoodsType {if $item['usegoods_type'] != 0}hide{/if}" id="useGoodsType0">
+                        全平台通用：用户在领取该红包后可以在当前平台任意代理，任意商家，购买任意商品时使用当前红包
+                    </div>
+                </div>
+            </div>
+            <!--指定代理-->
+            <div class="form-group useGoodsType {if $item['usegoods_type'] != 1}hide{/if}" id="useGoodsType1">
+                <label class="col-sm-2 control-label"></label>
+                <div class="col-sm-9">
+                    <select name="item[use_aids][]" class="form-control select2" multiple="" required style="width: 100%;">
+                        {loop $agents $agent}
+                        <option value="{$agent['id']}" {if in_array($agent['id'], $item['use_aids'])}selected{/if}>{$agent['agentname']}</option>
+                        {/loop}
+                    </select>
+                </div>
+            </div>
+            <!--指定商家-->
+            <div class="form-group useGoodsType {if $item['usegoods_type'] != 2}hide{/if}" id="useGoodsType2">
+                <label class="col-sm-2 control-label"></label>
+                <div class="col-sm-9">
+                    <select name="item[use_sids][]" class="form-control select2" multiple="" required style="width: 100%;">
+                        {loop $stores $store}
+                        <option value="{$store['id']}" {if in_array($store['id'], $item['use_sids'])}selected{/if}>{$store['storename']}</option>
+                        {/loop}
+                    </select>
+                </div>
+            </div>
+            <!--指定商品-->
+            <div class="form-group useGoodsType {if $item['usegoods_type'] != 3}hide{/if}" id="useGoodsType3">
+                <div class="form-group" >
+                    <label class="col-sm-2 control-label">抢购商品</label>
+                    <div class="col-sm-9">
+                        <select name="item[rush_ids][]" class="form-control select2" multiple="" style="width: 100%;">
+                            {loop $rushList $rush}
+                            <option value="{$rush['id']}" {if in_array($rush['id'], $item['rush_ids'])}selected{/if}>{$rush['name']}</option>
+                            {/loop}
+                        </select>
+                    </div>
+                </div>
+                <div class="form-group" >
+                    <label class="col-sm-2 control-label">团购商品</label>
+                    <div class="col-sm-9">
+                        <select name="item[group_ids][]" class="form-control select2" multiple="" style="width: 100%;">
+                            {loop $grouponList $group}
+                            <option value="{$group['id']}" {if in_array($group['id'], $item['group_ids'])}selected{/if}>{$group['name']}</option>
+                            {/loop}
+                        </select>
+                    </div>
+                </div>
+                <div class="form-group" >
+                    <label class="col-sm-2 control-label">拼团商品</label>
+                    <div class="col-sm-9">
+                        <select name="item[fight_ids][]" class="form-control select2" multiple="" style="width: 100%;">
+                            {loop $fightList $fight}
+                            <option value="{$fight['id']}" {if in_array($fight['id'], $item['fight_ids'])}selected{/if}>{$fight['name']}</option>
+                            {/loop}
+                        </select>
+                    </div>
+                </div>
+                <div class="form-group" >
+                    <label class="col-sm-2 control-label">砍价商品</label>
+                    <div class="col-sm-9">
+                        <select name="item[bargain_ids][]" class="form-control select2" multiple="" style="width: 100%;">
+                            {loop $bargainList $bargain}
+                            <option value="{$bargain['id']}" {if in_array($bargain['id'], $item['bargain_ids'])}selected{/if}>{$bargain['name']}</option>
+                            {/loop}
+                        </select>
+                    </div>
+                </div>
+            </div>
+            {if Customized::init('transfergift') > 0}
+            <div class="form-group">
+                <label class="col-sm-2 control-label">红包转赠</label>
+                <div class="col-sm-9">
+                    <label class="radio-inline">
+                        <input type="radio" name="item[transferstatus]" onclick="$('#trans').show();" value="1" {if !empty($item['transferstatus'])}checked{/if}>允许
+                    </label>
+                    <label class="radio-inline">
+                        <input type="radio" name="item[transferstatus]" onclick="$('#trans').hide();" value="0" {if empty($item['transferstatus'])}checked{/if}>禁止
+                    </label>
+                    <span class="help-block">允许转赠后用户可以将线上红包赠送给其他用户。</span>
+                </div>
+            </div>
+            <div id="trans"  {if empty($item['transferstatus'])} style="display: none" {/if}>
+                <div class="form-group">
+                    <label class="col-sm-2 control-label">多次转赠</label>
+                    <div class="col-sm-9">
+                        <label class="radio-inline">
+                            <input type="radio" name="item[transfermore]" value="1" {if !empty($item['transfermore'])}checked{/if}>允许
+                        </label>
+                        <label class="radio-inline">
+                            <input type="radio" name="item[transfermore]" value="0" {if empty($item['transfermore'])}checked{/if}>禁止
+                        </label>
+                        <span class="help-block">允许多次转赠后用户可以将别人赠送的线上红包再赠送给其他用户。</span>
+                    </div>
+                </div>
+                <div class="form-group">
+                    <label class="col-sm-2 control-label">转赠适用会员等级</label>
+                    <div class="col-sm-9">
+                        <label class="checkbox-inline">
+                            <input type="checkbox" value="-1" {if in_array(-1,$item['level'])} checked {/if}  name="level[]" />非会员
+                        </label>
+                        <label class="checkbox-inline">
+                            <input type="checkbox" value="0" {if in_array(0,$item['level'])} checked {/if}  name="level[]" />{$_W['wlsetting']['halflevel']['name']}
+                        </label>
+                        {loop $levels $level}
+                        <label class="checkbox-inline">
+                            <input type="checkbox" value="{$level['id']}" {if in_array($level['id'],$item['level'])} checked {/if}  name="level[]" />{$level['name']}
+                        </label>
+                        {/loop}
+                        <span class="help-block">设置后需要有所设置的会员等级才可以发起转赠,不勾选即所有用户可用。</span>
+                    </div>
+                </div>
+            </div>
+            {/if}
+            <div class="form-group">
+                <label class="col-sm-2 control-label"><span class="form-must">*</span>红包状态</label>
+                <div class="col-sm-9">
+                    <label class="radio-inline">
+                        <input type="radio" name="item[status]" value="1" {if !empty($item['status'])}checked{/if}>上架
+                    </label>
+                    <label class="radio-inline">
+                        <input type="radio" name="item[status]" value="0" {if empty($item['status'])}checked{/if}>下架
+                    </label>
+                </div>
+            </div>
+            <div class="form-group">
+                <label class="col-sm-2 control-label"></label>
+                <div class="col-sm-9">
+                    <input type="submit" name="submit" value="提交" class="btn btn-primary min-width" />
+                    <input type="hidden" name="token" value="{$_W['token']}" />
+                    <input type="hidden" name="id" value="{$item['id']}" />
+                </div>
+            </div>
+        </form>
+    </div>
+</div>
+<script>
+    /**
+     * 改变使用限制
+     */
+    $("[name='item[usegoods_type]']").on('change',function () {
+        let _this = $(this),
+            _value = _this.val(),
+            id = '#useGoodsType'+_value;
+        //隐藏所有内容
+        $(".useGoodsType").addClass('hide');
+        //显示当前选中内容
+        $(id).removeClass('hide');
+    });
+
+</script>
+
+{php include wl_template('common/footer');}

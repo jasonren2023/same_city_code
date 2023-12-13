@@ -1,0 +1,64 @@
+{php include wl_template('common/header');}
+<ul class="nav nav-tabs" id="myTab">
+	<li class="active">
+		<a href="#">编辑幻灯片</a>
+	</li>
+</ul>
+<div class="app-content">
+	<div class="app-form">
+		<form action="" method="post" class="form-horizontal form form-validate" id="form">
+			<div class="form-group-title">编辑幻灯片</div>
+			<div class="form-group">
+				<label class="col-sm-2 control-label">排序</label>
+				<div class="col-sm-9">
+					<input type="text" name="data[sort]" id="sort" class="form-control" value="{$data['sort']}" />
+					<span class="help-block">提示：填写数字,数字越大越靠前</span>
+				</div>
+			</div>
+			<div class="form-group">
+				<label class="col-sm-2 control-label">标题</label>
+				<div class="col-sm-9">
+					<input type="text" name="data[title]" id="title" class="form-control" value="{$data['title']}" />
+				</div>
+			</div>
+			<div class="form-group">
+				<label class="col-sm-2 control-label">幻灯片图片</label>
+				<div class="col-sm-9">
+					{php echo attachment_select('data[img]', $data['img']);}
+					<span class="help-block">图片建议为750 X 300,请将所有幻灯片图片尺寸保持一致</span>
+				</div>
+			</div>
+			<div class="form-group">
+				<label class="col-sm-2 control-label">幻灯片链接</label>
+				<div class="col-sm-9">
+					<div class="input-group">
+						<input type="text" value="{$data['url']}" class="form-control valid" name="data[url]" readonly="readonly" id="advlink">
+						<span data-input="#advlink" data-toggle="selectUrl" class="input-group-addon btn btn-default">选择链接</span>
+					</div>
+				</div>
+			</div>
+			<div class="form-group">
+				<label class="col-sm-2 control-label">是否显示</label>
+				<div class="col-sm-9">
+					<div class="radio radio-success radio-inline">
+						<input type="radio" id="status1" name="data[status]" value="1" {if intval($data[ 'status'])==1 }checked="checked" {/if}>
+						<label for="inlineRadio1"> 是 </label>
+					</div>
+					<div class="radio radio-success radio-inline">
+						<input type="radio" id="status2" name="data[status]" value="0" {if intval($data[ 'status'])==0 }checked="checked" {/if}>
+						<label for="inlineRadio2"> 否 </label>
+					</div>
+				</div>
+			</div>
+			<div class="form-group">
+				<label class="col-sm-2 control-label"></label>
+				<div class="col-sm-9">
+					<input type="submit" name="submit" value="提交" class="btn btn-primary min-width" />
+					<input type="hidden" name="token" value="{$_W['token']}" />
+					<input type="hidden" name="data[id]" value="{$data['id']}" />
+				</div>
+			</div>
+		</from>
+	</div>
+</div>
+{php include wl_template('common/footer');}

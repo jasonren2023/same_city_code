@@ -1,0 +1,233 @@
+{php include wl_template('common/header');}
+<style>
+	.nickname{display: inline-block;max-width:200px;overflow: hidden;text-overflow:ellipsis;white-space: nowrap;vertical-align: middle;}
+</style>
+<ul class="nav nav-tabs">
+	<li class="active"><a href="#">客户列表</a></li>
+</ul>
+<div class="app-content">
+	<div class="app-filter">
+		<div class="filter-list">
+			<form action="" method="get" class="form-horizontal" role="form" id="form1">
+	            <input type="hidden" name="c" value="site" />
+	            <input type="hidden" name="a" value="entry" />
+	            <input type="hidden" name="m" value="{MODULE_NAME}" />
+	            <input type="hidden" name="p" value="member" />
+				<input type="hidden" name="ac" value="wlMember" />
+				<input type="hidden" name="do" value="memberIndex" />
+				<input type="hidden" name="vipstatus" value="{$_GPC['vipstatus']}" />
+				<input type="hidden" name="blackflag" value="{$_GPC['blackflag']}" />
+	            <div class="form-group form-inline">
+					<label class="col-sm-2 control-label">会员筛选</label>
+					<div class="col-sm-9">
+						<select name="type" class="form-control">
+							<option value="5" {if $_GPC['type'] == 5}selected{/if}>MID</option>
+							<option value="2" {if $_GPC['type'] == 2}selected{/if}>手机号</option>
+							<option value="3" {if $_GPC['type'] == 3}selected{/if}>真实姓名</option>
+							<option value="4" {if $_GPC['type'] == 4}selected{/if}>昵称</option>
+						</select>
+						<input type="text" name="keyword" class="form-control" value="{$_GPC['keyword']}"  placeholder="请输入关键字"/>
+					</div>
+				</div>
+				<div class="form-group">
+					<label class="col-sm-2 control-label">会员状态</label>
+					<div class="col-sm-9">
+						<div class="btn-group">
+							<a href="{php echo wl_filter_url('blackflag:0');}" class="btn {if intval($_GPC['blackflag']) == 0}btn-primary{else}btn-default{/if}">不限</a>
+							<a href="{php echo wl_filter_url('blackflag:2');}" class="btn {if $_GPC['blackflag'] == 2}btn-primary{else}btn-default{/if}">正常</a>
+							<a href="{php echo wl_filter_url('blackflag:1');}" class="btn {if $_GPC['blackflag'] == 1}btn-primary{else}btn-default{/if}">黑名单</a>
+						</div>
+					</div>
+				</div>
+				<div class="form-group">
+					<label class="col-sm-2 control-label">注册时间</label>
+					<div class="col-md-2">
+						<select name="timetype" class="form-control">
+							<option value="0" {if $_GPC['timetype']!=1}selected="selected"{/if}>关闭</option>
+							<option value="1" {if $_GPC['timetype']==1}selected="selected"{/if}>开启</option>
+						</select>
+					</div>
+					<div class="col-md-2">
+						{php echo tpl_select_time_info('time_limit', array('starttime' => date('Y-m-d H:i',$starttime), 'endtime' => date('Y-m-d H:i', $endtime)));}
+					</div>
+				</div>
+				<div class="form-group">
+					<label class="col-sm-2 control-label"></label>
+					<div class="col-sm-9">
+						<button class="btn btn-primary" type="submit">筛选</button>
+						<button class="btn btn-default min-width" name="export" type="submit" value="export"><i class="fa fa-download"></i>导出用户</button>
+						{if IMS_FAMILY != 'wl'}
+						<a class="btn btn-default" data-toggle="ajaxModal" href="{php echo web_url('member/wlMember/memberImport')}">导入系统粉丝</a>
+						<a class="btn btn-default" data-toggle="ajaxModal" href="{php echo web_url('member/wlMember/membersync')}">同步用户信息</a>
+						{/if}
+						<a class="btn btn-default" data-toggle="ajaxModal" href="{php echo web_url('member/wlMember/membermerge')}">合并重复用户</a>
+						{if Customized::init('transfergift') > 0}
+						<button style="background-color: #586061;border-color: #586061;" class="btn btn-warning min-width" onclick="$('#excelUpload').click();return false;"><i class="fa fa-upload"></i>  转赠导入</button>
+						<input type="file" id="excelUpload" class="hide"/>
+						{/if}
+					</div>
+				</div>
+	        </form>
+		</div>
+	</div>
+	<div class="app-table-list">
+		<div class="table-responsive">
+			<table class="table table-responsive">
+                <thead>
+                    <tr>
+                        <th style="width: 20%;">用户</th>
+						<th style="width: 10%;">手机号</th>
+                        <th style="width: 10%;">积分/余额</th>
+                        <th style="width: 15%;">注册时间</th>
+                        <!--<th style="">客户来源</th>-->
+                        <th style="width: 10%;">成交</th>
+                        <th style="width: 35%;text-align: right;">操作</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    {loop $list $row}
+                    <tr>
+                        <td style="overflow: visible">
+                            <div rel="pop" style="display: flex"  data-content=" <span>ID: </span>{$row['id']} </br>                                                                                                                     <span>真实姓名：</span> {if empty($row['realname'])}未填写{else}{$row['realname']}{/if}<br/>
+                           <span>手机号：</span>{if !empty($row['mobile'])}{$row['mobile']}{else}未绑定{/if} <br/>
+                           <span>开户行：</span>{if !empty($row['bank_name'])}{$row['bank_name']}{else}未填写{/if} <br/>
+                           <span>银行卡账号：</span>{if !empty($row['card_number'])}{$row['card_number']}{else}未填写{/if} <br/>
+                           <span>支付宝账号：</span>{if !empty($row['alipay'])}{$row['alipay']}{else}未填写{/if} <br/>
+                           <span>推荐人：</span>{if !empty($row['distributorid'])}{$row['tjname']}(MID:{$row['tjmid']}){else}暂无{/if} <br/>
+                           <span>是否关注：</span>
+                            {if empty($row['follow'])}
+                                {if empty($row['unfollowtime'])}
+                                    <i>未关注</i>
+                                {else}
+                                    <i>取消关注</i>
+                                {/if}
+                            {else}
+                                <i>已关注</i>
+                            {/if}<br/>
+                           <span>状态:</span>{if $row['blackflag']==1}黑名单{else}正常{/if}">
+
+                               <img class="img-40" src="{php echo tomedia($row['avatar'])}" style='border-radius:50%;border:1px solid #efefef;' onerror="this.src='{IMAGE_NOPIC_SMALL}'" height="40" width="40" />
+                               <span style="display: flex;flex-direction: column;justify-content: center;align-items: flex-start;padding-left: 5px">
+                                   <span class="nickname">
+									   {if empty($row['nickname'])}未授权{else}{$row['nickname']}{/if}
+                                   </span>
+								   <div style="display: flex;">
+									   {if !empty($row['openid'])}
+									   <svg class="icon" style="display: flex;width: 1em; height: 1em;vertical-align: middle;fill: currentColor;overflow: hidden;" viewBox="0 0 1024 1024" version="1.1" xmlns="http://www.w3.org/2000/svg" p-id="1544"><path d="M512 512m-512 0a512 512 0 1 0 1024 0 512 512 0 1 0-1024 0Z" fill="#1BB723" p-id="1545"></path><path d="M831.890286 585.603657c0-90.528914-90.594743-164.322743-192.336457-164.322743-107.739429 0-192.599771 73.793829-192.599772 164.322743 0 90.682514 84.860343 164.322743 192.599772 164.322743 22.542629 0 45.282743-5.6832 67.935085-11.359086l62.112915 34.004115-17.020343-56.590629c45.443657-34.091886 79.3088-79.316114 79.3088-130.377143z m-254.785829-28.335543c-11.278629 0-22.652343-11.227429-22.652343-22.674285 0-11.278629 11.373714-22.637714 22.652343-22.637715 17.122743 0 28.350171 11.359086 28.350172 22.637715 0 11.446857-11.227429 22.674286-28.350172 22.674285z m124.5696 0c-11.2128 0-22.498743-11.227429-22.498743-22.674285 0-11.278629 11.285943-22.637714 22.498743-22.637715 16.954514 0 28.328229 11.359086 28.328229 22.637715 0 11.446857-11.373714 22.674286-28.328229 22.674285z" fill="#FFFFFF" p-id="1546"></path><path d="M418.552686 251.428571c-124.481829 0-226.442971 84.845714-226.442972 192.577829 0 62.193371 33.923657 113.261714 90.609372 152.861257l-22.652343 68.117943 79.162514-39.701943c28.328229 5.610057 51.0464 11.373714 79.316114 11.373714 7.109486 0 14.153143-0.3584 21.138286-0.899657-4.425143-15.125943-6.992457-30.990629-6.992457-47.440457 0-98.933029 84.955429-179.214629 192.519314-179.214628 7.336229 0 14.606629 0.548571 21.803886 1.338514-19.587657-91.223771-117.116343-159.012571-228.461714-159.012572zM344.992914 404.319086c-16.969143 0-34.0992-11.373714-34.0992-28.342857 0-17.042286 17.130057-28.2624 34.0992-28.2624s28.2624 11.220114 28.2624 28.2624c0 16.969143-11.293257 28.342857-28.2624 28.342857z m158.471315 0c-16.976457 0-34.004114-11.373714-34.004115-28.342857 0-17.042286 17.027657-28.2624 34.004115-28.2624 17.0496 0 28.342857 11.220114 28.342857 28.2624 0.007314 16.969143-11.293257 28.342857-28.342857 28.342857z" fill="#FFFFFF" p-id="1547"></path></svg>
+									   {/if}
+                                       {if !empty($row['wechat_openid'])}
+									   <svg class="icon" style="display: flex;width: 1em; height: 1em;vertical-align: middle;fill: currentColor;overflow: hidden;color: #605ab0;" viewBox="0 0 1024 1024" version="1.1" xmlns="http://www.w3.org/2000/svg" p-id="2253"><path d="M512 1024C229.248 1024 0 794.752 0 512S229.248 0 512 0s512 229.248 512 512-229.248 512-512 512z m-151.338667-213.333333a189.44 189.44 0 0 0 133.376-53.973334 185.045333 185.045333 0 0 0 56.362667-124.586666h0.256V357.632c0-61.226667 50.517333-110.933333 112.682667-110.933333s112.64 49.706667 112.64 110.933333-50.474667 110.933333-112.64 110.933333a38.485333 38.485333 0 0 0-38.741334 38.144c0 21.077333 17.493333 38.144 38.741334 38.144 104.746667 0 189.994667-83.968 189.994666-187.093333S768.085333 170.666667 663.338667 170.666667a190.464 190.464 0 0 0-133.589334 54.229333 184.832 184.832 0 0 0-56.149333 125.013333h-0.256v273.792c0 61.226667-50.517333 110.933333-112.682667 110.933334s-112.64-49.706667-112.64-110.933334 50.474667-110.933333 112.64-110.933333a38.4 38.4 0 0 0 38.741334-38.144 38.485333 38.485333 0 0 0-38.741334-38.144C255.914667 436.48 170.666667 520.448 170.666667 623.573333S255.914667 810.666667 360.661333 810.666667z" p-id="2254"></path></svg>
+									   {/if}
+								   </div>
+                               </span>
+                            </div>
+                        </td>
+						<td>
+							{if !empty($row['mobile'])}{$row['mobile']}{else}--{/if}
+						</td>
+						<td><span class="label label-info">积分  {php echo $row['credit1']}</span>
+                            <br/><span class="label label-warning" style="display: inline-block;margin-top: 5px;">余额  {php echo $row['credit2']}</span>
+                        </td>
+                        <td>{php echo date("Y-m-d",$row['createtime'])}<br/>{php echo date("H:i:s",$row['createtime'])}</td>
+                        <!--<td>{if empty($row['levelname'])}普通会员{else}{$row['levelname']}{/if}</td>-->
+                        <td><span>订单：<span class="text-info">{$row['dealnum']}</span></span>
+                            <br/><span> 金额：<span class="text-warning">{php echo floatval($row['dealmoney'])}</span></span>
+                        </td>
+                        <td style="overflow:visible;text-align: right;">
+							{if Customized::init('transfergift') > 0}
+							<a class="btn btn-primary btn-sm" style="background-color: #586061;border-color: #586061;"  href="{php echo web_url('member/wlMember/exportTransfer',['mid' => $row['id']]);}">批量转赠</a>
+							{/if}
+							{if empty($_W['aid'])}
+                            <a class="btn btn-primary btn-sm" href="{php echo web_url('member/wlMember/memberDetail',array('id' => $row['id']));}" title="">客户详情</a>
+							{/if}
+                            <a class="btn btn-info btn-sm" href="{php echo web_url('order/wlOrder/orderlist', array('keywordtype'=>'3','keyword'=>$row['id']))}">客户订单</a>
+							{if empty($_W['aid'])}
+                           	<a class="btn btn-warning btn-sm" data-toggle="ajaxModal" href="{php echo web_url('member/wlMember/memberRecharge', array('type'=>'credit1','id'=>$row['id']))}">账户</a>
+                            {if empty($row['blackflag'])}
+                            <a class="btn btn-default btn-sm" data-toggle='ajaxRemove' href="{php echo web_url('member/wlMember/toblack',array('id' => $row['id'],'flag'=>1));}" data-confirm="被加入黑名单的用户无法再访问并被删除所有发布的掌上信息帖子,确认要拉黑用户吗？">拉黑</a>
+                            {else}
+                            <a class="btn btn-success btn-sm" data-toggle='ajaxRemove' href="{php echo web_url('member/wlMember/toblack',array('id' => $row['id'],'flag'=>0));}" data-confirm="确认要解除用户黑名单吗？">解封</a>
+                            {/if}
+                            <a class="btn btn-danger btn-sm" data-toggle='ajaxRemove' href="{php echo web_url('member/wlMember/memberDelete',array('id' => $row['id']));}" data-confirm="确定要删除该会员吗？">删除</a>
+							{/if}
+                        </td>
+                    </tr>
+                    {/loop}
+                </tbody>
+            </table>
+		</div>
+		<div class="app-table-foot clearfix">
+			<div class="pull-left">
+				
+			</div>
+			<div class="pull-right">
+				{$pager}
+			</div>
+		</div>
+	</div>
+</div>
+<script>
+	$(function(){
+		require(['bootstrap'], function () {
+	        $("[rel=pop]").popover({
+	            trigger: 'manual',
+	            placement: 'right',
+	            title: $(this).data('title'),
+	            html: 'true',
+	            content: $(this).data('content'),
+	            animation: false
+	        }).on("mouseenter", function () {
+	            var _this = this;
+	            $(this).popover("show");
+	            $(this).siblings(".popover").on("mouseleave", function () {
+	                $(_this).popover('hide');
+	            });
+	        }).on("mouseleave", function () {
+	            var _this = this;
+	            setTimeout(function () {
+	                if (!$(".popover:hover").length) {
+	                    $(_this).popover("hide")
+	                }
+	            }, 100);
+	        });
+	    });
+	});
+
+	$("#excelUpload").on('change',function () {
+		var val = $("#excelUpload").get(0).files[0];//文件内容
+		var type = val['name'].split(".");//文件名称+文件后缀
+		type = $.trim(type[type.length - 1]);//文件后缀
+		$("#excelUpload").val('');
+		if(type == 'csv'){
+			var fd = new FormData();
+			fd.append("file",val);//上传的文件file
+			tip.confirm("内容处理中，请不要刷新页面/离开页面!<br />确定后开始处理",function () {
+				$.ajax({
+					url:"{php echo web_url('order/wlOrder/bulkShipment')}",
+					type:"post",
+					data:fd,
+					dataType:"json",
+					cache: false,
+					processData: false,
+					contentType: false,
+					async:false,
+					success:function(data){
+						tip.alert(data.message,function () {
+							if(data.errno == 1){
+								var url = "{php echo web_url('member/wlMember/transferSend')}"+"name="+data.data;
+								window.location.href = url;
+							}
+						});
+					},
+					error:function(){
+						tip.alert("网络错误，请重试！！");
+					}
+				});
+			});
+		}else{
+			tip.alert("只能上传csv类型的表格文件");
+		}
+	});
+
+</script>
+{php include wl_template('common/footer');}

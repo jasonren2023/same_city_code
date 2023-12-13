@@ -1,0 +1,1646 @@
+<!--------------------------  其他(公共)组件群  ----------------------------------->
+<!--组件群中单个主键的标题-->
+<script type="text/html" id="tpl_public_title">
+    <div class="public_title_content"><%title%></div>
+</script>
+<!-- 另存为模板 弹出层 -->
+<div class="modal fade" id="saveTempModal" aria-hidden="false">
+    <div class="modal-dialog">
+        <div class="modal-content">
+            <div class="modal-header">
+                <button data-dismiss="modal" class="close" type="button">×</button>
+                <h4 class="modal-title">另存为模板</h4>
+            </div>
+            <div class="modal-body form-horizontal">
+                <div class="form-group">
+                    <div class="col-sm-2 control-label must">模板名称</div>
+                    <div class="col-sm-9">
+                        <input class="form-control" placeholder="请输入模板名称"  id="saveTempName" value="{if $info['name']}{$info['name']}{else}未命名模板{/if}     " aria-required="true" data-rule-required="true" />
+                    </div>
+                </div>
+                <div class="form-group">
+                    <div class="col-sm-2 control-label">模板分类</div>
+                    <div class="col-sm-9">
+                        <select class="form-control" id="saveTempCate" >
+                            {loop $category $item}
+                            <option value="{$item['id']}" {if $info['cate'] == $item['name']}selected{/if}>{$item['name']}</option>
+                            {/loop}
+                            <option value="0">不分类</option>
+                        </select>
+                    </div>
+                </div>
+            </div>
+            <div class="modal-footer">
+                <div class="btn btn-primary" id="saveTemp" data-state="0">保存</div>
+                <button data-dismiss="modal" class="btn btn-default" type="button">关闭</button>
+            </div>
+        </div>
+    </div>
+</div>
+<!--------------------------  弹框模板组件群  ----------------------------------->
+<!--商品选择模板-->
+<div class="modal fade" id="SelectGoodsContent" aria-hidden="false"></div>
+<script type="text/html" id="tplSelectGoods">
+    <div class="modal-dialog" style="min-width: 80%!important;max-height: 80%!important;overflow: auto;">
+        <div class="modal-content">
+            <div class="modal-header">
+                <button data-dismiss="modal" class="close" type="button">×</button>
+                <h4 class="modal-title">
+                    请选择
+                    <%if plugin == 1%>
+                    抢购商品
+                    <%else if plugin == 2%>
+                    团购商品
+                    <%else if plugin == 3%>
+                    拼团商品
+                    <%else if plugin == 4%>
+                    大礼包
+                    <%else if plugin == 5%>
+                    卡券
+                    <%else if plugin == 6%>
+                    折扣卡
+                    <%else if plugin == 7%>
+                    砍价商品
+                    <%else if plugin == 8%>
+                    积分商品
+                    <%else if plugin == 9%>
+                    同城活动
+                    <%else if plugin == 10%>
+                    配送商品
+                    <%else%>
+                    商品
+                    <%/if%>
+                </h4>
+            </div>
+            <div class="modal-body form-horizontal">
+                <!--搜索-->
+                <div class="form-group">
+                    <div class="col-sm-9 searchContent">
+                        <input class="form-control" placeholder="请输入商品名称..." value="<%search%>"/>
+                    </div>
+                    <div class="btn btn-primary goodsSelect" data-plugin="<%plugin%>">搜索</div>
+                </div>
+                <!--表格-->
+                <div class="app-table-list">
+                    <div class="panel panel-default">
+                        <table class="table table-hover table-responsive table-bordered" style="border: 1px solid #e5e5e5;">
+                            <thead>
+                            <tr>
+                                <th class="text-center" width="10%"><%if plugin == 4 || plugin == 6 %>店铺logo<%else%>图片<%/if%></th>
+                                <th class="text-center" width="<%if plugin == 4 || plugin == 6 %>25<%else if plugin == 8%>20<%else%>40<%/if%>%"><%if plugin == 4 || plugin == 6 %>店铺名称<%else%>名称<%/if%></th>
+                                <th class="text-center" width="<%if plugin == 4 || plugin == 6 %>25<%else%>10<%/if%>%"><%if plugin == 4%>礼包名称<%else if plugin == 6%>折扣卡名称<%else%>类型<%/if%></th>
+                                <%if plugin != 6 && plugin != 8%><th class="text-center" width="10%"><%if plugin == 4%>使用次数<%else%>状态<%/if%></th><%/if%>
+                                <th class="text-center" width="<%if plugin == 8%>30<%else%>10<%/if%>%"><%if plugin == 4%>礼包价值<%else if plugin == 6%>折扣信息<%else%>价格<%/if%></th>
+                                <%if plugin != 6%><th class="text-center" width="10%">库存</th><%/if%>
+                                <th class="text-center" width="10%">操作</th>
+                            </tr>
+                            </thead>
+                            <tbody class="text-center">
+                            <%each goods as val key%>
+                            <tr>
+                                <td class="text-center">
+                                    <img src="<%if plugin != 8%><%val['logo']%><%else%><%val['thumb']%><%/if%>" />
+                                </td>
+                                <td class="text-left">
+                                    <%if plugin == 4 || plugin == 6 %>
+                                        <%val['storename']%>
+                                    <%else if  plugin == 8%>
+                                        <%val['title']%>
+                                    <%else%>
+                                        <%val['goods_name']%>
+                                    <%/if%>
+                                </td>
+                                <td class="<%if plugin == 4 || plugin == 6%>text-left<%else%>text-center<%/if%>">
+                                    <%if plugin == 4 || plugin == 6 %>
+                                        <%val['name']%>
+                                    <%else%>
+                                        <%if val['plugin'] == 'rush'%>
+                                            抢购
+                                        <%else if val['plugin'] == 'groupon'%>
+                                            团购
+                                        <%else if val['plugin'] == 'wlfightgroup'%>
+                                            拼团
+                                        <%else if val['plugin'] == 'coupon'%>
+                                            卡券
+                                        <%else if val['plugin'] == 'bargain'%>
+                                            砍价
+                                        <%else if val['plugin'] == 'activity'%>
+                                            活动
+                                        <%else if val['plugin'] == 'integral'%>
+                                            积分
+                                        <%else if val['plugin'] == 'citydelivery'%>
+                                            配送商品
+                                        <%/if%>
+                                    <%/if%>
+                                </td>
+                                <%if plugin != 6 && plugin != 8%>
+                                <td>
+                                    <%if plugin == 4%>
+                                        <%val['usetimes']%>次
+                                        <%if val['datestatus'] == 2%>/ 周
+                                        <%else if val['datestatus'] == 3%>/ 月
+                                        <%else if val['datestatus'] == 4%>/ 年<%/if%>
+                                    <%else%>
+                                        <%if val['plugin'] == 'rush'%>
+                                            <%if val['status'] == 3%>
+                                            <span class="label label-default">已结束</span>
+                                            <%else%>
+                                            <span class="label label-success">正常</span>
+                                            <%/if%>
+                                        <%else if val['plugin'] == 'groupon'%>
+                                            <%if val['status'] == 3%>
+                                            <span class="label label-default">已结束</span>
+                                            <%else%>
+                                            <span class="label label-success">正常</span>
+                                            <%/if%>
+                                        <%else if val['plugin'] == 'wlfightgroup'%>
+                                            <span class="label label-success">正常</span>
+                                        <%else if val['plugin'] == 'coupon'%>
+                                            <span class="label label-success">正常</span>
+                                        <%else if val['plugin'] == 'bargain'%>
+                                            <%if val['status'] == 1%>
+                                            <span class="label label-warning">未开始</span>
+                                            <%else if val['status'] == 2%>
+                                            <span class="label label-success">进行中</span>
+                                            <%else%>
+                                            <span class="label label-default">已结束</span>
+                                            <%/if%>
+                                        <%else if val['plugin'] == 'activity'%>
+                                            <%if val['status'] == 1%>
+                                                <span class="label label-warning">未开始</span>
+                                            <%else%>
+                                                <span class="label label-success">报名中</span>
+                                            <%/if%>
+                                        <%else if val['plugin'] == 'citydelivery'%>
+                                            <%if val['status'] == 2%>
+                                                <span class="label label-warning">售卖中</span>
+                                            <%else%>
+                                                <span class="label label-success">未开始</span>
+                                            <%/if%>
+                                        <%/if%>
+                                    <%/if%>
+                                </td>
+                                <%/if%>
+                                <td class="<%if plugin != 6%>text-left<%else%>text-center<%/if%>">
+                                    <%if plugin == 8%>
+                                        <span style="color:#ff3333;"><%val['price_text']%></span>
+                                    <%else if (val['plugin'] == 'coupon' && val['is_charge'] == 1) || (val['plugin'] != 'coupon')%>
+                                        <span style="color:#ff3333;"><%if plugin != 6%>￥:<%else%><%val['discount']%><%if val['discount'] != '暂不可用'%>折<%/if%><%/if%></span><%if plugin != 6%><%val['price']%><%/if%>
+                                    <%else%>
+                                        免费
+                                    <%/if%>
+                                </td>
+                                <%if plugin != 6%>
+                                <td>
+                                    <%if plugin == 4 || plugin == 6 %>
+                                        <%if val['stk'] > 0%>
+                                            <%val['stk']%>
+                                        <%else%>
+                                            无限制
+                                        <%/if%>
+                                    <%else if plugin == 8%>
+                                        <%val['stock']%>
+                                    <%else if plugin == 10%>
+                                        <%if val['allstock'] > 0%>
+                                            <%val['stk']%>
+                                        <%else%>
+                                            无限制
+                                        <%/if%>
+                                    <%else%>
+                                        <%val['stk']%>
+                                    <%/if%>
+                                </td>
+                                <%/if%>
+                                <td>
+                                    <a href="javascript:;" class="btn btn-sm btn-warning selectGoods" data-key="<%key%>" data-keys="<%keys%>">选择</a>
+                                </td>
+                            </tr>
+                            <%/each%>
+                            </tbody>
+                        </table>
+                    </div>
+                    <div class="paging"></div>
+                </div>
+            </div>
+            <div class="modal-footer">
+                <button data-dismiss="modal" class="btn btn-default" type="button">关闭</button>
+            </div>
+        </div>
+    </div>
+</script>
+<!--头条选择模板-->
+<div class="modal fade" id="SelectHeadlineContent" aria-hidden="false"></div>
+<script type="text/html" id="tplSelectHeadline">
+    <div class="modal-dialog" style="min-width: 80%!important;max-height: 80%!important;overflow: auto;">
+        <div class="modal-content">
+            <div class="modal-header">
+                <button data-dismiss="modal" class="close" type="button">×</button>
+                <h4 class="modal-title">选择头条</h4>
+            </div>
+            <div class="modal-body form-horizontal">
+                <!--搜索-->
+                <div class="form-group">
+                    <div class="col-sm-9 searchContent">
+                        <input class="form-control" placeholder="标题/作者" value="<%search%>"/>
+                    </div>
+                    <div class="btn btn-primary headlineSelect">搜索</div>
+                </div>
+                <!--表格-->
+                <div class="app-table-list">
+                    <div class="panel panel-default">
+                        <table class="table table-hover table-responsive table-bordered" style="border: 1px solid #e5e5e5;">
+                            <thead>
+                            <tr>
+                                <th class="text-center" width="20%">标题</th>
+                                <th class="text-center" width="20%">作者</th>
+                                <th class="text-center" width="20%">分类</th>
+                                <th class="text-center" width="20%">浏览量</th>
+                                <th class="text-center" width="20%">操作</th>
+                            </tr>
+                            </thead>
+                            <tbody class="text-center">
+                            <%each list as val key%>
+                            <tr>
+                                <td><%val['title']%></td>
+                                <td><%val['author']%></td>
+                                <td><%val['one_name']%> - <%val['two_name']%></td>
+                                <td><%val['browse']%></td>
+                                <td>
+                                    <a href="javascript:;" class="btn btn-sm btn-warning selectHeadline" data-key="<%key%>" data-itemid="<%itemid%>">选择</a>
+                                </td>
+                            </tr>
+                            <%/each%>
+                            </tbody>
+                        </table>
+                    </div>
+                    <div class="paging"></div>
+                </div>
+            </div>
+            <div class="modal-footer">
+                <button data-dismiss="modal" class="btn btn-default" type="button">关闭</button>
+            </div>
+        </div>
+    </div>
+</script>
+<!--商户选择模板-->
+<div class="modal fade" id="SelectShopContent" aria-hidden="false"></div>
+<script type="text/html" id="tplSelectShop">
+    <div class="modal-dialog" style="min-width: 80%!important;max-height: 80%!important;overflow: auto;">
+        <div class="modal-content">
+            <div class="modal-header">
+                <button data-dismiss="modal" class="close" type="button">×</button>
+                <h4 class="modal-title">选择商户</h4>
+            </div>
+            <div class="modal-body form-horizontal">
+                <!--搜索-->
+                <div class="form-group">
+                    <div class="col-sm-9 searchContent">
+                        <input class="form-control" placeholder="商户名称" value="<%search%>"/>
+                    </div>
+                    <div class="btn btn-primary shopSelect">搜索</div>
+                </div>
+                <!--表格-->
+                <div class="app-table-list">
+                    <div class="panel panel-default">
+                        <table class="table table-hover table-responsive table-bordered" style="border: 1px solid #e5e5e5;">
+                            <thead>
+                            <tr>
+                                <th class="text-center" width="20%">图片</th>
+                                <th class="text-center" width="20%">名称</th>
+                                <th class="text-center" width="20%">营业时间</th>
+                                <th class="text-center" width="20%">人气</th>
+                                <th class="text-center" width="20%">操作</th>
+                            </tr>
+                            </thead>
+                            <tbody class="text-center">
+                            <%each list as val key%>
+                            <tr>
+                                <td>
+                                    <img src="<%val['logo']%>" />
+                                </td>
+                                <td class="text-left"><%val['storename']%></td>
+                                <td><%val['storehours']%></td>
+                                <td><%val['pv']%></td>
+                                <td>
+                                    <a href="javascript:;" class="btn btn-sm btn-warning selectShop" data-key="<%key%>" data-itemid="<%itemid%>">选择</a>
+                                </td>
+                            </tr>
+                            <%/each%>
+                            </tbody>
+                        </table>
+                    </div>
+                    <div class="paging"></div>
+                </div>
+            </div>
+            <div class="modal-footer">
+                <button data-dismiss="modal" class="btn btn-default" type="button">关闭</button>
+            </div>
+        </div>
+    </div>
+</script>
+<!--企业选择模板-->
+<div class="modal fade" id="SelectEnterpriseContent" aria-hidden="false"></div>
+<script type="text/html" id="tplSelectEnterprise">
+    <div class="modal-dialog" style="min-width: 80%!important;max-height: 80%!important;overflow: auto;">
+        <div class="modal-content">
+            <div class="modal-header">
+                <button data-dismiss="modal" class="close" type="button">×</button>
+                <h4 class="modal-title">选择企业</h4>
+            </div>
+            <div class="modal-body form-horizontal">
+                <!--搜索-->
+                <div class="form-group">
+                    <div class="col-sm-9 searchContent">
+                        <input class="form-control" placeholder="企业名称/联系电话/id..." value="<%search%>"/>
+                    </div>
+                    <div class="btn btn-primary enterpriseSelect">搜索</div>
+                </div>
+                <!--表格-->
+                <div class="app-table-list">
+                    <div class="panel panel-default">
+                        <table class="table table-hover table-responsive table-bordered" style="border: 1px solid #e5e5e5;">
+                            <thead>
+                            <tr>
+                                <th class="text-center">LOGO</th>
+                                <th class="text-center">名称</th>
+                                <th class="text-center">性质</th>
+                                <th class="text-center">规模</th>
+                                <th class="text-center">行业</th>
+                                <th class="text-center">区域</th>
+                                <th class="text-center">岗位(个)</th>
+                                <th class="text-center">是否认证</th>
+                                <th class="text-center">操作</th>
+                            </tr>
+                            </thead>
+                            <tbody class="text-center">
+                            <%each list as val key%>
+                                <tr class="text-center">
+                                    <td><img src="<%val['logo']%>" width="50px" height="50px"/></td>
+                                    <td><%val['storename']%></td>
+                                    <td><%val['nature']%></td>
+                                    <td><%val['scale']%></td>
+                                    <td><%val['industry']%></td>
+                                    <td><%val['area']%></td>
+                                    <td><%val['release_recruit']%></td>
+                                    <td>
+                                        <%if val['is_authentication'] == 1%>
+                                            <label class="label label-success">已认证</label>
+                                        <%else%>
+                                            <label class="label label-danger">未认证</label>
+                                        <%/if%>
+                                    </td>
+                                    <td><a href="javascript:;" class="btn btn-sm btn-warning selectEnterprise" data-key="<%key%>" data-itemid="<%itemid%>">选择</a></td>
+                                </tr>
+                            <%/each%>
+                            </tbody>
+                        </table>
+                    </div>
+                    <div class="paging"></div>
+                </div>
+            </div>
+            <div class="modal-footer">
+                <button data-dismiss="modal" class="btn btn-default" type="button">关闭</button>
+            </div>
+        </div>
+    </div>
+</script>
+<!--招聘信息选择模板-->
+<div class="modal fade" id="SelectRecruitContent" aria-hidden="false"></div>
+<script type="text/html" id="tplSelectRecruit">
+    <div class="modal-dialog" style="min-width: 80%!important;max-height: 80%!important;overflow: auto;">
+        <div class="modal-content">
+            <div class="modal-header">
+                <button data-dismiss="modal" class="close" type="button">×</button>
+                <h4 class="modal-title">选择招聘信息</h4>
+            </div>
+            <div class="modal-body form-horizontal">
+                <!--搜索-->
+                <div class="form-group">
+                    <div class="col-sm-9 searchContent">
+                        <input class="form-control" placeholder="标题信息" value="<%search%>"/>
+                    </div>
+                    <div class="btn btn-primary recruitSelect">搜索</div>
+                </div>
+                <!--表格-->
+                <div class="app-table-list">
+                    <div class="panel panel-default">
+                        <table class="table table-hover table-responsive table-bordered" style="border: 1px solid #e5e5e5;">
+                            <thead>
+                            <tr>
+                                <th class="text-center">发布方</th>
+                                <th class="text-center">标题</th>
+                                <th class="text-center">招聘类型</th>
+                                <th class="text-center">工作类型</th>
+                                <th class="text-center">薪资</th>
+                                <th class="text-center">区域</th>
+                                <th class="text-center">状态</th>
+                                <th class="text-center">是否认证</th>
+                                <th class="text-center">操作</th>
+                            </tr>
+                            </thead>
+                            <tbody class="text-center">
+                            <%each list as val key%>
+                            <tr class="text-center">
+                                <td>
+                                    <div style="float:left;width:50px;height: 50px;">
+                                        <img src="<%val.release.logo%>" width="50px" height="50px">
+                                    </div>
+                                    <div style="float: left; margin-left: 10px;text-align: left;height: 50px;line-height: 25px;font-size: 15px;">
+                                        <div><%val.release.name%></div>
+                                        <div style="font-size: 13px;color: #CCCCCC;"><%val.release_time%>发布</div>
+                                    </div>
+                                </td>
+                                <td><%val['title']%></td>
+                                <td>
+                                    <%if val['recruitment_type'] == 1%>
+                                        <label class="label label-success">个人招聘</label>
+                                    <%else%>
+                                        <label class="label label-danger">企业招聘</label>
+                                    <%/if%>
+                                </td>
+                                <td>
+                                    <%if val['job_type'] == 1%>
+                                        <label class="label label-success">全职</label>
+                                    <%else%>
+                                        <label class="label label-danger">兼职</label>
+                                    <%/if%>
+                                </td>
+                                <td><%val['salary']%></td>
+                                <td>
+                                    <%if val['area']%>
+                                        <%val['area']%>
+                                    <%else if val['city']%>
+                                        <%val['city']%>
+                                    <%else if val['province']%>
+                                        <%val['province']%>
+                                    <%/if%>
+                                </td>
+                                <td>
+                                    <%if val['status'] == 1%>
+                                        <label class="label label-primary">待付款</label>
+                                    <%else if  val['status'] == 2%>
+                                        <label class="label label-inverse">审核中</label>
+                                    <%else if  val['status'] == 3%>
+                                        <label class="label label-danger">未通过</label>
+                                    <%else if  val['status'] == 4%>
+                                        <label class="label label-success">招聘中</label>
+                                    <%else%>
+                                        <label class="label label-default">已结束</label>
+                                    <%/if%>
+                                </td>
+                                <td>
+                                    <%if val['release']['is_authentication'] == 1%>
+                                        <label class="label label-success">已认证</label>
+                                    <%else%>
+                                        <label class="label label-danger">未认证</label>
+                                    <%/if%>
+                                </td>
+                                <td><a href="javascript:;" class="btn btn-sm btn-warning selectRecruit" data-key="<%key%>" data-itemid="<%itemid%>">选择</a></td>
+                            </tr>
+                            <%/each%>
+                            </tbody>
+                        </table>
+                    </div>
+                    <div class="paging"></div>
+                </div>
+            </div>
+            <div class="modal-footer">
+                <button data-dismiss="modal" class="btn btn-default" type="button">关闭</button>
+            </div>
+        </div>
+    </div>
+</script>
+<!--简历信息选择模板-->
+<div class="modal fade" id="SelectResumeContent" aria-hidden="false"></div>
+<script type="text/html" id="tplSelectResume">
+    <div class="modal-dialog" style="min-width: 80%!important;max-height: 80%!important;overflow: auto;">
+        <div class="modal-content">
+            <div class="modal-header">
+                <button data-dismiss="modal" class="close" type="button">×</button>
+                <h4 class="modal-title">选择简历信息</h4>
+            </div>
+            <div class="modal-body form-horizontal">
+                <!--搜索-->
+                <div class="form-group">
+                    <div class="col-sm-9 searchContent">
+                        <input class="form-control" placeholder="用户姓名" value="<%search%>"/>
+                    </div>
+                    <div class="btn btn-primary resumeSelect">搜索</div>
+                </div>
+                <!--表格-->
+                <div class="app-table-list">
+                    <div class="panel panel-default">
+                        <table class="table table-hover table-responsive table-bordered" style="border: 1px solid #e5e5e5;">
+                            <thead>
+                            <tr>
+                                <th class="text-center">用户信息</th>
+                                <th class="text-center">工作类型</th>
+                                <th class="text-center">上岗状态</th>
+                                <th class="text-center">工作经验</th>
+                                <th class="text-center">最高学历</th>
+                                <th class="text-center">期望职位</th>
+                                <th class="text-center">期望薪资</th>
+                                <th class="text-center">期望工作区域</th>
+                                <th class="text-center">操作</th>
+                            </tr>
+                            </thead>
+                            <tbody class="text-center">
+                            <%each list as val key%>
+                            <tr class="text-center">
+                                <td>
+                                    <div style="height: 50px!important;min-width: 170px!important;">
+                                        <div style="float:left;width:50px;height: 50px;position: relative;">
+                                            <img src="<%val.avatar%>" width="50px" height="50px" style="border-radius: 50%;">
+                                            <%if val['gender'] == 2%>
+                                                <i class="icon icon-male" style="position: absolute;bottom: 0; right: 0; background: #0d8ddb;width: 15px; height: 15px; line-height: 15px;font-size: 12px;color: #FFF;border-radius: 50%;opacity: .7;"></i>
+                                            <%else%>
+                                                <i class="icon icon-female" style="position: absolute;bottom: 0; right: 0; background: #ed5565;width: 15px; height: 15px; line-height: 15px;font-size: 12px;color: #FFF;border-radius: 50%;opacity: .7;transform: rotate(  30deg) skew(  0deg);"></i>
+                                            <%/if%>
+                                        </div>
+                                        <div style="float: left; margin-left: 10px;text-align: left;height: 50px;line-height: 25px;font-size: 15px;">
+                                            <div style="max-width: 100px;overflow: hidden;white-space: nowrap;text-overflow: ellipsis;"><%val.name%><span style="font-size: 12px;color: red;">age:<%val.age%></span></div>
+                                            <div style="font-size: 13px;color: #CCCCCC;">tel:<%val.phone%></div>
+                                        </div>
+                                    </div>
+                                </td>
+                                <td>
+                                    <%if val['job_type'] == 1%>
+                                        <label class="label label-success">全职</label>
+                                    <%else%>
+                                        <label class="label label-danger">兼职</label>
+                                    <%/if%>
+                                </td>
+                                <td><%val['work_status_text']%></td>
+                                <td><%val['experience']%></td>
+                                <td><%val['education']%></td>
+                                <td class="text-left">
+                                    <div style="height: 50px!important;line-height: 50px;">
+                                        <%each val.expect_position_list as item%>
+                                            <label class="label label-primary"><%item%></label>
+                                        <%/each%>
+                                    </div>
+                                </td>
+                                <td><%val['salary']%></td>
+                                <td>
+                                    <%if val['area']%>
+                                        <%val['area']%>
+                                    <%else if val['city']%>
+                                        <%val['city']%>
+                                    <%else if val['province']%>
+                                        <%val['province']%>
+                                    <%/if%>
+                                </td>
+                                <td><a href="javascript:;" class="btn btn-sm btn-warning selectResume" data-key="<%key%>" data-itemid="<%itemid%>">选择</a></td>
+                            </tr>
+                            <%/each%>
+                            </tbody>
+                        </table>
+                    </div>
+                    <div class="paging"></div>
+                </div>
+            </div>
+            <div class="modal-footer">
+                <button data-dismiss="modal" class="btn btn-default" type="button">关闭</button>
+            </div>
+        </div>
+    </div>
+</script>
+<!--相亲会员选择模板-->
+<div class="modal fade" id="SelectDatingContent" aria-hidden="false"></div>
+<script type="text/html" id="tplSelectDating">
+    <div class="modal-dialog" style="min-width: 80%!important;max-height: 80%!important;overflow: auto;">
+        <div class="modal-content">
+            <div class="modal-header">
+                <button data-dismiss="modal" class="close" type="button">×</button>
+                <h4 class="modal-title">选择会员信息</h4>
+            </div>
+            <div class="modal-body form-horizontal">
+                <!--搜索-->
+                <div class="form-group">
+                    <div class="col-sm-9 searchContent">
+                        <input class="form-control" placeholder="用户昵称" value="<%search%>"/>
+                    </div>
+                    <div class="btn btn-primary datingSelect">搜索</div>
+                </div>
+                <!--表格-->
+                <div class="app-table-list">
+                    <div class="panel panel-default">
+                        <table class="table table-hover table-responsive table-bordered" style="border: 1px solid #e5e5e5;">
+                            <thead>
+                            <tr>
+                                <th class="text-center">用户信息</th>
+                                <th class="text-center">封面图</th>
+                                <th class="text-center">住房情况</th>
+                                <th class="text-center">出行情况</th>
+                                <th class="text-center">浏览量</th>
+                                <th class="text-center">是否置顶</th>
+                                <th class="text-center">当前所在区域</th>
+                                <th class="text-center">是否为VIP</th>
+                                <th class="text-center">操作</th>
+                            </tr>
+                            </thead>
+                            <tbody class="text-center">
+                            <%each list as val key%>
+                            <tr class="text-center">
+                                <td>
+                                    <div style="height: 50px!important;min-width: 170px!important;">
+                                        <div style="float:left;width:50px;height: 50px;position: relative;">
+                                            <img src="<%val.avatar%>" width="50px" height="50px" style="border-radius: 50%;">
+                                            <%if val['gneder'] == 1%>
+                                            <i class="icon icon-male" style="position: absolute;bottom: 0; right: 0; background: #0d8ddb;width: 15px; height: 15px; line-height: 15px;font-size: 12px;color: #FFF;border-radius: 50%;opacity: .7;"></i>
+                                            <%else%>
+                                            <i class="icon icon-female" style="position: absolute;bottom: 0; right: 0; background: #ed5565;width: 15px; height: 15px; line-height: 15px;font-size: 12px;color: #FFF;border-radius: 50%;opacity: .7;transform: rotate(  30deg) skew(  0deg);"></i>
+                                            <%/if%>
+                                        </div>
+                                        <div style="float: left; margin-left: 10px;text-align: left;height: 50px;line-height: 25px;font-size: 15px;">
+                                            <div style="max-width: 100px;overflow: hidden;white-space: nowrap;text-overflow: ellipsis;"><%val.nickname%></div>
+                                            <div style="font-size: 13px;color: #CCCCCC;">年龄：<%val.age%></div>
+                                        </div>
+                                    </div>
+                                </td>
+                                <td>
+                                    <img src="<%imgsrc val.cover%>" style="max-height: 50px;max-width: 50px;">
+                                </td>
+                                <td>
+                                    <%if val['live'] == 1 || val['live'] == 2%>
+                                        <label class="label label-success">有房</label>
+                                    <%else%>
+                                        <label class="label label-danger">无房</label>
+                                    <%/if%>
+                                </td>
+                                <td>
+                                    <%if val['travel'] == 2%>
+                                        <label class="label label-success">已购车</label>
+                                    <%else%>
+                                        <label class="label label-danger">未购车</label>
+                                    <%/if%>
+                                </td>
+                                <td><%val['pv']%></td>
+                                <td>
+                                    <%if val['is_top'] == 1%>
+                                    <label class="label label-success">置顶中</label>
+                                    <%else%>
+                                    <label class="label label-danger">未置顶</label>
+                                    <%/if%>
+                                </td>
+                                <td><%val['area']%></td>
+                                <td>
+                                    <%if val['is_vip'] == 1%>
+                                        <label class="label label-success">是</label>
+                                    <%else%>
+                                        <label class="label label-danger">不是</label>
+                                    <%/if%>
+                                </td>
+                                <td><a href="javascript:;" class="btn btn-sm btn-warning selectDating" data-key="<%key%>" data-itemid="<%itemid%>">选择</a></td>
+                            </tr>
+                            <%/each%>
+                            </tbody>
+                        </table>
+                    </div>
+                    <div class="paging"></div>
+                </div>
+            </div>
+            <div class="modal-footer">
+                <button data-dismiss="modal" class="btn btn-default" type="button">关闭</button>
+            </div>
+        </div>
+    </div>
+</script>
+<!--家政服务选择模板-->
+<div class="modal fade" id="SelectHouseKeepContent" aria-hidden="false"></div>
+<script type="text/html" id="tplSelectHouseKeep">
+    <div class="modal-dialog" style="min-width: 80%!important;max-height: 80%!important;overflow: auto;">
+        <div class="modal-content">
+            <div class="modal-header">
+                <button data-dismiss="modal" class="close" type="button">×</button>
+                <h4 class="modal-title">选择服务信息</h4>
+            </div>
+            <div class="modal-body form-horizontal" style="padding: 15px!important;">
+                <!--搜索-->
+                <div class="form-group">
+                    <div class="col-sm-9 searchContent">
+                        <input class="form-control" placeholder="商户名称/师傅姓名/需求类型/服务标题" value="<%search%>"/>
+                    </div>
+                    <div class="btn btn-primary houseKeepSelect">搜索</div>
+                </div>
+                <!--表格-->
+                <div class="app-table-list">
+                    <div class="panel panel-default">
+                        <table class="table table-hover table-responsive table-bordered" style="border: 1px solid #e5e5e5;">
+                            <thead>
+                            <tr>
+                                <th class="text-center">LOGO</th>
+                                <th class="text-center">名称</th>
+                                <th class="text-center">地址</th>
+                                <th class="text-center">类型</th>
+                                <th class="text-center">操作</th>
+                            </tr>
+                            </thead>
+                            <tbody class="text-center">
+                            <%each list as val key%>
+                                <tr class="text-center">
+                                    <td>
+                                        <img src="<%imgsrc val.logo%>" style="max-height: 50px;max-width: 50px;">
+                                    </td>
+                                    <td><%val['name']%></td>
+                                    <td><%val['address']%></td>
+                                    <td><%val['tip']%></td>
+                                    <td><a href="javascript:;" class="btn btn-sm btn-warning selectHouseKeep" data-key="<%key%>" data-itemid="<%itemid%>">选择</a></td>
+                                </tr>
+                            <%/each%>
+                            </tbody>
+                        </table>
+                    </div>
+                    <div class="paging"></div>
+                </div>
+            </div>
+            <div class="modal-footer" style="padding: 15px!important;">
+                <button data-dismiss="modal" class="btn btn-default" type="button">关闭</button>
+            </div>
+        </div>
+    </div>
+</script>
+
+<!--掌上信息帖子选择模板-->
+<div class="modal fade" id="SelectpostsContent" aria-hidden="false"></div>
+<script type="text/html" id="tplSelectposts">
+    <div class="modal-dialog" style="min-width: 80%!important;max-height: 80%!important;overflow: auto;">
+        <div class="modal-content">
+            <div class="modal-header">
+                <button data-dismiss="modal" class="close" type="button">×</button>
+                <h4 class="modal-title">选择帖子</h4>
+            </div>
+            <div class="modal-body form-horizontal">
+                <!--搜索-->
+                <div class="form-group">
+                    <div class="col-sm-9 searchContent">
+                        <input class="form-control" placeholder="帖子内容...." value="<%search%>"/>
+                    </div>
+                    <div class="btn btn-primary postsSelect">搜索</div>
+                </div>
+                <!--表格-->
+                <div class="app-table-list">
+                    <div class="panel panel-default">
+                        <table class="table table-hover table-responsive table-bordered" style="border: 1px solid #e5e5e5;">
+                            <thead>
+                            <tr>
+								 <th class="text-center">用户头像</th>
+                                <th class="text-center">用户昵称</th>
+                                <th class="text-center">内容</th>
+                                <th class="text-center">帖子分类</th>
+								  <th class="text-center">置顶信息</th>
+                                <th class="text-center">操作</th>
+                            </tr>
+                            </thead>
+                            <tbody class="text-center">
+                            <%each list as val key%>
+                                <tr class="text-center">
+									<td>
+									    <img src="<%imgsrc val.avatar%>" style="max-height: 50px;max-width: 50px;">
+									</td>
+                                    <td><%val['nickname']%></td>
+                                    <td style="width: 440px"><%val['content']%></td>
+                                    <td><%val['onetype']%> - <%val['type']%></td>
+									 <td>
+										 <%if val['top'] == 0%>
+										     <label class="label label-success" style="background-color: #d1dade">未置顶</label>
+										 <%else if val['top'] == 1%>
+										     <label class="label label-danger" style="background-color: #5FB878;">置顶</label>
+										 <%else if val['top'] == 2%>
+										 <label class="label label-danger">分区置顶</label>
+										 <%else if val['top'] == 3%>
+										 <label class="label label-danger">全局置顶</label>
+										 <%/if%>
+									 </td>
+                                    <td><a href="javascript:;" class="btn btn-sm btn-warning selectposts" data-key="<%key%>" data-itemid="<%itemid%>">选择</a></td>
+                                </tr>
+                            <%/each%>
+                            </tbody>
+                        </table>
+                    </div>
+                    <div class="paging"></div>
+                </div>
+            </div>
+            <div class="modal-footer">
+                <button data-dismiss="modal" class="btn btn-default" type="button">关闭</button>
+            </div>
+        </div>
+    </div>
+</script>
+
+<!--自定义表单选择模板-->
+<div class="modal fade" id="SelectformContent" aria-hidden="false"></div>
+<script type="text/html" id="tplSelectform">
+    <div class="modal-dialog" style="min-width: 80%!important;max-height: 80%!important;overflow: auto;">
+        <div class="modal-content">
+            <div class="modal-header">
+                <button data-dismiss="modal" class="close" type="button">×</button>
+                <h4 class="modal-title">选择自定义表单</h4>
+            </div>
+            <div class="modal-body form-horizontal" style="padding: 15px!important;">
+                <!--搜索-->
+                <div class="form-group">
+                    <div class="col-sm-9 searchContent">
+                        <input class="form-control" placeholder="内容....." value="<%search%>"/>
+                    </div>
+                    <div class="btn btn-primary formSelect">搜索</div>
+                </div>
+                <!--表格-->
+                <div class="app-table-list">
+                    <div class="panel panel-default">
+                        <table class="table table-hover table-responsive table-bordered" style="border: 1px solid #e5e5e5;">
+                            <thead>
+                            <tr>
+                                <th class="text-center">id</th>
+                                <th class="text-center">标题</th>
+                                <th class="text-center">所属商户</th>
+                                <th class="text-center">创建时间</th>
+								<th class="text-center">最近编辑</th>
+                                <th class="text-center">操作</th>
+                            </tr>
+                            </thead>
+                            <tbody class="text-center">
+                            <%each list as val key%>
+                                <tr class="text-center">
+                                    <td><%val['id']%></td>
+                                    <td><%val['title']%></td>
+                                    <td><%val['storename']%></td>
+									<td><%val['update_time']%></td>
+									<td><%val['create_time']%></td>
+                                    <td><a href="javascript:;" class="btn btn-sm btn-warning selectform" data-key="<%key%>" data-itemid="<%itemid%>">选择</a></td>
+                                </tr>
+                            <%/each%>
+                            </tbody>
+                        </table>
+                    </div>
+                    <div class="paging"></div>
+                </div>
+            </div>
+            <div class="modal-footer" style="padding: 15px!important;">
+                <button data-dismiss="modal" class="btn btn-default" type="button">关闭</button>
+            </div>
+        </div>
+    </div>
+</script>
+
+
+<!--------------------------  富文本 ----------------------------------->
+<script type="text/html" id="tpl_show_richtext">
+    <div class="drag richtext<%itemid%>" data-itemid="<%itemid%>">
+        <div class="diy-richtext" style="background: <%style.background%>; padding: <%style.padding%>px;">
+            <%if params.content%>
+            <%=decode(params.content)%>
+            <%else%>
+            <p><span style="font-size: 20px;">哈喽大家好！这里是『富文本』区域</span></p>
+            <p>你可以对文字进行<strong>加粗</strong>、<em>斜体</em>、<span style="text-decoration: underline;">下划线</span>、<span style="text-decoration: line-through;">删除线</span>、文字<span style="color: rgb(0, 176, 240);">颜色</span>、<span style="background-color: rgb(255, 192, 0); color: rgb(255, 255, 255);">背景色</span>、以及字号<span style="font-size: 20px;">大</span><span style="font-size: 14px;">小</span>等简单排版操作。
+            </p>
+            <p>也可在这里插入图片</p>
+            <p><img src="../addons/{MODULE_NAME}/web/resource/images/default.png" style="width:100%;"></p>
+            <p style="text-align: left;"><span style="text-align: left;">还可给文字加上<a href="http://www.baidu.com">超级链接</a>，方便用户点击。</span></p>
+            <%/if%>
+        </div>
+    </div>
+</script>
+<!--------------------------  辅助线  ----------------------------------->
+<script type="text/html" id="tpl_show_line">
+    <div class="drag" data-itemid="<%itemid%>">
+        <div class="fui-line-diy" style="background: <%style.background%>; padding: <%style.padding%>px <%style.leftpadding%>px;">
+            <div class="line" style="border-top: 1px <%style.linestyle||'solid'%> <%style.bordercolor||'#000000'%>"></div>
+        </div>
+    </div>
+</script>
+<!--------------------------  辅助空白  ----------------------------------->
+<script type="text/html" id="tpl_show_blank">
+    <div class="drag" data-itemid="<%itemid%>" style="height: <%style.height%>px; background: <%style.background%>"></div>
+</script>
+<!--------------------------  图片展播  ----------------------------------->
+<script type="text/html" id="tpl_show_pictures">
+    <div class="drag" data-itemid="<%itemid%>">
+        <div class="fui-picturew <%if params.showtype==0%>row<%else%>picturew-slide slide<%/if%>-<%params.rownum%>" style="padding: <%style.paddingtop%>px <%style.paddingleft%>px; background: <%style.background%>;
+             <%if params.showtype==1%>width: calc(100% * <%count(data)%>);<%/if%>">
+            <div>
+                <%each data as item%>
+                <div class="item" style="padding: <%style.paddingtop%>px <%style.paddingleft%>px;
+                <%if params.showtype==1%>width: calc(100% / <%count(data)%> / (<%params.rownum%> + <%if params.rownum > 1%>0.3<%else%>0<%/if%>));<%/if%>">
+                    <div class="image">
+                        <img src="<%imgsrc item.imgurl%>">
+                        <%if item.title!=''%>
+                        <div class="title" style="color: <%style.titlecolor%>; text-align: <%style.titlealign%>;"><%item.title%></div>
+                        <%/if%>
+                    </div>
+                    <%if item.text!=''%>
+                    <div class="text" style="color: <%style.textcolor%>; text-align: <%style.titlealign%>;""><%item.text%></div>
+                <%/if%>
+            </div>
+            <%/each%>
+        </div>
+    </div>
+    </div>
+</script>
+<!--------------------------  图片魔方  ----------------------------------->
+<script type="text/html" id="tpl_show_magic_cube">
+    <div class="drag"  data-itemid="<%itemid%>" >
+        <div class="fui-magic_cube">
+            <div style="width: 100%;height: 100%;padding-top: <%style.padding%>px;position: relative;background-color: <%style.bgColor%>">
+                <div style="width: calc(100% - <%style.padding*2%>px);height: calc(100% - <%style.padding%>px);margin: <%style.padding%>px;margin-top: 0;position: relative;">
+                    <%each data as item%>
+                    <div class="block" style="width:calc(100% * (<%item.width%> / <%style.width%>));height: calc(100% * (<%item.height%> / <%style.width%>));position:absolute;top: calc(100% * (<%item.top%> / <%style.width%>));left:calc(100% * (<%item.left%> / <%style.width%>));padding: <%style.padding%>px;">
+                        <%if item.imgurl%>
+                        <img src="<%imgsrc item.imgurl%>" />
+                        <%/if%>
+                    </div>
+                    <%/each%>
+                </div>
+            </div>
+        </div>
+    </div>
+</script>
+<!--------------------------  社群  ----------------------------------->
+<script type="text/html" id="tpl_show_community">
+    <div class="drag" data-itemid="<%itemid%>">
+        <div class="fui-community" style="margin-bottom:<%style.marginBottom%>px;background-color: <%style.bgColor%>;">
+            <div class="images">
+                <img src="<%imgsrc params.imgUrl%>"  onerror="this.src='../addons/{MODULE_NAME}/web/resource/images/default.png';"/>
+            </div>
+            <div class="textarea">
+                <p><%params.name%></p>
+                <p><%params.introduce%></p>
+            </div>
+            <div class="add_button">
+                <span style="background-color:<%style.buttonbg%>;color:<%style.buttonColor%>;"><%params.title%></span>
+            </div>
+        </div>
+    </div>
+</script>
+<!--------------------------  地区选择  ----------------------------------->
+<script type="text/html" id="tpl_show_area_select">
+    <div class="drag" data-itemid="<%itemid%>">
+        <div class="model-area" style="margin-bottom: <%style.marginBottom||'1'%>px;background:<%style.background%>;">
+            <div class="area_global">
+                <div class="area_image">
+                    <img src="<%params.avatar%>" />
+                </div>
+                <div class="area_userName" style="color:<%style.nicknameColor%>"><%params.nickname%></div>
+                <div class="area_areaName" style="color:<%style.areanameColor%>"><%params.areaname%><%if style.showtype=='0'||!style.showtype%><i class="icon iconfont icon-unfold city-logo"></i><%/if%></div>
+            </div>
+        </div>
+    </div>
+</script>
+<!--------------------------  商户入驻  ----------------------------------->
+<script type="text/html" id="tpl_show_shop_join">
+    <div class="drag" data-itemid="<%itemid%>" group_name="<%group_name%>" group_key="<%group_key%>" data-id="<%group_name%>">
+        <div class="model-shop_join" style="margin-bottom: <%style.marginBottom||'0'%>px;">
+            <div class="detail">
+                <div class="title"><%params.title%></div>
+                <span class="vertical_line"></span>
+                <div class="info">获取最新店铺入驻信息</div>
+                <div class="join"><%params.button%></div>
+            </div>
+        </div>
+    </div>
+</script>
+<!--------------------------  用户信息  ----------------------------------->
+<script type="text/html" id="tpl_show_user_info">
+    <div class="drag" data-itemid="<%itemid%>">
+        <div class="diy-user_info">
+            <div class="member">
+                <div class="avatar">
+                    <div class="img"></div>
+                </div>
+                <div class="info">
+                    <div class="username">微信名</div>
+                    <div class="phone">137 0000 0000</div>
+                </div>
+            </div>
+            <div class="wealth">
+                <div class="title"><%params.title%></div>
+                <div class="number">
+                    <div class="price">563,020</div>
+                    <div class="link"><%params.button_title%><i class="icon iconfont icon-right"></i></div>
+                </div>
+            </div>
+        </div>
+    </div>
+</script>
+<!--------------------------  公众号跳转小程序  ----------------------------------->
+<script type="text/html" id="tpl_show_jump_wxapp">
+    <div class="drag" data-itemid="<%itemid%>">
+        <div class="diy-jump_wxapp">
+            <img src="<%imgsrc params.img%>" style=""/>
+        </div>
+    </div>
+</script>
+<!--------------------------  求职 —— 统计信息  ----------------------------------->
+<script type="text/html" id="tpl_show_recruit_statistics">
+    <div class="drag" data-itemid="<%itemid%>">
+        <div class="recruit_statistics">
+            <div class="recruit_statistics_block" style="background-color: <%params['enterprise']['backgroundColor']%>;">
+                <div class="num" style="color: <%params['enterprise']['numberColor']%>;">9999</div>
+                <div class="title" style="color: <%params['enterprise']['titleColor']%>;"><%params['enterprise']['title']%></div>
+                <div class="icon">
+                    <img src="<%imgsrc params['enterprise']['icon']%>"/>
+                </div>
+            </div>
+            <div class="recruit_statistics_block" style="background-color: <%params['recruit']['backgroundColor']%>;">
+                <div class="num" style="color: <%params['recruit']['numberColor']%>;">9999</div>
+                <div class="title" style="color: <%params['recruit']['titleColor']%>;"><%params['recruit']['title']%></div>
+                <div class="icon">
+                    <img src="<%imgsrc params['recruit']['icon']%>"/>
+                </div>
+            </div>
+            <div class="recruit_statistics_block" style="background-color: <%params['resume']['backgroundColor']%>;">
+                <div class="num" style="color: <%params['resume']['numberColor']%>;">9999</div>
+                <div class="title" style="color: <%params['resume']['titleColor']%>;"><%params['resume']['title']%></div>
+                <div class="icon">
+                    <img src="<%imgsrc params['resume']['icon']%>"/>
+                </div>
+            </div>
+            <div class="recruit_statistics_block" style="background-color: <%params['pv']['backgroundColor']%>;">
+                <div class="num" style="color: <%params['pv']['numberColor']%>;">9999</div>
+                <div class="title" style="color: <%params['pv']['titleColor']%>;"><%params['pv']['title']%></div>
+                <div class="icon">
+                    <img src="<%imgsrc params['pv']['icon']%>"/>
+                </div>
+            </div>
+        </div>
+    </div>
+</script>
+<!--------------------------  求职 —— 招聘信息  ----------------------------------->
+<script type="text/html" id="tpl_show_recruit_recruit">
+    <div class="drag" data-itemid="<%itemid%>">
+        <div class="recruit_recruit" style="background-color: <%style['bgColor']%>;padding: <%style['padding']%>px;margin-bottom: <%style['marginBottom']%>px;">
+            <%each data as item%>
+                <div class="block">
+                    <div class="top">
+                        <div class="title"><%item.title%></div>
+                        <div class="icon <%if item.is_top != 1%>hide<%/if%>">顶</div>
+                        <div class="salary"><%item.salary%></div>
+                    </div>
+                    <div class="center <%if item.job_type != 1%>hide<%/if%>">
+                        <div class="label-list">
+                            <%each item.welfare_list as labelName%>
+                                <label style="background-color: <%style['labelBgColor']%>;color: <%style['labelColor']%>;"><%labelName%></label>
+                            <%/each%>
+                        </div>
+                        <div class="area">
+                            <%if item.area%>
+                                <%item.area%>
+                            <%else if item.city%>
+                                <%item.city%>
+                            <%else%>
+                                <%item.province%>
+                            <%/if%>
+                        </div>
+                    </div>
+                    <div class="bottom">
+                        <div class="img">
+                            <img src="<%item.release.logo%>" />
+                        </div>
+                        <div class="info">
+                            <div class="name"><%item.release.name%></div>
+                            <div class="authentication <%if item.release.is_authentication != 1%>hide<%/if%>">已认证</div>
+                            <div class="area <%if item.job_type == 1%>hide<%/if%>">
+                                <%if item.area%>
+                                    <%item.area%>
+                                <%else if item.city%>
+                                    <%item.city%>
+                                <%else%>
+                                    <%item.province%>
+                                <%/if%>
+                            </div>
+                            <div class="time">
+                                <div class="desc">
+                                    <%if item.recruitment_type == 1%>
+                                        个人招聘
+                                    <%else%>
+                                        <%item.release.nature%>·<%item.release.scale%>·<%item.release.industry%>
+                                    <%/if%>
+                                </div>
+                                <div class="date"><%item.release_time%></div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            <%/each%>
+        </div>
+    </div>
+</script>
+<!--------------------------  求职 —— 简历信息  ----------------------------------->
+<script type="text/html" id="tpl_show_recruit_resume">
+    <div class="drag" data-itemid="<%itemid%>">
+        <div class="recruit_resume" style="background-color: <%style['bgColor']%>;padding: <%style['padding']%>px;margin-bottom: <%style['marginBottom']%>px;">
+            <%each data as item%>
+                <div class="block">
+                    <div class="img">
+                        <img src="<%item.avatar%>" />
+                        <%if item.gender == 2%>
+                            <i class="icon icon-male"></i>
+                        <%else%>
+                            <i class="icon icon-female"></i>
+                        <%/if%>
+                    </div>
+                    <div class="info">
+                        <div class="top">
+                            <div class="name"><%item.name%></div>
+                            <div class="salary"><%item.salary%></div>
+                        </div>
+                        <div class="center"><%item.age%>岁 · <%item.experience%> · <%item.education%></div>
+                        <div class="bottom">
+                            <div class="label-list">
+                                <%each item.expect_position_list as position%>
+                                    <label style="background-color: <%style['labelBgColor']%>;color: <%style['labelColor']%>;"><%position%></label>
+                                <%/each%>
+                            </div>
+                            <div class="area">
+                                <%if item['area']%>
+                                    <%item['area']%>
+                                <%else if item['city']%>
+                                    <%item['city']%>
+                                <%else if item['province']%>
+                                    <%item['province']%>
+                                <%/if%>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            <%/each%>
+        </div>
+    </div>
+</script>
+<!--------------------------  相亲交友 —— 统计信息  ----------------------------------->
+<script type="text/html" id="tpl_show_dating_statistics">
+    <div class="drag" data-itemid="<%itemid%>">
+        <div class="dating_statistics">
+            <div class="block" style="background-color: <%params['user']['backgroundColor']%>;">
+                <div class="number" style="color: <%params['user']['numberColor']%>;">9999</div>
+                <div class="title" style="color: <%params['user']['titleColor']%>;"><%params['user']['title']%></div>
+                <div class="img">
+                    <img src="<%imgsrc params['user']['icon']%>" />
+                </div>
+            </div>
+            <div class="block" style="background-color: <%params['pv']['backgroundColor']%>;">
+                <div class="number" style="color: <%params['pv']['numberColor']%>;">9999</div>
+                <div class="title" style="color: <%params['pv']['titleColor']%>;"><%params['pv']['title']%></div>
+                <div class="img">
+                    <img src="<%imgsrc params['pv']['icon']%>" />
+                </div>
+            </div>
+        </div>
+    </div>
+</script>
+<!--------------------------  相亲交友 —— 会员信息  ----------------------------------->
+<script type="text/html" id="tpl_show_dating_user">
+    <div class="drag" data-itemid="<%itemid%>">
+        <div class="dating_user" style="background-color: <%style['bgColor']%>;padding: <%style['padding']%>px;margin-bottom: <%style['marginBottom']%>px;">
+            <%each data as item%>
+                <div class="block">
+                    <div class="img">
+                        <img src="<%imgsrc item.cover%>" />
+                        <div class="top <%if item.is_top != 2%>hide<%/if%>">
+                            <i class="icon icon-favor"></i>置顶
+                        </div>
+                        <div class="pv">
+                            <i class="icon icon-attention"></i>
+                            <div class="pvNumber"><%item.pv%></div>
+                        </div>
+                        <div class="address">
+                            <i class="icon icon-locationfill"></i> <%item.area%> 999km
+                        </div>
+                    </div>
+                    <div class="info">
+                        <div class="userInfo">
+                            <div class="name"><%item.nickname%></div>
+                            <div class="age <%if item.gneder == 1%>male<%else%>female<%/if%>">
+                                <%if item.gneder == 1%>
+                                    <i class="icon icon-male"></i><%item.age%>
+                                <%else%>
+                                    <i class="icon icon-female"></i><%item.age%>
+                                <%/if%>
+                            </div>
+                            <div class="vip <%if item.is_vip != 1%>hide<%/if%>">VIP</div>
+                        </div>
+                        <div class="vehicleHouse">
+                            <div class="vehicleHouseBlock <%if item.live != 1 && item.live != 2%>hide<%/if%>">
+                                <i class="icon icon-home_fill_light"></i> 有房
+                            </div>
+                            <div class="vehicleHouseBlock <%if item.travel != 2%>hide<%/if%>">
+                                <i class="icon icon-dache"></i> 有车
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            <%/each%>
+        </div>
+    </div>
+</script>
+
+<!--------------------------  视频  ----------------------------------->
+
+<script type="text/html" id="tpl_show_vido">
+    <div class="drag" data-itemid="<%itemid%>">
+        <div class="vido" style="">
+                <div class="block">
+					 <video style="width: 100% !important; height: 250px !important;" src="<%imgsrc params.linkurl%>" controls>
+					 您的浏览器不支持 video 标签。
+					 </video>
+                </div>
+        </div>
+    </div>
+</script>
+
+<!--------------------------  商户信息展示  ----------------------------------->
+<script type="text/html" id="tpl_show_merchant_information">
+    <div class="drag" data-itemid="<%itemid%>">
+       <div class="" style="padding: 15px; background-color: #ffffff; border-radius: 10px; margin-bottom: <%style['marginBottom']%>px; box-sizing: border-box;">
+       	<div class=""  style="display: flex;">
+       		<img src="" style="width: 88px; min-width: 88px; height: 88px;border-radius: 10px;" />
+       		<div class="" style="margin-left:10px;">
+       			<div class="" style="font-size: 18px; color:#333333; width: 252px; overflow: hidden; text-overflow: ellipsis; word-wrap: normal; display: flex; align-items: center;
+       			margin-bottom: 5px">
+       				店铺名称....
+       				<img src="<%imgsrc params.qiye%>" style="width: 20px; height: 20px;margin-left: 5px;" />
+       			</div>
+       			<div style="display: flex; justify-content: space-between;">
+       				<div style="font-size: 12px; color: #333333;">
+       					<div style="" style="margin-bottom: 5px">
+							<div class="shangjia-i-r-t2 over-omit" style="top: -5px;">
+							    <div class="star star-dark">
+							        <i class="icon iconfont icon-shoucangxiao"></i>
+							        <i class="icon iconfont icon-shoucangxiao"></i>
+							        <i class="icon iconfont icon-shoucangxiao"></i>
+							        <i class="icon iconfont icon-shoucangxiao"></i>
+							        <i class="icon iconfont icon-shoucangxiao"></i>
+							    </div>
+							    <div class="star star-light">
+							        <div class="star-width" style="width:<%5 * 20%>%;">
+							            <i class="icon iconfont icon-shoucangxiao" style="color:#F5D145;"></i>
+							            <i class="icon iconfont icon-shoucangxiao" style="color:#F5D145;"></i>
+							            <i class="icon iconfont icon-shoucangxiao" style="color:#F5D145;"></i>
+							            <i class="icon iconfont icon-shoucangxiao" style="color:#F5D145;"></i>
+							            <i class="icon iconfont icon-shoucangxiao" style="color:#F5D145;"></i>
+							        </div>
+							    </div>
+								<span style="margin-left: 95px;">5分</span>
+							</div>
+						</div>
+       					<div style="" style="margin-bottom: 5px">
+       						营业时间：00:00 - 00:00
+       					</div>
+       					<div style="margin-bottom: 5px">
+       						<div style="">商铺地址：xx省xx市xx区xxxxxxx号</div>
+       					</div>
+       				</div>
+       				<div style="width: 43px; height: 62px; background: #ffffff; box-shadow: 0px 1px 6px 0px rgb(221 221 221 / 35%); border-radius: 4px; font-size: 10px; 
+					text-align: center;">
+       					<div class="" style="">
+							<img src="<%imgsrc params.aixin%>" style="width: 20px; height: 20px; margin:5px auto;" />
+						</div>
+       					<div class="" style="color: #333333;">
+       						<span>9999</span>
+       					</div>
+       					<div class="" style="color: #999999; margin-top:1px">
+       						<span>人喜欢</span>
+       					</div>
+       				</div>
+       			</div>
+       		</div>
+       	</div>
+       	<div class="" style="display: flex; margin-top:10px">
+       		<div class="" style="width: 25%; display: flex; flex-direction: column; justify-content: center; align-items: center;">
+       			<div class="" style="width: 31px; height: 31px">
+       				<img class="" style="width: 100%; height: 100%" src="<%imgsrc params.dh%>" />
+       			</div>
+       			<span class="" style="font-size: 12px; color: #333333;">电话</span>
+       		</div>
+       		<div class="" style="width: 25%; display: flex; flex-direction: column; justify-content: center; align-items: center;">
+       			<div class="" style="width: 31px; height: 31px">
+       				<img class="" style="width: 100%; height: 100%" src="<%imgsrc params.dw%>" />
+       			</div>
+       			<span class="" style="font-size: 12px; color: #333333;">未定位</span>
+       		</div>
+       		<div class="" style="width: 25%; display: flex; flex-direction: column; justify-content: center; align-items: center;">
+       			<div class="" style="width: 31px; height: 31px">
+       				<img class="" style="width: 100%; height: 100%" src="<%imgsrc params.fx%>" />
+       			</div>
+       			<span class="" style="font-size: 12px; color: #333333;">分享</span>
+       		</div>
+       		<div class="" style="width: 25%; display: flex; flex-direction: column; justify-content: center; align-items: center;">
+       			<div class="" style="width: 31px; height: 31px">
+       				<img class="" style="width: 100%; height: 100%" src="<%imgsrc params.sc%>" />
+       			</div>
+       			<span class="" style="font-size: 12px; color: #333333;">收藏</span>
+       		</div>
+       	</div>
+       </div>
+    </div>
+</script>
+
+<!--------------------------  自定义表单展示  ----------------------------------->
+
+<script type="text/html" id="tpl_show_custom_form">
+    <div class="drag" data-itemid="<%itemid%>">
+	<% if params.diyform.list.length == 0 %>
+	   <div class="" style="">
+	   			   <div class="">
+	   				   <div style="display: flex; line-height: 52px;">
+	   					   <div class="" style="width: 104px; color: #333333; font-size: 12px; text-align: right; margin-right: 10px;">
+	   					   		单行文本标题.....
+	   					   </div>
+	   					   <div class="">
+	   					   		<input type="text" placeholder="请输入内容..." placeholder-style="font-size:12px" style="width: 182px; height: 52px; line-height: 52px; border:none" />
+	   					   </div>
+	   				   </div>
+	   				   <div style="height: 18px; font-size: 10px; color: #888888; margin-left: 114px;">
+	   					   备注单行文本....
+	   				   </div>
+	   			   </div>
+	   			   <div class="">
+	   				   <div style="display: flex; line-height: 52px;">
+	   				   		<div class="" style="width: 104px; color: #333333; font-size: 12px; text-align: right; margin-right: 10px;">
+	   				   			单选项标题...
+	   				   		</div>
+	   					   <div class="" style="display: flex; justify-content: space-between;">
+	   						   <div class="" style="width: 243px; height: 52px; line-height: 52px; color: #999999; font-size: 12px;">请选择单选</div>
+	   							<i class="icon iconfont icon-right" style="color: #999999;"></i>
+	        				   </div>
+	   				   </div>
+	   				   <div style="height: 18px; font-size: 10px; color: #888888; margin-left: 114px;">
+	   				   		   备注单选....
+	   				   </div>
+	   			   </div>
+	   			   <div class="" style="margin-top:5px">
+	   				   <div style="display: flex; line-height: 52px;">
+	   				   		<div class="" style="width: 104px; color: #333333; font-size: 12px; text-align: right; margin-right: 10px; margin-top: -10px;">
+	   				   			图片标题....
+	   				   		</div>
+	   				   		 <div class="" style="">
+	   				   			<div class="" style="width: 50px; height: 50px; line-height: 50px; text-align: center; border: 1px solid #999999;">
+	   								<i class="icon iconfont icon-add"></i>
+	   							</div>
+	   				        </div>
+	   				   </div>
+	   				   <div style="height: 18px; font-size: 10px; color: #888888; margin-left: 114px;margin-top: 10px;">
+	   				   		   备注图片....
+	   				   </div>
+	   			   </div>
+	   			   <div class="">
+	   				   <div style="display: flex; line-height: 52px;">
+	   				   		<div class="" style="width: 104px; color: #333333; font-size: 12px; text-align: right; margin-right: 10px;">
+	   				   			时间标题....
+	   				   		</div>
+	   				   		 <div class="" style="display: flex; width: 255px; justify-content: space-between;">
+	   				   			<div class="" style="wwidth: 100% height: 52px; font-size: 12px; color: #999999;">
+	   								 2022-02-28  14:10:58
+	   							</div>
+	   							<i class="icon iconfont icon-right" style="color: #999999;"></i>				
+	   				        </div>
+	   				   </div>
+	   				   <div style="height: 18px; font-size: 10px; color: #888888; margin-left: 114px;">
+	   				   		   备注时间....
+	   				   </div>
+	   			   </div>
+	   			   <div class="" style="margin-top: 10px">
+	   				   <div style="display: flex;">
+	   				   		<div class="" style="width: 104px; color: #333333; font-size: 12px; text-align: right; margin-right: 10px;">
+	   				   		   时间范围标题....
+	   				   		</div>
+	   				   		 <div class="" style="width: 255px;">
+	   				   			<div class="" style="wwidth: 100%; font-size: 12px; color: #999999;">
+	   				   				 2022-02-28  14:10:58
+	   				   			</div>
+	   							<div style="margin-left: 10px">-</div>
+	   							<div class="" style="wwidth: 100%; font-size: 12px; color: #999999;">
+	   								2022-02-28  14:10:58
+	   							</div>
+	   							<!-- <i class="icon iconfont icon-right" style="color: #999999;"></i>				 -->
+	   				        </div>
+	   				   </div>
+	   				   <div style="height: 18px; font-size: 10px; color: #888888; margin-left: 114px; margin-top: 10px;">
+	   				   		   备注时间范围....
+	   				   </div>
+	   			   </div>
+	   			   <div class="">
+	   				   <div style="display: flex; line-height: 52px;">
+	   				   		<div class="" style="width: 104px; color: #333333; font-size: 12px; text-align: right; margin-right: 10px;">
+	   				   		  地区选择标题...
+	   				   		</div>
+	   				   		 <div class="" style="width: 255px; display: flex; text-align: right; justify-content: space-between;">
+	   				   			<div class="" style="font-size: 12px; color: #333333; display: flex;">
+	   								<span style="margin-right: 10px;">省</span>
+	   								<span style="margin-right: 10px;">市</span>
+	   								<span>区/县</span>
+	   							</div>
+	   				   			<i class="icon iconfont icon-right" style="color: #999999;"></i>				
+	   				        </div>
+	   				   </div>
+	   				   <div style="height: 18px; font-size: 10px; color: #888888; margin-left: 114px;">
+	   				   		   备注地区....
+	   				   </div>
+	   			   </div>
+	   			   <div class="" style="margin-top:10px">
+	   				   <div style="display: flex; line-height: 52px;">
+	   				   		<div class="" style="width: 104px; color: #333333; font-size: 12px; text-align: right; margin-right: 10px; margin-top: -21px;">
+	   				   		  其他内容填写
+	   				   		</div>
+	   				   		 <div class="" style="width: 255px; display: flex;">
+	   				   			<textarea style="width: 100%; height: 100px; border: 1px solid #e8e9eb;" placeholder="请输入其他内容" placeholder-style="color: #999999; font-size: 12px;"></textarea>			
+	   				        </div>
+	   				   </div>
+	   				   <div style="height: 18px; font-size: 10px; color: #888888; margin-left: 114px; margin-top: 10px;">
+	   				   		   备注其他内容....
+	   				   </div>
+	   		   </div>
+	   			   
+	   </div>
+	<%else%>
+	 <%each params.diyform.list as item%>
+      <div class="" style="">
+		     <% if item.id == 'text' %>
+      			   <div class="">
+      				   <div style="display: flex; line-height: 52px;">
+      					   <div class="" style="width: 104px; color: #333333; font-size: 12px; text-align: right; margin-right: 10px;">
+      					   		<%item.data.title%>
+      					   </div>
+      					   <div class="">
+      					   		<input type="text" placeholder="<%item.data.placeholder%>" placeholder-style="font-size:12px" style="width: 182px; height: 52px; line-height: 52px; border:none" />
+      					   </div>
+      				   </div>
+      				   <div style="height: 18px; font-size: 10px; color: #888888; margin-left: 114px;">
+      					  <%item.data.tipdetail%>
+      				   </div>
+      			   </div>
+				<%/if%>
+				  <% if item.id == 'select' %>
+      			   <div class="">
+      				   <div style="display: flex; line-height: 52px;">
+      				   		<div class="" style="width: 104px; color: #333333; font-size: 12px; text-align: right; margin-right: 10px;">
+      				   			<%item.data.title%>
+      				   		</div>
+      					   <div class="" style="display: flex; justify-content: space-between;">
+      						   <div class="" style="width: 243px; height: 52px; line-height: 52px; color: #999999; font-size: 12px;">
+								  <%item.data.options[0]%>
+								</div>
+      							<i class="icon iconfont icon-right" style="color: #999999;"></i>
+           				   </div>
+      				   </div>
+      				   <div style="height: 18px; font-size: 10px; color: #888888; margin-left: 114px;">
+      				   		 <%item.data.tipdetail%>
+      				   </div>
+      			   </div>
+				   <%/if%>
+				    <% if item.id == 'checkbox' %>
+					<div class="" style="margin-top:20px">
+					     <div style="display: flex; line-height: 52px;">
+					      	<div class="" style="width: 104px; color: #333333; font-size: 12px; text-align: right; margin-right: 10px;">
+					      		<%item.data.title%>
+					      	</div>
+					      	<div class="" style="display: flex; justify-content: space-between;">
+					      	  <div class="" style="width: 243px; color: #999999; font-size: 12px;">
+								   <%each item.data.options as items%>
+								 <div style="min-height: 30px; line-height: 30px; text-align: left; border: 1px solid #e8e9eb; margin: 0 3px 3px 0;
+								 padding: 0px 10px; font-size: 13px; display: inline-block;">
+								   <%items%>
+								 </div>
+								  <%/each%>
+							</div>
+					      	<i class="icon iconfont icon-right" style="color: #999999;"></i>
+					     </div>
+					 </div>
+					 <div style="height: 18px; font-size: 10px; color: #888888; margin-left: 114px;">
+					      	 <%item.data.tipdetail%>
+					</div>
+					</div>
+					 <%/if%>
+					 <%if item.id == 'img'%>
+      			   <div class="" style="margin-top:5px">
+      				   <div style="display: flex; line-height: 52px;">
+      				   		<div class="" style="width: 104px; color: #333333; font-size: 12px; text-align: right; margin-right: 10px; margin-top: -10px;">
+      				   			<%item.data.title%>
+      				   		</div>
+      				   		 <div class="" style="">
+      				   			<div class="" style="width: 50px; height: 50px; line-height: 50px; text-align: center; border: 1px solid #999999;">
+      								<i class="icon iconfont icon-add"></i>
+      							</div>
+      				        </div>
+      				   </div>
+      				   <div style="height: 18px; font-size: 10px; color: #888888; margin-left: 114px;margin-top: 10px;">
+      				   		  <%item.data.tipdetail%>
+      				   </div>
+      			   </div>
+				   <%/if%>
+				   	 <%if item.id == 'time'%>
+      			   <div class="">
+      				   <div style="display: flex; line-height: 52px;">
+      				   		<div class="" style="width: 104px; color: #333333; font-size: 12px; text-align: right; margin-right: 10px;">
+      				   			<%item.data.title%>
+      				   		</div>
+      				   		 <div class="" style="display: flex; width: 255px; justify-content: space-between;">
+      				   			<div class="" style="wwidth: 100% height: 52px; font-size: 12px; color: #999999;">
+      								  <%item.data.datetime_local%>
+      							</div>
+      							<i class="icon iconfont icon-right" style="color: #999999;"></i>				
+      				        </div>
+      				   </div>
+      				   <div style="height: 18px; font-size: 10px; color: #888888; margin-left: 114px;">
+      				   		     <%item.data.tipdetail%>
+      				   </div>
+      			   </div>
+				     <%/if%>
+					  <%if item.id == 'datetime'%>
+      			   <div class="" style="margin-top: 10px">
+      				   <div style="display: flex;">
+      				   		<div class="" style="width: 104px; color: #333333; font-size: 12px; text-align: right; margin-right: 10px;">
+      				   		  <%item.data.title%>
+      				   		</div>
+      				   		 <div class="" style="width: 255px;">
+      				   			<div class="" style="wwidth: 100%; font-size: 12px; color: #999999;">
+      				   				 <%item.data.start_time%>
+      				   			</div>
+      							<div style="margin-left: 10px">-</div>
+      							<div class="" style="wwidth: 100%; font-size: 12px; color: #999999;">
+      								 <%item.data.end_time%>
+      							</div>
+      							<!-- <i class="icon iconfont icon-right" style="color: #999999;"></i>				 -->
+      				        </div>
+      				   </div>
+      				   <div style="height: 18px; font-size: 10px; color: #888888; margin-left: 114px; margin-top: 10px;">
+      				   		   <%item.data.tipdetail%>
+      				   </div>
+      			   </div>
+				    <%/if%>
+					 <%if item.id == 'city'%>
+      			   <div class="">
+      				   <div style="display: flex; line-height: 52px;">
+      				   		<div class="" style="width: 104px; color: #333333; font-size: 12px; text-align: right; margin-right: 10px;">
+      				   		   <%item.data.title%>
+      				   		</div>
+      				   		 <div class="" style="width: 255px; display: flex; text-align: right; justify-content: space-between;">
+      				   			<div class="" style="font-size: 12px; color: #333333; display: flex;">
+									<%if item.data.province == 'true' %>
+									<span style="margin-right: 10px;">省</span>
+									<%/if%>
+      								<%if item.data.province == 'true' %>
+      								<span style="margin-right: 10px;">市</span>
+      								<%/if%>
+      								<%if item.data.province == 'true' %>
+      								<span>区/县</span>
+      								<%/if%>
+      								
+      							</div>
+      				   			<i class="icon iconfont icon-right" style="color: #999999;"></i>				
+      				        </div>
+      				   </div>
+      				   <div style="height: 18px; font-size: 10px; color: #888888; margin-left: 114px;">
+      				   		   <%item.data.tipdetail%>
+      				   </div>
+      			   </div>
+				       <%/if%>
+					 <%if item.id == 'textarea'%>  
+      			   <div class="" style="margin-top:10px">
+      				   <div style="display: flex; line-height: 52px;">
+      				   		<div class="" style="width: 104px; color: #333333; font-size: 12px; text-align: right; margin-right: 10px; margin-top: -21px;">
+      				   		    <%item.data.title%>
+      				   		</div>
+      				   		 <div class="" style="width: 255px; display: flex;">
+      				   			<textarea style="width: 100%; height: 100px; border: 1px solid #e8e9eb;" placeholder="<%item.data.placeholder%>" placeholder-style="color: #999999; font-size: 12px;"></textarea>			
+      				        </div>
+      				   </div>
+      				   <div style="height: 18px; font-size: 10px; color: #888888; margin-left: 114px; margin-top: 10px;">
+      				   		    <%item.data.tipdetail%>
+      				   </div>
+      		   </div>
+			    <%/if%>
+      </div>
+	   <%/each%>
+	   <%/if%>
+    </div>
+</script>
+
+
+{php include wl_template('diy/template/notice');}<!-- 公告 -->
+{php include wl_template('diy/template/title');}<!-- 标题 -->
+{php include wl_template('diy/template/search');}<!-- 搜索 -->
+{php include wl_template('diy/template/picturew');}<!-- 图片橱窗 -->
+{php include wl_template('diy/template/goods_rush');}<!-- 抢购 -->
+{php include wl_template('diy/template/goods_groupon');}<!-- 团购 -->
+{php include wl_template('diy/template/goods_coupon');}<!-- 优惠券 -->
+{php include wl_template('diy/template/goods_integral');}<!-- 积分 -->
+{php include wl_template('diy/template/goods_fightgroup');}<!-- 拼团 -->
+{php include wl_template('diy/template/goods_bargain');}<!-- 砍价 -->
+{php include wl_template('diy/template/goods_activity');}<!-- 同城活动 -->
+{php include wl_template('diy/template/halfcard');}<!-- 礼包/折扣卡 -->
+{php include wl_template('diy/template/headline');}<!-- 头条 -->
+{php include wl_template('diy/template/banner');}<!-- 轮播图 -->
+{php include wl_template('diy/template/public_goods');}<!-- 公共商品 -->
+{php include wl_template('diy/template/shop');}<!-- 商家 -->
+{php include wl_template('diy/template/options');}<!-- 选项卡 -->
+{php include wl_template('diy/template/recruit_enterprise');}<!-- 求职招聘 - 企业 -->
+{php include wl_template('diy/template/flow');}<!-- 流量主 -->
+{php include wl_template('diy/template/goods_citydelivery');}<!-- 配送商品 -->
+{php include wl_template('diy/template/menu');}<!-- 菜单 -->
+{php include wl_template('diy/template/house_keep');}<!-- 家政服务 -->
+{php include wl_template('diy/template/suprapalmar_statistics');}<!-- 统计-掌上信息 -->
+{php include wl_template('diy/template/Suprapalmar_posts');}<!-- 帖子-掌上信息 -->
+
+
+

@@ -1,0 +1,90 @@
+<!--------------------------  图片橱窗组件群  ----------------------------------->
+<!-- 风格一 -->
+<script type="text/html" id="tpl_show_picturew">
+    <div class="drag" data-itemid="<%itemid%>"  group_name="<%group_name%>" group_key="<%group_key%>" data-id="<%group_name%>">
+        <div class="fui-picturew row-4" style="padding:<%style.marginTopBottom%>px <%style.marginLeftRight%>px;background-color:<%style.bgColor%>;">
+            <%each data as item%>
+            <div class="item" style="padding:<%style.marginTopBottom%>px <%style.marginLeftRight%>px;">
+                <img src="<%imgsrc item.imgurl%>" onerror="this.src='../addons/{MODULE_NAME}/web/resource/images/default.png';">
+            </div>
+            <%/each%>
+        </div>
+    </div>
+</script>
+<!-- 风格二 -->
+<script type="text/html" id="tpl_show_picturew2">
+    <div class="drag" data-itemid="<%itemid%>"  group_name="<%group_name%>" group_key="<%group_key%>" data-id="<%group_name%>">
+        <div class="fui-picturew2" style="padding:<%style.marginTopBottom%>px <%style.marginLeftRight%>px;background-color:<%style.bgColor%>;">
+            <%each data as item%>
+            <div class="fui-picturew-i fui-picturew2-i">
+                <img src="<%imgsrc item.imgurl%>" onerror="this.src='../addons/{MODULE_NAME}/web/resource/images/default.png';" style="padding:<%style.marginTopBottom%>px <%style.marginLeftRight%>px;">
+            </div>
+            <%/each%>
+        </div>
+    </div>
+</script>
+<!-- 风格三 -->
+<script type="text/html" id="tpl_show_picturew3">
+    <div class="drag" data-itemid="<%itemid%>"  group_name="<%group_name%>" group_key="<%group_key%>" data-id="<%group_name%>">
+        <div class="fui-picturew3" style="padding:<%style.marginTopBottom%>px <%style.marginLeftRight%>px;background-color:<%style.bgColor%>;">
+            <%each data as item%>
+            <div class="fui-picturew-i fui-picturew3-i">
+                <img src="<%imgsrc item.imgurl%>" onerror="this.src='../addons/{MODULE_NAME}/web/resource/images/default.png';" style="padding:<%style.marginTopBottom%>px <%style.marginLeftRight%>px;">
+            </div>
+            <%/each%>
+        </div>
+    </div>
+</script>
+<!-- 风格四 -->
+<script type="text/html" id="tpl_show_picturew4">
+    <div class="drag" data-itemid="<%itemid%>"  group_name="<%group_name%>" group_key="<%group_key%>" data-id="<%group_name%>">
+        <div class="fui-cube" style="background-color:<%style.bgColor%>;">
+            <div class="fui-cube-left" style="padding: <%style.marginTopBottom%>px <%style.marginLeftRight%>px; padding-right: 0;">
+                <img src="<%imgsrc(toArray(data)[0].imgurl)%>" />
+            </div>
+            <div class="fui-cube-right">
+                <div class="fui-cube-right1" style="padding: <%style.marginTopBottom%>px <%style.marginLeftRight%>px; padding-bottom: <%style.marginTopBottom/2%>px;">
+                    <img src="<%imgsrc(toArray(data)[1].imgurl)%>" />
+                </div>
+                <div class="fui-cube-right2" style="padding: <%style.marginTopBottom%>px <%style.marginLeftRight%>px; padding-top: <%style.marginTopBottom/2%>px;">
+                    <img src="<%imgsrc(toArray(data)[2].imgurl)%>" />
+                </div>
+            </div>
+        </div>
+    </div>
+</script>
+<!-- 风格五 -->
+<script type="text/html" id="tpl_show_picturew5">
+    <div class="drag" data-itemid="<%itemid%>"  group_name="<%group_name%>" group_key="<%group_key%>" data-id="<%group_name%>">
+        <div class="fui-cube" style="background-color:<%style.bgColor%>;">
+            <div class="fui-cube-left" style="padding: <%style.marginTopBottom%>px <%style.marginLeftRight%>px; padding-right: 0;">
+                <img src="<%imgsrc(toArray(data)[0].imgurl)%>" />
+            </div>
+            <div class="fui-cube-right">
+                <div class="fui-cube-right1" style="padding: <%style.marginTopBottom%>px <%style.marginLeftRight%>px; padding-bottom: <%style.marginTopBottom/2%>px;">
+                    <img src="<%imgsrc(toArray(data)[1].imgurl)%>" />
+                </div>
+                <div class="fui-cube-right2">
+                    <div class="left" style="padding: <%style.marginTopBottom%>px <%style.marginLeftRight%>px; padding-top: <%style.marginTopBottom/2%>px; padding-right: <%style.marginLeftRight/2%>px;">
+                        <img src="<%imgsrc(toArray(data)[2].imgurl)%>" />
+                    </div>
+                    <div class="right" style="padding: <%style.marginTopBottom%>px <%style.marginLeftRight%>px; padding-top: <%style.marginTopBottom/2%>px; padding-left: <%style.marginLeftRight/2%>px;">
+                        <img src="<%imgsrc(toArray(data)[3].imgurl)%>" />
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</script>
+<!-- 风格六 -->
+<script type="text/html" id="tpl_show_picturew6">
+    <div class="drag" data-itemid="<%itemid%>"  group_name="<%group_name%>" group_key="<%group_key%>" data-id="<%group_name%>">
+        <div class="fui-picturew6" style="padding:<%style.marginTopBottom%>px <%style.marginLeftRight%>px;background-color:<%style.bgColor%>;">
+            <%each data as item%>
+            <div class="fui-picturew-i fui-picturew6-i">
+                <img src="<%imgsrc item.imgurl%>" onerror="this.src='../addons/{MODULE_NAME}/web/resource/images/default.png';" style="padding:<%style.marginTopBottom%>px <%style.marginLeftRight%>px;">
+            </div>
+            <%/each%>
+        </div>
+    </div>
+</script>

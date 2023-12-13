@@ -1,0 +1,633 @@
+{php include wl_template('common/header');}
+<style>
+    .app-content {
+        float: left;
+        width: calc(100% - 30px);
+    }
+
+    .left_p > img {
+        width: 100%;
+        height: 100%;
+        display: block;
+    }
+
+    .p_i span:first-child {
+        font-size: 16px;
+        color: #fff;
+        line-height: 16px;
+    }
+
+    .p_i span:last-child {
+        font-size: 25px;
+        color: #fff;
+        font-family: 'Arial';
+        line-height: 28px;
+        display: inline-block;
+        vertical-align: -12px;
+    }
+
+    .pm_title {
+        font-size: 13px;
+        line-height: 15px;
+        height: 15px;
+        color: #434343;
+        width: 150px;
+        margin-top: 5px;
+        overflow: hidden;
+        white-space: nowrap;
+        text-overflow: ellipsis;
+    }
+
+    .f-a {
+        font-family: 'Arial' !important;
+    }
+
+    .ca_line {
+        width: auto;
+        height: 19px;
+        line-height: 19px;
+        border-radius: 14.5px;
+        border: 1px solid #e5e5e5;
+        font-size: 13px;
+        color: #636363;
+        margin-bottom: 3px;
+        margin-top: 3px;
+        text-align: left;
+        display: inline-block;
+        padding: 0 10px;
+    }
+
+    .data_time {
+        font-size: 12px;
+        color: #969696;
+        width: 150px;
+    }
+
+    .env_head {
+        position: absolute;
+        top: 12px;
+        left: 12px;
+        width: 296px;
+        height: 148px;
+        display: block;
+        object-fit: cover;
+    }
+
+    .bl_r {
+        position: absolute;
+        top: 160px;
+        left: 12px;
+        width: 296px;
+        height: 310px;
+        background: #d41625;
+    }
+
+    .om_buy {
+        position: absolute;
+        left: 0;
+        right: 0;
+        bottom: 0;
+        height: 78px;
+        background: #d41625;
+        z-index: 2;
+    }
+
+    .om_buy > div {
+        width: 246px;
+        height: 42px;
+        background: -webkit-linear-gradient(#f4af5f, #f8d782);
+        background: -o-linear-gradient(#f4af5f, #f8d782);
+        background: -moz-linear-gradient(#f4af5f, #f8d782);
+        background: linear-gradient(#f4af5f, #f8d782);
+        color: #d41c3b;
+        border-radius: 20.85px;
+        line-height: 42px;
+        font-size: 13px;
+        text-align: center;
+        margin: 18px auto;
+    }
+
+    .om_buy_b > div {
+        width: 246px;
+        height: 42px;
+        background: #ffe937;
+        color: #fb5422;
+        border-radius: 20.85px;
+        line-height: 42px;
+        font-size: 13px;
+        text-align: center;
+        margin: 18px auto;
+    }
+
+    .bl_l {
+        position: absolute;
+        top: 160px;
+        left: 12px;
+        width: 296px;
+        height: 232px;
+        overflow-y: auto;
+        padding-top: 8px;
+    }
+
+    .list {
+        overflow: hidden;
+        width: 261px;
+        height: 80px;
+        border-radius: 20px;
+        margin: 0 auto;
+        background: #fff;
+        margin-bottom: 8px;
+        position: relative;
+    }
+
+    .list_left {
+        width: 103px;
+        float: left;
+        color: #d41625;
+        position: relative;
+    }
+
+    .list_right {
+        margin-left: 103px;
+        position: relative;
+        top: 5px;
+    }
+
+    .text {
+        position: relative;
+        left: 5px;
+        font-size: 14px;
+        line-height: 32px;
+    }
+
+    .triangle-topleft {
+        font-family: 'Arial';
+        font-size: 22px;
+        display: inline-block;
+    }
+
+    .list_text {
+        font-size: 10px;
+        color: #969696;
+        padding-left: 10px;
+        text-align: center;
+    }
+
+    .bl_line {
+        position: absolute;
+        left: -8px;
+        top: 32px;
+        background: #d41625;
+        width: 15px;
+        height: 15px;
+        border-radius: 50%;
+    }
+
+    .bl_second {
+        position: absolute;
+        right: -8px;
+        top: 32px;
+        background: #d41625;
+        width: 15px;
+        height: 15px;
+        border-radius: 50%;
+    }
+
+    .ad_bless > i {
+        font-size: 10px !important;
+        padding-left: 14px;
+        padding-right: 8px;
+    }
+
+    .ad_bless > span {
+        font-size: 14px;
+    }
+
+    .look_img > img {
+        display: block;
+        width: 246px;
+        height: 72px;
+        position: absolute;
+        top: 24px;
+        left: 603px;
+    }
+
+    .function_single a {
+        display: block;
+        height: 100%
+    }
+
+    .function_left img {
+        display: block;
+        position: absolute;
+        margin: auto;
+        left: 0;
+        right: 0;
+        top: 0;
+        bottom: 0;
+        width: 55px;
+    }
+
+    #redList .input-group {
+        margin-bottom: 5px;
+    }
+
+    input[type="button"] {
+        outline: 0 none !important;
+    }
+
+    select {
+        appearance: none !important;
+        -moz-appearance: none !important;
+        -webkit-appearance: none !important;
+        background: white !important;
+        padding-right: 14px !important;
+        width: 140px !important;
+    }
+
+    .red {
+        color: #f00;
+        font-weight: bold;
+    }
+
+    .red_price {
+        width: 100%;
+        height: 45px;
+        padding: 10px 0 10px 5px;
+        line-height: 27px;
+        text-align: center;
+    }
+</style>
+<ul class="nav nav-tabs" id="myTab">
+    <li class="active"><a href="#tab_basic">节日红包</a></li>
+</ul>
+<div class="app-content">
+    <div class="app-form">
+        <form action="" method="post" class="form-horizontal form form-validate" id="listContent">
+            <div class="form-group-title">节日红包</div>
+            <!-- 左边的效果栏 -->
+            <div class="pull-left" style="width:320px;background:#F4F5F9;margin-right:20px;border:1px solid #E7E7EB">
+                <div class="card-title">节日红包</div>
+                <div class="card_section area"
+                     style="position: relative;height: 480px;background-color: rgba(0, 0, 0, 0.8);">
+                    <img :src="info.image_url" class="env_head">
+                    <div class="bl_r" id="bl_r" :style="{'background':info.color['bg_color']}">
+                        <div class="om_buy" id="om_bg_buy" :style="{'background':info.color['bg_color']}">
+                            <div id="om_buy"
+                                 :style="{'background':info.color['button_color'],'color':info.color['text_color']}"
+                                 style="background: rgb(248, 215, 130); color: rgb(212, 28, 59);">立即领取
+                            </div>
+                        </div>
+                    </div>
+                    <div class="bl_l">
+                        <div class="list" v-for="(val,key) in info.list" :key="key">
+                            <div v-if="val.pack_id > 0">
+                                <div class="list_left" style="color: rgb(212, 22, 37);">
+                                    <div class="red_price">
+                                        <span class="text" :style="{'color':info.color['price_color']}">￥</span>
+                                        <div class="triangle-topleft" :style="{'color':info.color['price_color']}">{{
+                                            new_list[val['pack_id']].cut_money }}
+                                        </div>
+                                    </div>
+                                    <div class="list_text" v-if="new_list[val['pack_id']].full_money > 0">满{{
+                                        new_list[val['pack_id']].full_money }}元可用
+                                    </div>
+                                    <div class="list_text" v-else>无门槛</div>
+                                </div>
+                                <div class="list_right">
+                                    <div class="pm_title single-ellipsis mt10">{{ new_list[val['pack_id']].title }}
+                                    </div>
+                                    <div class="ca_line single-ellipsis font10 mt-3 mb0" v-if="new_list[val['pack_id']].usegoods_type == 1">指定代理商可用</div>
+                                    <div class="ca_line single-ellipsis font10 mt-3 mb0" v-else-if="new_list[val['pack_id']].usegoods_type == 2">指定商家可用</div>
+                                    <div class="ca_line single-ellipsis font10 mt-3 mb0" v-else-if="new_list[val['pack_id']].usegoods_type == 3">指定商品可用</div>
+                                    <div class="ca_line single-ellipsis font10 mt-3 mb0" v-else>全平台可用</div>
+                                    <div class="data_time single-ellipsis font10">
+                                        <span class="f-a f-a1">{{ new_list[val['pack_id']].usetime_text }}</span>
+                                    </div>
+                                </div>
+                            </div>
+                            <div v-else>
+                                <div class="list_left" style="color: rgb(212, 22, 37);">
+                                    <div class="red_price">
+                                        <span class="text">￥</span>
+                                        <div class="triangle-topleft">0.00</div>
+                                    </div>
+                                    <div class="list_text">无门槛</div>
+                                </div>
+                                <div class="list_right">
+                                    <div class="pm_title single-ellipsis mt10">请选择红包</div>
+                                    <div class="ca_line single-ellipsis font10 mt-3 mb0">请选择红包</div>
+                                    <div class="data_time single-ellipsis font10">
+                                        <span class="f-a f-a1">请选择红包</span>
+                                    </div>
+                                </div>
+                            </div>
+                            <!-- 卡卷两边的半圆 -->
+                            <div class="bl_line " :style="{'background':info.color['bg_color']}"></div>
+                            <div class="bl_second " :style="{'background':info.color['bg_color']}"></div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <!-- 右边的设置栏 -->
+            <div class="pull-left alert form form-area" style="width:650px;position:relative;display:block;" id="form1">
+                <div class="form-group">
+                    <label class="col-sm-2 control-label"><span class="form-must">*</span>红包状态</label>
+                    <div class="col-sm-9">
+                        <label class="radio-inline">
+                            <input type="radio" value="0" v-model="info.status">关闭
+                        </label>
+                        <label class="radio-inline">
+                            <input type="radio" value="1" v-model="info.status">开启
+                        </label>
+                    </div>
+                </div>
+                <div v-if="info.status == 1">
+                    <div class="form-group">
+                        <!--1=自定义类型，2=中秋红包，3=国庆红包，4=圣诞红包，5=新年红包，6=端午红包-->
+                        <label class="col-sm-2 control-label">红包模板</label>
+                        <div class="col-sm-9">
+                            <label class="radio-inline">
+                                <input type="radio" value="5" v-model="info.redpack_calss">新年
+                            </label>
+                            <label class="radio-inline">
+                                <input type="radio" value="6" v-model="info.redpack_calss">端午
+                            </label>
+                            <label class="radio-inline">
+                                <input type="radio" value="2" v-model="info.redpack_calss">中秋
+                            </label>
+                            <label class="radio-inline">
+                                <input type="radio" value="3" v-model="info.redpack_calss">国庆
+                            </label>
+                            <label class="radio-inline">
+                                <input type="radio" value="4" v-model="info.redpack_calss">圣诞
+                            </label>
+                        </div>
+                    </div>
+                    <div class="form-group">
+                        <label class="col-sm-2 control-label"><span class="form-must">*</span>节日名称</label>
+                        <div class="col-sm-9">
+                            <input type="text" v-model="info.name" class="form-control" required placeholder="请输入节日名称">
+                        </div>
+                    </div>
+                    <div class="form-group">
+                        <label class="col-sm-2 control-label"><span class="form-must">*</span>红包标签</label>
+                        <div class="col-sm-9">
+                            <input type="text" v-model="info.label" class="form-control" maxlength="5" required
+                                   placeholder="请输入红包标签(最多5字)">
+                        </div>
+                    </div>
+                    <div class="form-group">
+                        <label class="col-sm-2 control-label">主题图片</label>
+                        <div class="col-sm-9">
+                            <div class="input-group ">
+                                <input type="text" v-model="info.images" readonly class="form-control">
+                                <span class="input-group-btn">
+                            <button type="button" @click="selectImage(this)" class="btn btn-default">选择图片</button>
+                        </span>
+                            </div>
+                            <div class="input-group " style="margin-top: 0.5em;">
+                                <img :src="info.image_url"
+                                     onerror="this.src='./resource/images/nopic.jpg'; this.title='图片未找到.'" width="150"
+                                     class="img-responsive img-thumbnail">
+                                <em title="删除这张图片" @click="deleteImage()" class="close"
+                                    style="position: absolute; top: 0px; right: -14px;">×</em>
+                            </div>
+                            <span class="help-block">推荐图片尺寸620X310</span>
+                        </div>
+                    </div>
+                    <div class="form-group">
+                        <label class="col-sm-2 control-label">颜色设置</label>
+                        <div class="col-sm-9">
+                            <div class="input-group">
+                                <span class="input-group-addon">背景颜色</span>
+                                <input type="color" class="form-control" width="10px" v-model="info['color'].bg_color">
+                                <span class="input-group-addon">金额颜色</span>
+                                <input type="color" class="form-control" width="10px"
+                                       v-model="info['color'].price_color">
+                            </div>
+                        </div>
+                    </div>
+                    <div class="form-group">
+                        <label class="col-sm-2 control-label">按钮设置</label>
+                        <div class="col-sm-9">
+                            <div class="input-group">
+                                <span class="input-group-addon">按钮颜色</span>
+                                <input type="color" class="form-control" width="10px"
+                                       v-model="info['color'].button_color">
+                                <span class="input-group-addon">字体颜色</span>
+                                <input type="color" class="form-control" width="10px"
+                                       v-model="info['color'].text_color">
+                            </div>
+                        </div>
+                    </div>
+                    <div class="form-group">
+                        <label class="col-sm-2 control-label"><span class="form-must">*</span>活动时间</label>
+                        <div class="col-sm-9">
+                            <div class="input-group">
+                                <button class="btn btn-default daterange daterange-date" type="button">
+                                    <span class="date-title">{{info.start_time}} 至 {{info.end_time}}</span>
+                                    <i class="fa fa-calendar"></i>
+                                </button>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="form-group">
+                        <label class="col-sm-2 control-label"><span class="form-must">*</span>添加红包</label>
+                        <div class="col-sm-9" id="redList">
+                            <!-- 提示信息 -->
+                            <div class="input-group">
+                                <span class="help-block">可增加多张,从红包列表中选择,注意重复<i class="red">设置的红包张数为单人可领数</i></span>
+                            </div>
+                            <!-- 红包列表 -->
+                            <div class="input-group" v-for="(item, key) in info.list" :key="key">
+                                <span class="input-group-addon">红包名称</span>
+                                <select v-model="info.list[key].pack_id" class="form-control">
+                                    <option value="0">请选择红包</option>
+                                    <option v-for="(l, key) in list" :key="key" :value="l.id">{{ l.title }}</option>
+                                </select>
+                                <span class="input-group-addon">单人可领</span>
+                                <input type="number" class="form-control" min="1" v-model="info.list[key].limit"
+                                       width="10px">
+                                <span class="input-group-addon">张</span>
+                                <span class="input-group-addon btn btn-danger" @click="delRedPack(key)">X</span>
+                            </div>
+                            <!-- 添加按钮 -->
+                            <div class="input-group">
+                                <input type="button" @click="addRedPack()" value="添加" class="btn btn-warning"/>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                <div class="form-group">
+                    <label class="col-sm-2 control-label"></label>
+                    <div class="col-sm-9">
+                        <input type="button" @click="saveInfo()" value="提交" class="btn btn-primary min-width"/>
+                        <input type="hidden" v-model="id"/>
+                    </div>
+                </div>
+            </div>
+        </form>
+    </div>
+</div>
+<script>
+    let this_id = "{$id}";
+    let festival = new Vue({
+        el: '#listContent',
+        data: {
+            id: 0,
+            info: {
+                status: 1,
+                name: '',
+                label: '',
+                images: '',
+                color: {
+                    bg_color: '#fb5422',
+                    price_color: '#d41625',
+                    button_color: '#f4af5f',
+                    text_color: '#d41625',
+                },
+                start_time: '',
+                end_time: '',
+                list: [],
+                image_url: '',//图片超链接地址
+                redpack_calss: 5,//1=自定义类型，2=中秋红包，3=国庆红包，4=圣诞红包，5=新年红包，6=端午红包
+            },//设置信息
+            list: [],//红包列表信息
+            new_list: [],//以id为下标的数组
+        },
+        watch: {
+            'info.redpack_calss'(){
+                this.modelChange();
+            }
+        },
+        methods: {
+            //信息获取
+            getInfo() {
+                let res = commonVue.requestAjax('redpack/redpack/festival_pack_get', {id: this.id}, true, 'public');
+                if (res.errno == 1) {
+                    tip.alert(res.message);
+                } else {
+                    let data = res.data;
+                    this.info = data.info ? data.info : [];
+                    this.list = data.list ? data.list : [];
+                    this.new_list = data.new_list ? data.new_list : [];
+                }
+            },
+            //添加红包信息
+            addRedPack() {
+                let i = {pack_id: 0, limit: 1};
+                this.info['list'].push(i);
+            },
+            //点击删除信息
+            delRedPack(key) {
+                this.$delete(this.info['list'], key);
+            },
+            //信息提交
+            saveInfo() {
+                let _this = this;
+                let res = commonVue.requestAjax('redpack/redpack/festival_pack_set', {
+                    info: this.info,
+                    id: this.id
+                }, true,  'public');
+                if (res.errno == 1) {
+                    tip.alert(res.message);
+                } else {
+                    _this.id = res.data.id;
+                    let url = biz.url('redpack/redpack/festival_pack_edit', {id: res.data.id});
+                    tip.alert(res.message, function () {
+                        window.location.href = url;
+                        //_this.getInfo();
+                        //_this.$forceUpdate();
+                    });
+                }
+            },
+            //选择图片
+            selectImage(elm) {
+                let _info = this.info, _this = this;
+                require(["util"], function (util) {
+                    let btn = $(elm);
+                    let ipt = btn.parent().prev();
+                    let val = ipt.val();
+                    util.image(val, function (url) {
+                        _info.images = url.attachment;
+                        _info.image_url = url.url;
+                        _this.$forceUpdate();
+                    });
+                });
+            },
+            //点击删除图片
+            deleteImage() {
+                this.info.image = '';
+                this.info.image_url = '';
+            },
+            //时间选择
+            selectTime(start, end) {
+                this.info.start_time = start;
+                this.info.end_time = end;
+            },
+            //模板改变
+            modelChange(){
+                let res = commonVue.requestAjax('redpack/redpack/festival_pack_modelSelect', {id: this.id,redpack_calss:this.info.redpack_calss}, true, 'public');
+                if (res.errno == 1) {
+                    tip.alert(res.message);
+                } else {
+                    this.info = res.data ? res.data : [];
+                    this.$forceUpdate();
+                }
+            },
+        },
+        //进入页面请求获取信息
+        mounted() {
+            if (this_id > 0) this.id = this_id;
+            this.getInfo();
+        }
+    });
+</script>
+<script type="text/javascript">
+    require(["daterangepicker"], function () {
+        $(function () {
+            $(".daterange.daterange-date").each(function () {
+                var elm = this;
+                $(this).daterangepicker({
+                    ranges: {
+                        "近7天": [moment().subtract(7, "days").hours(0).minutes(0), moment().hours(23).minutes(59)],
+                        "本月": [moment().startOf("month").hours(0).minutes(0), moment().endOf("month").hours(23).minutes(59)],
+                        "上个月": [moment().subtract(1, "month").startOf("month").hours(0).minutes(0), moment().subtract(1, "month").endOf("month").hours(23).minutes(59)],
+                        "本周": [moment().startOf("week").add(1,"days").hours(0).minutes(0), moment().endOf("week").add(1,"days").hours(23).minutes(59)],
+                        "未来7天": [moment().hours(0).minutes(0),moment().add(7, "days").hours(23).minutes(59)],
+                        "未来15天": [moment().hours(0).minutes(0),moment().add(15, "days").hours(23).minutes(59)],
+                        "未来1个月": [moment().hours(0).minutes(0),moment().add(1, "months").hours(23).minutes(59)],
+                        "未来6个月": [moment().hours(0).minutes(0),moment().add(6, "months").hours(23).minutes(59)],
+                        "未来一年": [moment().hours(0).minutes(0),moment().add(1, "years").hours(23).minutes(59)],
+                    },
+                    startDate: $(elm).prev().prev().val(),
+                    endDate: $(elm).prev().val(),
+                    format: "YYYY-MM-DD HH:mm",
+                    timePicker: true,
+                    timePicker12Hour: false,
+                    timePicker24Hour: true,
+                    locale: {
+                        applyLabel: "确定",
+                        cancelLabel: "取消",
+                        fromLabel: "起始时间",
+                        toLabel: "结束时间",
+                        customRangeLabel: "自定义时间",
+                        firstDay: 1
+                    },
+                    timePickerIncrement: 1,
+                    minuteStep: 1
+                }, function (start, end) {
+                    start = start.toDateStr().indexOf("0000-01-01") != -1 ? "" : start.toDateStr();
+                    end = end.toDateStr().indexOf("0000-01-01") != -1 ? "" : end.toDateStr();
+                    var html = (start == "" ? "不限时间" : start) + (start == "" && end === "" ? "" : (" 至" + end))
+                    $(elm).find(".date-title").html(html);
+                    $(elm).prev().prev().val(start);
+                    $(elm).prev().val(end);
+                    festival.selectTime(start, end);
+                });
+            });
+        });
+    });
+</script>
+{php include wl_template('common/footer');}

@@ -1,0 +1,418 @@
+{php include wl_template('common/header');}
+<ul class="nav nav-tabs" id="myTab">
+	<li class="active"><a href="#">用户列表</a></li>
+</ul>
+<div class="app-content">
+	<style type='text/css'>
+		.goods-info{position:relative;padding-left:60px;}
+		.goods-info .img{position:absolute;top:50%;margin-top:-25px;background: url({IMAGE_LOADING}
+		) center center no-repeat;width:50px;height:50px;}
+		.goods-info span{white-space: nowrap;overflow: hidden;text-overflow: ellipsis;display: block;}
+		.all-tips{margin-left: 65px;}
+	</style>
+	<div class="app-filter">
+		<div class="filter-action">
+			{if $ac}
+			<a href="{php echo web_url('halfcard/halftype/editmember')}" class="btn btn-primary" data-toggle="ajaxModal">添加会员</a>
+			{else}
+			<a href="{php echo web_url('halfcard/halfcard_web/editmember')}" class="btn btn-primary" data-toggle="ajaxModal">添加会员</a>
+			{/if}
+		</div>
+		<div class="filter-list">
+			<form action="" method="get" class="form-horizontal" role="form" id="form1">
+				<input type="hidden" name="c" value="site" />
+				<input type="hidden" name="a" value="entry" />
+				<input type="hidden" name="m" value="{MODULE_NAME}" />
+				<input type="hidden" name="p" value="halfcard" />
+				<input type="hidden" name="ac" {if $ac} value="{$ac}"{else} value="halfcard_web" {/if} />
+				<input type="hidden" name="do" value="memberlist" />
+				<input type="hidden" name="usetype" value="{$_GPC['usetype']}" />
+				<div class="form-group">
+					<label class="col-sm-2 control-label">用户状态</label>
+					<div class="col-sm-9">
+						<div class="btn-group">
+							<a href="{php echo wl_filter_url('usetype:0');}" class="btn {if $_GPC['usetype'] == 0}btn-primary{else}btn-default{/if}">不限</a>
+							<a href="{php echo wl_filter_url('usetype:1');}" class="btn {if $_GPC['usetype'] == 1}btn-primary{else}btn-default{/if}">使用中</a>
+							<a href="{php echo wl_filter_url('usetype:2');}" class="btn {if $_GPC['usetype'] == 2}btn-primary{else}btn-default{/if}">已过期</a>
+						</div>
+					</div>
+				</div>
+				<div class="form-group">
+					<label class="col-sm-2 control-label">关键字</label>
+					<div class="col-md-3">
+						<select name="keywordtype" class="form-control">
+							<option value="">关键字类型</option>
+							<option value="3" {if $_GPC['keywordtype']==3}selected="selected"{/if}>持卡人名称</option>
+							<option value="1" {if $_GPC['keywordtype']==1}selected="selected"{/if}>用户昵称</option>
+							<option value="2" {if $_GPC['keywordtype']==2}selected="selected"{/if}>用户电话</option>
+							<option value="4" {if $_GPC['keywordtype']==4}selected="selected"{/if}>实卡编号</option>
+						</select>
+                    </div>
+                    <div class="col-md-4">
+                        <input type="text" name="keyword" class="form-control" value="{$_GPC['keyword']}"  placeholder="请输入关键字"/>
+                    </div>
+				</div>
+				<div class="form-group">
+					<label class="col-sm-2 control-label">时间筛选</label>
+					<div class="col-md-3">
+						<select name="timetype" class="form-control">
+							<option value="">请选择时间类型</option>
+							<option value="1" {if $_GPC['timetype']==1}selected="selected"{/if}>开通时间</option>
+							<option value="2" {if $_GPC['timetype']==2}selected="selected"{/if}>过期时间</option>
+						</select>
+					</div>
+					<div class="col-md-2">
+						{php echo tpl_select_time_info('time_limit', array('starttime' => date('Y-m-d H:i',$starttime), 'endtime' => date('Y-m-d H:i', $endtime)));}
+					</div>
+				</div>
+				<div class="form-group">
+					<label class="col-sm-2 control-label"></label>
+					<div class="col-sm-9">
+						<button class="btn btn-primary" id="search">筛选</button>
+						<button class="btn btn-default" id="output">导出</button>
+						<input type="hidden" value="0" name="outflag" id="outflag" />
+					</div>
+				</div>
+			</form>
+		</div>
+	</div>
+		<script type="text/javascript">
+			$("#search").click(function(){
+				$('#outflag').val(0);
+				$('#form1')[0].submit();
+			});
+			$("#output").click(function(){
+				$('#outflag').val(1);
+				$('#form1')[0].submit();
+			});
+			function sandh(asd){
+				if ($(asd).val() == 3) {
+					$('#keyword').hide();
+					$('#usetype').show();
+				}else{
+					$('#keyword').show();
+					$('#usetype').hide();
+				}
+			}
+		</script>
+		<div class="app-table-list">
+			<div class="panel-body table-responsive collapse in" id="order-template-item-4" style="padding: 0;">
+				<table class="table table-hover table-bordered">
+					<thead style="background-color: #FFFFFF;">
+						<tr>
+							<th style="width: 30px;"><input type="checkbox" onclick="var ck = this.checked;$(':checkbox').each(function(){this.checked = ck});" /></th>
+							<th style="width:130px;text-align:center;">持卡人信息</th>
+							<th style="width:50px;text-align: center;">用户电话</th>
+							<th style="width:50px;text-align: center;">用户昵称</th>
+							<th style="width:50px;text-align: center;">所属代理</th>
+							{if is_file(PATH_MODULE.'TnSrtWDJ.log')}
+							<th style="width:80px;text-align: center;">用户车型</th>
+							<th style="width:80px;text-align: center;">用户车牌号</th>
+							{/if}
+							{if is_file(PATH_MODULE.'N814.log')}
+							<th style="width:80px;text-align: center;">银行卡号</th>
+							{/if}
+							<th style="width:100px; text-align:center;">开通时间</th>
+							<th style="width:50px; text-align:center;">用户状态</th>
+							<th style="width:60px; text-align:center;">用户等级</th>
+							<th style="width:100px; text-align: center;">失效时间</th>
+							<th style="width:170px; text-align: center;">操作</th>
+						</tr>
+					</thead>
+					<tbody >
+					{loop $member $y $item}
+						<tr>
+							<td><input type="checkbox" name="checkbox[]" class="checkbox" value="{$item['id']}" /></td>
+							<!--用户昵称-->
+							<td class="goods-info line-feed" style="width:150px;padding-left: 10px;height: 60px;">
+								<div class="img"><img src="{IMAGE_PIXEL}" class="scrollLoading" data-url="{php echo tomedia($item['avatar'])}" height="50" width="50" ></div>
+								<div class="all-tips">
+									<p class="" style="margin-bottom: 3px;font-family: "Arial","Microsoft YaHei","黑体","宋体",sans-serif;">{$item['username']}</p>
+									{if $item['cardsn']}<p class="" style="font-family: "Arial","Microsoft YaHei","黑体","宋体",sans-serif;">实卡编号:{$item['cardsn']}</p>{/if}
+								</div>
+							</td>
+							<!--用户电话-->
+							<td class="text-center" style="width:150px;font-family: "Arial","Microsoft YaHei","黑体","宋体",sans-serif;">
+								{$item['mobile']}
+							</td>
+							<td class="text-center" style="width:150px;font-family: "Arial","Microsoft YaHei","黑体","宋体",sans-serif;">
+								{$item['nickname']}
+							</td>
+							<td class="text-center" style="width:150px;font-family: "Arial","Microsoft YaHei","黑体","宋体",sans-serif;">
+								{$item['agentuser']}
+							</td>
+							{if is_file(PATH_MODULE.'TnSrtWDJ.log')}
+							<td class="text-center" style="width:150px;font-family: "Arial","Microsoft YaHei","黑体","宋体",sans-serif;">
+							{$item['mototype']}
+							</td>
+							<td class="text-center" style="width:150px;font-family: "Arial","Microsoft YaHei","黑体","宋体",sans-serif;">
+							{$item['platenumber']}
+							</td>
+							{/if}
+							{if is_file(PATH_MODULE.'N814.log')}
+							<td class="text-center" style="width:150px;font-family: "Arial","Microsoft YaHei","黑体","宋体",sans-serif;">
+							{$item['banknum']}
+							</td>
+							{/if}
+							<!--开通时间-->
+							<td class="text-center" style="width:100px;font-family: "Arial","Microsoft YaHei","黑体","宋体",sans-serif;">
+								{php echo date('Y-m-d H:i:s',$item['createtime'])}
+							</td>
+							<!--用户状态-->
+							<td class="text-center" style="width:100px;font-family: "Arial","Microsoft YaHei","黑体","宋体",sans-serif;" >
+								{if $item['status'] == 1}
+								<span class="label label-primary">使用中</span>
+								{/if}
+								{if $item['status'] == 2}
+								<span class="label label-danger">已失效</span>
+								{/if}
+								{if $item['status'] == 3}
+								<span class="label label-warning">被禁用</span>
+								{/if}
+							</td>
+							<!--用户等级-->
+							<td class="text-center" style="width: 110px;">
+								{$item['levelname']}
+							</td>
+							<!--失效时间-->
+							<td class="text-center" style="width: 110px;">
+								{php echo date('Y-m-d H:i:s',$item['expiretime'])}
+							</td>
+							<!--操作-->
+							<td class="text-center wsmne" style="width: 110px;">
+								{if $ac}
+									<a href="{php echo web_url('halfcard/halftype/editmember',array('id'=>$item['id']))}" data-toggle="ajaxModal">编辑 -</a>
+								{else}
+									<a href="{php echo web_url('halfcard/halfcard_web/editmember',array('id'=>$item['id']))}" data-toggle="ajaxModal">编辑 -</a>
+								{/if}
+								{if $item['disable'] == 1}
+									<a class="nodisablemember" merid = {$item['id']} href="javascript:;">解除禁用 -</a>
+								{else}
+									<a class="disablemember" merid = {$item['id']} href="javascript:;">禁用 -</a>
+								{/if}
+									<a class="deletemember" merid = {$item['id']} href="javascript:;">删除</a>
+							</td>
+						</tr>
+						{/loop}
+					</tbody>
+				</table>
+			</div>
+			<div class="app-table-foot clearfix">
+				<div class="pull-left">
+					<div id="de1" class="pull-left">
+						<a href="javascript:;" class="btn btn-default min-width js-batch js-delete pass">批量删除</a>
+					</div>
+				</div>
+				<div class="pull-right">
+					{$pager}
+				</div>
+			</div>
+		</div>
+
+	<div id="modal-module-gift" class="modal fade" tabindex="-1">
+		<div class="modal-dialog" style='width: 920px;'>
+			<div class="modal-content" style="overflow: auto;">
+				<div class="modal-header">
+					<button aria-hidden="true" data-dismiss="modal" class="close" type="button">×</button>
+					<h2>更多信息</h2>
+				</div>
+				<div class="modal-body">
+					<div id="detail" class="modal-body" style="padding:0;"></div>
+				</div>
+				<div class="modal-footer" style="padding: 5px 15px;">
+					<a class="btn btn-primary js-order-remark-post" data-dismiss="modal" aria-hidden="true">确定</a>
+				</div>
+			</div>
+		</div>
+	</div>
+
+</div>
+
+<script type="text/javascript">
+	require(['jquery', 'util'], function($, util){
+		$('.js-copy').each(function(){
+			var id=$(this).attr('data-id');
+			util.clip($("#js-copy"+id), $(this).attr('data-url'));
+		});
+	});
+	{if $ac}
+	$('.wsmne').delegate('.disablemember','click',function(e){
+		e.stopPropagation();
+		var id = $(this).attr('merid');
+		util.nailConfirm(this, function(state) {
+		if(!state) return;
+			$.post("{php echo web_url('halfcard/halftype/disablemember')}", { id : id , flag : 1}, function(data){
+				if(!data.errno){
+				util.tips("禁用成功！");
+				location.reload();
+				};
+			}, 'json');
+		}, {html: '确认禁用该用户?'});
+	});
+	
+	$('.wsmne').delegate('.nodisablemember','click',function(e){
+		e.stopPropagation();
+		var id = $(this).attr('merid');
+		util.nailConfirm(this, function(state) {
+		if(!state) return;
+			$.post("{php echo web_url('halfcard/halftype/disablemember')}", { id : id,flag : 2 }, function(data){
+				if(!data.errno){
+				util.tips("解除成功！");
+				location.reload();
+				};
+			}, 'json');
+		}, {html: '确认解除禁用该用户?'});
+	});
+	
+	$('.wsmne').delegate('.deletemember','click',function(e){
+		e.stopPropagation();
+		var id = $(this).attr('merid');
+		util.nailConfirm(this, function(state) {
+		if(!state) return;
+			$.post("{php echo web_url('halfcard/halftype/deletemember')}", {id : id}, function(data){
+				if(!data.errno){
+				util.tips("删除成功！");
+				location.reload();
+				};
+			}, 'json');
+		}, {html: '删除用户可能导致记录信息错误或不全,确定要删除吗?'});
+	});
+	{else}
+	$('.wsmne').delegate('.disablemember','click',function(e){
+		e.stopPropagation();
+		var id = $(this).attr('merid');
+		util.nailConfirm(this, function(state) {
+		if(!state) return;
+			$.post("{php echo web_url('halfcard/halfcard_web/disablemember')}", { id : id , flag : 1}, function(data){
+				if(!data.errno){
+				util.tips("禁用成功！");
+				location.reload();
+				};
+			}, 'json');
+		}, {html: '确认禁用该用户?'});
+	});
+	
+	$('.wsmne').delegate('.nodisablemember','click',function(e){
+		e.stopPropagation();
+		var id = $(this).attr('merid');
+		util.nailConfirm(this, function(state) {
+		if(!state) return;
+			$.post("{php echo web_url('halfcard/halfcard_web/disablemember')}", { id : id,flag : 2 }, function(data){
+				if(!data.errno){
+				util.tips("解除成功！");
+				location.reload();
+				};
+			}, 'json');
+		}, {html: '确认解除禁用该用户?'});
+	});
+	
+	$('.wsmne').delegate('.deletemember','click',function(e){
+		e.stopPropagation();
+		var id = $(this).attr('merid');
+		util.nailConfirm(this, function(state) {
+		if(!state) return;
+			$.post("{php echo web_url('halfcard/halfcard_web/deletemember')}", {id : id}, function(data){
+				if(!data.errno){
+				util.tips("删除成功！");
+				location.reload();
+				};
+			}, 'json');
+		}, {html: '删除用户可能导致记录信息错误或不全,确定要删除吗?'});
+	});
+	{/if}
+</script>
+
+<script type="text/javascript">
+	$(function(){
+		$('[name="rank_all"]').click(function() {
+			var checked = this.checked;
+			$('.js-rank').find('input:checkbox').each(function() {
+				this.checked = checked;
+			});
+		});
+		$('#export').click(function() {
+			if ($('[name="selecttime[start]"]').val() == '') {
+				alert('请选择下单时间');
+				$(this).focus();
+				return false;
+			};
+			$(this).attr('type', 'submit').submit();
+		});
+		
+		$('.order-rank').each(function(){
+			o.rank(this);
+		});
+
+		//批量删除会员
+		$('#de1').delegate('.js-delete','click',function(e){
+			e.stopPropagation();
+			var mem_ids = [];
+			var $checks=$('.checkbox:checkbox:checked');
+			$checks.each(function() {
+				if (this.checked) {
+					mem_ids.push(this.value);
+				};
+			});
+			var $this = $(this);
+			var ids = mem_ids;
+			util.nailConfirm(this, function(state) {
+				if(!state) return;
+				$.post("{php echo web_url('halfcard/halfcard_web/deletemember')}",{id:ids}, function(data){
+					if(!data.errno){
+						util.tips("删除完成！");
+						location.reload();
+					};
+				}, 'json');
+			}, {html: '删除用户可能导致记录信息错误或不全,确定要删除吗?',placement:'right'});
+		});
+
+	});
+		
+//转换日期
+	var dt=$('.date1').text().replace(/^\s+|\s+$/g, "");
+	var yy=dt.slice(0,4);
+	var mm=dt.slice(4,6);
+	var dd=dt.slice(6,8);
+	var str=(yy+'-'+mm+'-'+dd).toString();
+	$('.date1').text(str);
+
+//二级联动切换
+$('#sel_parent').click(function(){
+
+if(this.value!=0){
+		$('.daterange-date').hide();
+		$('#sel_child').hide();
+		$(".nickname").removeAttr("style");
+		$('.nickname').show();
+}
+else{
+		$('.daterange-date').hide();
+		$('.nickname').hide();
+		$('#sel_child').hide();	
+		$('#sel_child').attr("display","block");
+}
+//alert(this.value);
+//if(this.value==0)
+//		$('#sel_child').hide();
+})
+
+	$('.todetail').click(function(){
+		$("#detail").html('');
+		popwin = $('#modal-module-gift').modal();
+		var id = $(this).attr('orderid');
+		$.ajax({
+			url: "{php echo web_url('halfcard/halftype/moreinfo')}&id="+id,
+			cache: false
+		}).done(function (html) {
+			$("#detail").html(html);
+		});
+	});
+
+
+
+
+</script>
+
+
+
+{php include wl_template('common/footer');}

@@ -1,0 +1,157 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="utf-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="referrer" content="origin">
+    <meta name="viewport"
+          content="width=device-width, viewport-fit=cover, initial-scale=1, maximum-scale=1, minimum-scale=1, user-scalable=no">
+    <meta http-equiv="Cache-Control" content="no-cache, no-store, must-revalidate" />
+    <title>支付完成</title>
+    <script type="text/javascript" charset="UTF-8" src="https://wx.gtimg.com/pay_h5/goldplan/js/jgoldplan-1.0.0.js">
+    </script>
+    <script type="text/javascript" src="https://cdn.bootcss.com/vConsole/3.3.0/vconsole.min.js"></script>
+    <script type="text/javascript" src="https://libs.baidu.com/jquery/2.0.0/jquery.min.js"></script>
+
+    <style>
+        body {
+            font-family: PingFang SC, "Helvetica Neue", Arial, sans-serif;
+        }
+
+        .order_box {
+            text-align: center;
+        }
+
+        .order_box .bussiness_avt img {
+            width: 68px;
+            height: 68px;
+            border-radius: 100%;
+            border: 1px solid #E0E0E0;
+        }
+
+        .b_name {
+            font-size: 14px;
+            font-weight: 500;
+            color: #333333;
+            margin-top: 6px;
+        }
+
+        .col_box {
+            margin-top: 25px;
+        }
+
+        .col_box .col {
+            display: -webkit-box;
+            display: -ms-flexbox;
+            display: -webkit-flex;
+            display: flex;
+            -webkit-box-align: center;
+            -ms-flex-align: center;
+            -webkit-align-items: center;
+            align-items: center;
+            -webkit-box-pack: justify;
+            -ms-flex-pack: justify;
+            -webkit-justify-content: space-between;
+            justify-content: space-between;
+            font-size: 14px;
+            color: #333;
+            margin-bottom: 14px;
+        }
+
+        .col .ct.price {
+            color: #E61515
+        }
+
+        .btns {
+            display: -webkit-box;
+            display: -ms-flexbox;
+            display: -webkit-flex;
+            display: flex;
+            -webkit-box-pack: justify;
+            -ms-flex-pack: justify;
+            -webkit-justify-content: space-between;
+            justify-content: space-between;
+            margin-top: 31px;
+        }
+
+        .btns .btn {
+            width: 147px;
+            height: 35px;
+            line-height: 35px;
+            font-size: 14px;
+            border-radius: 39px;
+            border: 1px solid #CD2314;
+            box-sizing: border-box;
+            color: #CD2314;
+        }
+
+        .btns .btn.detail {
+
+            background: linear-gradient(270deg, #D51010 0%, #EF4D2D 100%);
+            color: #fff;
+        }
+    </style>
+</head>
+
+<body>
+<div class="order_box">
+    <div class="bussiness_avt">
+        <img id="b_avt" src="{$base['logo']}" alt="">
+    </div>
+    <div class="b_name" id="b_name">
+        {$base['name']}
+    </div>
+    <div class="col_box">
+        <div class="col">
+            <div class="lab">商品名称</div>
+            <div id="p_name" class="ct" style="line-height: 19px;height: 19px;overflow: hidden;width: 220px;">{$data['goodsname']}</div>
+        </div>
+        <div class="col">
+            <div class="lab">购买数量</div>
+            <div id="count" class="ct">{$data['num']}</div>
+        </div>
+        <div class="col">
+            <div class="lab">实付金额</div>
+            <div id="price" class="ct price">¥{$data['price']}</div>
+        </div>
+    </div>
+    <div class="btns">
+        <div id="backHome" class="btn home">返回首页</div>
+        <div id="toOrder" class="btn detail">查看详情</div>
+    </div>
+</div>
+
+<script type="text/javascript">
+    //展示小票信息
+    window.onload=function(){
+        var mchData ={action:'onIframeReady',displayStyle:'SHOW_CUSTOM_PAGE'};
+        var postData = JSON.stringify(mchData);
+        parent.postMessage(postData,'https://payapp.weixin.qq.com');
+    };
+    var homeLink   = "{$home_url}";
+    var detailLink = "{$detail_url}";
+
+    //注册点击事件(去详情)
+    document.getElementById("toOrder").onclick = function () {
+        var mchData = {
+            action: 'jumpOut',
+            jumpOutUrl: detailLink //跳转的页面
+        }
+        var postData = JSON.stringify(mchData)
+        parent.postMessage(postData, 'https://payapp.weixin.qq.com')
+    }
+    //注册点击事件(去首页)
+    document.getElementById("backHome").onclick = function () {
+        var mchData = {
+            action: 'jumpOut',
+            jumpOutUrl: homeLink //跳转的页面
+        }
+        var postData = JSON.stringify(mchData)
+        parent.postMessage(postData, 'https://payapp.weixin.qq.com')
+    }
+
+</script>
+</body>
+
+</html>

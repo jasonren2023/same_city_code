@@ -1,0 +1,343 @@
+{php include wl_template('common/header');}
+<style>
+    #topType a{
+        margin-bottom: 5px!important;
+    }
+
+</style>
+<link rel="stylesheet" href="{URL_MODULE}web/resource/diy/css/diy.min.css">
+<ul class="nav nav-tabs">
+    <li class="active"><a href="javascript:;">页面列表</a></li>
+</ul>
+<div class="app-content">
+    <!--顶部信息-->
+    <div class="app-filter">
+        <div class="filter-action">
+            <a id="create_page" href="javascript:;" class="btn btn-primary">新建页面</a>
+        </div>
+        <div class="filter-list">
+            <form class="form-horizontal" action="" method="post">
+                <div class="form-group max-with-all">
+                    <div class="col-sm-2 control-label">页面类型</div>
+                    <div class="col-sm-9" id="topType">
+                        <div class="btn-group">
+                            <a href="{php echo web_url('diypage/diy/pagelist')}" class="btn btn-{if !$_GPC['page_type']}primary{else}default{/if}">全部</a>
+                            <a href="{php echo web_url('diypage/diy/pagelist',array('page_type'=>1))}" class="btn btn-{if $_GPC['page_type'] == 1}primary{else}default{/if}">自定义页面</a>
+                            <a href="{php echo web_url('diypage/diy/pagelist',array('page_type'=>2))}" class="btn btn-{if $_GPC['page_type'] == 2}primary{else}default{/if}">平台首页</a>
+                            {if p('rush')}
+                                <a href="{php echo web_url('diypage/diy/pagelist',array('page_type'=>3))}" class="btn btn-{if $_GPC['page_type'] == 3}primary{else}default{/if}">抢购首页</a>
+                            {/if}
+                            <a href="{php echo web_url('diypage/diy/pagelist',array('page_type'=>8))}" class="btn btn-{if $_GPC['page_type'] == 8}primary{else}default{/if}">好店首页</a>
+                            {if p('groupon')}
+                                <a href="{php echo web_url('diypage/diy/pagelist',array('page_type'=>4))}" class="btn btn-{if $_GPC['page_type'] == 4}primary{else}default{/if}">团购首页</a>
+                            {/if}
+                            {if p('wlcoupon')}
+                                <a href="{php echo web_url('diypage/diy/pagelist',array('page_type'=>5))}" class="btn btn-{if $_GPC['page_type'] == 5}primary{else}default{/if}">卡券首页</a>
+                            {/if}
+                            {if p('wlfightgroup')}
+                                <a href="{php echo web_url('diypage/diy/pagelist',array('page_type'=>6))}" class="btn btn-{if $_GPC['page_type'] == 6}primary{else}default{/if}">拼团首页</a>
+                            {/if}
+                            {if p('bargain')}
+                                <a href="{php echo web_url('diypage/diy/pagelist',array('page_type'=>7))}" class="btn btn-{if $_GPC['page_type'] == 7}primary{else}default{/if}">砍价首页</a>
+                            {/if}
+                            {if p('activity')}
+                                <a href="{php echo web_url('diypage/diy/pagelist',array('page_type'=>14))}" class="btn btn-{if $_GPC['page_type'] == 14}primary{else}default{/if}">活动首页</a>
+                            {/if}
+                            {if p('recruit')}
+                                <a href="{php echo web_url('diypage/diy/pagelist',array('page_type'=>15))}" class="btn btn-{if $_GPC['page_type'] == 15}primary{else}default{/if}">招聘首页</a>
+                            {/if}
+                            {if p('dating')}
+                                <a href="{php echo web_url('diypage/diy/pagelist',array('page_type'=>16))}" class="btn btn-{if $_GPC['page_type'] == 16}primary{else}default{/if}">相亲首页</a>
+                            {/if}
+                            {if p('housekeep')}
+                            	<a href="{php echo web_url('diypage/diy/pagelist',array('page_type'=>18))}" class="btn btn-{if $_GPC['page_type'] == 18}primary{else}default{/if}">家政首页</a>
+                            {/if}
+                            <!--{if p('house')}-->
+                            <!--<a href="{php echo web_url('diypage/diy/pagelist',array('page_type'=>20))}" class="btn btn-{if $_GPC['page_type'] == 20}primary{else}default{/if}">房产首页</a>-->
+                            <!--{/if}-->
+                            {if Customized::init('redpack527') > 0}
+                            	<a href="{php echo web_url('diypage/diy/pagelist',array('page_type'=>21))}" class="btn btn-{if $_GPC['page_type'] == 21}primary{else}default{/if}">表单页面</a>
+                            {/if}
+                        </div>
+                    </div>
+                </div>
+                <div class="form-group">
+                    <div class="col-sm-2 control-label">页面名称</div>
+                    <div class="col-sm-9">
+                        <input type="text" class="form-control" name="page_name" value="{$pageName}" placeholder="请输入页面名称">
+                    </div>
+                </div>
+                <div class="form-group">
+                    <div class="col-sm-2 control-label"></div>
+                    <div class="col-sm-6">
+                        <div class="input-group">
+                            <button class="btn btn-primary" type="submit" >搜索</button>
+                        </div>
+                    </div>
+                </div>
+            </form>
+        </div>
+    </div>
+    <!--页面列表-->
+    <div class="app-table-list">
+        <div class="table-responsive">
+            <table class="table table-hover">
+                <thead>
+                <tr>
+                    <th class="text-center"><input type="checkbox" /></th>
+                    <th class="text-center" >页面名称</th>
+                    <th class="text-center" >页面类型</th>
+                    <th class="text-center" >创建时间</th>
+                    <th class="text-center" >最近编辑时间</th>
+                    <th class="text-center" >操作</th>
+                </tr>
+                </thead>
+                <tbody>
+                {loop $list $v}
+                    <tr class="text-center">
+                        <td>
+                            {if $v['aid'] == $_W['aid'] || (empty($_W['aid']) && !empty($v['is_public'])) }
+                                <input type="checkbox" value="{$v['id']}" />
+                            {/if}
+                        </td>
+                        <td class="pageName" style="cursor: pointer">{$v['name']}</td>
+                        <td>
+                            {if $v['type'] == 1}
+                                <span style="color: #ffffff;background: linear-gradient(14deg,#6b6b6b,#da0000);padding: 5px 10px;border-radius: 15px;">自定义页面</span>
+                            {elseif $v['type'] == 2}
+                                <span style="color: #ffffff;background: linear-gradient(14deg,#6b6b6b,#da0097);padding: 5px 10px;border-radius: 15px;">平台首页</span>
+                            {elseif $v['type'] == 3}
+                                <span style="color: #ffffff;background: linear-gradient(14deg,#6b6b6b,#da00d3);padding: 5px 10px;border-radius: 15px;">抢购首页</span>
+                            {elseif $v['type'] == 4}
+                                <span style="color: #ffffff;background: linear-gradient(14deg,#6b6b6b,#9a00da);padding: 5px 10px;border-radius: 15px;">团购首页</span>
+                            {elseif $v['type'] == 5}
+                                <span style="color: #ffffff;background: linear-gradient(14deg,#6b6b6b,#3600da);padding: 5px 10px;border-radius: 15px;">卡券首页</span>
+                            {elseif $v['type'] == 6}
+                                <span style="color: #ffffff;background: linear-gradient(14deg,#6b6b6b,#00dada);padding: 5px 10px;border-radius: 15px;">拼团首页</span>
+                            {elseif $v['type'] == 7}
+                                <span style="color: #ffffff;background: linear-gradient(14deg,#6b6b6b,#00da94);padding: 5px 10px;border-radius: 15px;">砍价首页</span>
+                            {elseif $v['type'] == 8}
+                                <span style="color: #ffffff;background: linear-gradient(14deg,#6b6b6b,#00da1a);padding: 5px 10px;border-radius: 15px;">好店首页</span>
+                            {elseif $v['type'] == 14}
+                                <span style="color: #ffffff;background: linear-gradient(14deg,#6b6b6b,#87bf00);padding: 5px 10px;border-radius: 15px;">活动首页</span>
+                            {elseif $v['type'] == 15}
+                                <span style="color: #ffffff;background: linear-gradient(14deg,#6b6b6b,#d7da00);padding: 5px 10px;border-radius: 15px;">招聘首页</span>
+                            {elseif $v['type'] == 16}
+                                <span style="color: #ffffff;background: linear-gradient(14deg,#6b6b6b,#da6e00);padding: 5px 10px;border-radius: 15px;">相亲首页</span>
+                            {elseif $v['type'] == 18}
+                                <span style="color: #ffffff;background: linear-gradient(14deg,#6b6b6b,#da0000);padding: 5px 10px;border-radius: 15px;">家政首页</span>
+                            {elseif $v['type'] == 20}
+                                <span style="color: #ffffff;background: linear-gradient(14deg,#6b6b6b,#da0000);padding: 5px 10px;border-radius: 15px;">房产首页</span>
+                            {elseif $v['type'] == 21}
+                                <span style="color: #ffffff;background: linear-gradient(14deg,#6b6b6b,#da0000);padding: 5px 10px;border-radius: 15px;">表单页面</span>
+                            {/if}
+                        </td>
+                        <td>{php echo date("Y-m-d H:i:s",$v['createtime']);}</td>
+                        <td>{php echo date("Y-m-d H:i:s",$v['lastedittime']);}</td>
+                        <td style="position: relative;">
+                            {if p('wxplatform')}
+                            <a class="btn btn-info btn-sm js-clip" data-url="{php echo h5_url('pages/mainPages/index/diypage?type=1',['id'=>$v['id']])}" href="javascript:;">复制链接</a>
+                            {/if}
+                            {if p('wxapp')}
+                            <a class="btn btn-success btn-sm js-clip" data-url="pages/mainPages/index/diypage?type=1&id={$v['id']}" href="javascript:;">复制路径</a>
+                            {/if}
+                            <a class="btn btn-warning btn-sm" data-toggle="ajaxModal" href="{php echo web_url('diy/diy/previewPage', array('id'=>$v['id'],'type'=>'list'))}">预览</a>
+                            {if $v['aid'] == $_W['aid'] || (empty($_W['aid']) && !empty($v['is_public'])) }
+                                <a class="btn btn-sm btn-primary" href="{php echo web_url('diy/diy/editPage',array('id'=>$v['id'],'type'=>$v['type'],'page_type'=>'page','page_class'=>$v['page_class'],'back_url'=>$backUrl))}" target="_blank">编辑</a>
+                                <a class="btn btn-sm btn-danger" data-toggle="ajaxRemove" href="{php echo web_url('diy/diy/delPage',['ids'=>$v['id']])}" data-confirm="确定删除当前页面?">删除</a>
+                            {/if}
+                        </td>
+                    </tr>
+                {/loop}
+                </tbody>
+            </table>
+        </div>
+        <div class="app-table-foot clearfix">
+			<div class="pull-left">
+                <button class="btn btn-default" type="button" data-toggle='batch-remove' data-confirm="确定删除当前选中的所有页面？" data-href="{php echo web_url('diy/diy/delPage')}">批量删除</button>
+			</div>
+			<div class="pull-right">
+				{$pager}
+			</div>
+		</div>
+    </div>
+    <!--弹出框内容-->
+    <div id="select_pageClass">
+        <div class="pageClass_title">选择类型<span class="pageClass_del">X</span></div>
+        <div class="pageClass_content">
+            <!--自定义页面-->
+            <div class="pageClass_block">
+                <span class="title">自定义页面</span>
+                <span class="createButton">
+                <a href="{php echo web_url('diy/diy/editPage',array('type'=>1,'page_type'=>'page','back_url'=>$backUrl));}">
+                    <span>立即创建</span>
+                </a>
+            </span>
+            </div>
+            <!--平台首页-->
+            <div class="pageClass_block">
+                <span class="title">平台首页</span>
+                <span class="createButton">
+                 <a href="{php echo web_url('diy/diy/editPage',array('type'=>2,'page_type'=>'page','back_url'=>$backUrl));}">
+                    <span>立即创建</span>
+                </a>
+            </span>
+            </div>
+            <!--抢购首页-->
+            {if p('rush')}
+                <div class="pageClass_block">
+                    <span class="title">抢购首页</span>
+                    <span class="createButton">
+                     <a href="{php echo web_url('diy/diy/editPage',array('type'=>3,'page_type'=>'page','back_url'=>$backUrl));}">
+                        <span>立即创建</span>
+                    </a>
+                </span>
+                </div>
+            {/if}
+            <!--团购首页-->
+            {if p('groupon')}
+                <div class="pageClass_block">
+                    <span class="title">团购首页</span>
+                    <span class="createButton">
+                     <a href="{php echo web_url('diy/diy/editPage',array('type'=>4,'page_type'=>'page','back_url'=>$backUrl));}">
+                        <span>立即创建</span>
+                    </a>
+                </span>
+                </div>
+            {/if}
+            <!--卡券首页-->
+            {if p('wlcoupon')}
+                <div class="pageClass_block">
+                    <span class="title">卡券首页</span>
+                    <span class="createButton">
+                     <a href="{php echo web_url('diy/diy/editPage',array('type'=>5,'page_type'=>'page','back_url'=>$backUrl));}">
+                        <span>立即创建</span>
+                    </a>
+                </span>
+                </div>
+            {/if}
+            <!--拼团首页-->
+            {if p('wlfightgroup')}
+                <div class="pageClass_block">
+                    <span class="title">拼团首页</span>
+                    <span class="createButton">
+                     <a href="{php echo web_url('diy/diy/editPage',array('type'=>6,'page_type'=>'page','back_url'=>$backUrl));}">
+                        <span>立即创建</span>
+                    </a>
+                </span>
+                </div>
+            {/if}
+            <!--砍价首页-->
+            {if p('bargain')}
+                <div class="pageClass_block">
+                    <span class="title">砍价首页</span>
+                    <span class="createButton">
+                     <a href="{php echo web_url('diy/diy/editPage',array('type'=>7,'page_type'=>'page','back_url'=>$backUrl));}">
+                        <span>立即创建</span>
+                    </a>
+                </span>
+                </div>
+            {/if}
+            <!--好店首页-->
+            <div class="pageClass_block">
+                <span class="title">好店首页</span>
+                <span class="createButton">
+                    <a href="{php echo web_url('diy/diy/editPage',array('type'=>8,'page_type'=>'page','back_url'=>$backUrl));}">
+                        <span>立即创建</span>
+                    </a>
+                </span>
+            </div>
+            <!--活动首页-->
+            {if p('activity')}
+                <div class="pageClass_block">
+                    <span class="title">活动首页</span>
+                    <span class="createButton">
+                        <a href="{php echo web_url('diy/diy/editPage',array('type'=>14,'page_type'=>'page','back_url'=>$backUrl));}">
+                            <span>立即创建</span>
+                        </a>
+                    </span>
+                </div>
+            {/if}
+            <!--招聘首页-->
+            {if p('recruit')}
+                <div class="pageClass_block">
+                    <span class="title">招聘首页</span>
+                    <span class="createButton">
+                        <a href="{php echo web_url('diy/diy/editPage',array('type'=>15,'page_type'=>'page','back_url'=>$backUrl));}">
+                            <span>立即创建</span>
+                        </a>
+                    </span>
+                </div>
+            {/if}
+            <!--相亲首页-->
+            {if p('dating')}
+                <div class="pageClass_block">
+                    <span class="title">相亲首页</span>
+                    <span class="createButton">
+                        <a href="{php echo web_url('diy/diy/editPage',array('type'=>16,'page_type'=>'page','back_url'=>$backUrl));}">
+                            <span>立即创建</span>
+                        </a>
+                    </span>
+                </div>
+            {/if}
+            <!--家政服务-->
+            {if p('housekeep')}
+                <div class="pageClass_block">
+                    <span class="title">家政首页</span>
+                    <span class="createButton">
+                        <a href="{php echo web_url('diy/diy/editPage',array('type'=>18,'page_type'=>'page','back_url'=>$backUrl));}">
+                            <span>立即创建</span>
+                        </a>
+                    </span>
+                </div>
+            {/if}
+            <!--房产-->
+            <!--表单-->
+            {if Customized::init('redpack527') > 0}
+            <div class="pageClass_block">
+                <span class="title">表单页面</span>
+                <span class="createButton">
+                    <a href="{php echo web_url('diy/diy/editPage',array('type'=>21,'page_type'=>'page','back_url'=>$backUrl));}">
+                        <span>立即创建</span>
+                    </a>
+                </span>
+            </div>
+            {/if}
+        </div>
+    </div>
+</div>
+<script>
+    //新建内容
+    $("#create_page").on('click',function () {
+        $("#select_pageClass").modal();
+    });
+    //关闭页面
+    $("#select_pageClass").on('click','.pageClass_del',function () {
+        $("#select_pageClass").modal('hide');
+    });
+    //将页面设置为公共页面
+    $(".pageSetPulbic").on('click',function () {
+        var the = $(this);
+        var url = the.data("href");
+        var is_public = the.attr("is_public");
+        var tips = '确定要将该页面设为公共页面吗？设置后每个代理商都可以使用该页面';
+        if(is_public == 1){
+            tips = '确定要将该页面设为私有页面吗？设置后其他代理商将不可使用该页面';
+        }
+        tip.confirm(tips,function () {
+            $.post(url,function (res) {
+                if(res.errno == 1){
+                    the.html("设为公共页面");
+                    the.attr("is_public",0);
+                    {if empty($_W['aid'])}
+                    location.reload();
+                    {/if}
+                }else{
+                    the.html("设为私有页面");
+                    the.attr("is_public",1);
+                }
+            },'json');
+        });
+    });
+</script>
+{php include wl_template('common/footer');}

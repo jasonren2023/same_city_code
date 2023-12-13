@@ -1,0 +1,228 @@
+{php include wl_template('common/header');}
+<ul class="nav nav-tabs" id="myTab">
+	<li class="active"><a href="#setBase">基本设置</a></li>
+	<li><a href="#setTop">置顶设置</a></li>
+	<li><a href="#setShare">列表分享</a></li>
+	<li><a href="#infoShare">岗位页分享</a></li>
+</ul>
+<div class="app-content">
+	<div class="app-form">
+		<form action="" method="post" class="form-horizontal form-validate" id="setting-form">
+			<div class="panel panel-default">
+				<div class="panel-body">
+					<div class="tab-content">
+						<!-- 基本设置 -->
+						<div class="tab-pane active" id="setBase">
+							<div class="panel-heading">基本设置</div>
+							<div class="form-group">
+								<label class="col-sm-2 control-label">招聘审核</label>
+								<div class="col-sm-9">
+									<label class="radio-inline">
+										<input type="radio" name="data[is_examine]" value="1" {if $info['is_examine'] != 2}checked="checked"{/if}> 需要审核
+									</label>
+									<label class="radio-inline">
+										<input type="radio" name="data[is_examine]" value="2" {if $info['is_examine'] == 2}checked="checked"{/if}> 免审核
+									</label>
+								</div>
+							</div>
+							<div class="form-group">
+								<label class="col-sm-2 control-label">个人招聘</label>
+								<div class="col-sm-9">
+									<div class="input-group">
+										<span class="input-group-addon">免费发布</span>
+										<input type="text" digits="true" name="data[release_number]" class="form-control" value="{php echo $info['release_number'] ? : 0;}">
+										<span class="input-group-addon">次后，每次</span>
+										<input type="text"  name="data[release_price]" class="form-control" value="{php echo $info['release_price'] ? : 0;}">
+										<span class="input-group-addon">元</span>
+									</div>
+									<div class="help-block">个人发布招聘信息时在免费次数使用完后，每次发布都需要支付对应的金额；全部设置为0则每次发布都不需要付费。</div>
+								</div>
+							</div>
+							<div class="form-group">
+								<label class="col-sm-2 control-label">虚拟数据</label>
+								<div class="col-sm-9">
+									<div class="input-group">
+										<span class="input-group-addon">浏览量</span>
+										<input type="text" digits="true" name="data[look]" class="form-control" value="{php echo $info['look'] ? : 0;}">
+<!--										<span class="input-group-addon">分享</span>-->
+<!--										<input type="text" digits="true" name="data[share]" class="form-control" value="{php echo $info['share'] ? : 0;}">-->
+									</div>
+								</div>
+							</div>
+							<div class="form-group">
+								<label class="col-sm-2 control-label">免责声明(发布)</label>
+								<div class="col-sm-9">
+									<textarea name="data[disclaimers]" class="form-control" rows="10" style="resize: none;font-size: 15px;">{$info['disclaimers']}</textarea>
+									<div class="help-block">发布页面显示的免责声明，招聘信息发布方可见</div>
+								</div>
+							</div>
+							<div class="form-group">
+								<label class="col-sm-2 control-label">免责声明(详情)</label>
+								<div class="col-sm-9">
+									<textarea name="data[desc_disclaimers]" class="form-control" rows="10" style="resize: none;font-size: 15px;">{$info['desc_disclaimers']}</textarea>
+									<div class="help-block">招聘详情页显示的免责声明，对普通用户可见</div>
+								</div>
+							</div>
+						</div>
+						<!-- 置顶设置 -->
+						<div class="tab-pane" id="setTop">
+							<div class="panel-heading">置顶设置</div>
+							<div class="form-group">
+								<label class="col-sm-2 control-label">置顶数量</label>
+								<div class="col-sm-9">
+									<div class="input-group">
+										<input type="number" min="0" name="data[top_number]" class="form-control" value="{php echo $info['top_number'] ? : 0;}">
+										<span class="input-group-addon">条</span>
+									</div>
+									<span class="help-block">置顶招聘信息的数量，不填或填0则无限制。</span>
+								</div>
+							</div>
+							<div class="form-group">
+								<label class="col-sm-2 control-label">置顶价格</label>
+								<div class="col-sm-9 priceList">
+									<!-- 置顶价格信息列表 -->
+									{loop $info['top_rule'] $key $item}
+										<div class="input-group" style="margin-bottom: 10px;">
+											<span class="input-group-addon">置顶时间(天)</span>
+											<input type="text" name="data[top_rule][{$key}][day]" digits="true" class="form-control day" value="{$item['day']}" required="required" min="1">
+											<span class="input-group-addon">￥</span>
+											<input type="text" name="data[top_rule][{$key}][price]" class="form-control price" value="{$item['price']}" required="required" min="0.01">
+											<span class="input-group-addon btn btn-default deletePriceButton">
+												<i class="fa fa-remove"></i> 删除
+											</span>
+										</div>
+									{/loop}
+									<!-- 提示信息 -->
+									<span class="help-block">时间请填入整数，价格保留两位小数。</span>
+								</div>
+							</div>
+							<div class="form-group">
+								<label class="col-sm-2 control-label"></label>
+								<div class="col-sm-9">
+									<a class="btn btn-info addPriceButton" href="javascript:;">
+										<i class="fa fa-plus"></i>增加一种置顶规则
+									</a>
+								</div>
+							</div>
+						</div>
+						<!-- 分享设置 -->
+						<div class="tab-pane" id="setShare">
+							<div class="panel-heading">列表设置</div>
+							<div class="alert alert-info">
+								<b>适用模板变量：[昵称] [时间] [系统名称]</b>
+							</div>
+							<div class="form-group">
+								<label class="col-sm-2 control-label">分享标题</label>
+								<div class="col-sm-9">
+									<input type="text" name="data[share_title]" class="form-control" value="{$info['share_title']}" />
+								</div>
+							</div>
+							{if p('wxplatform')}
+							<div class="form-group">
+								<label class="col-sm-2 control-label">分享图片</label>
+								<div class="col-sm-9">
+									{php echo attachment_select('data[share_image]', $info['share_image']);}
+									<span class="help-block">推荐图片尺寸500X500</span>
+								</div>
+							</div>
+							{/if}
+							{if p('wxapp')}
+							<div class="form-group">
+								<label class="col-sm-2 control-label">小程序分享图片</label>
+								<div class="col-sm-9">
+									{php echo attachment_select('data[share_wa_image]', $info['share_wa_image']);}
+									<span class="help-block">推荐图片尺寸500X400</span>
+								</div>
+							</div>
+							{/if}
+							<div class="form-group">
+								<label class="col-sm-2 control-label">分享描述</label>
+								<div class="col-sm-9">
+									<input type="text" name="data[share_desc]" class="form-control" value="{$info['share_desc']}" />
+								</div>
+							</div>
+						</div>
+
+						<div class="tab-pane" id="infoShare">
+							<div class="panel-heading">岗位页分享</div>
+							<div class="alert alert-info">
+								<b>适用模板变量：[昵称] [时间] [系统名称] [岗位名] [岗位描述]</b>
+							</div>
+							<div class="form-group">
+								<label class="col-sm-2 control-label">分享标题</label>
+								<div class="col-sm-9">
+									<input type="text" name="data[info_share_title]" class="form-control" value="{$info['info_share_title']}" />
+									<span class="help-block">不设置会自动显示为岗位名和平台名</span>
+								</div>
+							</div>
+							{if p('wxplatform')}
+							<div class="form-group">
+								<label class="col-sm-2 control-label">分享图片</label>
+								<div class="col-sm-9">
+									{php echo attachment_select('data[info_share_image]', $info['info_share_image']);}
+									<span class="help-block">推荐图片尺寸500X500,不设置会调用发布方图片</span>
+								</div>
+							</div>
+							{/if}
+							{if p('wxapp')}
+							<div class="form-group">
+								<label class="col-sm-2 control-label">小程序分享图片</label>
+								<div class="col-sm-9">
+									{php echo attachment_select('data[info_share_wa_image]', $info['info_share_wa_image']);}
+									<span class="help-block">推荐图片尺寸500X400,不设置会调用发布方图片</span>
+								</div>
+							</div>
+							{/if}
+							<div class="form-group">
+								<label class="col-sm-2 control-label">分享描述</label>
+								<div class="col-sm-9">
+									<input type="text" name="data[info_share_desc]" class="form-control" value="{$info['info_share_desc']}" />
+									<span class="help-block">不设置会自动调用岗位描述</span>
+								</div>
+							</div>
+						</div>
+
+					</div>
+				</div>
+			</div>
+			<div class="form-group">
+				<label class="col-sm-2 control-label"></label>
+				<div class="col-sm-9">
+					<input type="submit" name="submit" value="提交" class="btn btn-primary min-width" />
+					<input type="hidden" name="token" value="{$_W['token']}" />
+				</div>
+			</div>
+		</form>
+	</div>
+</div>
+<script>
+	//点击添加一条规则信息
+	$(".addPriceButton").on('click',function () {
+		let html = '<div class="input-group" style="margin-bottom: 10px;">\n' +
+				'\t\t\t\t\t\t\t\t\t\t<span class="input-group-addon">置顶时间(天)</span>\n' +
+				'\t\t\t\t\t\t\t\t\t\t<input type="text" name="data[top_rule][0][day]" digits="true" class="form-control day" value="" required="required" min="1">\n' +
+				'\t\t\t\t\t\t\t\t\t\t<span class="input-group-addon">￥</span>\n' +
+				'\t\t\t\t\t\t\t\t\t\t<input type="text" name="data[top_rule][0][price]" class="form-control price" value="" required="required" min="0.01">\n' +
+				'\t\t\t\t\t\t\t\t\t\t<span class="input-group-addon btn btn-default deletePriceButton">\n' +
+				'\t\t\t\t\t\t\t\t\t\t\t<i class="fa fa-remove"></i> 删除\n' +
+				'\t\t\t\t\t\t\t\t\t\t</span>\n' +
+				'\t\t\t\t\t\t\t\t\t</div>';
+		$(".priceList").find('.help-block').before(html);
+		priceNameInit();
+	});
+	//点击删除当前规则信息
+	$(".priceList").on('click','.deletePriceButton',function () {
+		$(this).parent('.input-group').remove();
+		priceNameInit();
+	});
+	//价格规则信息name格式化
+	function priceNameInit(){
+		$(".priceList .input-group").each(function (k,v) {
+			//修改天的name
+			$(this).find('.day').attr('name',"data[top_rule]["+k+"][day]");
+			//修改价格的name
+			$(this).find('.price').attr('name',"data[top_rule]["+k+"][price]");
+		});
+	}
+</script>
+{php include wl_template('common/footer');}

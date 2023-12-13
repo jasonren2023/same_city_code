@@ -1,0 +1,23 @@
+<svg xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink" width="78" height="72" viewBox="0 0 78 72">
+  <defs>
+    <style>
+      .cls-1 {
+        fill: #fff;
+      }
+
+      .cls-2 {
+        filter: url(#路径_79);
+      }
+    </style>
+    <filter id="路径_79" x="0" y="0" width="78" height="72" filterUnits="userSpaceOnUse">
+      <feOffset dy="3" input="SourceAlpha"/>
+      <feGaussianBlur stdDeviation="3" result="blur"/>
+      <feFlood flood-opacity="0.161"/>
+      <feComposite operator="in" in2="blur"/>
+      <feComposite in="SourceGraphic"/>
+    </filter>
+  </defs>
+  <g class="cls-2" transform="matrix(1, 0, 0, 1, 0, 0)">
+    <path id="路径_79-2" data-name="路径 79" class="cls-1" d="M651.88,287.578l-.933-.413a71.271,71.271,0,0,1-14.375-9.057,47.5,47.5,0,0,1-10-10.88,27.608,27.608,0,0,1-4.687-15.03,20.433,20.433,0,0,1,2.8-10.641,16.456,16.456,0,0,1,7.393-6.546,17.373,17.373,0,0,1,10.459-1.077,22.872,22.872,0,0,1,9.351,4.375,22.853,22.853,0,0,1,9.346-4.375,17.324,17.324,0,0,1,10.459,1.077,16.419,16.419,0,0,1,7.388,6.546A20.365,20.365,0,0,1,681.88,252.2a27.648,27.648,0,0,1-4.687,15.03,47.613,47.613,0,0,1-10,10.88,70.871,70.871,0,0,1-14.37,9.057Z" transform="translate(-612.88 -227.58)"/>
+  </g>
+</svg>

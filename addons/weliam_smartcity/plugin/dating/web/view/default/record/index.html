@@ -1,0 +1,119 @@
+{php include wl_template('common/header');}
+<style>
+    .user{
+        height: 60px;
+        min-width: 180px;
+    }
+    .user .img{
+        width: 60px;
+        height: 60px;
+        float: left;
+        position: relative;
+    }
+    .user .img img{
+        width: 60px;
+        height: 60px;
+        border-radius: 50%;
+        border: 1px solid #CCC;
+    }
+    .user .info{
+        float: left;
+        height: 60px;
+        width: calc(100% - 60px);
+        padding-left: 10px;
+        padding-top: 10px;
+        font-size: 15px;
+        text-align: left;
+        line-height: 20px;
+    }
+    .dynamicContent{
+        max-height: 80px;
+        overflow: auto;
+        text-align: left;
+    }
+</style>
+<ul class="nav nav-tabs" id="myTab">
+    <li class="active"><a href="javascript:;">开卡记录</a></li>
+</ul>
+<div class="app-content">
+    <!--顶部操作-->
+    <div class="app-filter">
+        <div class="filter-list">
+            <form action="" method="get" class="form-horizontal" role="form" id="form1">
+                <input type="hidden" name="c" value="site" />
+                <input type="hidden" name="a" value="entry" />
+                <input type="hidden" name="m" value="{MODULE_NAME}" />
+                <input type="hidden" name="p" value="dating" />
+                <input type="hidden" name="ac" value="vip" />
+                <input type="hidden" name="do" value="recordList" />
+                <div class="form-group">
+                    <div class="col-sm-2 control-label">用户昵称</div>
+                    <div class="col-sm-9">
+                        <input type="text" class="form-control" name="nickname" value="{$nickname}" placeholder="请输入用户昵称...">
+                    </div>
+                </div>
+                <div class="form-group">
+                    <div class="col-sm-2 control-label"></div>
+                    <div class="col-sm-9">
+                        <button class="btn btn-primary" type="submit">搜索</button>
+                        <a href="{php echo web_url('dating/vip/recordList')}" class="btn btn-danger">清除</a>
+                    </div>
+                </div>
+            </form>
+        </div>
+    </div>
+    <!--表格信息-->
+    <div class="app-table-list">
+        <!--列表信息-->
+        <div class="table-responsive order-list">
+            <table class="table table-hover">
+                <thead>
+                    <tr>
+                        <th class="text-left">用户信息</th>
+                        <th class="text-center">类型</th>
+                        <th class="text-center">时间/次数</th>
+                        <th class="text-center">开卡时间</th>
+                        <th class="text-center">订单金额</th>
+                    </tr>
+                </thead>
+                <tbody>
+                {loop $list $key $item}
+                <tr class="text-center">
+                    <td>
+                        <div class="user">
+                            <div class="img">
+                                <img src="{$item['avatar']}">
+                            </div>
+                            <div class="info">
+                                <div>{$item['nickname']}</div>
+                            </div>
+                        </div>
+                    </td>
+                    <td>
+                        {if $item['type'] == 1}
+                            <label class="label label-success">时限卡</label>
+                        {else}
+                            <label class="label label-info">次数卡</label>
+                        {/if}
+                    </td>
+                    <td>
+                        {if $item['type'] == 1}
+                            <label class="label label-success">{$item['day']}天</label>
+                        {else}
+                            <label class="label label-info">{$item['frequency']}次</label>
+                        {/if}
+                    </td>
+                    <td>{$item['create_time']}</td>
+                    <td>{$item['money']}</td>
+                </tr>
+                {/loop}
+                </tbody>
+            </table>
+        </div>
+        <!--操作按钮 分页信息-->
+        <div class="app-table-foot clearfix">
+            <div class="pull-right">{$pager}</div>
+        </div>
+    </div>
+</div>
+{php include wl_template('common/footer');}

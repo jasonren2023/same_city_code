@@ -1,0 +1,88 @@
+{php include wl_template('common/header');}
+<ul class="nav nav-tabs">
+    <li class="active"><a href="javascript:;">红包管理</a></li>
+</ul>
+<div class="app-content">
+    <div class="app-filter">
+        <div class="filter-action">
+            <a href="{php echo web_url('redpack/redpack/festival_pack_edit')}" class="btn btn-primary">添加红包</a>
+        </div>
+        <div class="filter-list">
+            <form class="form-horizontal" action="{php echo web_url('redpack/redpack/pack_lists')}" method="post">
+                <div class="form-group">
+                    <div class="col-sm-2 control-label">红包信息</div>
+                    <div class="col-sm-9">
+                        <input type="text" class="form-control" name="name" value="{$_GPC['name']}" placeholder="请输入红包名称">
+                    </div>
+                </div>
+                <div class="form-group">
+                    <div class="col-sm-2 control-label"></div>
+                    <div class="col-sm-9">
+                        <button class="btn btn-primary" type="submit">搜索</button>
+                    </div>
+                </div>
+            </form>
+        </div>
+    </div>
+
+
+
+    <div class="app-table-list">
+        {if !empty($lists)}
+            <div class="table-responsive">
+                <table class="table table-hover table-bordered">
+                    <thead>
+                        <tr>
+                            <th class="text-center">节日名称</th>
+                            <th class="text-center">红包标签</th>
+                            <th class="text-center">红包名称/红包金额/使用条件/每人限领</th>
+                            <th class="text-center">活动时间</th>
+                            <th class="text-center">状态</th>
+                            <th class="text-center">操作</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        {loop $lists $item}
+                        <tr class="text-center">
+                            <td>{$item['name']}</td>
+                            <td>{$item['label']}</td>
+                            <td>
+                                {loop $item['list'] $pack}
+                                    <div>{$pack['title']}/{$pack['cut_money']}元/{php echo $pack['full_money'] ? '满'.$pack['full_money'].'元使用' :"无门槛";}/{$pack['limit']}</div>
+                                {/loop}
+                            </td>
+                            <td>{$item['time']}</td>
+                            <td>
+                                {if $item['status']==2}
+                                    <a href="javascript:;" class='btn btn-sm btn-danger'>过期</a>
+                                {else}
+                                    <a data-toggle="ajaxPost" href="{php echo web_url('redpack/redpack/festival_pack_changeStatus', ['id' => $item['id'],'status'=>$item['status']])}" class='btn btn-sm {if $item['status']==1}btn-primary{else}btn-default{/if}'>
+                                        {if $item['status']==1}上架{else}下架{/if}
+                                    </a>
+                                {/if}
+                            </td>
+                            <td>
+                                <a class="btn btn-sm btn-info" href="{php echo web_url('redpack/redpack/record_lists', ['festival_id' => $item['id']])}">领取记录</a>
+                                <a class="btn btn-sm btn-primary" href="{php echo web_url('redpack/redpack/festival_pack_edit',['id' => $item['id']])}">编辑</a>
+                                <a class="btn btn-sm btn-danger" data-toggle="ajaxRemove" href="{php echo web_url('redpack/redpack/festival_pack__del', ['id' => $item['id']])}" data-confirm="删除节日红包将删除所有用户通过当前活动领取的红包，确定删除?">删除</a>
+                            </td>
+                        </tr>
+                        {/loop}
+                    </tbody>
+                </table>
+            </div>
+            <div class="app-table-foot clearfix">
+                <div class="pull-left">
+                </div>
+                <div class="pull-right">
+                    {$pager}
+                </div>
+            </div>
+        {else}
+            <div class="no-result">
+                <p>还没有相关数据</p>
+            </div>
+        {/if}
+    </div>
+</div>
+{php include wl_template('common/footer');}

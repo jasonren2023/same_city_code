@@ -1,0 +1,353 @@
+{php include wl_template('common/header');}
+<ul class="nav nav-tabs" id="myTab">
+	<li class="active"><a href="#setBase">基本设置</a></li>
+	<li><a href="#setTop">置顶设置</a></li>
+	<li><a href="#setMatchmaker">红娘提现</a></li>
+	<li><a href="#setShare">分享设置</a></li>
+</ul>
+<div class="app-content">
+	<div class="app-form">
+		<form action="" method="post" class="form-horizontal form-validate" id="setting-form">
+			<div class="panel panel-default">
+				<div class="panel-body">
+					<div class="tab-content">
+						<!-- 基本设置 -->
+						<div class="tab-pane active" id="setBase">
+							<div class="panel-heading">基本设置</div>
+							<div class="form-group">
+								<label class="col-sm-2 control-label">会员是否需要审核</label>
+								<div class="col-sm-9">
+									<label class="radio-inline">
+										<input type="radio" name="data[member_examine]" value="1" {if $info['member_examine'] == 1}checked="checked"{/if}> 需要审核
+									</label>
+									<label class="radio-inline">
+										<input type="radio" name="data[member_examine]" value="2" {if $info['member_examine'] != 1}checked="checked"{/if}> 免审核
+									</label>
+									<div class="help-block">开启后用户添加、编辑会员资料后都会进行审核</div>
+								</div>
+							</div>
+							<div class="form-group">
+								<label class="col-sm-2 control-label">动态是否需要审核</label>
+								<div class="col-sm-9">
+									<label class="radio-inline">
+										<input type="radio" name="data[dynamic_examine]" value="1" {if $info['dynamic_examine'] == 1}checked="checked"{/if}> 需要审核
+									</label>
+									<label class="radio-inline">
+										<input type="radio" name="data[dynamic_examine]" value="2" {if $info['dynamic_examine'] != 1}checked="checked"{/if}> 免审核
+									</label>
+									<div class="help-block">开启后会员发布动态需要审核</div>
+								</div>
+							</div>
+							<div class="form-group">
+								<label class="col-sm-2 control-label">动态评论是否需要审核</label>
+								<div class="col-sm-9">
+									<label class="radio-inline">
+										<input type="radio" name="data[comment_examine]" value="1" {if $info['comment_examine'] == 1}checked="checked"{/if}> 需要审核
+									</label>
+									<label class="radio-inline">
+										<input type="radio" name="data[comment_examine]" value="2" {if $info['comment_examine'] != 1}checked="checked"{/if}> 免审核
+									</label>
+								</div>
+							</div>
+							<div class="form-group">
+								<label class="col-sm-2 control-label">红娘是否付费入驻</label>
+								<div class="col-sm-9">
+									<label class="radio-inline">
+										<input type="radio" name="data[pay_settle]" onclick="$('#money').removeClass('hide');" value="1" {if $info['pay_settle'] == 1}checked="checked"{/if}> 付费
+									</label>
+									<label class="radio-inline">
+										<input type="radio" name="data[pay_settle]" onclick="$('#money').addClass('hide');" value="2" {if $info['pay_settle'] != 1}checked="checked"{/if}> 免费
+									</label>
+								</div>
+							</div>
+							<div class="form-group {if $info['pay_settle'] != 1}hide{/if}" id="money">
+								<label class="col-sm-2 control-label">付费金额</label>
+								<div class="col-sm-9">
+									<div class="input-group">
+										<span class="input-group-addon">￥</span>
+										<input type="text" name="data[money]" class="form-control" value="{$info['money']}">
+									</div>
+								</div>
+							</div>
+							<div class="form-group">
+								<label class="col-sm-2 control-label">红娘入驻是否需要审核</label>
+								<div class="col-sm-9">
+									<label class="radio-inline">
+										<input type="radio" name="data[matchmaker_examine]" value="1" {if $info['matchmaker_examine'] == 1}checked="checked"{/if}> 需要审核
+									</label>
+									<label class="radio-inline">
+										<input type="radio" name="data[matchmaker_examine]" value="2" {if $info['matchmaker_examine'] != 1}checked="checked"{/if}> 免审核
+									</label>
+								</div>
+							</div>
+							<div class="form-group">
+								<label class="col-sm-2 control-label">用户主要资料显示</label>
+								<div class="col-sm-9">
+									<label class="radio-inline">
+										<input type="radio" name="data[member_privacy]" value="1" {if $info['member_privacy'] == 1}checked="checked"{/if}> 强制公开
+									</label>
+									<label class="radio-inline">
+										<input type="radio" name="data[member_privacy]" value="2" {if $info['member_privacy'] == 2}checked="checked"{/if}> 强制隐藏
+									</label>
+									<label class="radio-inline">
+										<input type="radio" name="data[member_privacy]" value="0" {if empty($info['member_privacy'])}checked="checked"{/if}> 用户自行设置
+									</label>
+								</div>
+							</div>
+							<div class="form-group">
+								<label class="col-sm-2 control-label">用户照片显示</label>
+								<div class="col-sm-9">
+									<label class="radio-inline">
+										<input type="radio" name="data[member_photo]" value="1" {if $info['member_photo'] == 1}checked="checked"{/if}> 强制公开
+									</label>
+									<label class="radio-inline">
+										<input type="radio" name="data[member_photo]" value="2" {if $info['member_photo'] == 2}checked="checked"{/if}> 强制隐藏
+									</label>
+									<label class="radio-inline">
+										<input type="radio" name="data[member_photo]" value="0" {if empty($info['member_photo'])}checked="checked"{/if}> 用户自行设置
+									</label>
+								</div>
+							</div>
+							<div class="form-group">
+								<label class="col-sm-2 control-label">用户联系方式显示</label>
+								<div class="col-sm-9">
+									<label class="radio-inline">
+										<input type="radio" name="data[member_phone]" value="1" {if $info['member_phone'] == 1}checked="checked"{/if}> 强制公开
+									</label>
+									<label class="radio-inline">
+										<input type="radio" name="data[member_phone]" value="2" {if $info['member_phone'] == 2}checked="checked"{/if}> 强制隐藏
+									</label>
+									<label class="radio-inline">
+										<input type="radio" name="data[member_phone]" value="0" {if empty($info['member_phone'])}checked="checked"{/if}> 用户自行设置
+									</label>
+								</div>
+							</div>
+							<div class="form-group">
+								<label class="col-sm-2 control-label">用户自由切换红娘</label>
+								<div class="col-sm-9">
+									<label class="radio-inline">
+										<input type="radio" name="data[change_matchmaker]" value="1" {if $info['change_matchmaker'] == 1}checked="checked"{/if}> 关闭
+									</label>
+									<label class="radio-inline">
+										<input type="radio" name="data[change_matchmaker]" value="0" {if empty($info['change_matchmaker'])}checked="checked"{/if}> 开启
+									</label>
+								</div>
+							</div>
+							<div class="form-group">
+								<label class="col-sm-2 control-label">虚拟浏览量</label>
+								<div class="col-sm-9">
+									<input type="text" name="data[fictitious_pv]" class="form-control" value="{$info['fictitious_pv']}">
+								</div>
+							</div>
+							<div class="form-group">
+								<label class="col-sm-2 control-label">红娘邀请函话语</label>
+								<div class="col-sm-9">
+									<input type="text" name="data[invitation_speech]" class="form-control" value="{$info['invitation_speech']}" maxlength="25">
+									<div class="help-block">默认红娘海报中的邀请话语，不填则不显示邀请话语。长度限制：25</div>
+								</div>
+							</div>
+							<div class="form-group">
+								<label class="col-sm-2 control-label">免责声明</label>
+								<div class="col-sm-9">
+									<textarea name="data[disclaimers]" class="form-control" rows="10" style="resize: none;font-size: 15px;">{$info['disclaimers']}</textarea>
+									<div class="help-block">会员信息编辑页面显示的免责声明</div>
+								</div>
+							</div>
+						</div>
+						<!-- 置顶设置 -->
+						<div class="tab-pane" id="setTop">
+							<div class="panel-heading">置顶设置</div>
+							<div class="form-group">
+								<label class="col-sm-2 control-label">置顶数量</label>
+								<div class="col-sm-9">
+									<div class="input-group">
+										<input type="number" min="0" name="data[top_number]" class="form-control" value="{php echo $info['top_number'] ? : 0;}">
+										<span class="input-group-addon">条</span>
+									</div>
+									<span class="help-block">置顶的数量，不填或填0则无限制。</span>
+								</div>
+							</div>
+							<div class="form-group">
+								<label class="col-sm-2 control-label">置顶价格</label>
+								<div class="col-sm-9 priceList">
+									<!-- 置顶价格信息列表 -->
+									{loop $info['top_rule'] $key $item}
+										<div class="input-group" style="margin-bottom: 10px;">
+											<span class="input-group-addon">置顶时间(天)</span>
+											<input type="text" name="data[top_rule][{$key}][day]" digits="true" class="form-control day" value="{$item['day']}" required="required" min="1">
+											<span class="input-group-addon">￥</span>
+											<input type="text" name="data[top_rule][{$key}][price]" class="form-control price" value="{$item['price']}" required="required" min="0.01">
+											<span class="input-group-addon btn btn-default deletePriceButton">
+												<i class="fa fa-remove"></i> 删除
+											</span>
+										</div>
+									{/loop}
+									<!-- 提示信息 -->
+									<span class="help-block">时间请填入整数，价格保留两位小数。</span>
+								</div>
+							</div>
+							<div class="form-group">
+								<label class="col-sm-2 control-label"></label>
+								<div class="col-sm-9">
+									<a class="btn btn-info addPriceButton" href="javascript:;">
+										<i class="fa fa-plus"></i>增加一种置顶规则
+									</a>
+								</div>
+							</div>
+						</div>
+						<!-- 红娘提现 -->
+						<div class="tab-pane" id="setMatchmaker">
+							<div class="panel-heading">红娘提现</div>
+							<div class="form-group">
+								<label class="col-sm-2 control-label">红娘提现是否需要审核</label>
+								<div class="col-sm-9">
+									<label class="radio-inline">
+										<input type="radio" name="data[matchmaker_withdrawal]" value="1" {if $info['matchmaker_withdrawal'] == 1}checked="checked"{/if}> 需要审核
+									</label>
+									<label class="radio-inline">
+										<input type="radio" name="data[matchmaker_withdrawal]" value="2" {if $info['matchmaker_withdrawal'] != 1}checked="checked"{/if}> 免审核
+									</label>
+								</div>
+							</div>
+							<div class="form-group">
+								<label class="col-sm-2 control-label">红娘提现自动打款</label>
+								<div class="col-sm-9">
+									<label class="radio-inline">
+										<input type="radio" name="data[automatic_payment]" value="1" {if $info['automatic_payment'] == 1}checked="checked"{/if}> 开启
+									</label>
+									<label class="radio-inline">
+										<input type="radio" name="data[automatic_payment]" value="2" {if $info['automatic_payment'] != 1}checked="checked"{/if}> 关闭
+									</label>
+								</div>
+							</div>
+							<div class="form-group">
+								<label class="col-sm-2 control-label">佣金比例</label>
+								<div class="col-sm-9">
+									<div class="input-group">
+										<input type="text" name="data[commission]" class="form-control" value="{$info['commission']}">
+										<span class="input-group-addon">%</span>
+									</div>
+								</div>
+							</div>
+							<div class="form-group">
+								<label class="col-sm-2 control-label">打款方式</label>
+								<div class="col-sm-9">
+									<label class="checkbox-inline">
+										<input type="checkbox" name="data[matchmaker_type][alipay]" value="1" {if $info['matchmaker_type']['alipay'] == 1}checked="checked"{/if}> 支付宝
+									</label>
+									<label class="checkbox-inline">
+										<input type="checkbox" name="data[matchmaker_type][we_chat]" value="1" {if $info['matchmaker_type']['we_chat'] == 1}checked="checked"{/if}> 微信
+									</label>
+									<label class="checkbox-inline">
+										<input type="checkbox" name="data[matchmaker_type][bank_card]" value="1" {if $info['matchmaker_type']['bank_card'] == 1}checked="checked"{/if}> 银行卡
+									</label>
+									<label class="checkbox-inline">
+										<input type="checkbox" name="data[matchmaker_type][balance]" value="1" {if $info['matchmaker_type']['balance'] == 1}checked="checked"{/if}> 余额
+									</label>
+								</div>
+							</div>
+							<div class="form-group">
+								<label class="col-sm-2 control-label">提现金额限制</label>
+								<div class="col-sm-9">
+									<div class="input-group">
+										<span class="input-group-addon">最小￥</span>
+										<input type="number" min="0" name="data[min_money]" class="form-control" value="{$info['min_money']}">
+										<span class="input-group-addon">最大￥</span>
+										<input type="number" min="0" name="data[max_money]" class="form-control" value="{$info['max_money']}">
+									</div>
+									<span class="help-block">最小值默认为1元,设置为0则无限制</span>
+								</div>
+							</div>
+							<div class="form-group">
+								<label class="col-sm-2 control-label">提现频率</label>
+								<div class="col-sm-9">
+									<div class="input-group">
+										<input type="number" min="0" digits="true" name="data[frequency]" class="form-control" value="{$info['frequency']}">
+										<span class="input-group-addon">天一次</span>
+									</div>
+									<span class="help-block">不填或填0则默认无限制，填1则为一天一次，以此类推。只能填入正整数</span>
+								</div>
+							</div>
+							<div class="form-group">
+								<label class="col-sm-2 control-label">提现手续费</label>
+								<div class="col-sm-9">
+									<div class="input-group">
+										<input type="number" min="0" name="data[service_charge]" class="form-control" value="{$info['service_charge']}">
+										<span class="input-group-addon">%</span>
+									</div>
+									<span class="help-block">提现时给平台的手续费,不填或填0则没有手续费</span>
+								</div>
+							</div>
+
+
+						</div>
+						<!-- 分享设置 -->
+						<div class="tab-pane" id="setShare">
+							<div class="panel-heading">分享设置</div>
+							<div class="alert alert-info">
+								<b>适用模板变量：[昵称] [时间] [系统名称]</b>
+							</div>
+							<div class="form-group">
+								<label class="col-sm-2 control-label">分享标题</label>
+								<div class="col-sm-9">
+									<input type="text" name="data[share_title]" class="form-control" value="{$info['share_title']}" />
+								</div>
+							</div>
+							<div class="form-group">
+								<label class="col-sm-2 control-label">分享图片</label>
+								<div class="col-sm-9">
+									{php echo attachment_select('data[share_image]', $info['share_image']);}
+									<span class="help-block">推荐图片尺寸500X500</span>
+								</div>
+							</div>
+							<div class="form-group">
+								<label class="col-sm-2 control-label">分享描述</label>
+								<div class="col-sm-9">
+									<input type="text" name="data[share_desc]" class="form-control" value="{$info['share_desc']}" />
+								</div>
+							</div>
+						</div>
+					</div>
+				</div>
+			</div>
+			<div class="form-group">
+				<label class="col-sm-2 control-label"></label>
+				<div class="col-sm-9">
+					<input type="submit" name="submit" value="提交" class="btn btn-primary min-width" />
+					<input type="hidden" name="token" value="{$_W['token']}" />
+				</div>
+			</div>
+		</form>
+	</div>
+</div>
+<script>
+	//点击添加一条规则信息
+	$(".addPriceButton").on('click',function () {
+		let html = '<div class="input-group" style="margin-bottom: 10px;">\n' +
+				'\t\t\t\t\t\t\t\t\t\t<span class="input-group-addon">置顶时间(天)</span>\n' +
+				'\t\t\t\t\t\t\t\t\t\t<input type="text" name="data[top_rule][0][day]" digits="true" class="form-control day" value="" required="required" min="1">\n' +
+				'\t\t\t\t\t\t\t\t\t\t<span class="input-group-addon">￥</span>\n' +
+				'\t\t\t\t\t\t\t\t\t\t<input type="text" name="data[top_rule][0][price]" class="form-control price" value="" required="required" min="0.01">\n' +
+				'\t\t\t\t\t\t\t\t\t\t<span class="input-group-addon btn btn-default deletePriceButton">\n' +
+				'\t\t\t\t\t\t\t\t\t\t\t<i class="fa fa-remove"></i> 删除\n' +
+				'\t\t\t\t\t\t\t\t\t\t</span>\n' +
+				'\t\t\t\t\t\t\t\t\t</div>';
+		$(".priceList").find('.help-block').before(html);
+		priceNameInit();
+	});
+	//点击删除当前规则信息
+	$(".priceList").on('click','.deletePriceButton',function () {
+		$(this).parent('.input-group').remove();
+		priceNameInit();
+	});
+	//价格规则信息name格式化
+	function priceNameInit(){
+		$(".priceList .input-group").each(function (k,v) {
+			//修改天的name
+			$(this).find('.day').attr('name',"data[top_rule]["+k+"][day]");
+			//修改价格的name
+			$(this).find('.price').attr('name',"data[top_rule]["+k+"][price]");
+		});
+	}
+</script>
+{php include wl_template('common/footer');}

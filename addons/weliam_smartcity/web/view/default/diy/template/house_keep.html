@@ -1,0 +1,117 @@
+<!--------------------------  轮播图组件群  ----------------------------------->
+<!-- 风格一 -->
+<script type="text/html" id="tpl_show_house_keep">
+    <div class="drag" data-itemid="<%itemid%>" group_name="<%group_name%>" group_key="<%group_key%>" data-id="<%group_name%>">
+        <div class="houseKeep houseKeep1" style="background-color: <%style.bgColor||'#FFFFFF'%>;padding-left: <%style.padding%>px;padding-right: <%style.padding%>px;margin-bottom: <%style.marginBottom%>px;">
+            <div class="top <%if params.show_title != 1%>hide<%/if%>">
+                <div class="title"><%params.title%></div>
+                <div class="more <%if params.show_more != 1%>hide<%/if%>">
+                    更多<i class="icon icon-right"></i>
+                </div>
+            </div>
+            <div class="list">
+                <%each data as item%>
+                    <div class="block">
+                        <div class="img">
+                            <img src="<%imgsrc item.long_logo%>" onerror="this.src='../addons/{MODULE_NAME}/web/resource/images/nopic.jpg';"/>
+                            <span  class="service_type <%if params.jbstatus == 2%>hide<%/if%>">
+                                <%if item.service_type == 1%>
+                                    商户服务商
+                                <%else if item.service_type == 2%>
+                                    个人服务商
+                                <%else if item.service_type == 3%>
+                                    客户需求
+                                <%else if item.service_type == 4%>
+                                    服务项目
+                                <%/if%>
+                            </span>
+                        </div>
+                        <div class="info">
+                            <div class="name"><%item.name%></div>
+                            <div class="label-list">
+                                <%each item.label as labelItem%>
+                                    <div class="label-item"><%labelItem%></div>
+                                <%/each%>
+                            </div>
+                        </div>
+                    </div>
+                <%/each%>
+            </div>
+        </div>
+    </div>
+</script>
+<!-- 风格二 -->
+<script type="text/html" id="tpl_show_house_keep2">
+    <div class="drag" data-itemid="<%itemid%>" group_name="<%group_name%>" group_key="<%group_key%>" data-id="<%group_name%>">
+        <div class="houseKeep houseKeep2" style="background-color: <%style.bgColor||'#F6F6F6'%>;padding: <%style.margin%>px;margin-bottom: <%style.marginBottom%>px;">
+            <div class="list">
+                <%each data as item%>
+                    <div class="block" style="padding: <%style.padding%>px;">
+                        <div class="img">
+                            <img src="<%imgsrc item.logo%>" onerror="this.src='../addons/{MODULE_NAME}/web/resource/images/default.png';"/>
+                            <span class="service_type <%if params.jbstatus == 2%>hide<%/if%>">
+                                <%if item.service_type == 1%>
+                                    商户服务商
+                                <%else if item.service_type == 2%>
+                                    个人服务商
+                                <%else if item.service_type == 3%>
+                                    客户需求
+                                <%else if item.service_type == 4%>
+                                    服务项目
+                                <%/if%>
+                            </span>
+                        </div>
+                        <div class="info">
+                            <div class="name">
+                                <div class="title-content"><%item.name%></div>
+                                <div class="title-icon <%if item.is_authentication != 1%>hide<%/if%>">
+                                    <img src="../addons/{MODULE_NAME}/plugin/housekeep/web/resource/image/arwebrz.png" />
+                                </div>
+                                <div class="title-icon <%if item.is_bond != 1%>hide<%/if%>">
+                                    <img src="../addons/{MODULE_NAME}/plugin/housekeep/web/resource/image/arwebbzj.png" />
+                                </div>
+                            </div>
+                            <div class="label-list">
+                                <%each item.label as labelItem%>
+                                    <div class="label-item"><%labelItem%></div>
+                                <%/each%>
+                            </div>
+                            <div class="address">
+                                <div class="city"><%item.address%></div>
+                                <div class="distances">9999km</div>
+                            </div>
+                            <div class="service">
+                                <%each item.service as serviceItem%>
+                                    <div class="service-block">
+                                        <div class="top">
+                                            <div class="img">
+                                                <img src="<%imgsrc serviceItem.thumb%>" onerror="this.src='../addons/{MODULE_NAME}/web/resource/images/default.png';"/>
+                                            </div>
+                                            <div class="title"><%serviceItem.title%></div>
+                                        </div>
+                                        <div class="sale">
+                                            <div class="price">
+                                                <span class="price-title">预约金:</span>
+                                                <span class="price-money">￥</span>
+                                                <span class="price-price"><%serviceItem.price_text%></span>
+                                            </div>
+                                            <div class="sales">已售<%serviceItem.salenum%></div>
+                                        </div>
+                                    </div>
+                                <%/each%>
+                            </div>
+                        </div>
+                        <div class="clear"></div>
+                    </div>
+                <%/each%>
+            </div>
+        </div>
+    </div>
+</script>
+
+
+
+
+
+
+

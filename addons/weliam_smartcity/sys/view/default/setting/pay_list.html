@@ -1,0 +1,121 @@
+<form class="form-horizontal" action="{php echo web_url('setting/pay/index')}" method="post" enctype="multipart/form-data">
+    <div class="modal-dialog">
+        <div class="modal-content">
+            <div class="modal-header">
+                <button data-dismiss="modal" class="close" type="button">×</button>
+                <h4 class="modal-title">设置支付方式</h4>
+            </div>
+            <div class="modal-body">
+                {if $name == 'wxapp'}
+                <div class="form-group">
+                    <label class="col-sm-2 control-label">微信支付组接口</label>
+                    <div class="col-sm-9">
+                        <label class="radio-inline" onclick="$('#wxzf').show();$('#zfgl').hide();"><input type="radio" name="set[channel]" value="0" {if $set['channel'] != 1}checked="checked"{/if}>微信支付</label>
+                        <label class="radio-inline" onclick="$('#wxzf').hide();$('#zfgl').show();"><input type="radio" name="set[channel]" value="1" {if $set['channel'] == 1}checked="checked"{/if}>支付管理</label>
+                    </div>
+                </div>
+                {/if}
+                <div class="form-group" id="wxzf" {if $set['channel'] == 1 } style="display: none;" {/if} >
+                    <label class="col-sm-2 control-label">微信支付</label>
+                    <div class="col-sm-9">
+                        <select name="set[wechat]" class="form-control">
+                            <option value="-1">不开启微信支付</option>
+                            {loop $weChat $item}
+                                <option value="{$item['id']}" {if $set['wechat'] == $item['id']}selected{/if}>{$item['name']}</option>
+                            {/loop}
+                        </select>
+                    </div>
+                </div>
+
+                <div class="form-group" id="zfgl" {if $set['channel'] != 1 } style="display: none;" {/if} >
+                    <label class="col-sm-2 control-label">商户号</label>
+                    <div class="col-sm-9">
+                       <input class="form-control" name="set[mchid]" value="{$set['mchid']}"  placeholder="请填入支付管理商户号" />
+                    </div>
+                </div>
+
+                {if $name != 'wxapp'}
+                <div class="form-group">
+                    <label class="col-sm-2 control-label">支付宝支付</label>
+                    <div class="col-sm-9">
+                        <select name="set[alipay]" class="form-control">
+                            <option value="-1">不开启支付宝支付</option>
+                            {loop $aliPay $item}
+                            <option value="{$item['id']}" {if $set['alipay'] == $item['id']}selected{/if}>{$item['name']}</option>
+                            {/loop}
+                        </select>
+                    </div>
+                </div>
+                {/if}
+                {if $name == 'wechat' && !empty($yunPay)}
+                <div class="form-group">
+                    <label class="col-sm-2 control-label">云收单支付</label>
+                    <div class="col-sm-9">
+                        <select name="set[yunpay]" class="form-control">
+                            <option value="-1">不开启云收单支付</option>
+                            {loop $yunPay $item}
+                            <option value="{$item['id']}" {if $set['yunpay'] == $item['id']}selected{/if}>{$item['name']}</option>
+                            {/loop}
+                        </select>
+                    </div>
+                </div>
+                {/if}
+                <div class="form-group">
+                    <label class="col-sm-2 control-label">余额支付</label>
+                    <div class="col-sm-9">
+                        <label class="radio-inline"><input type="radio" name="set[balance]" value="0" {if $set['balance'] != 1}checked="checked"{/if}>关闭</label>
+                        <label class="radio-inline"><input type="radio" name="set[balance]" value="1" {if $set['balance'] == 1}checked="checked"{/if}>开启</label>
+                    </div>
+                </div>
+                <div {if $set['balance'] != 1}hide{/if} id="balance_model" >
+                    <div class="form-group" >
+                        <label class="col-sm-2 control-label">支持模块</label>
+                        <div class="col-sm-9">
+                            {loop $plugin $index $items}
+                            <label class="checkbox-inline">
+                                <input type="checkbox" name="set[balance_model][]" value="{$index}" {if in_array($index,$set['balance_model'])}checked="checked"{/if}>{$items}
+                            </label>
+                            {/loop}
+                            <span class="help-block">不勾选则支持所有模块</span>
+                        </div>
+                    </div>
+                    {if $isAuth}
+                    <div class="form-group">
+                        <label class="col-sm-2 control-label">混合支付</label>
+                        <div class="col-sm-9">
+                            <label class="radio-inline"><input type="radio" name="set[blend]" value="0" {if $set['blend'] != 1}checked="checked"{/if}>关闭</label>
+                            <label class="radio-inline"><input type="radio" name="set[blend]" value="1" {if $set['blend'] == 1}checked="checked"{/if}>开启</label>
+                            <span class="help-block">开启后,使用余额支付余额不足的部分会自动调用微信支付。</span>
+                        </div>
+                    </div>
+                    {/if}
+                </div>
+
+
+            </div>
+            <div class="modal-footer">
+                <input type="text" class="hide" name="name" value="{$name}" />
+                <button class="btn btn-primary" type="submit">提交</button>
+            </div>
+        </div>
+    </div>
+</form>
+<script>
+    /**
+     * 控制余额支付 支持模块选择器的显示隐藏
+     */
+    $("[name='set[balance]']").on('change',function () {
+        let status = $(this).val(),
+            id = $("#balance_model");
+        if(status == 1) {
+            //显示
+            id.removeClass('hide');
+            id.addClass('show');
+        } else{
+            //隐藏
+            id.removeClass('show');
+            id.addClass('hide');
+        }
+    });
+</script>
+

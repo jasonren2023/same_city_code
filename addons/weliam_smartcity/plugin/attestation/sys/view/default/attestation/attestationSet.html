@@ -1,0 +1,348 @@
+{php include wl_template('common/header');}
+<ul class="nav nav-tabs" id="myTab">
+    <li class="active"><a href="#tab_basic">认证设置</a></li>
+    <li><a href="#tab_share">保证金设置</a></li>
+</ul>
+<div class="app-content">
+    <div class="app-form">
+        <form action="" method="post" class="form-horizontal form-validate" id="setting-form">
+            <div class="panel panel-default">
+                <div class="panel-heading">认证设置</div>
+                <div class="panel-body">
+                    <div class="tab-content">
+                        <div class="tab-pane active" id="tab_basic">
+                            <div class="form-group">
+                                <label class="col-sm-2 control-label">认证功能</label>
+                                <div class="col-sm-9">
+                                    <label class="radio-inline">
+                                        <input type="radio" value="1" name="base[switch]" {if $base['switch'] == 1} checked {/if} /> 开启
+                                    </label>
+                                    <label class="radio-inline">
+                                        <input type="radio" value="0" name="base[switch]" {if $base['switch'] == 0 || empty($base['switch'])} checked {/if} /> 关闭
+                                    </label>
+                                </div>
+                            </div>
+                            <div class="form-group">
+                                <label class="col-sm-2 control-label">认证审核</label>
+                                <div class="col-sm-9">
+                                    <label class="radio-inline">
+                                        <input type="radio" value="1" name="base[audits]" {if $base['audits']==1} checked {/if}> 免审核
+                                    </label>
+                                    <label class="radio-inline">
+                                        <input type="radio" value="0" name="base[audits]" {if $base['audits']==0||!$base['audits']} checked {/if}> 需审核
+                                    </label>
+                                </div>
+                            </div>
+                            <div class="form-group">
+                                <label class="col-sm-2 control-label">认证类型</label>
+                                <div class="col-sm-9">
+                                    <label class="checkbox-inline">
+                                        <input type="checkbox" {if in_array('member',$base['type'])} checked="checked" {/if} name="type[]" value="member">个人认证
+                                    </label>
+                                    <label class="checkbox-inline">
+                                        <input type="checkbox" onclick="makecheckstatus(this)" {if in_array('store',$base['type'])} checked="checked" {/if} name="type[]" value="store">商家认证
+                                    </label>
+                                </div>
+                            </div>
+                            <div id="storemore"  {if !in_array('store',$base['type'])} style="display: none" {/if} >
+                                <div class="form-group">
+                                    <label class="col-sm-2 control-label">未认证商户管理店铺</label>
+                                    <div class="col-sm-9">
+                                        <label class="radio-inline">
+                                            <input type="radio" value="1" name="base[attmanage]" {if $base['attmanage']==1} checked {/if}> 禁用
+                                        </label>
+                                        <label class="radio-inline">
+                                            <input type="radio" value="0" name="base[attmanage]" {if $base['attmanage']==0||!$base['attmanage']} checked {/if}> 开启
+                                        </label>
+                                        <span class="help-block">禁用后,未认证商户无法管理店铺。</span>
+                                    </div>
+                                </div>
+                                <div class="form-group">
+                                    <label class="col-sm-2 control-label">个人认证表单</label>
+                                    <div class="col-sm-9">
+                                        <select name="base[personmoreformid]" class="form-control">
+                                            <option value="0"> - 无 - </option>
+                                            {loop $diyform $form}
+                                            <option value="{$form['id']}" {if $base['personmoreformid'] == $form['id']}selected="selected"{/if}>{$form['title']}</option>
+                                            {/loop}
+                                        </select>
+                                        <span class="help-block">提交个人认证时需要添加的额外内容</span>
+                                    </div>
+                                </div>
+                                <div class="form-group">
+                                    <label class="col-sm-2 control-label">商家认证表单</label>
+                                    <div class="col-sm-9">
+                                        <select name="base[storemoreformid]" class="form-control">
+                                            <option value="0"> - 无 - </option>
+                                            {loop $diyform $form}
+                                            <option value="{$form['id']}" {if $base['storemoreformid'] == $form['id']}selected="selected"{/if}>{$form['title']}</option>
+                                            {/loop}
+                                        </select>
+                                        <span class="help-block">提交商户认证时需要添加的额外内容</span>
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="form-group">
+                                <label class="col-sm-2 control-label">认证协议</label>
+                                <div class="col-sm-9">
+                                    {php echo tpl_diy_editor_create('base[agreement]', $base['agreement']);}
+                                </div>
+                            </div>
+                        </div>
+                        <div class="tab-pane" id="tab_share">
+                            <div class="form-group">
+                                <label class="col-sm-2 control-label">保证金功能</label>
+                                <div class="col-sm-9">
+                                    <label class="radio-inline">
+                                        <input type="radio" value="1" name="base[moneyswitch]" {if $base['moneyswitch'] == 1} checked {/if} /> 开启
+                                    </label>
+                                    <label class="radio-inline">
+                                        <input type="radio" value="0" name="base[moneyswitch]" {if $base['moneyswitch'] == 0 || empty($base['switch'])} checked {/if} /> 关闭
+                                    </label>
+                                </div>
+                            </div>
+                            <div class="form-group">
+                                <label class="col-sm-2 control-label">个人保证金</label>
+                                <div class="col-sm-9">
+                                    <label class="radio-inline" onclick="$('#membermoney').show();" >
+                                        <input type="radio" value="1" name="base[memberstatus]" {if $base['memberstatus'] == 1} checked {/if} /> 开启
+                                    </label>
+                                    <label class="radio-inline" onclick="$('#membermoney').hide();">
+                                        <input type="radio" value="0" name="base[memberstatus]" {if $base['memberstatus'] == 0 || empty($base['memberstatus'])} checked {/if} /> 关闭
+                                    </label>
+                                </div>
+                            </div>
+                            <div id="membermoney"  {if empty($base['memberstatus'])} style='display: none;'  {/if}>
+                                {if Customized::init('distributionText') > 0}
+                                <div id="membermoneyarray">
+                                    {if is_array($membermoney)}
+                                    {loop $membermoney $key $money}
+                                    {if $key == 0}
+                                    <div class="form-group" style="margin-bottom: 10px;">
+                                        <label class="col-sm-2 control-label">个人保证金金额</label>
+                                        <div class="col-sm-6">
+                                            <div class="input-group">
+                                                <input type="number" name="membermoney[]" min="0.01" class="form-control valid" value="{$money}" aria-invalid="false">
+                                                <span class="input-group-addon">元</span>
+                                                <span onclick="addmemmoney()" class="input-group-addon btn btn-default data-item-delete"><i class="fa fa-plus"></i> 新增</span>
+                                            </div>
+                                        </div>
+                                    </div>
+                                    {else}
+                                    <div class="form-group data-item" style="margin-bottom: 10px;">
+                                        <label class="col-sm-2 control-label"></label>
+                                        <div class="col-sm-6">
+                                            <div class="input-group">
+                                                <input type="number" name="membermoney[]" min="0.01" class="form-control valid" value="{$money}" aria-invalid="false">
+                                                <span class="input-group-addon">元</span>
+                                                <span onclick="removes(this)" class="input-group-addon btn btn-default data-item-delete"><i class="fa fa-remove"></i> 删除</span>
+                                            </div>
+                                        </div>
+                                    </div>
+                                    {/if}
+                                    {/loop}
+                                    {else}
+                                    <div class="form-group" style="margin-bottom: 10px;">
+                                    <label class="col-sm-2 control-label">个人保证金金额</label>
+                                        <div class="col-sm-6">
+                                            <div class="input-group">
+                                                <input type="number" name="membermoney[]" min="0.01" class="form-control valid" value="" aria-invalid="false">
+                                                <span class="input-group-addon">元</span>
+                                                <span onclick="addmemmoney()" class="input-group-addon btn btn-default data-item-delete"><i class="fa fa-plus"></i> 新增</span>
+                                            </div>
+                                        </div>
+                                    </div>
+                                    {/if}
+                                </div>
+                                {else}
+                                <div class="form-group">
+                                    <label class="col-sm-2 control-label">个人保证金金额</label>
+                                    <div class="col-sm-3">
+                                        <div class="input-group">
+                                            <input type="number" name="base[membermoney]" min="0.1" class="form-control valid" value="{$base['membermoney']}" aria-invalid="false">
+                                            <span class="input-group-addon">元</span>
+                                        </div>
+                                    </div>
+                                </div>
+                                {/if}
+                            </div>
+                            <div class="form-group">
+                                <label class="col-sm-2 control-label">商家保证金</label>
+                                <div class="col-sm-9">
+                                    <label class="radio-inline" onclick="$('#storemoney').show();" >
+                                        <input type="radio" value="1" name="base[storestatus]" {if $base['storestatus'] == 1} checked {/if} /> 开启
+                                    </label>
+                                    <label class="radio-inline" onclick="$('#storemoney').hide();">
+                                        <input type="radio" value="0" name="base[storestatus]" {if $base['storestatus'] == 0 || empty($base['storestatus'])} checked {/if} /> 关闭
+                                    </label>
+                                </div>
+                            </div>
+                            <div  id="storemoney"  {if empty($base['storestatus'])} style='display: none;'  {/if}>
+                                {if Customized::init('distributionText') > 0}
+                                <div id="storemoneyarray">
+                                    {if is_array($storemoney)}
+                                    {loop $storemoney $key2 $smoney}
+                                    {if $key2 == 0}
+                                    <div class="form-group" style="margin-bottom: 10px;">
+                                        <label class="col-sm-2 control-label">商家保证金金额</label>
+                                        <div class="col-sm-6">
+                                            <div class="input-group">
+                                                <input type="number" name="storemoney[]" min="0.01" class="form-control valid" value="{$smoney}" aria-invalid="false">
+                                                <span class="input-group-addon">元</span>
+                                                <span onclick="addstomoney()" class="input-group-addon btn btn-default data-item-delete"><i class="fa fa-plus"></i> 新增</span>
+                                            </div>
+                                        </div>
+                                    </div>
+                                    {else}
+                                    <div class="form-group data-item" style="margin-bottom: 10px;">
+                                        <label class="col-sm-2 control-label"></label>
+                                        <div class="col-sm-6">
+                                            <div class="input-group">
+                                                <input type="number" name="storemoney[]" min="0.01" class="form-control valid" value="{$smoney}" aria-invalid="false">
+                                                <span class="input-group-addon">元</span>
+                                                <span onclick="removes(this)" class="input-group-addon btn btn-default data-item-delete"><i class="fa fa-remove"></i> 删除</span>
+                                            </div>
+                                        </div>
+                                    </div>
+                                    {/if}
+                                    {/loop}
+                                    {else}
+                                    <div class="form-group" style="margin-bottom: 10px;">
+                                        <label class="col-sm-2 control-label">商家保证金金额</label>
+                                        <div class="col-sm-6">
+                                            <div class="input-group">
+                                                <input type="number" name="storemoney[]" min="0.01" class="form-control valid" value="" aria-invalid="false">
+                                                <span class="input-group-addon">元</span>
+                                                <span onclick="addstomoney()" class="input-group-addon btn btn-default data-item-delete"><i class="fa fa-plus"></i> 新增</span>
+                                            </div>
+                                        </div>
+                                    </div>
+                                    {/if}
+                                    </div>
+                                    {else}
+                                    <div class="form-group">
+                                        <label class="col-sm-2 control-label">商家保证金金额</label>
+                                        <div class="col-sm-3">
+                                            <div class="input-group">
+                                                <input type="number" name="base[storemoney]" min="0.01" class="form-control valid" value="{$base['storemoney']}" aria-invalid="false">
+                                                <span class="input-group-addon">元</span>
+                                            </div>
+                                        </div>
+                                    </div>
+                                {/if}
+                            </div>
+                            <div class="form-group">
+                                <label class="col-sm-2 control-label">退还保证金</label>
+                                <div class="col-sm-9">
+                                    <label class="radio-inline" onclick="$('#refundmoney').show();" >
+                                        <input type="radio" value="1" name="base[refundstatus]" {if $base['refundstatus'] == 1} checked {/if} /> 开启
+                                    </label>
+                                    <label class="radio-inline" onclick="$('#refundmoney').hide();">
+                                        <input type="radio" value="0" name="base[refundstatus]" {if $base['refundstatus'] == 0 || empty($base['refundstatus'])} checked {/if} /> 关闭
+                                    </label>
+                                    <span class="help-block">开启后，用户保证金可在后台退还。</span>
+                                </div>
+                            </div>
+                            <div class="form-group" id="refundmoney"  {if empty($base['refundstatus'])} style='display: none;'  {/if}>
+                                <label class="col-sm-2 control-label">最低间隔天数</label>
+                                <div class="col-sm-3">
+                                    <div class="input-group">
+                                        <input type="number" name="base[refundday]" min="0" class="form-control valid" value="{$base['refundday']}" aria-invalid="false">
+                                        <span class="input-group-addon">天</span>
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="form-group">
+                                <label class="col-sm-2 control-label">保证金说明</label>
+                                <div class="col-sm-9">
+                                    {php echo tpl_diy_editor_create('base[bonddescription]', $base['bonddescription']);}
+                                </div>
+                            </div>
+                            <div class="form-group">
+                                <label class="col-sm-2 control-label">保证金协议</label>
+                                <div class="col-sm-9">
+                                    {php echo tpl_diy_editor_create('base[bondagreement]', $base['bondagreement']);}
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <div class="form-group">
+                <label class="col-sm-2 control-label"></label>
+                <div class="col-sm-9">
+                    <input type="submit" name="submit" value="提交" class="btn btn-primary min-width" />
+                    <input type="hidden" name="token" value="{$_W['token']}" />
+                </div>
+            </div>
+        </form>
+    </div>
+</div>
+<script>
+    $(function() {
+        window.optionchanged = false;
+        $('#myTab a').click(function(e) {
+            e.preventDefault(); //阻止a链接的跳转行为
+            $(this).tab('show'); //显示当前选中的链接及关联的content
+        })
+    });
+
+    function makecheckstatus(asd){
+        if($(asd).is(":checked")){
+            $('#storemore').show();
+        }else{
+            $('#storemore').hide();
+        }
+    }
+    function addmemmoney(){
+        var html = "<div class='form-group data-item' style='margin-bottom: 10px;'>"+
+            "<label class='col-sm-2 control-label'></label>"+
+            "<div class='col-sm-6'>"+
+            "<div class='input-group'>" +
+            "<input type='number' name='membermoney[]' min='0.01'  class='form-control valid' aria-invalid='false'>" +
+            "<span class='input-group-addon'>元</span>" +
+            "<span onclick='removes(this)' class='input-group-addon btn btn-default data-item-delete'><i class='fa fa-remove'></i> 删除</span>" +
+            "</div>" +
+            "</div>" +
+            "</div>";
+        $("#membermoneyarray").append(html);
+    }
+
+    function addstomoney(){
+        var html = "<div class='form-group data-item' style='margin-bottom: 10px;'>"+
+            "<label class='col-sm-2 control-label'></label>"+
+            "<div class='col-sm-6'>"+
+            "<div class='input-group'>" +
+            "<input type='number' name='storemoney[]' min='0.01'  class='form-control valid' aria-invalid='false'>" +
+            "<span class='input-group-addon'>元</span>" +
+            "<span onclick='removes(this)' class='input-group-addon btn btn-default data-item-delete'><i class='fa fa-remove'></i> 删除</span>" +
+            "</div>" +
+            "</div>" +
+            "</div>";
+        $("#storemoneyarray").append(html);
+    }
+
+    function addType() {
+        $(".btn-add-type").button("loading");
+        var html = " <div class='input-group data-item' style='margin-top: 10px;'>"+
+            "<span class='input-group-addon'>填写内容</span>"+
+            "<input type='text' name='storecontent[]' class='form-control' value=''>"+
+            "<span class='input-group-addon'>内容类型</span>"+
+            "<select name='storetype[]' class='form-control'>"+
+            "<option value='text'>文本</option>"+
+            "<option value='number'>数字</option>"+
+            "<option value='pic'>图片</option>"+
+            "<option value='pics'>图集</option>"+
+            "</select>"+
+            "<span onclick='removes(this)' class='input-group-addon btn btn-default data-item-delete'><i class='fa fa-remove'></i> 删除</span>"+
+            "</div>";
+        $("#datas").append(html);
+        $(".btn-add-type").button("reset");
+    }
+    function removes(asd){
+        $(asd).closest('.data-item').remove();
+    }
+
+
+</script>
+{php include wl_template('common/footer');}

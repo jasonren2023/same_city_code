@@ -1,0 +1,81 @@
+{php include wl_template('common/header');}
+<ul class="nav nav-tabs">
+    <li class="active"><a href="javascript:;">自定义表单列表</a></li>
+</ul>
+<div class="app-content">
+    <div class="app-filter">
+        <div class="filter-action">
+            <a href="{php echo web_url('agentset/diyForm/edit')}" class="btn btn-primary">添加表单</a>
+        </div>
+        <div class="filter-list">
+            <form class="form-horizontal" action="" method="post">
+                <div class="form-group">
+                    <div class="col-sm-2 control-label">表单名称</div>
+                    <div class="col-sm-9">
+                        <input type="text" class="form-control" name="title" value="{$title}" placeholder="请输入表单名称...">
+                    </div>
+                </div>
+                <div class="form-group">
+                    <div class="col-sm-2 control-label"></div>
+                    <div class="col-sm-6">
+                        <button class="btn btn-primary" type="submit">搜索</button>
+                        <a href="{php echo web_url('agentset/diyForm/index')}" class="btn btn-danger">清除</a>
+                    </div>
+                </div>
+            </form>
+        </div>
+    </div>
+    <div class="app-table-list">
+        <div class="panel panel-default">
+            <div class="table-responsive">
+                <table class="table table-hover">
+                    <thead>
+                    <tr>
+                        <th class="text-center" width="5%">ID</th>
+                        <th class="text-center" width="15%">标题</th>
+                        <th class="text-center" width="15%">所属商户</th>
+                        <th class="text-center" width="20%">创建时间</th>
+                        <th class="text-center" width="20%">最近编辑</th>
+                        <th class="text-center" width="45%">操作</th>
+                    </tr>
+                    </thead>
+                    <tbody>
+                    {loop $list $item}
+                        <tr class="text-center">
+                            <td>{$item['id']}</td>
+                            <td>{$item['title']}</td>
+                            <td>
+                                {if $item['storename']}
+                                    <label class="label label-primary">{$item['storename']}</label>
+                                {else}
+                                    <label class="label label-info">当前代理</label>
+                                {/if}
+                            </td>
+                            <td>{php echo date("Y-m-d H:i:s",$item['create_time']);}</td>
+                            <td>
+                                {if $item['update_time'] <= 0}
+                                    {php echo date("Y-m-d H:i:s",$item['create_time']);}
+                                {else}
+                                    {php echo date("Y-m-d H:i:s",$item['update_time']);}
+                                {/if}
+                            </td>
+                            <td>
+                                <a class="btn btn-sm btn-success js-clip" href="javascript:;" data-url="pages/subPages2/merchantca/merchantca?id={$item['id']}" >复制路径</a>
+                                <a class="btn btn-sm btn-info js-clip" href="javascript:;" data-url="{php echo h5_url('pages/subPages2/merchantca/merchantca',['id'=>$item['id']])}" >复制链接</a>
+                                <a class="btn btn-sm btn-primary" href="{php echo web_url('agentset/diyForm/edit',['id'=>$item['id']])}">编辑</a>
+                                <a class="btn btn-sm btn-warning" href="{php echo web_url('agentset/diyForm/record',['id'=>$item['id']])}">记录</a>
+                                <a class="btn btn-sm btn-danger" data-toggle="ajaxRemove" href="{php echo web_url('agentset/diyForm/delete',['id'=>$item['id']])}" data-confirm="确定删除当前表单?">删除</a>
+                            </td>
+                        </tr>
+                    {/loop}
+                    </tbody>
+                </table>
+            </div>
+            <div class="app-table-foot clearfix margin-t-20">
+                <div class="pull-left"></div>
+                <div class="pull-right">{$pager}</div>
+            </div>
+        </div>
+    </div>
+</div>
+{php include wl_template('common/footer');}

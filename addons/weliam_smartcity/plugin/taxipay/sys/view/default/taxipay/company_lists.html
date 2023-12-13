@@ -1,0 +1,79 @@
+{php include wl_template('common/header');}
+<ul class="nav nav-tabs">
+    <li class="active"><a href="javascript:;">公司管理</a></li>
+</ul>
+<div class="app-content">
+    <div class="app-filter">
+        <div class="filter-action">
+            <a href="{php echo web_url('taxipay/taxipay/company_edit')}" class="btn btn-primary">添加公司</a>
+        </div>
+    </div>
+    <div class="app-table-list">
+        {if !empty($lists)}
+        <div class="table-responsive">
+            <table class="table table-hover table-bordered">
+                <thead>
+                    <tr>
+                        <th class="text-center"><input type="checkbox" /></th>
+                        <th class="text-center">公司名称</th>
+                        <th class="text-center">公司电话</th>
+                        <th class="text-center">公司区域</th>
+                        <th class="text-center">公司地址</th>
+                        <th class="text-center">广告抽佣</th>
+                        <th class="text-center">累计佣金</th>
+                        <th class="text-center">司机数量</th>
+                        <th class="text-center">操作</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    {loop $lists $list}
+                    <tr class="text-center">
+                        <td>
+                            <input type="checkbox" value="{$list['id']}" />
+                        </td>
+                        <td>
+                            {$list['name']}
+                        </td>
+                        <td>
+                            {$list['tel']}
+                        </td>
+                        <td>
+                            {$list['province_name']} - {$list['city_name']} - {$list['district_name']}
+                        </td>
+                        <td>
+                            {$list['address']}
+                        </td>
+                        <td>
+                            {$list['scale']}%
+                        </td>
+                        <td>
+                            ￥{$list['money']}
+                        </td>
+                        <td>
+                            {$list['master']}
+                        </td>
+                        <td>
+                            <a class="btn btn-sm btn-primary" href="{php echo web_url('taxipay/taxipay/company_edit', array('id' => $list['id']))}">编辑</a>
+                            <a class="btn btn-sm btn-danger"  data-toggle="ajaxRemove" href="{php echo web_url('taxipay/taxipay/company_del', array('id' => $list['id']))}" data-confirm="确定删除当前公司？">删除</a>
+                        </td>
+                    </tr>
+                    {/loop}
+                </tbody>
+            </table>
+        </div>
+        <div class="app-table-foot clearfix">
+            <div class="pull-left">
+                <button class="btn btn-default" type="button" data-toggle='batch-remove' data-confirm="确定删除当前选择的公司？" data-href="{php echo web_url('taxipay/taxipay/company_del')}">批量删除</button>
+            </div>
+            <div class="pull-right">
+                {$pager}
+            </div>
+        </div>
+        {else}
+        <div class="no-result">
+            <p>还没有相关数据</p>
+        </div>
+        {/if}
+    </div>
+</div>
+{php include wl_template('common/footer');}

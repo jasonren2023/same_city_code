@@ -1,0 +1,116 @@
+{php include wl_template('common/header');}
+<ul class="nav nav-tabs">
+    <li class="active"><a href="javascript:;">师傅管理</a></li>
+</ul>
+<div class="app-content">
+    <div class="app-filter">
+        <div class="filter-action">
+            <a href="{php echo web_url('taxipay/taxipay/master_edit')}" class="btn btn-primary">添加师傅</a>
+        </div>
+        <div class="filter-list">
+            <form class="form-horizontal" action="{php echo web_url('taxipay/taxipay/master_lists')}" method="post">
+                <div class="form-group">
+                    <div class="col-sm-2 control-label">师傅信息</div>
+                    <div class="col-sm-9">
+                        <input type="text" class="form-control" name="name" value="{$_GPC['name']}" placeholder="请输入师傅名称">
+                    </div>
+                </div>
+                <div class="form-group">
+                    <div class="col-sm-2 control-label"></div>
+                    <div class="col-sm-9">
+                        <button class="btn btn-primary" type="submit">搜索</button>
+                    </div>
+                </div>
+            </form>
+        </div>
+    </div>
+    <div class="app-table-list">
+        {if !empty($lists)}
+        <div class="table-responsive">
+            <table class="table table-hover table-bordered">
+                <thead>
+                    <tr>
+                        <th class="text-center"><input type="checkbox" /></th>
+                        <th class="text-center">师傅名称</th>
+                        <th class="text-center">关联用户</th>
+                        <th class="text-center">所属公司</th>
+                        <th class="text-center">手机号</th>
+                        <th class="text-center">车牌号</th>
+                        {if $_W['wlsetting']['taxipay']['is_maxpay'] == 1}
+                        <th class="text-center">收款限制</th>
+                        {/if}
+                        <th class="text-center">状态</th>
+                        <th class="text-center">操作</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    {loop $lists $list}
+                    <tr class="text-center">
+                        <td>
+                            <input type="checkbox" value="{$list['id']}" />
+                        </td>
+                        <td>
+                            {$list['name']}
+                        </td>
+                        <td class="name text-left">
+                            <div style="display: flex">
+                                <img class="img-40" src="{php echo tomedia($list['member']['avatar'])}" style="border-radius:50%;border:1px solid #efefef;" onerror="this.src='../addons/{MODULE_NAME}/web/resource/images/nopic-small.jpg'" height="40" width="40">
+                                <span style="display: flex;flex-direction: column;justify-content: center;align-items: flex-start;padding-left: 5px">
+                                    {$list['member']['nickname']}
+                                </span>
+                            </div>
+                        </td>
+                        <td>
+                            {$list['company']}
+                        </td>
+                        <td>
+                            {$list['mobile']}
+                        </td>
+                        <td>
+                            {$list['plate1']}{$list['plate2']}{$list['plate_number']}
+                        </td>
+                        {if $_W['wlsetting']['taxipay']['is_maxpay'] == 1}
+                        <td>
+                            ￥{if $list['is_maxpay'] == 1}{$list['maxpay']}{else}{$_W['wlsetting']['taxipay']['maxpay']}{/if}
+                        </td>
+                        {/if}
+                        <td>
+                            <span class='label {if $list['status']==1}label-primary{else if $list['status']==2}label-warning{else}label-default{/if}'>
+                            {if $list['status']==1}
+                            启用
+                            {else if $list['status']==2}
+                            待审核
+                            {else}
+                            禁用
+                            {/if}</span>
+                        </td>
+                        <td>
+                            <a class="btn btn-sm btn-default" href="{php echo web_url('taxipay/taxipay/master_qrcode',array('id' => $list['id']))}" data-toggle="ajaxModal"><i class="fa fa-qrcode"></i></a>
+                            <a class="btn btn-sm btn-default" href="{php echo web_url('taxipay/taxipay/master_edit', array('id' => $list['id']))}">编辑</a>
+                            {if $list['status']==2}
+                            <a class="btn btn-sm btn-default" data-toggle="ajaxRemove" href="{php echo web_url('taxipay/taxipay/master_pass', array('id' => $list['id']))}" data-confirm="确定通过审核当前师傅?">通过</a>
+                            {/if}
+                            <a class="btn btn-sm btn-default" data-toggle="ajaxRemove" href="{php echo web_url('taxipay/taxipay/master_del', array('id' => $list['id']))}" data-confirm="确定删除当前师傅?">删除</a>
+                        </td>
+                    </tr>
+                    {/loop}
+                </tbody>
+            </table>
+        </div>
+        <div class="app-table-foot clearfix">
+            <div class="pull-left">
+                <button class="btn btn-default" type="button" data-toggle='batch-remove' data-confirm="确定删除当前选择的师傅？" data-href="{php echo web_url('citycard/citycard/card_del')}">批量删除</button>
+                <button class="btn btn-default" type="button" data-toggle='batch-remove' data-confirm="确定通过当前选择的师傅？" data-href="{php echo web_url('citycard/citycard/master_pass')}">批量通过</button>
+            </div>
+            <div class="pull-right">
+                {$pager}
+            </div>
+        </div>
+        {else}
+        <div class="no-result">
+            <p>还没有相关数据</p>
+        </div>
+        {/if}
+    </div>
+</div>
+{php include wl_template('common/footer');}

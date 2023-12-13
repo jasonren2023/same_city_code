@@ -1,0 +1,495 @@
+<!-- 当前表单基本配置信息 -->
+<template id="config_base">
+    <div class="block config_base">
+        <div class="form-group">
+            <div class="col-sm-2 control-label">表单名称</div>
+            <div class="col-sm-9">
+                <div class="form-group">
+                    <input v-model="params.title" class="form-control" placeholder="请输入表单名称"/>
+                </div>
+            </div>
+        </div>
+        <div class="form-group">
+            <div class="col-sm-2 control-label">标题对齐</div>
+            <div class="col-sm-9">
+                <label class="radio-inline">
+                    <input type="radio" v-model="params.align" value="left"> 左对齐
+                </label>
+                <label class="radio-inline">
+                    <input type="radio" v-model="params.align" value="center"> 居中
+                </label>
+                <label class="radio-inline">
+                    <input type="radio" v-model="params.align" value="right"> 右对齐
+                </label>
+            </div>
+        </div>
+    </div>
+</template>
+<!-- 单行文本配置信息 -->
+<template id="config_text">
+    <div class="block config_text">
+        <div class="form-group">
+            <div class="col-sm-2 control-label">标题</div>
+            <div class="col-sm-9">
+                <div class="form-group">
+                    <input type="text" v-model="info.title" class="form-control" placeholder="请输入标题名称"/>
+                </div>
+            </div>
+        </div>
+        <div class="form-group">
+            <div class="col-sm-2 control-label">提示内容</div>
+            <div class="col-sm-9">
+                <div class="form-group">
+                    <input type="text" v-model="info.placeholder" class="form-control" placeholder="请输入提示内容"/>
+                </div>
+            </div>
+        </div>
+        <div class="form-group">
+            <div class="col-sm-2 control-label">长度限制</div>
+            <div class="col-sm-9">
+                <div class="form-group">
+                    <input type="number" v-model="info.length" class="form-control"/>
+                    <span class="help-block">不填或0则无限制</span>
+                </div>
+            </div>
+        </div>
+        <div class="form-group">
+            <div class="col-sm-2 control-label">详细描述</div>
+            <div class="col-sm-9">
+                <div class="form-group">
+                    <input type="text" v-model="info.tipdetail" class="form-control"/>
+                    <span class="help-block">用于向用户说明填写内容与方式。</span>
+                </div>
+            </div>
+        </div>
+        <div class="form-group">
+            <div class="col-sm-2 control-label">是否必填</div>
+            <div class="col-sm-9">
+                <label class="radio-inline">
+                    <input type="radio" v-model="info.is_required" value="1"> 是
+                </label>
+                <label class="radio-inline">
+                    <input type="radio" v-model="info.is_required" value="0"> 否
+                </label>
+            </div>
+        </div>
+        <div class="form-group" v-if="attflag">
+            <div class="col-sm-2 control-label">认证内容显示</div>
+            <div class="col-sm-9">
+                <label class="radio-inline">
+                    <input type="radio" v-model="info.att_show" value="0"> 显示
+                </label>
+                <label class="radio-inline">
+                    <input type="radio" v-model="info.att_show" value="1"> 隐藏
+                </label>
+                <span class="help-block">当此表单作为商户认证表单时，是否显示把此项内容显示在商户资质中。</span>
+            </div>
+        </div>
+    </div>
+</template>
+<!-- 文本域 -->
+<template id="config_textarea">
+    <div class="block config_textarea">
+        <div class="form-group">
+            <div class="col-sm-2 control-label">标题</div>
+            <div class="col-sm-9">
+                <div class="form-group">
+                    <input type="text" v-model="params.title" class="form-control" placeholder="请输入标题名称"/>
+                </div>
+            </div>
+        </div>
+        <div class="form-group">
+            <div class="col-sm-2 control-label">提示内容</div>
+            <div class="col-sm-9">
+                <div class="form-group">
+                    <input type="text" v-model="params.placeholder" class="form-control" placeholder="请输入提示内容"/>
+                </div>
+            </div>
+        </div>
+        <div class="form-group">
+            <div class="col-sm-2 control-label">长度限制</div>
+            <div class="col-sm-9">
+                <div class="form-group">
+                    <input type="number" v-model="params.length" class="form-control"/>
+                    <span class="help-block">不填则默认无限制</span>
+                </div>
+            </div>
+        </div>
+        <div class="form-group">
+            <div class="col-sm-2 control-label">详细描述</div>
+            <div class="col-sm-9">
+                <div class="form-group">
+                    <input type="text" v-model="params.tipdetail" class="form-control"/>
+                    <span class="help-block">用于向用户说明填写内容与方式。</span>
+                </div>
+            </div>
+        </div>
+        <div class="form-group">
+            <div class="col-sm-2 control-label">高度</div>
+            <div class="col-sm-9">
+                <div class="input-group">
+                    <input type="number" v-model="params.height" class="form-control"/>
+                    <span class="input-group-addon">PX</span>
+                </div>
+            </div>
+        </div>
+        <div class="form-group">
+            <div class="col-sm-2 control-label">是否必填</div>
+            <div class="col-sm-9">
+                <label class="radio-inline">
+                    <input type="radio" v-model="params.is_required" value="1"> 是
+                </label>
+                <label class="radio-inline">
+                    <input type="radio" v-model="params.is_required" value="0"> 否
+                </label>
+            </div>
+        </div>
+        <div class="form-group" v-if="attflag">
+            <div class="col-sm-2 control-label">认证内容显示</div>
+            <div class="col-sm-9">
+                <label class="radio-inline">
+                    <input type="radio" v-model="params.att_show" value="0"> 显示
+                </label>
+                <label class="radio-inline">
+                    <input type="radio" v-model="params.att_show" value="1"> 隐藏
+                </label>
+                <span class="help-block">当此表单作为商户认证表单时，是否显示把此项内容显示在商户资质中。</span>
+            </div>
+        </div>
+    </div>
+</template>
+<!-- 下拉框 -->
+<template id="config_select">
+    <div class="block config_select">
+        <div class="form-group">
+            <div class="col-sm-2 control-label">标题</div>
+            <div class="col-sm-9">
+                <div class="form-group">
+                    <input type="text" v-model="params.title" class="form-control" placeholder="请输入标题名称"/>
+                </div>
+            </div>
+        </div>
+        <div class="form-group">
+            <div class="col-sm-2 control-label">选项</div>
+            <div class="col-sm-9">
+                <div class="form-group">
+                    <!-- 选项卡内容列表 -->
+                    <div class="input-group select_block" v-for="(selectItem,selectIndex) in params.options">
+                        <input type="text" @input="changeInfo($event,selectIndex)" :value="selectItem" class="form-control" placeholder="请输入选项名称"/>
+                        <span class="input-group-addon btn" @click="delOption(selectIndex)">删除</span>
+                    </div>
+                    <!-- 添加按钮 -->
+                    <a href="javascript:;" class="btn btn-sm btn-primary" @click="addOption()">添加</a>
+                </div>
+            </div>
+        </div>
+        <div class="form-group">
+            <div class="col-sm-2 control-label">详细描述</div>
+            <div class="col-sm-9">
+                <div class="form-group">
+                    <input type="text" v-model="params.tipdetail" class="form-control"/>
+                    <span class="help-block">用于向用户说明填写内容与方式。</span>
+                </div>
+            </div>
+        </div>
+        <div class="form-group" v-if="attflag">
+            <div class="col-sm-2 control-label">认证内容显示</div>
+            <div class="col-sm-9">
+                <label class="radio-inline">
+                    <input type="radio" v-model="params.att_show" value="0"> 显示
+                </label>
+                <label class="radio-inline">
+                    <input type="radio" v-model="params.att_show" value="1"> 隐藏
+                </label>
+                <span class="help-block">当此表单作为商户认证表单时，是否显示把此项内容显示在商户资质中。</span>
+            </div>
+        </div>
+    </div>
+</template>
+<!-- 多选框 -->
+<template id="config_checkbox">
+    <div class="block config_checkbox">
+        <div class="form-group">
+            <div class="col-sm-2 control-label">标题</div>
+            <div class="col-sm-9">
+                <div class="form-group">
+                    <input type="text" v-model="params.title" class="form-control" placeholder="请输入标题名称"/>
+                </div>
+            </div>
+        </div>
+        <div class="form-group">
+            <div class="col-sm-2 control-label">选项</div>
+            <div class="col-sm-9">
+                <div class="form-group">
+                    <!-- 选项卡内容列表 -->
+                    <div class="input-group select_block" v-for="(selectItem,selectIndex) in params.options">
+                        <input type="text" @input="changeInfo($event,selectIndex)" :value="selectItem" class="form-control" placeholder="请输入选项名称"/>
+                        <span class="input-group-addon btn" @click="delOption(selectIndex)">删除</span>
+                    </div>
+                    <!-- 添加按钮 -->
+                    <a href="javascript:;" class="btn btn-sm btn-primary" @click="addOption()">添加</a>
+                </div>
+            </div>
+        </div>
+        <div class="form-group">
+            <div class="col-sm-2 control-label">详细描述</div>
+            <div class="col-sm-9">
+                <div class="form-group">
+                    <input type="text" v-model="params.tipdetail" class="form-control"/>
+                    <span class="help-block">用于向用户说明填写内容与方式。</span>
+                </div>
+            </div>
+        </div>
+        <div class="form-group" v-if="attflag">
+            <div class="col-sm-2 control-label">认证内容显示</div>
+            <div class="col-sm-9">
+                <label class="radio-inline">
+                    <input type="radio" v-model="params.att_show" value="0"> 显示
+                </label>
+                <label class="radio-inline">
+                    <input type="radio" v-model="params.att_show" value="1"> 隐藏
+                </label>
+                <span class="help-block">当此表单作为商户认证表单时，是否显示把此项内容显示在商户资质中。</span>
+            </div>
+        </div>
+    </div>
+</template>
+<!-- 图片 -->
+<template id="config_img">
+    <div class="block config_img">
+        <div class="form-group">
+            <div class="col-sm-2 control-label">标题</div>
+            <div class="col-sm-9">
+                <div class="form-group">
+                    <input type="text" v-model="params.title" class="form-control" placeholder="请输入标题名称"/>
+                </div>
+            </div>
+        </div>
+        <div class="form-group">
+            <div class="col-sm-2 control-label">数量限制</div>
+            <div class="col-sm-9">
+                <div class="form-group">
+                    <div class="input-group">
+                        <input type="number" v-model="params.number" class="form-control" placeholder="请输入限制数量" min="1" max="8"/>
+                        <span class="input-group-addon btn">张</span>
+                    </div>
+                    <span class="help-block">限制为1时则是单图上传</span>
+                </div>
+            </div>
+        </div>
+        <div class="form-group">
+            <div class="col-sm-2 control-label">详细描述</div>
+            <div class="col-sm-9">
+                <div class="form-group">
+                    <input type="text" v-model="params.tipdetail" class="form-control"/>
+                    <span class="help-block">用于向用户说明填写内容与方式。</span>
+                </div>
+            </div>
+        </div>
+        <div class="form-group" v-if="attflag">
+            <div class="col-sm-2 control-label">认证内容显示</div>
+            <div class="col-sm-9">
+                <label class="radio-inline">
+                    <input type="radio" v-model="params.att_show" value="0"> 显示
+                </label>
+                <label class="radio-inline">
+                    <input type="radio" v-model="params.att_show" value="1"> 隐藏
+                </label>
+                <span class="help-block">当此表单作为商户认证表单时，是否显示把此项内容显示在商户资质中。</span>
+            </div>
+        </div>
+        <div class="form-group">
+            <div class="col-sm-2 control-label">是否必传</div>
+            <div class="col-sm-9">
+                <div class="form-group">
+                    <div class="col-sm-9">
+                        <label class="radio-inline">
+                            <input type="radio" v-model="params.is_required" value="1"> 必传
+                        </label>
+                        <label class="radio-inline">
+                            <input type="radio" v-model="params.is_required" value="0"> 非必传
+                        </label>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</template>
+<!-- 时间 -->
+<template id="config_time">
+    <div class="block config_time">
+        <div class="form-group">
+            <div class="col-sm-2 control-label">标题</div>
+            <div class="col-sm-9">
+                <div class="form-group">
+                    <input type="text" v-model="params.title" class="form-control" placeholder="请输入标题名称"/>
+                </div>
+            </div>
+        </div>
+        <div class="form-group">
+            <div class="col-sm-2 control-label">默认时间</div>
+            <div class="col-sm-9">
+                <label class="radio-inline">
+                    <input type="radio" v-model="params.type" value="0"> 实时时间
+                </label>
+                <label class="radio-inline">
+                    <input type="radio" v-model="params.type" value="1"> 指定时间
+                </label>
+            </div>
+        </div>
+        <div class="form-group" v-if="params.type == 1">
+            <div class="col-sm-2 control-label">指定时间</div>
+            <div class="col-sm-9">
+                <div class="form-group">
+                    <input type="datetime-local" class="form-control" v-model="params.datetime_local" />
+                </div>
+            </div>
+        </div>
+        <div class="form-group">
+            <div class="col-sm-2 control-label">详细描述</div>
+            <div class="col-sm-9">
+                <div class="form-group">
+                    <input type="text" v-model="params.tipdetail" class="form-control"/>
+                    <span class="help-block">用于向用户说明填写内容与方式。</span>
+                </div>
+            </div>
+        </div>
+        <div class="form-group" v-if="attflag">
+            <div class="col-sm-2 control-label">认证内容显示</div>
+            <div class="col-sm-9">
+                <label class="radio-inline">
+                    <input type="radio" v-model="params.att_show" value="0"> 显示
+                </label>
+                <label class="radio-inline">
+                    <input type="radio" v-model="params.att_show" value="1"> 隐藏
+                </label>
+                <span class="help-block">当此表单作为商户认证表单时，是否显示把此项内容显示在商户资质中。</span>
+            </div>
+        </div>
+    </div>
+</template>
+<!-- 时间范围 -->
+<template id="config_datetime">
+    <div class="block config_datetime">
+        <div class="form-group">
+            <div class="col-sm-2 control-label">标题</div>
+            <div class="col-sm-9">
+                <div class="form-group">
+                    <input type="type" v-model="params.title" class="form-control" placeholder="请输入标题名称"/>
+                </div>
+            </div>
+        </div>
+        <div class="form-group">
+            <div class="col-sm-2 control-label">默认时间</div>
+            <div class="col-sm-9">
+                <label class="radio-inline">
+                    <input type="radio" v-model="params.type" value="0"> 实时时间
+                </label>
+                <label class="radio-inline">
+                    <input type="radio" v-model="params.type" value="1"> 指定时间
+                </label>
+            </div>
+        </div>
+        <!--默认结束时间-->
+        <div class="form-group" v-if="params.type != 1">
+            <div class="col-sm-2 control-label">时间范围</div>
+            <div class="col-sm-9">
+                <div class="form-group">
+                    <div class="input-group">
+                        <input type="number" v-model="params.time_day" class="form-control"/>
+                        <span class="input-group-addon">天</span>
+                    </div>
+                    <span class="help-block">默认结束时间为开始时间 + 时间范围</span>
+                </div>
+            </div>
+        </div>
+        <!-- 指定时间 -->
+        <div v-if="params.type == 1">
+            <div class="form-group">
+                <div class="col-sm-2 control-label">开始时间</div>
+                <div class="col-sm-9">
+                    <div class="form-group">
+                        <input type="datetime-local" v-model="params.start_time" class="form-control"/>
+                    </div>
+                </div>
+            </div>
+            <div class="form-group">
+                <div class="col-sm-2 control-label">结束时间</div>
+                <div class="col-sm-9">
+                    <div class="form-group">
+                        <input type="datetime-local" v-model="params.end_time" class="form-control"/>
+                    </div>
+                </div>
+            </div>
+        </div>
+        <div class="form-group">
+            <div class="col-sm-2 control-label">详细描述</div>
+            <div class="col-sm-9">
+                <div class="form-group">
+                    <input type="text" v-model="params.tipdetail" class="form-control"/>
+                    <span class="help-block">用于向用户说明填写内容与方式。</span>
+                </div>
+            </div>
+        </div>
+        <div class="form-group" v-if="attflag">
+            <div class="col-sm-2 control-label">认证内容显示</div>
+            <div class="col-sm-9">
+                <label class="radio-inline">
+                    <input type="radio" v-model="params.att_show" value="0"> 显示
+                </label>
+                <label class="radio-inline">
+                    <input type="radio" v-model="params.att_show" value="1"> 隐藏
+                </label>
+                <span class="help-block">当此表单作为商户认证表单时，是否显示把此项内容显示在商户资质中。</span>
+            </div>
+        </div>
+    </div>
+</template>
+<!-- 城市 -->
+<template id="config_city">
+    <div class="block config_city">
+        <div class="form-group">
+            <div class="col-sm-2 control-label">标题</div>
+            <div class="col-sm-9">
+                <div class="form-group">
+                    <input type="text" v-model="params.title" class="form-control" placeholder="请输入标题名称"/>
+                </div>
+            </div>
+        </div>
+        <div class="form-group">
+            <div class="col-sm-2 control-label">区域选择</div>
+            <div class="col-sm-9">
+                <label class="checkbox checkbox-inline">
+                    <input type="checkbox" v-model="params.province" :value="true"> 省
+                </label>
+                <label class="checkbox checkbox-inline">
+                    <input type="checkbox" v-model="params.city" :value="true"> 市
+                </label>
+                <label class="checkbox checkbox-inline">
+                    <input type="checkbox" v-model="params.area" :value="true"> 区/县
+                </label>
+            </div>
+        </div>
+        <div class="form-group">
+            <div class="col-sm-2 control-label">详细描述</div>
+            <div class="col-sm-9">
+                <div class="form-group">
+                    <input type="text" v-model="params.tipdetail" class="form-control"/>
+                    <span class="help-block">用于向用户说明填写内容与方式。</span>
+                </div>
+            </div>
+        </div>
+        <div class="form-group" v-if="attflag">
+            <div class="col-sm-2 control-label">认证内容显示</div>
+            <div class="col-sm-9">
+                <label class="radio-inline">
+                    <input type="radio" v-model="params.att_show" value="0"> 显示
+                </label>
+                <label class="radio-inline">
+                    <input type="radio" v-model="params.att_show" value="1"> 隐藏
+                </label>
+                <span class="help-block">当此表单作为商户认证表单时，是否显示把此项内容显示在商户资质中。</span>
+            </div>
+        </div>
+    </div>
+</template>

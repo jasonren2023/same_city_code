@@ -1,0 +1,213 @@
+{php include wl_template('common/header');}
+<style>
+    .none-control{
+        border: none;
+        padding-left: 0;
+    }
+</style>
+<ul class="nav nav-tabs">
+    <li><a href="{php echo web_url('recruit/recruitment/recruitList')}">招聘列表</a></li>
+    <li class="active"><a href="javascript:;">查看招聘信息</a></li>
+</ul>
+<div class="app-content">
+    <div class="app-form">
+        <div class="panel panel-default">
+            <form class="form-horizontal form-validate" method="post">
+                <div class="form-group">
+                    <label class="col-sm-2 control-label">职位名称</label>
+                    <div class="col-sm-9">
+                        <input class="form-control" type="text" disabled="disabled" value="{$info['title']}" />
+                    </div>
+                </div>
+                <div class="form-group">
+                    <label class="col-sm-2 control-label">行业职位</label>
+                    <div class="col-sm-9">
+                        <div class="form-control none-control">
+                            <label class="label label-success">{$info['industry_pid_text']}</label>
+                            <label class="label label-success">{$info['industry_id_text']}</label>
+                            <label class="label label-success">{$info['position_id_text']}</label>
+                        </div>
+                    </div>
+                </div>
+                <div class="form-group">
+                    <label class="col-sm-2 control-label">招聘类型</label>
+                    <div class="col-sm-9">
+                        {if $info['recruitment_type'] == 1}
+                            <input class="form-control" type="text" disabled="disabled" value="个人招聘" />
+                        {else}
+                            <input class="form-control" type="text" disabled="disabled" value="企业招聘" />
+                        {/if}
+                    </div>
+                </div>
+                <div class="form-group">
+                    <label class="col-sm-2 control-label">是否置顶</label>
+                    <div class="col-sm-9">
+                        {if $info['is_top'] == 1}
+                            <input class="form-control" type="text" disabled="disabled" value="置顶中" />
+                        {else}
+                            <input class="form-control" type="text" disabled="disabled" value="未置顶" />
+                        {/if}
+                    </div>
+                </div>
+                {if $info['is_top'] == 1}
+                    <div class="form-group">
+                        <label class="col-sm-2 control-label">置顶结束时间</label>
+                        <div class="col-sm-9">
+                            <input class="form-control" type="text" disabled="disabled" value="{php echo date('Y-m-d H:i',$info['top_end_time'])}" />
+                        </div>
+                    </div>
+                {/if}
+                <div class="form-group">
+                    <label class="col-sm-2 control-label">发布方</label>
+                    <div class="col-sm-9">
+                        {if $info['recruitment_type'] == 1}
+                            <input class="form-control" type="text" disabled="disabled" value="用户：{$info['release_name']}" />
+                        {else}
+                            <input class="form-control" type="text" disabled="disabled" value="企业：{$info['release_name']}" />
+                        {/if}
+                    </div>
+                </div>
+                <div class="form-group">
+                    <label class="col-sm-2 control-label">工作类型</label>
+                    <div class="col-sm-9">
+                        {if $info['job_type'] == 1}
+                            <input class="form-control" type="text" disabled="disabled" value="全职" />
+                        {else}
+                            <input class="form-control" type="text" disabled="disabled" value="兼职" />
+                        {/if}
+                    </div>
+                </div>
+                {if $info['job_type'] == 1}
+                    <!-- 全职 -->
+                    <div class="form-group">
+                        <label class="col-sm-2 control-label">薪资待遇</label>
+                        <div class="col-sm-9">
+                            {if $info['full_type'] == 1}
+                                <input class="form-control" type="text" disabled="disabled" value="面议" />
+                            {else}
+                                <input class="form-control" type="text" disabled="disabled" value="{$info['full_salary_min']}元 ~ {$info['full_salary_max']}元" />
+                            {/if}
+                        </div>
+                    </div>
+                    <div class="form-group">
+                        <label class="col-sm-2 control-label">职位福利</label>
+                        <div class="col-sm-9">
+                            <div class="form-control none-control">
+                                {loop $info['welfare'] $item}
+                                    <label class="label label-success" style="display: inline-block;margin-bottom: 2px;">{$item['title']}</label>
+                                {/loop}
+                            </div>
+                        </div>
+                    </div>
+                {else}
+                    <!-- 兼职 -->
+                    <div class="form-group">
+                        <label class="col-sm-2 control-label">薪资待遇</label>
+                        <div class="col-sm-9">
+                            <input class="form-control" type="text" disabled="disabled" value="{$info['part_salary']}{if $info['part_type'] == 1}元/时{else}元/天{/if}" />
+                        </div>
+                    </div>
+                    <div class="form-group">
+                        <label class="col-sm-2 control-label">结算方式</label>
+                        <div class="col-sm-9">
+                            {if $info['part_settlement'] == 1}
+                                <input class="form-control" type="text" disabled="disabled" value="日结" />
+                            {elseif $info['part_settlement'] == 2}
+                                <input class="form-control" type="text" disabled="disabled" value="周结" />
+                            {elseif $info['part_settlement'] == 3}
+                                <input class="form-control" type="text" disabled="disabled" value="月结" />
+                            {else}
+                                <input class="form-control" type="text" disabled="disabled" value="完工结算" />
+                            {/if}
+                        </div>
+                    </div>
+                {/if}
+                <div class="form-group">
+                    <label class="col-sm-2 control-label">工作区域</label>
+                    <div class="col-sm-9">
+                        <div class="form-control none-control">
+                            <label class="label label-success">{$info['work_province_text']}</label>
+                            <label class="label label-success">{$info['work_city_text']}</label>
+                            <label class="label label-success">{$info['work_area_text']}</label>
+                        </div>
+                    </div>
+                </div>
+                <div class="form-group">
+                    <label class="col-sm-2 control-label">工作地址</label>
+                    <div class="col-sm-9">
+                        <input class="form-control" type="text" disabled="disabled" value="{$info['work_address']}" />
+                    </div>
+                </div>
+                <div class="form-group">
+                    <label class="col-sm-2 control-label">联系人</label>
+                    <div class="col-sm-9">
+                        <input class="form-control" type="text" disabled="disabled" value="{$info['contacts']}" />
+                    </div>
+                </div>
+                <div class="form-group">
+                    <label class="col-sm-2 control-label">联系电话</label>
+                    <div class="col-sm-9">
+                        <input class="form-control" type="text" disabled="disabled" value="{$info['contact_phone']}" />
+                    </div>
+                </div>
+                <div class="form-group">
+                    <label class="col-sm-2 control-label">性别要求</label>
+                    <div class="col-sm-9">
+                        <input class="form-control" type="text" disabled="disabled" value="{if $info['gender'] == 1} 不限 {elseif $info['gender'] == 2} 男 {else} 女 {/if}" />
+                    </div>
+                </div>
+                <div class="form-group">
+                    <label class="col-sm-2 control-label">年龄要求</label>
+                    <div class="col-sm-9">
+                        <input class="form-control" type="text" disabled="disabled" value="{$info['age_min']} ~ {$info['age_max']}岁" />
+                    </div>
+                </div>
+                <div class="form-group">
+                    <label class="col-sm-2 control-label">学历要求</label>
+                    <div class="col-sm-9">
+                        <input class="form-control" type="text" disabled="disabled" value="{$info['education']}" />
+                    </div>
+                </div>
+                <div class="form-group">
+                    <label class="col-sm-2 control-label">经验要求</label>
+                    <div class="col-sm-9">
+                        <input class="form-control" type="text" disabled="disabled" value="{$info['experience']}" />
+                    </div>
+                </div>
+                <div class="form-group">
+                    <label class="col-sm-2 control-label">职位描述</label>
+                    <div class="col-sm-9">
+                        <textarea class="form-control" rows="10" style="resize: none;font-size: 15px;" disabled="disabled">{$info['job_description']}</textarea>
+                    </div>
+                </div>
+                <!-- 提交按钮 -->
+                <div class="form-group">
+                    <label class="col-sm-2 control-label"></label>
+                    <div class="col-sm-9">
+                        <a href="{php echo web_url('recruit/recruitment/recruitList')}" id="backButton" class="btn btn-danger min-width">返回</a>
+                        <a href="javascript:;" type="button" class="btn btn-primary min-width toExamine" status="4">审核通过</a>
+                        <a href="javascript:;" type="button" class="btn btn-warning min-width toExamine" status="3">审核不通过</a>
+                    </div>
+                </div>
+            </form>
+        </div>
+    </div>
+</div>
+<script>
+    let id = "{$id}";
+    let link = "{php echo web_url('recruit/recruitment/changeRecruitStatus')}";
+    let backLink = "{php echo web_url('recruit/recruitment/recruitList')}";
+    //审核
+    $(".toExamine").on('click',function () {
+        let status = $(this).attr('status');
+        let html = $(this).html();
+        tip.confirm('确定让当前招聘信息'+html+'吗！',function () {
+            $.post(link,{ids:id,status:status},function (res){
+                tip.alert(res.result.message,function (){
+                    if(res.status == 1) window.location.href = backLink;
+                })
+            },'json');
+        })
+    });
+</script>
+{php include wl_template('common/footer');}

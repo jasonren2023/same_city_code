@@ -1,0 +1,145 @@
+/****************************************** 菜单组样式 ************************************************************/
+/*公共样式*/
+.menu-style {
+    position: relative;
+    overflow: hidden;
+    background: #fff;
+}
+.menu-style.col-2 .menu-list {
+    width: 50%;
+}
+.menu-style.col-3 .menu-list{
+    width: 33.3%;
+}
+.menu-style.col-4 .menu-list {
+    width: 25%;
+}
+.menu-style.col-5 .menu-list {
+    width: 20%;
+}
+.menu-style .menu-spot {
+    float: left;
+    width: 100%;
+    height: 15px;
+    text-align: center;
+    line-height: 15px;
+}
+.menu-style .menu-spot a {
+    height: 8px;
+    width: 8px;
+    background: #000;
+    display: inline-block;
+    opacity: 0.3;
+}
+.menu-style .menu-spot a.active {
+    opacity: 0.5;
+}
+
+.menu-style .menu-spot.left {
+    text-align: left;
+}
+.menu-style .menu-spot.center {
+    text-align: center;
+}
+.menu-style .menu-spot.right {
+    text-align: right;
+}
+.menu-style .menu-spot.rectangle a {
+    height: 10px;
+    width: 16px;
+}
+.menu-style .menu-spot.square a {
+    height: 10px;
+    width: 10px;
+}
+.menu-style .menu-spot.round a {
+    height: 10px;
+    width: 10px;
+    border-radius: 10px;
+}
+
+/*风格一*/
+.menu-style1 .menu-list {
+    height: auto;
+    position: relative;
+    padding: 0;
+    margin: 10px 0;
+    text-align: center;
+    transition: background-color 300ms;
+    -webkit-transition: background-color 300ms;
+    float: left;
+    border: none !important;
+}
+.menu-style1 .menu-list .icon {
+    height: 50px;
+    margin: auto;
+    text-align: center;
+    line-height: 50px;
+}
+.menu-style1 .menu-list .icon img {
+    height: 50px;
+    width: 50px;
+}
+.menu-style1.radius .menu-list img {
+    border-radius: 10px;
+}
+.menu-style1.circle .menu-list img {
+    border-radius: 44px;
+}
+.menu-style1 .menu-list .text {
+    font-size: 13px;
+    text-align: center;
+    overflow: hidden;
+    text-overflow: ellipsis;
+    white-space: nowrap;
+    padding: 4px;
+    color: #7a7a7a;
+
+}
+
+/*风格二*/
+.menu-style2 .menu-list{
+    position: relative;
+    padding: 0;
+    margin: 10px 0;
+    text-align: center;
+    transition: background-color 300ms;
+    -webkit-transition: background-color 300ms;
+    float: left;
+    border: none !important;
+}
+.menu-style2 .menu-list .menu-block {
+    width: 80%;
+    height: 35px;
+    line-height: 35px;
+    font-size: 14px;
+    margin: auto;
+    text-align: center;
+    overflow: hidden;
+    padding: 0 5px;
+}
+.menu-style2 .menu-list .menu-block .icon {
+    width: 20px;
+    height: 20px;
+    line-height: 32px;
+    display: inline-block;
+    margin-right: 5px;
+}
+.menu-style2 .menu-list .menu-block .icon img {
+    width: 100%;
+    height: 100%;
+}
+.menu-style2.radius .menu-list .menu-block{
+    border-radius: 10px;
+}
+
+
+
+
+
+
+
+
+
+
+

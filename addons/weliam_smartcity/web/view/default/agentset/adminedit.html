@@ -1,0 +1,229 @@
+{php include wl_template('common/header');}
+<style>
+    .Jurisdiction{
+        moz-user-select: -moz-none;
+        -moz-user-select: none;
+        -o-user-select:none;
+        -khtml-user-select:none;
+        -webkit-user-select:none;
+        -ms-user-select:none;
+        user-select:none;
+    }
+</style>
+<ul class="nav nav-tabs">
+    <li ><a href="{php echo web_url('agentset/agentSetStaff/adminset')}">管理员列表</a></li>
+    {if empty($admin['id'])}
+	<li class="active"><a href="{php echo web_url('agentset/agentSetStaff/adminedit')}">添加管理员</a></li>
+    {/if}
+	{if !empty($admin['id'])}
+	<li class="active"><a href="#">编辑管理员</a></li>
+	{/if}
+</ul>
+<div class="app-content">
+<div class="app-form">
+	<form action="" method="post" class="form-horizontal form form-validate" autocomplete="off">
+		<input type="hidden" name="adminid" value="{$admin['id']}" />
+		<div class="panel panel-default">
+			<div class="panel-heading">管理员设置</div>
+			<div class="panel-body">
+                <!-- 账号管理 -->
+                <div class="form-group">
+                    <label class="col-md-2 control-label">登录账号</label>
+                    <div class="col-sm-9">
+                        <input type="text" name="account" class="form-control" maxlength="18" value="{$admin['account']}" autocomplete="off" placeholder="18位内的账号信息(英文/数字/中文)"/>
+                    </div>
+                </div>
+                <div class="form-group">
+                    <label class="col-md-2 control-label">登录密码</label>
+                    <div class="col-sm-9">
+                        <input type="text" name="password" class="form-control" value="{$admin['password']}" autocomplete="off"/>
+                        <span class="help-block">密码经过加密处理如需修改直接输入新密码。</span>
+                    </div>
+                </div>
+                <!-- 用户&通知设置 -->
+		  		<div class="form-group">
+                    <label class="col-sm-2 control-label">关联用户</label>
+                    <div class="col-sm-9">
+                        {php echo tpl_select_user('mid', $admin['mid']);}
+                	</div>
+   				</div>
+				<div class="form-group">
+		    		<label class="col-sm-2 control-label">通知权限</label>
+		    		<div class="col-sm-9">
+                        <label class="radio-inline">
+                            <input type="radio" name='notice' value='1' {if $admin['notice']==1}checked{/if}>有
+                        </label>
+                        <label class="radio-inline">
+                            <input type="radio" name='notice' value='0' {if $admin['notice']==0 || empty($admin['notice']) }checked{/if}>无
+                        </label>
+		      			<span class="help-block">可以接受到通知模板消息</span>
+		    		</div>
+		  		</div>
+                <div class="form-group">
+                    <label class="col-sm-2 control-label">通知内容</label>
+                    <div class="col-sm-9">
+                        <label class="checkbox-inline" style="padding-left: 30px;margin-left: 0;">
+                            <input type="checkbox" name="noticeauthority[]" value="pay" {if in_array('pay',$noticeauthority)}checked="true"{/if}>买家购买商品
+                        </label>
+                        <label class="checkbox-inline" style="padding-left: 30px;margin-left: 0;">
+                            <input type="checkbox" name="noticeauthority[]" value="storesettled" {if in_array('storesettled',$noticeauthority)}checked="true"{/if}>商户入驻审核
+                        </label>
+                        <label class="checkbox-inline" style="padding-left: 30px;margin-left: 0;">
+                            <input type="checkbox" name="noticeauthority[]" value="storegood" {if in_array('storegood',$noticeauthority)}checked="true"{/if}>商品动态审核(包括商品上传，修改，商户动态添加)
+                        </label>
+                        <label class="checkbox-inline" style="padding-left: 30px;margin-left: 0;">
+                            <input type="checkbox" name="noticeauthority[]" value="storecomment" {if in_array('storecomment',$noticeauthority)}checked="true"{/if}>用户评论审核
+                        </label>
+                        <label class="checkbox-inline" style="padding-left: 30px;margin-left: 0;">
+                            <input type="checkbox" name="noticeauthority[]" value="refundorder" {if in_array('refundorder',$noticeauthority)}checked="true"{/if}>用户申请退款
+                        </label>
+                        <label class="checkbox-inline" style="padding-left: 30px;margin-left: 0;">
+                            <input type="checkbox" name="noticeauthority[]" value="opencard" {if in_array('opencard',$noticeauthority)}checked="true"{/if}>一卡通开卡通知
+                        </label>
+                        {if agent_p('pocket')}
+                        <label class="checkbox-inline" style="padding-left: 30px;margin-left: 0;">
+                            <input type="checkbox" name="noticeauthority[]" value="pocketfabu" {if in_array('pocketfabu',$noticeauthority)}checked="true"{/if}>掌上信息审核
+                        </label>
+                        {/if}
+                        {if uniacid_p('attestation') && !is_agent()}
+                        <label class="checkbox-inline" style="padding-left: 30px;margin-left: 0;">
+                            <input type="checkbox" name="noticeauthority[]" value="attestation" {if in_array('attestation',$noticeauthority)}checked="true"{/if}>认证功能审核
+                        </label>
+                        {/if}
+                        {if agent_p('citycard')}
+                        <label class="checkbox-inline" style="padding-left: 30px;margin-left: 0;">
+                            <input type="checkbox" name="noticeauthority[]" value="citycard" {if in_array('citycard',$noticeauthority)}checked="true"{/if}>名片入驻审核
+                        </label>
+                        {/if}
+                        {if agent_p('yellowpage')}
+                        <label class="checkbox-inline" style="padding-left: 30px;margin-left: 0;">
+                            <input type="checkbox" name="noticeauthority[]" value="yellowpage" {if in_array('yellowpage',$noticeauthority)}checked="true"{/if}>黄页114入驻审核
+                        </label>
+                        {/if}
+                        {if uniacid_p('distribution') && !is_agent()}
+                            <label class="checkbox-inline" style="padding-left: 30px;margin-left: 0;">
+                                <input type="checkbox" name="noticeauthority[]" value="disapply" {if in_array('disapply',$noticeauthority)}checked="true"{/if}>分销商申请通知
+                            </label>
+                        {/if}
+                        {if agent_p('recruit')}
+                            <label class="checkbox-inline" style="padding-left: 30px;margin-left: 0;">
+                                <input type="checkbox" name="noticeauthority[]" value="recruit_examine" {if in_array('recruit_examine',$noticeauthority)}checked="true"{/if}> 招聘发布审核通知
+                            </label>
+                        {/if}
+                        {if agent_p('dating')}
+                            <label class="checkbox-inline" style="padding-left: 30px;margin-left: 0;">
+                                <input type="checkbox" name="noticeauthority[]" value="dating_dynamic_examine" {if in_array('dating_dynamic_examine',$noticeauthority)}checked="true"{/if}> 相亲交友动态发布审核通知
+                            </label>
+                            <label class="checkbox-inline" style="padding-left: 30px;margin-left: 0;">
+                                <input type="checkbox" name="noticeauthority[]" value="dating_member_examine" {if in_array('dating_member_examine',$noticeauthority)}checked="true"{/if}> 相亲交友会员审核通知
+                            </label>
+                            <label class="checkbox-inline" style="padding-left: 30px;margin-left: 0;">
+                                <input type="checkbox" name="noticeauthority[]" value="dating_matchmaker_examine" {if in_array('dating_matchmaker_examine',$noticeauthority)}checked="true"{/if}> 相亲交友红娘审核通知
+                            </label>
+                        {/if}
+                        {if agent_p('housekeep')}
+                            <label class="checkbox-inline" style="padding-left: 30px;margin-left: 0;">
+                                <input type="checkbox" name="noticeauthority[]" value="housekeep_demand" {if in_array('housekeep_demand',$noticeauthority)}checked="true"{/if}> 家政服务需求发布审核通知
+                            </label>
+                            <label class="checkbox-inline" style="padding-left: 30px;margin-left: 0;">
+                                <input type="checkbox" name="noticeauthority[]" value="housekeep_artificer" {if in_array('housekeep_artificer',$noticeauthority)}checked="true"{/if}> 家政服务服务者入驻审核通知
+                            </label>
+                            <label class="checkbox-inline" style="padding-left: 30px;margin-left: 0;">
+                                <input type="checkbox" name="noticeauthority[]" value="housekeep_service" {if in_array('housekeep_service',$noticeauthority)}checked="true"{/if}> 家政服务项目发布审核通知
+                            </label>
+                        {/if}
+                        {if agent_p('vehicle')}
+                            <label class="checkbox-inline" style="padding-left: 30px;margin-left: 0;">
+                                <input type="checkbox" name="noticeauthority[]" value="vehicle_examine" {if in_array('vehicle_examine',$noticeauthority)}checked="true"{/if}> 顺风车路线审核通知
+                            </label>
+                        {/if}
+                        <span class="help-block">不勾选任何项目则会通知所有信息</span>
+                    </div>
+                </div>
+                <!-- 操作权限 -->
+                <div class="form-group">
+                    <label class="col-md-2 control-label">操作权限</label>
+                    <div class="col-sm-9">
+                        {loop $list $index $item}
+                            <div class="form-group Jurisdiction" style="margin: 0">
+                                <label class="col-md-12">
+                                    <label class="checkbox-inline" style="padding-left: 30px;margin-left: 0;">
+                                        <input type="checkbox" name="title" value="{$index}" id="allSelect{$index}">{$item['title']}：
+                                    </label>
+                                </label>
+                                <div class="col-md-12" style="margin-left: 30px;">
+                                    {loop $item['list'] $key $val}
+                                        <label class="checkbox-inline" style="padding-left: 30px;margin-left: 0;">
+                                            <input type="checkbox" class="allSelect allSelect{$index}" index="{$index}" name="jurisdiction[]" value="{$val['url']}" {if in_array($val['url'],$jurisdiction)}checked="true"{/if}>{$val['name']}
+                                        </label>
+                                    {/loop}
+                                </div>
+                            </div>
+                        {/loop}
+                    </div>
+                </div>
+			</div>
+		</div>
+        <div class="form-group">
+            <label class="col-sm-2 control-label"></label>
+            <div class="col-sm-9">
+                <input type="submit" name="submit" value="提交" class="btn btn-primary min-width" />
+                <input type="hidden" name="token" value="{$_W['token']}" />
+            </div>
+        </div>
+	</form>
+</div>
+</div>
+<script>
+    /**
+     * 员工权限管理 全选/取消全选某个管理项
+     */
+    $("[name='title']").on("change",function () {
+        var val = $(this).val();
+        var name = '.allSelect'+val;
+        $(name).proagent_p('checked',$(this).is(':checked')?true:false);
+    });
+    /**
+     * 员工权限管理 某个已被全选的管理中有一个被取消时则取消全选状态
+     */
+    $(".allSelect").on("change",function () {
+        var index =  $(this).attr("index");
+        var idName =  '#allSelect'+index;
+        if(!$(this).is(':checked')){
+            //取消全选状态
+            $(idName).proagent_p('checked',false);
+        }else{
+            var name =  '.allSelect'+index;
+            var state = true;//全选
+            $(name).each(function () {
+                var status = $(this).is(':checked')?true:false;
+                if(!status){
+                    state = false;
+                }
+            });
+            if(state){
+                $(idName).proagent_p('checked',true);
+            }
+        }
+    });
+    /**
+     * 员工权限管理 某个管理是否在全选中
+     */
+    $(function () {
+        $("[name='title']").each(function () {
+            var val = $(this).val();
+            var name = '.allSelect'+val;
+            var state = true;//全选
+            $(name).each(function () {
+                var status = $(this).is(':checked')?true:false
+                if(!status){
+                    state = false;
+                }
+            });
+            if(state){
+                $(this).attr("checked","true");
+            }
+        });
+    });
+</script>
+{php include wl_template('common/footer');}

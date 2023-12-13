@@ -1,0 +1,53 @@
+{php include wl_template('common/header');}
+<ul class="nav nav-tabs">
+    <li class="active"><a href="{php echo web_url('citycard/citycard/cate_edit', array('id' => $item['id']))}">编辑分类</a></li>
+</ul>
+<div class="app-content">
+    <div class="app-form">
+        <form action="" method="post" class="form-horizontal form form-validate">
+            <div class="form-group-title">分类信息</div>
+            {if !empty($item[parentid])}
+            <div class="form-group">
+                <label class="col-sm-2 control-label">上级分类</label>
+                <div class="col-sm-9">
+                    <input type="text" name="" readonly="true" class="form-control" value="{$item[parentname]}">
+                </div>
+            </div>
+            {/if}
+            <div class="form-group">
+                <label class="col-sm-2 control-label">排序</label>
+                <div class="col-sm-9">
+                    <input type="text" name="item[sort]" class="form-control" value="{$item['sort']}" placeholder="排序">
+                    <div class="help-block">排序由大到小，数值越大，顺序越靠前</div>
+                </div>
+            </div>
+            <div class="form-group">
+                <label class="col-sm-2 control-label"><span class="form-must">*</span>分类名称</label>
+                <div class="col-sm-9">
+                    <input type="text" name="item[name]" class="form-control" value="{$item['name']}" placeholder="请输入分类名称" required>
+                </div>
+            </div>
+            <div class="form-group">
+                <label class="col-sm-2 control-label">状态</label>
+                <div class="col-sm-9">
+                    <label class="radio-inline">
+                        <input type="radio" name="item[enabled]" value="0" {if empty($item['enabled'])}checked{/if}>禁用
+                    </label>
+                    <label class="radio-inline">
+                        <input type="radio" name="item[enabled]" value="1" {if !empty($item['enabled'])}checked{/if}>启用
+                    </label>
+                </div>
+            </div>
+            <div class="form-group">
+                <label class="col-sm-2 control-label"></label>
+                <div class="col-sm-9">
+                    <input type="submit" name="submit" value="提交" class="btn btn-primary min-width" />
+                    <input type="hidden" name="token" value="{$_W['token']}" />
+                    <input type="hidden" name="id" value="{$item['id']}" />
+                    <input type="hidden" name="item[parentid]" value="{$item['parentid']}" />
+                </div>
+            </div>
+        </form>
+    </div>
+</div>
+{php include wl_template('common/footer');}

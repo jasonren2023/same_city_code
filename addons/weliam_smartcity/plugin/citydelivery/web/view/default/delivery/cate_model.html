@@ -1,0 +1,90 @@
+<style type="text/css">
+    #ajaxModal{z-index: 799!important;}
+</style>
+<form class="form-horizontal form-validate" action="{php echo web_url('citydelivery/category/cateEdit',['id'=>$id])}" method="post" enctype="multipart/form-data">
+    <div class="modal-dialog">
+        <div class="modal-content">
+            <div class="modal-header">
+                <button data-dismiss="modal" class="close" type="button">×</button>
+                <h4 class="modal-title">编辑分类</h4>
+            </div>
+            <div class="modal-body form-horizontal">
+                {if !is_store()}
+                <div class="form-group">
+                    <label class="col-sm-2 control-label">关联商家</label>
+                    <div class="col-sm-9">
+                        <div class='input-group'>
+                            <div class="input-group">
+                                <input type="text" class="form-control col-sm-9" id="namemerchant" name="" value="{$merchant['storename']}" disabled style="width: 460px;">
+                                <span class="input-group-btn"><button class="btn btn-default" type="button" onclick="popwin = $('#modal-module-merchant').modal();">选择商家</button></span>
+                            </div>
+                            <div class="input-group " style="margin-top:.5em;">
+                                <input type="hidden" value="{$merchant['id']}" name="data[sid]" id="sidmerchant">
+                                <img src="{if empty($merchant['logo'])}../web/resource/images/nopic.jpg{else}{php echo tomedia($merchant['logo'])}{/if}" class="img-responsive img-thumbnail" width="150" id="imgmerchant" />
+                                <em class="close" style="position:absolute; top: 0px; right: -14px;" title="删除" onclick="remove_merchant(this)">×</em>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                {/if}
+                <div class="form-group">
+                    <div class="col-sm-2 control-label">分类名称</div>
+                    <div class="col-sm-9">
+                        <input class="form-control" placeholder="请输入分类名称" name="data[name]" value="{$info['name']}" />
+                    </div>
+                </div>
+                <div class="form-group">
+                    <div class="col-sm-2 control-label">分类排序</div>
+                    <div class="col-sm-9">
+                        <input class="form-control" placeholder="请输入分类排序" name="data[sort]" value="{$info['sort']}" />
+                    </div>
+                </div>
+            </div>
+            <div class="modal-footer">
+                <button class="btn btn-primary" type="submit">提交</button>
+                <button data-dismiss="modal" class="btn btn-default" type="button">取消</button>
+            </div>
+        </div>
+    </div>
+    <div id="modal-module-merchant" class="modal fade" tabindex="-1">
+        <div class="modal-dialog" style='width: 920px;'>
+            <div class="modal-content">
+                <div class="modal-header">
+                    <button aria-hidden="true" data-dismiss="modal" class="close" type="button">×</button>
+                    <h3>选取</h3></div>
+                <div class="modal-body">
+                    <div class="row">
+                        <div class="input-group">
+                            <input type="text" class="form-control" name="keyword" value="" id="search-kwd-merchant" placeholder="请输入商家名称，不输入任何内容搜索结果为所有商家。" />
+                            <span class='input-group-btn'><button type="button" class="btn btn-default" onclick="search_merchant();">搜索</button></span>
+                        </div>
+                    </div>
+                    <div id="module-merchant" style="padding-top:5px;"></div>
+                </div>
+                <div class="modal-footer"><a href="#" class="btn btn-default" data-dismiss="modal" aria-hidden="true">关闭</a></div>
+            </div>
+        </div>
+    </div>
+</form>
+<script>
+    function search_merchant() {
+        $("#module-merchant").html("正在搜索....")
+        $.get("{php echo web_url('goodshouse/goodshouse/selectMerchant')}", {
+            keyword: $.trim($('#search-kwd-merchant').val())
+        }, function(dat){
+            $('#module-merchant').html(dat);
+        });
+    }
+    function remove_merchant(obj){
+        $('#goodsidmerchant').val('');
+        $('#namemerchant').val('');
+        $('#imgmerchant').attr("src",'');
+    }
+    function select_merchant(o) {
+        $('#sidmerchant').val(o.id);
+        $('#namemerchant').val(o.storename);
+        $('#imgmerchant').attr("src",o.logo);
+        $('#modal-module-merchant').modal('hide');
+        util.tips("操作成功");
+    }
+</script>

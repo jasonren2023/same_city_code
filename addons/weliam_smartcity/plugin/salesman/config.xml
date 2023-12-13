@@ -1,0 +1,35 @@
+<?xml version="1.0" encoding="utf-8"?>
+<manifest>
+	<application>
+		<name><![CDATA[业务员]]></name>
+		<identifie><![CDATA[salesman]]></identifie>
+		<version><![CDATA[1.0.0]]></version>
+		<type><![CDATA[expand]]></type>
+		<description><![CDATA[通过业务员招募商家，快速扩展平台商家，减少平台支出。]]></description>
+		<author><![CDATA[微连科技]]></author>
+		<url><![CDATA[http://www.weliam.cn/]]></url>
+	</application>
+	<setting>
+		<agent embed="true" />
+		<system embed="true" />
+		<task embed="false" />
+	</setting>
+	<agentmenu>
+		<menu title="业务员" font="fa-inbox">
+			<entry title="业务员管理" ac="salesman" do="lists" iscover="true"/>
+			<entry title="佣金明细" ac="salesman" do="details" />
+		</menu>
+		<menu title="设置" font="fa-inbox">
+			<entry title="业务员设置" ac="salesman" do="setting" />
+		</menu>
+	</agentmenu>
+	<systemmenu>
+		<menu title="业务员" font="fa-inbox">
+			<entry title="业务员管理" ac="salesman" do="lists" iscover="true"/>
+			<entry title="佣金明细" ac="salesman" do="details" />
+		</menu>
+		<menu title="设置" font="fa-inbox">
+			<entry title="业务员设置" ac="salesman" do="setting" />
+		</menu>
+	</systemmenu>
+</manifest>

@@ -1,0 +1,37 @@
+<!--------------------------  同城活动组件群  ----------------------------------->
+<!-- 同城活动组  风格一 -->
+<script type="text/html" id="tpl_show_activity_goods">
+    <div class="drag" data-itemid="<%itemid%>"  group_name="<%group_name%>" group_key="<%group_key%>" data-id="<%group_name%>" >
+        <div class="goods_activity_1 goods_style_1" style="margin-bottom: <%style.marginBottom%>px;padding: <%style.margin||'10'%>px;background-color:<%style.bgColor||'#ffffff'%>">
+            <%each data as item index%>
+                <div class="block" style="padding:<%style.padding||'10'%>px;">
+                    <div class="images">
+                        <img src="<%imgsrc item.logo%>" onerror="this.src='../addons/{MODULE_NAME}/web/resource/images/default.png';"/>
+                    </div>
+                    <div class="describe">
+                        <div class="title"><%item.goods_name%></div>
+                        <div class="shop">
+                            <div class="shop_title"><%item.address%></div>
+                            <div class="shop_distance">9999km</div>
+                        </div>
+                        <div class="footer_info">
+                            <div class="sale_info">
+                                <div class="price_info">
+                                    <span class="price_title">价格：</span>
+                                    <span class="price_icon">¥</span>
+                                    <div class="price"><%if item.optionstatus == 1%><%item.minprice%><%else%><%item.price%><%/if%></div>
+                                    <%if item.optionstatus == 1%>
+                                        <span class="price_icon">&nbsp;~&nbsp;¥</span>
+                                        <div class="price"><%item.maxprice%></div>
+                                    <%/if%>
+                                </div>
+                            </div>
+                            <div class="cate"><%item.catename%></div>
+                            <div class="button button-remind">立即报名</div>
+                        </div>
+                    </div>
+                </div>
+            <%/each%>
+        </div>
+    </div>
+</script>

@@ -1,0 +1,672 @@
+{php include wl_template('common/header');}
+<div class="app-content">
+	<ul class="nav nav-tabs" id="myTab">
+		<li class="active"><a href="#tab_basic">基本设置</a></li>
+		<li><a href="#tab_top">置顶设置</a></li>
+		<li><a href="#tab_redpaper">红包设置</a></li>
+		<li><a href="#tab_share">列表分享</a></li>
+		{if Customized::init('pocket1500') > 0}
+		<li><a href="#tab_credit">积分设置</a></li>
+		{/if}
+		<li><a href="#tab_kefu">管理员设置</a></li>
+	</ul>
+	<div class="app-form">
+		<form action="" method="post" class="form-horizontal form form-validate">
+			<div class="panel panel-default">
+				<div class="panel-heading">模块设置</div>
+				<div class="panel-body">
+					<div class="tab-content">
+						<div class="tab-pane active" id="tab_basic">
+							<div class="form-group">
+								<label class="col-sm-2 control-label">掌上信息</label>
+								<div class="col-sm-9">
+									<label class="radio-inline">
+	                                    <input type="radio" value="1" name="status" {if $data['status']==1} checked {/if}>启用
+	                                </label>
+	                             	<label class="radio-inline">
+	                                    <input type="radio" value="0" name="status" {if $data['status']==0} checked {/if}>禁用
+	                                </label>
+								</div>
+							</div>
+							<div class="form-group">
+								<label class="col-sm-2 control-label">帖子免审核</label>
+								<div class="col-sm-9">
+									<label class="radio-inline">
+	                                    <input type="radio" value="1" name="passstatus" {if $data['passstatus']==1} checked {/if}>启用
+	                                </label>
+	                                <label class="radio-inline">
+	                                    <input type="radio" value="0" name="passstatus" {if $data['passstatus']==0} checked {/if}>禁用
+	                                </label>
+									<span class="help-block">开启后发布帖子免审核</span>
+								</div>
+							</div>
+							<div class="form-group">
+								<label class="col-sm-2 control-label">评论&回复功能</label>
+								<div class="col-sm-9">
+									<label class="radio-inline">
+										<input type="radio" value="0" onclick="$('#commdiv').show();" name="data[commentStatus]" {if $data['commentStatus']!=1} checked {/if}>启用
+									</label>
+									<label class="radio-inline">
+										<input type="radio" value="1" onclick="$('#commdiv').hide();" name="data[commentStatus]" {if $data['commentStatus'] >0} checked {/if}>禁用
+									</label>
+									<span class="help-block">关闭后所有帖子无法评论和回复。</span>
+								</div>
+							</div>
+							<div class="form-group" id="commdiv" {if $data['commentStatus'] >0} style="display: none;" {/if}>
+								<label class="col-sm-2 control-label">评论&回复审核</label>
+								<div class="col-sm-9">
+									<label class="radio-inline">
+										<input type="radio" value="1" name="comment_reply" {if $data['comment_reply']==1} checked {/if}>启用
+									</label>
+									<label class="radio-inline">
+										<input type="radio" value="0" name="comment_reply" {if $data['comment_reply']!=1} checked {/if}>禁用
+									</label>
+									<span class="help-block">开启后发布帖子的评论和回复需要审核</span>
+								</div>
+							</div>
+							<div class="form-group">
+								<label class="col-sm-2 control-label">会员查阅特权</label>
+								<div class="col-sm-9">
+									<label class="radio-inline" onclick="$('#vip_level').show()">
+										<input type="radio" value="1" name="vip_show" {if $data['vip_show']==1} checked {/if}>启用
+									</label>
+									<label class="radio-inline" onclick="$('#vip_level').hide()">
+										<input type="radio" value="0" name="vip_show" {if $data['vip_show']!=1} checked {/if}>禁用
+									</label>
+									<span class="help-block">开启后只有设置了权限的会员等级才能查看发帖人联系方式。</span>
+								</div>
+							</div>
+							<div class="form-group" id="vip_level" {if $data['vip_show'] != 1} style="display:none;" {/if} >
+								<label class="col-sm-2 control-label">查阅特权等级</label>
+								<div class="col-sm-9">
+									<label class="checkbox-inline">
+										<input type="checkbox" value="0" name="vip_level[]" {if in_array(0,$vip_level)} checked="checked" {/if}  /> {$_W['wlsetting']['halflevel']['name']}
+									</label>
+									{loop $levels $level}
+									<label class="checkbox-inline">
+										<input type="checkbox" value="{$level['id']}" name="vip_level[]" {if in_array($level['id'],$vip_level)} checked="checked" {/if}  /> {$level['name']}
+									</label>
+									{/loop}
+									<span class="help-block">只有勾选等级会员可以查看发帖人联系方式，不勾选则为全等级可用。</span>
+								</div>
+							</div>
+
+							<div class="form-group">
+								<label class="col-sm-2 control-label">发帖定位</label>
+								<div class="col-sm-9">
+									<label class="radio-inline">
+										<input type="radio" value="2" name="locastatus" {if $data['locastatus']==2} checked {/if}>强制开启
+									</label>
+									<label class="radio-inline">
+										<input type="radio" value="1" name="locastatus" {if $data['locastatus']==1} checked {/if}>默认开启
+									</label>
+									<label class="radio-inline">
+										<input type="radio" value="0" name="locastatus" {if $data['locastatus']==0} checked {/if}>默认关闭
+									</label>
+								</div>
+							</div>
+							<div class="form-group">
+								<label class="col-sm-2 control-label">帖子默认排序</label>
+								<div class="col-sm-9">
+									<label class="radio-inline">
+	                                    <input type="radio" value="0" name="listorder" {if $data['listorder']==0} checked {/if}>按发帖时间
+	                                </label>
+									<label class="radio-inline">
+	                                    <input type="radio" value="1" name="listorder" {if $data['listorder']==1} checked {/if}>按浏览数量
+	                                </label>
+	                                <label class="radio-inline">
+	                                    <input type="radio" value="2" name="listorder" {if $data['listorder']==2} checked {/if}>按分享数量
+	                                </label>
+	                                <label class="radio-inline">
+	                                    <input type="radio" value="3" name="listorder" {if $data['listorder']==3} checked {/if}>按点赞数量
+	                                </label>
+									<label class="radio-inline">
+										<input type="radio" value="4" name="listorder" {if $data['listorder']==4} checked {/if}>按回复时间
+									</label>
+								</div>
+							</div>
+							<div class="form-group">
+								<label class="col-sm-2 control-label">发帖限制</label>
+								<div class="col-sm-9">
+									<div class="input-group">
+										<span class="input-group-addon">个人发帖总数</span>
+										<input type="text" name="data[alllimit]" class="form-control" value="{$data['alllimit']}" />
+										<span class="input-group-addon">个，个人每日发帖数</span>
+										<input type="text" name="data[daylimit]" class="form-control" value="{$data['daylimit']}" />
+										<span class="input-group-addon">个</span>
+									</div>
+									<span class="help-block">普通用户发帖的数量限制，不填则无限制。</span>
+								</div>
+							</div>
+							<div class="form-group">
+								<label class="col-sm-2 control-label"></label>
+								<div class="col-sm-9">
+									<div class="input-group">
+										<span class="input-group-addon">会员发帖总数</span>
+										<input type="text" name="data[vipalllimit]" class="form-control" value="{$data['vipalllimit']}" />
+										<span class="input-group-addon">个，会员每日发帖数</span>
+										<input type="text" name="data[vipdaylimit]" class="form-control" value="{$data['vipdaylimit']}" />
+										<span class="input-group-addon">个</span>
+									</div>
+									<span class="help-block">会员用户发帖的数量限制，不填则无限制。</span>
+								</div>
+							</div>
+							<div class="form-group form-inline">
+								<label class="col-sm-2 control-label">虚拟数据</label>
+								<div class="col-sm-9">
+									<div class="input-group">
+										<span class="input-group-addon">浏览</span>
+										<input type="text" name="data[look]" class="form-control" value="{$data['look']}" />
+										<span class="input-group-addon">发布</span>
+										<input type="text" name="data[fabu]" class="form-control" value="{$data['fabu']}" />
+										<span class="input-group-addon">分享</span>
+										<input type="text" name="data[share]" class="form-control" value="{$data['share']}" />
+									</div>
+								</div>
+							</div>
+							<div class="form-group">
+								<label class="col-sm-2 control-label">浏览增量</label>
+								<div class="col-sm-9">
+									<div class="input-group">
+										<span class="input-group-addon">最大</span>
+										<input type="text" name="data[maxup]" placeholder="5" class="form-control" value="{$data['maxup']}" />
+										<span class="input-group-addon">最小</span>
+										<input type="text" name="data[minup]" placeholder="1" class="form-control" value="{$data['minup']}" />
+									</div>
+									<span class="help-block">每次刷新页面增加的浏览量，在最大与最小值之间随机增加.</span>
+								</div>
+							</div>
+							<div class="form-group">
+								<label class="col-sm-2 control-label">列表增加浏览量</label>
+								<div class="col-sm-9">
+									<label class="radio-inline">
+										<input type="radio" value="1" name="listadd" {if $data['listadd']==1} checked {/if}>禁用
+									</label>
+									<label class="radio-inline">
+										<input type="radio" value="0" name="listadd" {if $data['listadd']!=1} checked {/if}>启用
+									</label>
+									<span class="help-block">开启后,帖子加载在列表时也会增加浏览量。</span>
+								</div>
+							</div>
+							<div class="form-group">
+								<label class="col-sm-2 control-label">平台备注</label>
+								<div class="col-sm-7">
+									<input type="text" name="data[remark]" class="form-control" value="{$data['remark']}" />
+								</div>
+								<div class="col-sm-2">
+									<input type="color" name="data[remarkcolor]" class="form-control" value="{$data['remarkcolor']}" />
+								</div>
+							</div>
+							<div class="form-group">
+								<label class="col-sm-2 control-label">商户入驻提示</label>
+								<div class="col-sm-9">
+									<label class="radio-inline">
+										<input type="radio" value="1" name="storesettle" {if $data['storesettle']==1} checked {/if}>禁用
+									</label>
+									<label class="radio-inline">
+										<input type="radio" value="0" name="storesettle" {if $data['storesettle']!=1} checked {/if}>启用
+									</label>
+									<span class="help-block">是否在发帖选择分类页面显示商户入驻提示。</span>
+								</div>
+							</div>
+							{if empty(Customized::init('pocket140'))}
+							<div class="form-group">
+								<label class="col-sm-2 control-label">发帖图片上传</label>
+								<div class="col-sm-9">
+									<label class="radio-inline">
+										<input type="radio" value="1" name="imgupload" {if $data['imgupload']==1} checked {/if}>禁用
+									</label>
+									<label class="radio-inline">
+										<input type="radio" value="0" name="imgupload" {if $data['imgupload']!=1} checked {/if}>启用
+									</label>
+									<span class="help-block">用户在发帖时是否可以上传图片。</span>
+								</div>
+							</div>
+							<div class="form-group">
+								<label class="col-sm-2 control-label">发帖视频上传</label>
+								<div class="col-sm-9">
+									<label class="radio-inline">
+										<input type="radio" value="1" name="videoupload" {if $data['videoupload']==1} checked {/if}>禁用
+									</label>
+									<label class="radio-inline">
+										<input type="radio" value="0" name="videoupload" {if $data['videoupload']!=1} checked {/if}>启用
+									</label>
+									<span class="help-block">用户在发帖时是否可以上传视频。</span>
+								</div>
+							</div>
+							<div class="form-group">
+								<label class="col-sm-2 control-label">发帖音频上传</label>
+								<div class="col-sm-9">
+									<label class="radio-inline">
+										<input type="radio" value="1" name="audioupload" {if $data['audioupload']==1} checked {/if}>禁用
+									</label>
+									<label class="radio-inline">
+										<input type="radio" value="0" name="audioupload" {if $data['audioupload']!=1} checked {/if}>启用
+									</label>
+									<span class="help-block">用户在发帖时是否可以转译语音。</span>
+								</div>
+							</div>
+							{/if}
+							<div class="form-group">
+								<label class="col-sm-2 control-label">免责声明</label>
+								<div class="col-sm-9">
+									<input type="text" name="data[statement]" placeholder="请输入平台免责声明" class="form-control" value="{$data['statement']}" />
+									<span class="help-block">默认内容为：本平台发布的所有信息展示，内容本身与平台本身无关，平台不负任何责任。</span>
+								</div>
+							</div>
+							{if p('wxapp')}
+							<div class="form-group">
+								<label class="col-sm-2 control-label">订阅消息提示</label>
+								<div class="col-sm-9">
+									<label class="radio-inline">
+										<input type="radio" value="1" name="data[wxapptip]" {if $data['wxapptip']==1} checked {/if}>启用
+									</label>
+									<label class="radio-inline">
+										<input type="radio" value="0" name="data[wxapptip]" {if $data['wxapptip']!=1} checked {/if}>禁用
+									</label>
+									<span class="help-block">小程序端发布时是否提示订阅。</span>
+								</div>
+							</div>
+							{/if}
+						</div>
+						<div class="tab-pane" id="tab_top">
+							<div class="form-group">
+								<label class="col-sm-2 control-label">置顶数量</label>
+								<div class="col-sm-9">
+									<div class="input-group">
+										<input type="number" min="0" name="data[number]" class="form-control" value="{$data['number']}" />
+										<span class="input-group-addon">个</span>
+									</div>
+									<span class="help-block">置顶帖子的数量，不填或填0则无限制。</span>
+								</div>
+							</div>
+<!--							<div class="form-group">-->
+<!--								<label class="col-sm-2 control-label">免费置顶</label>-->
+<!--								<div class="col-sm-9">-->
+<!--									<label class="radio-inline">-->
+<!--										<input type="radio" value="1" name="freestatus" {if $data['freestatus']==1} checked {/if}>启用-->
+<!--									</label>-->
+<!--									<label class="radio-inline">-->
+<!--										<input type="radio" value="0" name="freestatus" {if $data['freestatus']==0} checked {/if}>禁用-->
+<!--									</label>-->
+<!--								</div>-->
+<!--							</div>-->
+							<div class="form-group">
+								<label class="col-sm-2 control-label">置顶价格</label>
+								<div class="col-sm-9">
+									<div id="datas">
+										{if empty($data['price'])}
+										{php include wl_template('pocket/dayandprice');}
+										{else}
+										{loop $data['price'] $ba}
+										{php include wl_template('pocket/dayandprice');}
+										{/loop}
+										{/if}
+									</div>
+									<span class="help-block">时间请填入整数，价格保留两位小数。</span>
+								</div>
+							</div>
+							<div class="form-group">
+								<label class="col-sm-2 control-label"></label>
+								<div class="col-sm-9">
+									<a class="btn btn-info btn-add-type" href="javascript:;" onclick="addType();">
+										<i class="fa fa-plus" title=""></i>增加一种置顶规则
+									</a>
+								</div>
+							</div>
+							{if Customized::init('pocket140') > 0}
+							<div class="form-group">
+								<label class="col-sm-2 control-label">全频推广</label>
+								<div class="col-sm-9">
+									<label class="radio-inline">
+										<input type="radio" value="1" onclick="$('#fulldiv').show();" name="data[fullchannel]" {if $data['fullchannel']==1} checked {/if}>开启
+									</label>
+									<label class="radio-inline">
+										<input type="radio" value="0" onclick="$('#fulldiv').hide();" name="data[fullchannel]" {if $data['fullchannel']!=1} checked {/if}>关闭
+									</label>
+									<span class="help-block">全频推广时，用户帖子会显示在所有代理中，全频推广的帖子不能置顶，置顶帖也不能全频推广。</span>
+								</div>
+							</div>
+							<div class="form-group" id="fulldiv" {if $data['fullchannel'] != 1} style="display:none;" {/if}  >
+								<label class="col-sm-2 control-label">推广金额</label>
+								<div class="col-sm-9">
+									<div class="input-group">
+										<input type="number" min="0" name="data[fullprice]" class="form-control" value="{$data['fullprice']}" />
+										<span class="input-group-addon">元，会员价</span>
+										<input type="number" min="0" name="data[fullvip]" class="form-control" value="{$data['fullvip']}" />
+										<span class="input-group-addon">元</span>
+									</div>
+									<span class="help-block">金额保留两位小数，不填或者填0即为免费。</span>
+								</div>
+							</div>
+							{/if}
+						</div>
+						<div class="tab-pane" id="tab_redpaper">
+							<div class="form-group">
+								<label class="col-sm-2 control-label">是否开启红包发帖</label>
+								<div class="col-sm-9">
+									<label class="radio-inline">
+										<input type="radio" value="1" name="is_openRed" {if $data['is_openRed']==1} checked {/if}>启用
+									</label>
+									<label class="radio-inline">
+										<input type="radio" value="0" name="is_openRed" {if $data['is_openRed']==0} checked {/if}>禁用
+									</label>
+								</div>
+							</div>
+							<span class="{if $data['is_openRed']!=1}hide{/if}"  id="redSetList">
+								<div class="form-group">
+									<label class="col-sm-2 control-label">红包设置</label>
+									<div class="col-sm-9">
+										<div id="redEnvelopes">
+											{if empty($data['red_envelopes'])}
+												{php include wl_template('pocket/redEnvelopes');}
+											{else}
+												{loop $data['red_envelopes'] $itmes}
+													{php include wl_template('pocket/redEnvelopes');}
+												{/loop}
+											{/if}
+										</div>
+										<span class="help-block">数量指红包数量请填入整数，金额指红包所包含的金额，金额保留两位小数。</span>
+									</div>
+								</div>
+								<div class="form-group">
+									<label class="col-sm-2 control-label"></label>
+									<div class="col-sm-9">
+										<a class="btn btn-info btn-add-type" href="javascript:;" onclick="addReds();">
+											<i class="fa fa-plus" title=""></i>增加一种红包设置
+										</a>
+									</div>
+								</div>
+							</span>
+						</div>
+						<div class="tab-pane" id="tab_share">
+							<div class="alert alert-info">
+								<b>适用模板变量：[昵称] [时间] [系统名称]</b>
+							</div>
+							<div class="form-group">
+								<label class="col-sm-2 control-label">分享标题</label>
+								<div class="col-sm-9">
+									<input type="text" name="data[share_title]" class="form-control" value="{$data['share_title']}" />
+								</div>
+							</div>
+							<div class="form-group">
+								<label class="col-sm-2 control-label">分享图片</label>
+								<div class="col-sm-9">
+									{php echo attachment_select('data[share_image]', $data['share_image']);}
+								</div>
+							</div>
+							<div class="form-group">
+								<label class="col-sm-2 control-label">分享描述</label>
+								<div class="col-sm-9">
+									<input type="text" name="data[share_desc]" class="form-control" value="{$data['share_desc']}" />
+								</div>
+							</div>
+						</div>
+						<div class="tab-pane" id="tab_kefu">
+							<div class="form-group">
+								<label class="col-sm-2 control-label">管理员名称</label>
+								<div class="col-sm-9">
+									<input type="text" name="data[kefu_name]" class="form-control" value="{$data['kefu_name']}" />
+								</div>
+							</div>
+							<div class="form-group">
+								<label class="col-sm-2 control-label">管理员头像</label>
+								<div class="col-sm-9">
+									{php echo attachment_select('data[kefu_avatar]', $data['kefu_avatar']);}
+								</div>
+							</div>
+							<div class="form-group">
+								<label class="col-sm-2 control-label">管理员电话</label>
+								<div class="col-sm-9">
+									<input type="tel" name="data[kefu_phone]" class="form-control" value="{$data['kefu_phone']}" />
+								</div>
+							</div>
+						</div>
+						{if Customized::init('pocket1500') > 0}
+						<div class="tab-pane" id="tab_credit">
+							<div class="form-group">
+								<label class="col-sm-2 control-label">看视频赠积分</label>
+								<div class="col-sm-9">
+									<div id="datas2">
+										{if empty($data['videocredit'])}
+										{php include wl_template('pocket/videocredit');}
+										{else}
+										{loop $data['videocredit'] $ca}
+										{php include wl_template('pocket/videocredit');}
+										{/loop}
+										{/if}
+									</div>
+									<span class="help-block">时间请填入整数，时间设置为0即点开视频就赠送，请勿重复设置观看时间分钟数，赠送积分设置为整数。</span>
+								</div>
+							</div>
+							<div class="form-group">
+								<label class="col-sm-2 control-label"></label>
+								<div class="col-sm-9">
+									<a class="btn btn-info btn-add-type" href="javascript:;" onclick="addType2();">
+										<i class="fa fa-plus" title=""></i>增加一种赠送规则
+									</a>
+								</div>
+							</div>
+							<div class="form-group form-inline">
+								<label class="col-sm-2 control-label">赠送积分</label>
+								<div class="col-sm-9">
+									<div class="input-group">
+										<span class="input-group-addon">点赞</span>
+										<input type="number" name="data[credit_like]" class="form-control" value="{$data['credit_like']}" />
+										<span class="input-group-addon">评论</span>
+										<input type="number" name="data[credit_comment]" class="form-control" value="{$data['credit_comment']}" />
+										<span class="input-group-addon">关注</span>
+										<input type="number" name="data[credit_follow]" class="form-control" value="{$data['credit_follow']}" />
+									</div>
+									<span class="help-block">设置为0即不赠送积分，赠送积分设置为整数。</span>
+								</div>
+							</div>
+							<div class="form-group form-inline">
+								<label class="col-sm-2 control-label">每日积分上限</label>
+								<div class="col-sm-9">
+									<div class="input-group">
+										<input type="number" name="data[credit_day]" class="form-control" value="{$data['credit_day']}" />
+									</div>
+									<span class="help-block">设置为0即没有上限，积分上限设置为整数。</span>
+								</div>
+							</div>
+							<div class="form-group">
+								<label class="col-sm-2 control-label">分享数据页面幻灯片</label>
+								<div class="col-sm-9">
+									<div id="datas3">
+										{loop $advs $kw $adv}
+										{php include wl_template('pocket/advinfo');}
+										{/loop}
+									</div>
+								</div>
+							</div>
+							<div class="form-group">
+								<label class="col-sm-2 control-label"></label>
+								<div class="col-sm-9">
+									<a class="btn btn-info btn-add-type" href="javascript:;" onclick="addadv();">
+										<i class="fa fa-plus" title=""></i>增加一张幻灯片
+									</a>
+								</div>
+							</div>
+							<div class="form-group">
+								<label class="col-sm-2 control-label">页面标题</label>
+								<div class="col-sm-9">
+									<input type="text" name="data[share_page_title]" placeholder="请输入分享数据页面标题" class="form-control" value="{$data['share_page_title']}" />
+								</div>
+							</div>
+							<div class="form-group form-inline">
+								<label class="col-sm-2 control-label">邀请好友赠送积分</label>
+								<div class="col-sm-9">
+									<div class="input-group">
+										<input type="number" name="data[credit_invitation]" class="form-control" value="{$data['credit_invitation']}" />
+									</div>
+									<span class="help-block">设置为0即不自动赠送积分，积分上限设置为整数。</span>
+								</div>
+							</div>
+						</div>
+						{/if}
+					</div>
+				</div>
+			</div>
+			<div class="form-group">
+				<label class="col-sm-2 control-label"></label>
+				<div class="col-sm-9">
+					<input type="submit" name="submit" value="提交" class="btn btn-primary min-width" />
+					<input type="hidden" name="token" value="{$_W['token']}" />
+				</div>
+			</div>
+		</form>
+	</div>
+</div>
+<script>
+	$('.dede').delegate('.deteblack','click',function(e){
+		e.stopPropagation();
+		var mid = $(this).attr('inmid');
+		util.nailConfirm(this, function(state) {
+		if(!state) return;
+			$.post("{php echo web_url('pocket/Tiezi/deteblack')}", { mid : mid }, function(data){
+				if(!data.errno){
+				util.tips("取消成功！");
+				location.reload();
+				}else{
+				util.tips(data.msg);
+				};
+			}, 'json');
+		}, {html: '确认把该用户取消黑名单?'});
+	});
+	$(function() {
+		window.optionchanged = false;
+		$('#myTab a').click(function(e) {
+			e.preventDefault(); //阻止a链接的跳转行为
+			$(this).tab('show'); //显示当前选中的链接及关联的content
+		})
+	});
+	var kw = 1;
+	function addType() {
+	    $(".btn-add-type").button("loading");
+	    $.ajax({
+	        url: "{php echo web_url('pocket/BasicSetting/dayandprice')}&kw="+kw,
+	        cache: false
+	    }).done(function (html) {
+	        $(".btn-add-type").button("reset");
+	        $("#datas").append(html);
+	    });
+	    kw++;
+	}
+
+    var vodeow = 1;
+    function addType2() {
+        $(".btn-add-type").button("loading");
+        $.ajax({
+            url: "{php echo web_url('pocket/BasicSetting/videocredit')}&kw="+vodeow,
+            cache: false
+        }).done(function (html) {
+            $(".btn-add-type").button("reset");
+            $("#datas2").append(html);
+        });
+        vodeow++;
+    }
+
+
+	var nums = 1;
+	function addReds() {
+		$(".btn-add-type").button("loading");
+		$.ajax({
+			url: "{php echo web_url('pocket/BasicSetting/redEnvelopes')}&kw="+nums,
+			cache: false
+		}).done(function (html) {
+			$(".btn-add-type").button("reset");
+			$("#redEnvelopes").append(html);
+		});
+		nums++;
+	}
+	function removes(asd){
+        $(asd).closest('.data-item').remove();
+   	}
+	function search_members() {
+       	if( $.trim($('#search-kwd').val())==''){
+            Tip.focus('#search-kwd','请输入关键词');
+            return;
+        }
+
+		$("#module-menus").html("正在搜索....")
+		$.get('{php echo web_url('store/register/add',array('op'=>'selectnickname'))}', {
+			keyword: $.trim($('#search-kwd').val())
+		}, function(dat){
+			$('#module-menus').html(dat);
+		});
+	}
+    function select_member(o) {
+		$("#openid").val(o.openid);
+		$("#saler").val(o.nickname);
+		$('#search-kwd').val(o.nickname)
+		$('#module-menus').html('');
+		$("#modal-module-menus").modal("hide");
+	}
+    //监听搜索框是否启用
+    $("[name='search']").change(function () {
+        var val = $(this).val();
+        if(val == 1){
+            $(".form-group.search_float").hide();
+            $(".form-group.search_bgColor").hide();
+        }else{
+            $(".form-group.search_float").show();
+            if($("[name='search_float']:checked").val() == 1){
+                $(".form-group.search_bgColor").show();
+            }else{
+                $(".form-group.search_bgColor").hide();
+            }
+        }
+    });
+    //监听搜索框是否浮动
+    $("[name='search_float']").change(function () {
+        var val = $(this).val();
+        if(val == 1){
+            $(".form-group.search_bgColor").show();
+        }else{
+            $(".form-group.search_bgColor").hide();
+        }
+    });
+	//监听红包是否开启
+	$("[name='is_openRed']").change(function () {
+		var val = $(this).val();
+		if(val == 1){
+			$("#redSetList").removeClass("hide");
+			$("#redSetList").show();
+		}else{
+			$("#redSetList").hide();
+		}
+	});
+	//判断 浏览增量 最小值是否小于最大值
+	$('[name="data[maxup]"],[name="data[minup]"]').on('change',function () {
+		let minup = $('[name="data[minup]"]').val();
+		let maxup = $('[name="data[maxup]"]').val();
+		console.log(minup,maxup);
+		if(parseInt(minup) > parseInt(maxup)){
+			tip.alert('最小值不能大于最大值',function () {
+				$('[name="data[minup]"]').val(0);
+			});
+		}
+	});
+
+
+
+    var kw2 = 100;
+    function addadv() {
+        $(".btn-add-type").button("loading");
+        $.ajax({
+            url: "{php echo web_url('pocket/BasicSetting/advinfo')}&kw="+kw2,
+            cache: false
+        }).done(function (html) {
+            $(".btn-add-type").button("reset");
+            $("#datas3").append(html);
+        });
+        kw2++;
+    }
+
+    function removesadv(asd2){
+        $(asd2).closest('.removedav').remove();
+    }
+
+</script>
+{php include wl_template('common/footer');}

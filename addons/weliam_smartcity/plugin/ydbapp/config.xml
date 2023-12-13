@@ -1,0 +1,24 @@
+<?xml version="1.0" encoding="utf-8"?>
+<manifest>
+	<application>
+		<name><![CDATA[APP]]></name>
+		<identifie><![CDATA[ydbapp]]></identifie>
+		<version><![CDATA[1.0.0]]></version>
+		<type><![CDATA[channel]]></type>
+		<description><![CDATA[一键生成App]]></description>
+		<author><![CDATA[微连科技]]></author>
+		<url><![CDATA[http://www.weliam.cn/]]></url>
+	</application>
+	<setting>
+		<agent embed="false" />
+		<system embed="true" />
+		<task embed="false" />
+	</setting>
+	<agentmenu>
+	</agentmenu>
+	<systemmenu>
+		<menu title="APP" font="fa-inbox">
+			<entry title="APP设置" ac="appset" do="setting" iscover="true" />
+		</menu>
+	</systemmenu>
+</manifest>

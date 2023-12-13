@@ -1,0 +1,123 @@
+{php include wl_template('common/header');}
+<ul class="nav nav-tabs">
+    <li class="active"><a href="{php echo web_url('citycard/citycard/top_edit', array('id' => $item['id']))}">编辑置顶</a></li>
+</ul>
+<div class="app-content">
+    <div class="app-form">
+        <form action="" method="post" class="form-horizontal form form-validate">
+            <div class="form-group-title">置顶信息</div>
+            <div class="form-group">
+                <label class="col-sm-2 control-label">排序</label>
+                <div class="col-sm-9">
+                    <input type="text" name="item[sort]" class="form-control" value="{$item['sort']}" placeholder="排序">
+                    <div class="help-block">排序由大到小，数值越大，顺序越靠前</div>
+                </div>
+            </div>
+            <div class="form-group">
+                <label class="col-sm-2 control-label"><span class="form-must">*</span>置顶名称</label>
+                <div class="col-sm-9">
+                    <input type="text" name="item[name]" class="form-control" value="{$item['name']}" placeholder="请输入置顶名称" required>
+                </div>
+            </div>
+            <div class="form-group">
+                <label class="col-sm-2 control-label"><span class="form-must">*</span>置顶金额</label>
+                <div class="col-sm-9">
+                    <div class="input-group">
+                        <input type="text" class="form-control" name="item[price]" value="{$item['price']}" placeholder="请输入置顶金额" number="true" required>
+                        <span class="input-group-addon">元</span>
+                    </div>
+                </div>
+            </div>
+            <div class="form-group">
+                <label class="col-sm-2 control-label">是否参与分销</label>
+                <div class="col-sm-9">
+                    <label class="radio-inline" onclick="distri(1)">
+                        <input type="radio" value="1" name="item[isdistri]" {if $item['isdistri']==1} checked {/if}>参与
+                    </label>
+                    <label class="radio-inline" onclick="distri(2)">
+                        <input type="radio" value="0" name="item[isdistri]" {if $item['isdistri']==0 || empty($item)} checked {/if}>不参与
+                    </label>
+                </div>
+            </div>
+            <div class="form-group" id="distridiv" {if $item['isdistri'] == 0 || empty($item)} style="display: none;" {/if} >
+                <label class="col-sm-2 control-label">分销佣金</label>
+                <div class="col-sm-9">
+                    <div class="input-group">
+                        <span class="input-group-addon">一级</span>
+                        <input type="number" min="0" name="item[onedismoney]" class="form-control " value="{$item['onedismoney']}" />
+                        {if $_W['wlsetting']['distribution']['ranknum']>1}
+                        <span class="input-group-addon">元，二级</span>
+                        <input type="number" min="0" name="item[twodismoney]" class="form-control " value="{$item['twodismoney']}" />
+                        <span class="input-group-addon">元</span>
+                        {/if}
+                    </div>
+                    <span class="help-block">不填或填0按分销等级比例结算,最多保留两位小数</span>
+                </div>
+            </div>
+            <div class="form-group">
+                <label class="col-sm-2 control-label">会员特权</label>
+                <div class="col-sm-9">
+                    <label class="radio-inline">
+                        <input type="radio" name="item[vipstatus]" value="0" onclick="$('.vipprice').hide()" {if empty($item['vipstatus'])}checked{/if}>无
+                    </label>
+                    <label class="radio-inline" >
+                    <input type="radio" name="item[vipstatus]" value="1" onclick="$('.vipprice').show()" {if $item['vipstatus'] == 1}checked{/if}>会员特价
+                    </label>
+                    <label class="radio-inline">
+                        <input type="radio" name="item[vipstatus]" value="2" onclick="$('.vipprice').hide()" {if $item['vipstatus'] == 2}checked{/if}>会员特供
+                    </label>
+                    <div class="help-block">一卡通会员特权设置,会员特供即只有会员可以选择此套餐.</div>
+                </div>
+            </div>
+            <div class="form-group vipprice"  {if $item['vipstatus'] != 1}style="display: none;"{/if} >
+                <label class="col-sm-2 control-label">会员特价</label>
+                <div class="col-sm-9">
+                    <div class="input-group">
+                        <input type="number" class="form-control" name="item[vipprice]" value="{$item['vipprice']}" placeholder="请输入会员优惠置顶金额">
+                        <span class="input-group-addon">元</span>
+                    </div>
+                    <div class="help-block">最多保留两位小数.</div>
+                </div>
+            </div>
+
+            <div class="form-group">
+                <label class="col-sm-2 control-label"><span class="form-must">*</span>置顶时间</label>
+                <div class="col-sm-9">
+                    <div class="input-group">
+                        <input type="text" class="form-control" name="item[day]" value="{$item['day']}" placeholder="请输入置顶时间" digits="true" required>
+                        <span class="input-group-addon">天</span>
+                    </div>
+                </div>
+            </div>
+            <div class="form-group">
+                <label class="col-sm-2 control-label">状态</label>
+                <div class="col-sm-9">
+                    <label class="radio-inline">
+                        <input type="radio" name="item[status]" value="0" {if empty($item['status'])}checked{/if}>禁用
+                    </label>
+                    <label class="radio-inline">
+                        <input type="radio" name="item[status]" value="1" {if !empty($item['status'])}checked{/if}>启用
+                    </label>
+                </div>
+            </div>
+            <div class="form-group">
+                <label class="col-sm-2 control-label"></label>
+                <div class="col-sm-9">
+                    <input type="submit" name="submit" value="提交" class="btn btn-primary min-width" />
+                    <input type="hidden" name="token" value="{$_W['token']}" />
+                    <input type="hidden" name="id" value="{$item['id']}" />
+                </div>
+            </div>
+        </form>
+    </div>
+</div>
+<script>
+    function distri(flag){
+        if (flag == 1) {
+            $('#distridiv').show();
+        } else{
+            $('#distridiv').hide();
+        }
+    }
+</script>
+{php include wl_template('common/footer');}

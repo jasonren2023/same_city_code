@@ -1,0 +1,433 @@
+{php include wl_template('common/header');}
+<link rel="stylesheet" href="//at.alicdn.com/t/font_1372178_dkou5yhyhzt.css">
+<style>
+    .pay_block{
+        float: left;
+        background-attachment: scroll;
+        background-clip: border-box;
+        background-color: rgb(255, 255, 255);
+        background-image: none;
+        background-origin: padding-box;
+        background-position-x: 0%;
+        background-position-y: 0%;
+        background-repeat-x: ;
+        background-repeat-y: ;
+        background-size: auto;
+        border-bottom-color: rgb(238, 238, 238);
+        border-bottom-left-radius: 4px;
+        border-bottom-right-radius: 4px;
+        border-bottom-style: solid;
+        border-bottom-width: 1px;
+        border-image-outset: 0px;
+        border-image-repeat: stretch;
+        border-image-slice: 100%;
+        border-image-source: none;
+        border-image-width: 1;
+        border-left-color: rgb(238, 238, 238);
+        border-left-style: solid;
+        border-left-width: 1px;
+        border-right-color: rgb(238, 238, 238);
+        border-right-style: solid;
+        border-right-width: 1px;
+        border-top-color: rgb(238, 238, 238);
+        border-top-left-radius: 4px;
+        border-top-right-radius: 4px;
+        border-top-style: solid;
+        border-top-width: 1px;
+        box-sizing: border-box;
+        color: rgb(73, 80, 96);
+        display: block;
+        font-family: "Helvetica Neue", Helvetica, "PingFang SC", "Hiragino Sans GB", "Microsoft YaHei", 微软雅黑, Arial, sans-serif;
+        font-size: 12px;
+        height: 222px;
+        line-height: 18px;
+        margin-bottom: 20px;
+        margin-left: 20px;
+        margin-right: 0px;
+        margin-top: 0px;
+        padding-bottom: 8px;
+        padding-left: 0px;
+        padding-right: 0px;
+        padding-top: 0px;
+        text-rendering: optimizelegibility;
+        text-size-adjust: 100%;
+        width: 378px;
+        -webkit-font-smoothing: antialiased;
+        -webkit-tap-highlight-color: rgba(0, 0, 0, 0);
+    }
+    .pay_block .pay_head{
+        align-items: center;
+        background-attachment: scroll;
+        background-clip: border-box;
+        background-color: rgb(243, 244, 247);
+        background-image: none;
+        background-origin: padding-box;
+        background-position-x: 0%;
+        background-position-y: 0%;
+        background-repeat-x: ;
+        background-repeat-y: ;
+        background-size: auto;
+        box-sizing: border-box;
+        color: rgb(73, 80, 96);
+        display: flex;
+        flex-direction: row;
+        font-family: "Helvetica Neue", Helvetica, "PingFang SC", "Hiragino Sans GB", "Microsoft YaHei", 微软雅黑, Arial, sans-serif;
+        font-size: 12px;
+        height: 88px;
+        justify-content: space-between;
+        line-height: 18px;
+        margin-bottom: 0px;
+        margin-left: 0px;
+        margin-right: 0px;
+        margin-top: 0px;
+        padding-bottom: 20px;
+        padding-left: 20px;
+        padding-right: 20px;
+        padding-top: 20px;
+        text-rendering: optimizelegibility;
+        text-size-adjust: 100%;
+        width: 376px;
+        -webkit-box-align: center;
+        -webkit-box-orient: horizontal;
+        -webkit-box-pack: justify;
+        -webkit-font-smoothing: antialiased;
+        -webkit-tap-highlight-color: rgba(0, 0, 0, 0);
+    }
+    .pay_block .pay_head .left{
+        box-sizing: border-box;
+        color: rgb(0, 0, 0);
+        display: flex;
+        flex-direction: column;
+        font-family: "Helvetica Neue", Helvetica, "PingFang SC", "Hiragino Sans GB", "Microsoft YaHei", 微软雅黑, Arial, sans-serif;
+        font-size: 18px;
+        height: 65px;
+        line-height: 27px;
+        margin-bottom: 0px;
+        margin-left: 0px;
+        margin-right: 0px;
+        margin-top: 0px;
+        padding-bottom: 10px;
+        padding-left: 0px;
+        padding-right: 0px;
+        padding-top: 0px;
+        text-rendering: optimizelegibility;
+        text-size-adjust: 100%;
+        width: 120px;
+        -webkit-box-orient: vertical;
+        -webkit-font-smoothing: antialiased;
+        -webkit-tap-highlight-color: rgba(0, 0, 0, 0);
+    }
+    .pay_block .pay_head .title{
+        box-sizing: border-box;
+        color: rgb(0, 0, 0);
+        display: block;
+        font-family: "Helvetica Neue", Helvetica, "PingFang SC", "Hiragino Sans GB", "Microsoft YaHei", 微软雅黑, Arial, sans-serif;
+        font-size: 18px;
+        height: 37px;
+        line-height: 27px;
+        margin-bottom: 0px;
+        margin-left: 0px;
+        margin-right: 0px;
+        margin-top: 0px;
+        padding-bottom: 10px;
+        padding-left: 0px;
+        padding-right: 0px;
+        padding-top: 0px;
+        text-rendering: optimizelegibility;
+        text-size-adjust: 100%;
+        width: 120px;
+        -webkit-font-smoothing: antialiased;
+        -webkit-tap-highlight-color: rgba(0, 0, 0, 0);
+    }
+    .pay_block .pay_head .tips{
+        box-sizing: border-box;
+        color: rgb(125, 123, 123);
+        display: block;
+        font-family: "Helvetica Neue", Helvetica, "PingFang SC", "Hiragino Sans GB", "Microsoft YaHei", 微软雅黑, Arial, sans-serif;
+        font-size: 12px;
+        height: 18px;
+        line-height: 18px;
+        margin-block-end: 0px;
+        margin-block-start: 0px;
+        margin-bottom: 0px;
+        margin-inline-end: 0px;
+        margin-inline-start: 0px;
+        margin-left: 0px;
+        margin-right: 0px;
+        margin-top: 0px;
+        padding-bottom: 0px;
+        padding-left: 0px;
+        padding-right: 0px;
+        padding-top: 0px;
+        text-rendering: optimizelegibility;
+        text-size-adjust: 100%;
+        width: 200px;
+        -webkit-font-smoothing: antialiased;
+        -webkit-tap-highlight-color: rgba(0, 0, 0, 0);
+    }
+    .pay_block .pay_head button{
+        color: #409eff;
+        background: #ecf5ff;
+        border-color: #b3d8ff;
+        padding: 9px 15px;
+        font-size: 12px;
+        border-radius: 3px;
+        display: inline-block;
+        line-height: 1;
+        white-space: nowrap;
+        cursor: pointer;
+        border: 1px solid #dcdfe6;
+        text-align: center;
+        box-sizing: border-box;
+        outline: 0;
+        margin: 0;
+        transition: .1s;
+        font-weight: 500;
+    }
+    .pay_block .pay_list{
+        box-sizing: border-box;
+        color: rgb(73, 80, 96);
+        display: flex;
+        flex-direction: row;
+        flex-wrap: wrap;
+        font-family: "Helvetica Neue", Helvetica, "PingFang SC", "Hiragino Sans GB", "Microsoft YaHei", 微软雅黑, Arial, sans-serif;
+        font-size: 12px;
+        height: 94px;
+        line-height: 18px;
+        margin-bottom: 0px;
+        margin-left: 0px;
+        margin-right: 0px;
+        margin-top: 30px;
+        padding-bottom: 0px;
+        padding-left: 0px;
+        padding-right: 0px;
+        padding-top: 0px;
+        text-rendering: optimizelegibility;
+        text-size-adjust: 100%;
+        width: 376px;
+        -webkit-box-orient: horizontal;
+        -webkit-font-smoothing: antialiased;
+        -webkit-tap-highlight-color: rgba(0, 0, 0, 0);
+    }
+    .pay_block .pay_list .type{
+        align-items: center;
+        box-sizing: border-box;
+        color: rgb(73, 80, 96);
+        display: flex;
+        flex-direction: column;
+        font-family: "Helvetica Neue", Helvetica, "PingFang SC", "Hiragino Sans GB", "Microsoft YaHei", 微软雅黑, Arial, sans-serif;
+        font-size: 12px;
+        height: 74px;
+        line-height: 18px;
+        margin-bottom: 20px;
+        margin-left: 0px;
+        margin-right: 0px;
+        margin-top: 0px;
+        padding-bottom: 0px;
+        padding-left: 0px;
+        padding-right: 0px;
+        padding-top: 0px;
+        text-rendering: optimizelegibility;
+        text-size-adjust: 100%;
+        width: 125.313px;
+        -webkit-box-align: center;
+        -webkit-box-orient: vertical;
+        -webkit-font-smoothing: antialiased;
+        -webkit-tap-highlight-color: rgba(0, 0, 0, 0);
+    }
+    .pay_block .pay_list .pay_icon{
+        overflow: hidden;
+        box-sizing: border-box;
+        color: #a6a2a2;
+        display: block;
+        fill: rgb(73, 80, 96);
+        font-size: 30px;
+        height: 36px;
+        text-align: center;
+        line-height: 36px;
+        overflow-x: hidden;
+        overflow-y: hidden;
+        text-rendering: optimizelegibility;
+        text-size-adjust: 100%;
+        vertical-align: -1.8px;
+        width: 50px;
+        -webkit-font-smoothing: antialiased;
+        -webkit-tap-highlight-color: rgba(0, 0, 0, 0);
+    }
+    .pay_block .pay_list .pay_active{
+        color: #82ec76;
+    }
+    .pay_block .pay_list .name{
+        box-sizing: border-box;
+        color: rgb(73, 80, 96);
+        display: block;
+        font-family: "Helvetica Neue", Helvetica, "PingFang SC", "Hiragino Sans GB", "Microsoft YaHei", 微软雅黑, Arial, sans-serif;
+        font-size: 12px;
+        height: 18px;
+        line-height: 18px;
+        margin-top: 15px;
+        text-rendering: optimizelegibility;
+        text-size-adjust: 100%;
+        width: 65px;
+        text-align: center;
+        -webkit-font-smoothing: antialiased;
+        -webkit-tap-highlight-color: rgba(0, 0, 0, 0);
+    }
+</style>
+<ul class="nav nav-tabs" id="myTab">
+    <li class="active"><a href="#tab_basic">支付设置</a></li>
+</ul>
+<!--主要内容-->
+<div class="app-content">
+    <div class="app-form">
+        <form action="" method="post" class="form-horizontal form form-validate" id="setting-form">
+            <div class="panel panel-default">
+                <!--微信公众号-->
+                {if p('wxplatform')}
+                    <div class="pay_block">
+                        <div class="pay_head">
+                            <div class="left">
+                                <div class="title">微信公众号</div>
+                                <div class="tips">在公众号中付款时使用</div>
+                            </div>
+                            <a href="{php echo web_url('setting/pay/infoList',array('name'=>wechat))}" data-toggle='ajaxModal'>
+                                <button type="button"> 设置支付方式 </button>
+                            </a>
+                        </div>
+                        <div class="pay_list">
+                            {if $setInfo['wechat']['wechat'] > 0}<span class="set_wechat_model"></span>{else}<span class="wechat_model"></span>{/if}
+                            {if $setInfo['wechat']['alipay'] > 0}<span class="set_alipay_model"></span>{else}<span class="alipay_model"></span>{/if}
+                            {if $setInfo['wechat']['balance'] > 0}<span class="set_balance_model"></span>{else}<span class="balance_model"></span>{/if}
+                        </div>
+                    </div>
+                {/if}
+                <!--H5-->
+                {if p('wxplatform')}
+                    <div class="pay_block">
+                        <div class="pay_head">
+                            <div class="left">
+                                <div class="title">H5</div>
+                                <div class="tips">在H5网页中付款时使用</div>
+                            </div>
+                            <a href="{php echo web_url('setting/pay/infoList',array('name'=>h5))}" data-toggle='ajaxModal'>
+                                <button type="button"> 设置支付方式 </button>
+                            </a>
+                        </div>
+                        <div class="pay_list">
+                            {if $setInfo['h5']['wechat'] > 0}<span class="set_wechat_model"></span>{else}<span class="wechat_model"></span>{/if}
+                            {if $setInfo['h5']['alipay'] > 0}<span class="set_alipay_model"></span>{else}<span class="alipay_model"></span>{/if}
+                            {if $setInfo['h5']['balance'] > 0}<span class="set_balance_model"></span>{else}<span class="balance_model"></span>{/if}
+                        </div>
+                    </div>
+                {/if}
+                <!--微信小程序-->
+                {if p('wxapp')}
+                    <div class="pay_block">
+                        <div class="pay_head">
+                            <div class="left">
+                                <div class="title">微信小程序</div>
+                                <div class="tips">在微信小程序中付款时使用</div>
+                            </div>
+                            <a href="{php echo web_url('setting/pay/infoList',array('name'=>wxapp))}" data-toggle='ajaxModal'>
+                                <button type="button"> 设置支付方式 </button>
+                            </a>
+                        </div>
+                        <div class="pay_list">
+                            {if $setInfo['wxapp']['wechat'] > 0}<span class="set_wechat_model"></span>{else}<span class="wechat_model"></span>{/if}
+                            <!--小程序没有支付宝支付{if $setInfo['wxapp']['alipay'] > 0}<span class="set_alipay_model"></span>{else}<span class="alipay_model"></span>{/if}-->
+                            {if $setInfo['wxapp']['balance'] > 0}<span class="set_balance_model"></span>{else}<span class="balance_model"></span>{/if}
+                        </div>
+                    </div>
+                {/if}
+            </div>
+        </form>
+    </div>
+</div>
+<script>
+    /**
+     * 默认样式
+     */
+    function defaultStyle() {
+        /**
+         * 微信支付样式模板
+         * @returns {string}
+         */
+        wechat = function () {
+            return '<div class="type">\n' +
+                '                            <icon class="pay_icon icon icon-weixinzhifu1-copy"></icon>\n' +
+                '                            <span class="name">微信支付</span>\n' +
+                '                        </div>';
+        }
+        /**
+         * 支付宝支付样式模板
+         * @returns {string}
+         */
+        alipay = function () {
+            return '<div class="type">\n' +
+                '                            <icon class="pay_icon icon icon-zhifubao"></icon>\n' +
+                '                            <span class="name">支付宝支付</span>\n' +
+                '                        </div>';
+        }
+        /**
+         * 余额支付样式模板
+         */
+        balance = function(){
+            return '<div class="type">\n' +
+                '                            <icon class="pay_icon icon icon-yue-active"></icon>\n' +
+                '                            <span class="name">余额支付</span>\n' +
+                '                        </div>';
+        }
+
+        $(".wechat_model").append(wechat());
+        $(".alipay_model").append(alipay());
+        $(".balance_model").append(balance());
+    }
+    /**
+     * 已设置样式
+     */
+    function settingStyle() {
+        /**
+         * 微信支付样式模板
+         * @returns {string}
+         */
+        set_wechat = function () {
+            return '<div class="type">\n' +
+                '                            <icon class="pay_icon icon icon-weixinzhifu" style="color: #41b035;"></icon>\n' +
+                '                            <span class="name">微信支付</span>\n' +
+                '                        </div>';
+        }
+        /**
+         * 支付宝支付样式模板
+         * @returns {string}
+         */
+        set_alipay = function () {
+            return '<div class="type">\n' +
+                '                            <icon class="pay_icon icon icon-umidd17" style="color: #1296db;"></icon>\n' +
+                '                            <span class="name">支付宝支付</span>\n' +
+                '                        </div>';
+        }
+        /**
+         * 余额支付样式模板
+         * @returns {string}
+         */
+        set_balance = function () {
+            return '<div class="type">\n' +
+                '                            <icon class="pay_icon icon icon-yue-active" style="color: #41b035;"></icon>\n' +
+                '                            <span class="name">余额支付</span>\n' +
+                '                        </div>';
+        }
+
+
+
+
+
+        $(".set_wechat_model").append(set_wechat());
+        $(".set_alipay_model").append(set_alipay());
+        $(".set_balance_model").append(set_balance());
+    }
+    $(function () {
+        defaultStyle();
+        settingStyle();
+    });
+</script>
+{php include wl_template('common/footer');}

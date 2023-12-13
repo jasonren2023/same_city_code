@@ -1,0 +1,86 @@
+{php include wl_template('common/header');}
+<style type="text/css">
+    .page-heading {
+        padding: 5px 0;
+        border-bottom: 1px solid #ccc;
+        margin-bottom: 20px;
+        position: relative;
+        margin-left: 15px;
+    }
+</style>
+<ul class="nav nav-tabs" id="myTab">
+    <li><a href="javascript:;">团长等级</a></li>
+</ul>
+
+<div class="app-content">
+    <div class="app-filter">
+        <div class="filter-action">
+            <a class="btn btn-primary" href="{php echo web_url('distribution/dissysbase/editgrouplevel')}" data-toggle="ajaxModal">增加等级</a>
+        </div>
+    </div>
+    <div class="app-table-list">
+        <div class="table-responsive">
+            <table class="table table-hover table-bordered">
+                <thead>
+                <tr>
+                    <th class="text-center" style="width:20%;">等级名称</th>
+                    <th class="text-center" style="width:10%;">直属团队分红比例</th>
+                    <th class="text-center" style="width:10%;">子团队分红比例</th>
+                    <th class="text-center" style="width:10%;" >等级层级</th>
+                    <th class="text-center" style="width:25%;">升级条件</th>
+                    <th class="text-center" style="width:25%;">操作</th>
+                </tr>
+                </thead>
+                <tbody>
+                {loop $levels $item}
+                <tr class="text-center" >
+                    <td>
+                        {$item['name']}{if $item['isdefault'] == 1}[默认等级]{/if}
+                    </td>
+                    <td>{$item['onecommission']}%</td>
+                    <td>{$item['twocommission']}%</td>
+                    <td>{$item['levelclass']}</td>
+                    <td>
+                        {if $item['upstandard1'] > 0}
+                        高级分销商人数:<span style="color:orangered;">{$item['upstandard1']}</span>人<br/>
+                        {/if}
+                        {if $item['upstandard2'] > 0}
+                        自然月内结算佣金:<span style="color:orangered;">{$item['upstandard2']}</span>元<br/>
+                        {/if}
+                        {if $item['upstandard3'] > 0}
+                        自购订单的金额:<span style="color:orangered;">{$item['upstandard3']}</span>元<br/>
+                        {/if}
+                        {if $item['upstandard4'] > 0}
+                        团队总人数:<span style="color:orangered;">{$item['upstandard4']}</span>人<br/>
+                        {/if}
+                        {if $item['upstandard5'] > 0}
+                        自然月内订单数量	:<span style="color:orangered;">{$item['upstandard5']}</span>个<br/>
+                        {/if}
+                        {if $item['upstandard6'] > 0}
+                        团队团长人数:<span style="color:orangered;">{$item['upstandard6']}</span>人<br/>
+                        {/if}
+                        {if empty($item['upstandard1']) && empty($item['upstandard2']) && empty($item['upstandard3']) && empty($item['upstandard4']) && empty($item['upstandard5']) && empty($item['upstandard6'])}
+                        暂不能自动升级
+                        {/if}
+                    </td>
+                    <td style="position:relative;">
+                        <a href="{php echo web_url('distribution/dissysbase/editgrouplevel',array('id'=>$item['id']))}" data-toggle="ajaxModal">编辑  </a>
+                        {if $item['isdefault'] != 1} - <a data-toggle="ajaxRemove" href="{php echo web_url('distribution/dissysbase/deletegrouplevel',array('id'=>$item['id']));}" data-confirm='确认删除此等级？删除后此等级团长全部变为默认等级团长。'>删除  </a>{/if}
+                    </td>
+                </tr>
+                {/loop}
+                </tbody>
+            </table>
+        </div>
+        <div class="app-table-foot clearfix">
+            <div class="pull-left">
+
+            </div>
+            <div class="pull-right">
+                {$pager}
+            </div>
+        </div>
+    </div>
+</div>
+
+{php include wl_template('common/footer');}

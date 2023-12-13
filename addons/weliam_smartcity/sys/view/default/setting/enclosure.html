@@ -1,0 +1,234 @@
+{php include wl_template('common/header');}
+<ul class="nav nav-tabs" id="myTab">
+    <li class="active"><a href="#tab_basic">附件设置</a></li>
+</ul>
+<div class="app-content">
+    <div class="app-form">
+        <form action="" method="post" class="form-horizontal form form-validate" id="setting-form">
+            <div class="panel panel-default">
+                <div class="panel-heading">附件设置</div>
+                <div class="tab-content">
+                    <div class="form-group">
+                        <label class="col-sm-2 control-label">服务商</label>
+                        <div class="col-sm-9">
+                            <label class="radio-inline">
+                                <input type="radio"  name="data[service]" onclick="$('.service').hide();" value="0" {if intval($settings['service']) == 0 || empty($settings['service'])}checked="checked"{/if}>无
+                            </label>
+                            <label class="radio radio-success radio-inline">
+                                <input type="radio"  name="data[service]" onclick="$('.service').hide();$('#aliyun').show();" value="2" {if intval($settings['service']) == 2}checked="checked"{/if}>阿里云OSS
+                            </label>
+                            <label class="radio radio-success radio-inline">
+                                <input type="radio"  name="data[service]" onclick="$('.service').hide();$('#qiniu').show();" value="3" {if intval($settings['service']) == 3}checked="checked"{/if}>七牛云存储
+                            </label>
+                            <label class="radio radio-success radio-inline">
+                                <input type="radio"  name="data[service]" onclick="$('.service').hide();$('#tengxun').show();" value="4" {if intval($settings['service']) == 4}checked="checked"{/if}>腾讯云存储
+                            </label>
+                            <span class="help-block">公众号内不设置时会自动调用控制台设置内容。</span>
+                        </div>
+                    </div>
+                    <div class="service" id="aliyun"  {if intval($settings['service']) != 2} style="display: none;" {/if} >
+                        <div class="form-group">
+                            <label class="col-sm-2 control-label">Access Key ID<span class="must-fill">*</span></label>
+                            <div class="col-sm-9">
+                                <input type="text" name="alioss[key]" required  placeholder="请输入系统版权" autocomplete="off" class="form-control" value="{$alioss['key']}">
+                                <span class="help-block">Access Key ID是您访问阿里云API的密钥，具有该账户完全的权限，请您妥善保管。</span>
+                            </div>
+                        </div>
+                        <div class="form-group">
+                            <label class="col-sm-2 control-label">Access Key Secret<span class="must-fill">*</span></label>
+                            <div class="col-sm-9">
+                                <input type="text" name="alioss[secret]" required  placeholder="请输入系统版权" autocomplete="off" class="form-control" value="{$alioss['secret']}">
+                                <span class="help-block">Access Key Secret是您访问阿里云API的密钥，具有该账户完全的权限，请您妥善保管。(填写完Access Key ID 和 Access Key Secret 后请选择bucket)</span>
+                            </div>
+                        </div>
+                        <div class="form-group">
+                            <label class="col-sm-2 control-label">内网上传</label>
+                            <div class="col-sm-9">
+                                <label class="radio radio-success radio-inline">
+                                    <input type="radio"  name="alioss[internal]" value="1" {if intval($alioss['internal']) == 1}checked="checked"{/if}>是
+                                </label>
+                                <label class="radio-inline">
+                                    <input type="radio"  name="alioss[internal]" value="0" {if intval($alioss['internal']) == 0 || empty($alioss['internal'])}checked="checked"{/if}>否
+                                </label>
+                                <span class="help-block">如果此站点使用的是阿里云ecs服务器，并且服务器与bucket在同一地区（如：同在华北一区），您可以选择通过内网上传的方式上传附件，以加快上传速度、节省带宽。。</span>
+                            </div>
+                        </div>
+                        <div class="form-group" id="bucket" {if empty($alioss['key'])}style="display: none;{/if}">
+                            <label class="col-sm-2 control-label">Bucket选择</label>
+                            <div class="col-sm-9">
+                                <select name="alioss[bucket]" class="form-control">
+                                </select>
+                                <span class="help-block">完善Access Key ID和Access Key Secret资料后可以选择存在的Bucket(请保证bucket为可公共读取的)，否则请手动输入。</span>
+                            </div>
+                        </div>
+                        <div class="form-group">
+                            <label class="col-sm-2 control-label">自定义URL</label>
+                            <div class="col-sm-9">
+                                <input type="text" name="alioss[url]" class="form-control" {if !strexists($alioss['url'],'aliyuncs.com') && $settings['service'] == 1}value="{$alioss['url']}"{/if} placeholder="默认URL不需要填写（默认包含 aliyuncs.com 的URL不显示）"/>
+                                <span class="help-block">阿里云oss支持用户自定义访问域名，如果自定义了URL则用自定义的URL，如果未自定义，则用系统生成出来的URL。注：自定义url开头加http://或https://结尾不加 ‘/’例：http://abc.com</span>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="service" id="qiniu"  {if intval($settings['service']) != 3} style="display: none;" {/if}>
+                        <div class="form-group">
+                            <label class="col-sm-2 control-label">Accesskey</label>
+                            <div class="col-sm-9">
+                                <input type="text" name="qiniu[accesskey]" class="form-control" value="{$qiniu['accesskey']}" placeholder="" />
+                                <span class="help-block">用于签名的公钥</span>
+                            </div>
+                        </div>
+                        <div class="form-group">
+                            <label class="col-sm-2 control-label">Secretkey</label>
+                            <div class="col-sm-9">
+                                <input type="text" name="qiniu[secretkey]" class="form-control encrypt" value="{$qiniu['secretkey']}" placeholder="" />
+                                <span class="help-block">用于签名的私钥</span>
+                            </div>
+                        </div>
+                        <div class="form-group" id="qiniubucket">
+                            <label class="col-sm-2 control-label">Bucket</label>
+                            <div class="col-sm-9">
+                                <input type="text" name="qiniu[bucket]" class="form-control" value="{$qiniu['bucket']}" placeholder="" />
+                                <span class="help-block">请保证bucket为可公共读取的</span>
+                            </div>
+                        </div>
+                        <div class="form-group">
+                            <label class="col-sm-2 control-label">Url</label>
+                            <div class="col-sm-9">
+                                <input type="text" name="qiniu[url]" class="form-control" value="{$qiniu['url']}" placeholder="" />
+                                <span class="help-block">七牛支持用户自定义访问域名。注：url开头加http://或https://结尾不加 ‘/’例：http://abc.com</span>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="service" id="tengxun"  {if intval($settings['service']) != 4} style="display: none;" {/if}>
+                        <div class="form-group">
+                            <label class="col-sm-2 control-label">APPID</label>
+                            <div class="col-sm-9">
+                                <input type="text" name="cos[appid]" class="form-control" value="{$tengxun['appid']}" placeholder="" />
+                                <span class="help-block">APPID 是您项目的唯一ID</span>
+                            </div>
+                        </div>
+                        <div class="form-group">
+                            <label class="col-sm-2 control-label">SecretID</label>
+                            <div class="col-sm-9">
+                                <input type="text" name="cos[secretid]" class="form-control" value="{$tengxun['secretid']}" placeholder="" />
+                                <span class="help-block">SecretID 是您项目的安全密钥，具有该账户完全的权限，请妥善保管</span>
+                            </div>
+                        </div>
+                        <div class="form-group">
+                            <label class="col-sm-2 control-label">SecretKEY</label>
+                            <div class="col-sm-9">
+                                <input type="text" name="cos[secretkey]" class="form-control encrypt" value="{$tengxun['secretkey']}" placeholder="" />
+                                <span class="help-block">SecretKEY 是您项目的安全密钥，具有该账户完全的权限，请妥善保管</span>
+                            </div>
+                        </div>
+                        <div class="form-group" id="cosbucket">
+                            <label class="col-sm-2 control-label">Bucket</label>
+                            <div class="col-sm-9">
+                                <input type="text" name="cos[bucket]" class="form-control" value="{$tengxun['bucket']}" placeholder="" />
+                                <span class="help-block">请保证bucket为可公共读取的</span>
+                            </div>
+                        </div>
+                        <div class="form-group" id="cos_local">
+                            <label class="col-sm-2 control-label">bucket所在区域</label>
+                            <div class="col-sm-9">
+                                <select class="form-control" name="cos[local]">
+                                    <option value="ap-beijing-1" {if $tengxun['local'] == 'ap-beijing-1'}selected{/if}>北京一区（已售罄）</option>
+                                    <option value="ap-beijing" {if $tengxun['local'] == 'ap-beijing'}selected{/if}>北京</option>
+                                    <option value="ap-nanjing" {if $tengxun['local'] == 'ap-nanjing'}selected{/if}>南京</option>
+                                    <option value="ap-shanghai" {if $tengxun['local'] == 'ap-shanghai'}selected{/if}>上海</option>
+                                    <option value="ap-guangzhou" {if $tengxun['local'] == 'ap-guangzhou'}selected{/if}>广州</option>
+                                    <option value="ap-chengdu" {if $tengxun['local'] == 'ap-chengdu'}selected{/if}>成都</option>
+                                    <option value="ap-chongqing" {if $tengxun['local'] == 'ap-chongqing'}selected{/if}>重庆</option>
+                                    <option value="ap-shenzhen-fsi" {if $tengxun['local'] == 'ap-shenzhen-fsi'}selected{/if}>深圳金融</option>
+                                    <option value="ap-shanghai-fsi" {if $tengxun['local'] == 'ap-shanghai-fsi'}selected{/if}>上海金融</option>
+                                    <option value="ap-beijing-fsi" {if $tengxun['local'] == 'ap-beijing-fsi'}selected{/if}>北京金融</option>
+                                    <option value="ap-hongkong" {if $tengxun['local'] == 'ap-hongkong'}selected{/if}>中国香港</option>
+                                    <option value="ap-singapore" {if $tengxun['local'] == 'ap-singapore'}selected{/if}>新加坡</option>
+                                    <option value="ap-mumbai" {if $tengxun['local'] == 'ap-mumbai'}selected{/if}>孟买</option>
+                                    <option value="ap-seoul" {if $tengxun['local'] == 'ap-seoul'}selected{/if}>首尔</option>
+                                    <option value="ap-bangkok" {if $tengxun['local'] == 'ap-bangkok'}selected{/if}>曼谷</option>
+                                    <option value="ap-tokyo" {if $tengxun['local'] == 'ap-tokyo'}selected{/if}>东京</option>
+                                    <option value="na-siliconvalley" {if $tengxun['local'] == 'na-siliconvalley'}selected{/if}>硅谷</option>
+                                    <option value="na-ashburn" {if $tengxun['local'] == 'na-ashburn'}selected{/if}>弗吉尼亚</option>
+                                    <option value="na-toronto" {if $tengxun['local'] == 'na-toronto'}selected{/if}>多伦多</option>
+                                    <option value="eu-frankfurt" {if $tengxun['local'] == 'eu-frankfurt'}selected{/if}>法兰克福</option>
+                                    <option value="eu-moscow" {if $tengxun['local'] == 'eu-moscow'}selected{/if}>莫斯科</option>
+                                </select>
+                                <span class="help-block">选择bucket对应的区域</span>
+                            </div>
+                        </div>
+                        <div class="form-group" >
+                            <label class="col-sm-2 control-label">Url</label>
+                            <div class="col-sm-9">
+                                <input type="text" name="cos[url]" class="form-control" value="{$tengxun['url']}" placeholder="" />
+                                <span class="help-block">腾讯云支持用户自定义访问域名。注：url开头加http://或https://结尾不加 ‘/’例：http://abc.com</span>
+                            </div>
+                        </div>
+
+
+                    </div>
+                </div>
+            </div>
+            <div class="form-group">
+                <label class="col-sm-2 control-label"></label>
+                <div class="col-sm-9">
+                    <input type="submit" name="submit" value="提交" class="btn btn-primary min-width" />
+                    <input type="hidden" name="token" value="{$_W['token']}" />
+                </div>
+            </div>
+        </form>
+    </div>
+</div>
+<script>
+    $(function () {
+        window.optionchanged = false;
+        $('#myTab a').click(function (e) {
+            e.preventDefault();//阻止a链接的跳转行为
+            $(this).tab('show');//显示当前选中的链接及关联的content
+        })
+    });
+
+    var alibucket = '{$_W['wlsetting']['enclosure']['alioss']['bucket']}';
+
+    var buck =  function() {
+        var key = $(':text[name="alioss[key]"]').val();
+        var secret = $(':text[name="alioss[secret]"]').val();
+        if (key == '' || secret == '') {
+            $('#bucket').hide();
+            return false;
+        }
+        $.post("{php echo url('system/attachment/buckets')}", {'key' : key, 'secret' : secret}, function(data) {
+            try {
+                var data = $.parseJSON(data);
+            } catch (error) {
+                util.message('Access Key ID 或 Access Key Secret 填写错误，请重新填写。', '', 'error');
+                $('#bucket').hide();
+                $('select[name="alioss[bucket]"]').val('');
+                return false;
+            }
+
+            if (data.message.errno < 0 ) {
+                return false;
+            } else {
+                $('#bucket').show();
+                var bucket = $('select[name="alioss[bucket]"]');
+                bucket.empty();
+                var buckets = eval(data.message.message);
+                for (var i in buckets) {
+                    var selected = alibucket == buckets[i]['name'] || alibucket ==  buckets[i]['name'] + '@@' + buckets[i]['location'] ? 'selected' : '';
+                    bucket.append('<option value="' + buckets[i]['name'] + '@@' + buckets[i]['location'] + '"' + selected + '>'+buckets[i]['loca_name'] + '</option>');
+                }
+                if($('select').niceSelect) {
+                    $('select').niceSelect('update')
+                }
+            }
+        });
+    };
+    {if $settings['service'] == 2}
+    buck();
+    {/if}
+    $(':text[name="alioss[secret]"]').blur(function() {buck();});
+
+
+</script>
+{php include wl_template('common/footer');}

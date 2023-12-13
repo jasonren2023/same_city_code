@@ -1,0 +1,70 @@
+{php include wl_template('common/header');}
+<style>
+    .fui-goods-list{width:100%;border-bottom: 1px dashed #e1ecee;padding-top:5px;padding-bottom:5px;}
+    .fui-goods-list span{display: block;padding:0;}
+</style>
+<ul class="nav nav-tabs" id="myTab">
+    <li class="active"><a href="javascript:;">发货</a></li>
+</ul>
+<div class="app-content">
+    <div class="app-form">
+    <form action="" method="post" class="form-horizontal form form-validate" >
+        <div class="panel panel-default">
+            <div class="panel-heading">发货</div>
+            <div class="panel-body">
+                <div class="form-group">
+                    <label class="col-sm-2 control-label must">收件人姓名</label>
+                    <div class="col-sm-9">
+                        <input type="text" disabled name="receiver_name" class="form-control" value="{$address['receiver_name']}" />
+                    </div>
+                </div>
+                <div class="form-group">
+                    <label class="col-sm-2 control-label must">详细收货地址信息</label>
+                    <div class="col-sm-9">
+                        <input type="text" disabled name="detailed_address" class="form-control" value="{$address['detailed_address']}" />
+                    </div>
+                </div>
+                <div class="form-group">
+                    <label class="col-sm-2 control-label must">收件人手机号码</label>
+                    <div class="col-sm-9">
+                        <input type="text" disabled name="tel_number" class="form-control" value="{$address['tel_number']}" />
+                    </div>
+                </div>
+
+                <div class="form-group">
+                    <label class="col-sm-2 control-label">快递公司</label>
+                    <div class="col-sm-9">
+                        <select class="form-control select2" name="delivery_id" id="express">
+                            {loop $companyList $value}
+                            <option value="{$value['delivery_id']}" >{$value['delivery_name']}</option>
+                            {/loop}
+                        </select>
+                    </div>
+                </div>
+                <div class="form-group">
+                    <label class="col-sm-2 control-label must">快递单号</label>
+                    <div class="col-sm-9">
+                        <input type="text" name="waybill_id" class="form-control"  />
+                    </div>
+                </div>
+            </div>
+        </div>
+        <div class="form-group">
+            <label class="col-sm-2 control-label"></label>
+            <div class="col-sm-9">
+                <input type="hidden" name="id" value="{$id}" />
+                <input type="hidden" name="openid" value="{$openid}" />
+                <input type="submit" name="submit" value="提交" class="btn btn-primary min-width" />
+                <input type="hidden" name="token" value="{$_W['token']}" />
+            </div>
+        </div>
+    </form>
+    </div>
+</div>
+{php include wl_template('common/footer');}
+
+
+
+
+
+

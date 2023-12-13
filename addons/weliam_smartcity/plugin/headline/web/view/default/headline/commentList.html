@@ -1,0 +1,580 @@
+{php include wl_template('common/header');}
+<style>
+	#titleList{
+		float: left;
+		width: 220px;
+		border: 1px solid #e5e5e5;
+		margin-right: 30px;
+	}
+	#titleList .menuHref{
+		float: left;
+		background-color: #FFF;
+		width: 100%;
+		border-bottom: 1px solid #e5e5e5;
+		padding: 10px;
+		color: rgb(15,15,15);
+	}
+	#titleList .menuHref:last-child{
+		border-bottom: none;
+	}
+	#titleList .active{
+		background: #1ab394;
+		color: #FFF;
+	}
+	#titleList .active .menuTime{
+		background: #1ab394;
+		color: #FFF;
+	}
+	#titleList .menuHref .menuList{}
+	#titleList .menuHref .menuTitle{
+		font-size: 15px;
+		overflow: hidden;
+		text-overflow: ellipsis;
+		display: -webkit-box;
+		-webkit-line-clamp: 2;
+		-webkit-box-orient: vertical;
+		line-height: 20px;
+	}
+	#titleList .menuHref .menuInfo{
+		color: #aaa;
+	}
+	#titleList .menuHref .menuTime{
+		margin-top: 10px;
+		display: block;
+		font-size: 14px;
+		line-height: 20px;}
+	#titleList .menuHref .menuNumber{}
+	#titleList .menuHref .menuUnread{
+		float: right;
+		background: red;
+		color: #FFF;
+		width: 15px;
+		height: 15px;
+		line-height: 16px;
+		text-align: center;
+		border-radius: 50%;
+	}
+	#commonsList{
+		float: left;
+		width: calc(100% - 300px);
+	}
+</style>
+<ul class="nav nav-tabs">
+	<li class="active"><a href="javascript:;">留言列表</a></li>
+</ul>
+<div class="app-content">
+	<div class="app-table-list">
+		<div id="list" class="panel tab-pane panel-default">
+			<div class="table-responsive">
+				<div id="titleList">
+					{loop $list $listKey $listVal}
+						<a href="{php echo web_url('headline/headline/commentList',array('id'=>$listVal['id']))}" class="menuHref  {if $listVal['id'] == $id}active{/if} ">
+							<div class="menuList">
+								<div class="menuTitle">{$listVal['title']}</div>
+								<div class="menuInfo">
+									<span class="menuTime">{$listVal['release_time']}</span>
+									{if $listVal['num'] > 0 && $listVal['id'] != $id}<span class="menuUnread">{$listVal['num']}</span>{/if}
+								</div>
+							</div>
+						</a>
+					{/loop}
+				</div>
+				<table id="commonsList" class="table table-hover table-bordered">
+					<thead>
+						<tr>
+							<th class="text-center" width="5%"><input type="checkbox" /></th>
+							<th class="text-center" width="75%">留言内容</th>
+							<th class="text-center" width="20%">操作</th>
+						</tr>
+					</thead>
+					<tbody id="tables">
+						{loop $commentList $index $item}
+							<tr class="text-left text-left">
+								<td style="text-align: center">
+									<input type="checkbox" value="{$item['id']}" />
+								</td>
+								<td class="textarea textarea-pd">
+									<div class="dis-flex">
+										<div class="user-image" style="background-image:url({$item['avatar']})"></div>
+										<div class="user-detail">
+											<div class="user-name content-color">{$item['nickname']}</div>
+											<div class="comment-content">{php echo json_decode($item['text'])}</div>
+											<div class="comment-date content-color">{$item['times']}</div>
+										</div>
+									</div>
+									{if $item['reply']}
+									<div class="reply-text">
+										<span class="content-color">作者回复：</span>
+										<p class="content-color">{php echo json_decode($item['reply'])}</p>
+									</div>
+									{/if}
+								</td>
+								<td comment_id="{$item['id']}">
+									<a class="btn btn-sm btn-default btn-selected" href="javascript:;" selectedState="{$item['selected']}">
+										{if $item['selected'] == 0}
+										精选
+										{else}
+										取消精选
+										{/if}
+									</a>
+									<a class="btn btn-sm btn-warning btn-setTop" href="javascript:;" topState="{$item['set_top']}">
+										{if $item['set_top'] == 0}
+										置顶
+										{else}
+										取消置顶
+										{/if}
+									</a>
+									{if $item['reply'] == ''}
+									<a class="btn btn-sm btn-info btn-reply" href="javascript:;">回复</a>
+									{else}
+									<a class="btn btn-sm btn-info btn-changereply" href="javascript:;">已回复</a>
+									{/if}
+									<a class="btn btn-sm btn-danger" href="{php echo web_url('headline/headline/delatecom', array('id'=>$item['id']))}" data-toggle="ajaxRemove" data-confirm="确认删除此条留言吗？" >删除</a>
+								</td>
+							</tr>
+						{/loop}
+					</tbody>
+				</table>
+				<div class="pull-left">
+					<button class="btn btn-default" type="button" data-toggle='batch-remove' data-confirm="确定删除当前选择的留言？" data-href="{php echo web_url('headline/headline/delatecom')}">批量删除</button>
+				</div>
+			</div>
+			<div class="app-table-foot clearfix">
+				<div class="pull-left">
+				</div>
+				<div class="pull-right">
+					{$pager}
+				</div>
+			</div>
+		</div>
+	</div>
+</div>
+<script	>
+	//留言精选
+	$("#tables").on('click','.btn-selected', function() {
+		var the = $(this);
+		var id = the.parent("td").attr("comment_id");
+		var selected = the.attr("selectedState");
+		var html = $.trim($(this).html());
+		var htmls = '精选';
+		$.post("{php echo web_url('headline/headline/selected');}", {
+			id: id,
+			selected: selected
+		}, function(res) {
+			if (res.errno == 1) {
+				tip.msgbox.suc('操作成功');
+				if (html == '精选') {
+					htmls = '取消精选';
+				}
+				the.html(htmls);
+				the.attr("selectedState", res.data);
+			}
+
+		}, 'json');
+	});
+	//留言置顶
+	$("#tables").on('click','.btn-setTop', function() {
+		var the = $(this);
+		var id = the.parent("td").attr("comment_id");
+		var topState = the.attr("topState");
+		var hid = "{php echo $id}";
+		var html = $.trim($(this).html());
+		$(".btn-setTop").html('置顶');
+		$(".btn-setTop").attr("topState", 0);
+		$.post("{php echo web_url('headline/headline/setTop');}", {
+			id: id,
+			topState: topState,
+			hid: hid
+		}, function(res) {
+			if (res.errno == 1) {
+				//修改状态
+				tip.msgbox.suc('操作成功');
+				if (topState == 0) {
+					the.attr("topState", 1);
+					the.html('取消置顶');
+					//内容置顶
+					the.parent("td").parent("tr").prependTo($("#tables"));
+				}
+			}
+		}, 'json');
+	});
+	//回复留言 —— 弹出文本框
+	$("#tables").on('click','.btn-reply', function() {
+		$('.t-reply').remove();
+		var replyHtml =
+				'<div class="t-reply"><div class="reply-text"><span>作者回复：</span><div class="reply-text-c"><textarea class="reply-texta textarea-style" id="reply_text" maxlength="1024" placeholder="请输入回复内容..."></textarea><div class="reply-text-c-b"><div class="wordCount wordCount-tb">0/1024</div><a class="btn btn-sm comment-btn-reply submitBut" comment_id=""  href="javascript:;">回复</a><a class="btn btn-sm comment-btn-cancel cancelBut" href="javascript:;">取消</a></div></div></div></div>';
+		$(this).parents('.text-left').find('.textarea').append(replyHtml);
+		$(this).parents('.text-left').find('.submitBut').attr("comment_id", $(this).parent("td").attr("comment_id"));
+		$('.reply-texta').focus();
+		apd_textarea();
+	});
+
+	$("#tables").on('click','.btn-changereply', function() {
+		$(this).parents().prev().find('.reply-text').remove();
+		var replyHtml =
+				'<div class="t-reply"><div class="reply-text"><span>作者回复：</span><div class="reply-text-c"><textarea class="reply-texta textarea-style" id="reply_text" maxlength="1024" placeholder="请输入回复内容..."></textarea><div class="reply-text-c-b"><div class="wordCount wordCount-tb">0/1024</div><a class="btn btn-sm comment-btn-reply submitBut" comment_id=""  href="javascript:;">回复</a><a class="btn btn-sm comment-btn-cancel cancelBut" href="javascript:;">取消</a></div></div></div></div>';
+		$(this).parents('.text-left').find('.textarea').append(replyHtml);
+		$(this).parents('.text-left').find('.submitBut').attr("comment_id", $(this).parent("td").attr("comment_id"));
+		$('.reply-texta').focus();
+		apd_textarea();
+	});
+
+
+
+
+	function apd_textarea() {
+		$("textarea").on('keyup', function() {
+			var length = $(this).val().length;
+			var maxlength = $(this).attr("maxlength");
+			$(this).parent().find('.wordCount').html(length + "/" + maxlength);
+		});
+		$('.cancelBut').on('click', function() {
+			$(this).parents('.text-left').find('.t-reply').remove();
+		});
+		//回复留言 —— 提交内容
+		$(".submitBut").on('click', function() {
+			var the = $(this);
+			var id = the.attr("comment_id");
+			var text = $("#reply_text").val();
+			$.post("{php echo web_url('headline/headline/reply');}", {
+				id: id,
+				text: text
+			}, function(res) {
+				if (res.errno == 1) {
+					the.parents('.text-left').find('.btn-reply').parent().append(
+							'<a class="btn btn-sm btn-disabled" href="javascript:;">已回复</a>');
+					the.parents('.text-left').find('.btn-reply').remove();
+					the.parents('.text-left').find('.t-reply').remove();
+					var html = "<div class='reply-text'>\n" +
+							"<span>作者回复：</span>" + text +
+							"</div>";
+					$("[comment_id='" + id + "']").prev(".textarea").append(html);
+				}
+				$("#reply-model").click();
+			}, 'json');
+		});
+	}
+</script>
+
+
+
+
+<!--<style>
+	.comment-btn-reply{
+		background-color: #23c6c8;
+		border-color: #23c6c8;
+		color: #FFF;
+		padding: 5px 35px;
+		border-radius: 15px;
+		margin-right: 20px;
+	}
+	.comment-btn-cancel{
+		background-color: #f7a54a;
+		border-color: #f7a54a;
+		color: #FFF;
+		padding: 5px 35px;
+		border-radius: 15px;
+	}
+	.reply-texta{
+		width: 100%;
+		height: 150px;
+		max-width: 100%;
+		max-height: 150px;
+		resize:none;
+		margin-top: 10px;
+	}
+	.wordCount-tb{
+		margin: 7px 0 ;
+	}
+	#tables tr .user-image {
+		width: 40px;
+		height: 40px;
+		background-repeat: no-repeat;
+		background-position: center;
+		background-size: 40px 40px;
+		margin-right: 20px;
+		flex-shrink: 0;
+	}
+
+	#tables .dis-flex {
+		display: flex;
+	}
+
+	#tables .user-detail {
+		padding-bottom: 10px;
+	}
+
+	#tables .textarea-pd {
+		padding: 10px 10px 10px 30px !important;
+	}
+
+	#tables .user-detail .comment-content {
+		margin: 5px 0;
+	}
+
+	#tables .reply-text {
+		position: relative;
+		border-top: 1px solid #EFEFEF;
+		padding: 10px 20px 0 20px;
+		font-size: 13px;
+		color: #666;
+		margin-left: 80px;
+	}
+
+	#tables .reply-text span:before {
+		content: " ";
+		width: 2px;
+		height: 12px;
+		position: absolute;
+		left: 22px;
+		top: 12px;
+		background-color: rgb(0, 162, 0);
+	}
+
+	#tables .reply-text span {
+		margin-left: 15px;
+	}
+	#tables .reply-text p{
+		margin-top: 2px;
+	}
+	#tables .content-color {
+		color: rgb(173, 160, 175);
+	}
+
+	#list .table.table-hover.table-bordered {
+		float: right;
+		width: 85%;
+	}
+
+	#list #leftMenuList {
+		float: left;
+		width: 15%;
+		max-height: 800px;
+		overflow-x: auto;
+	}
+
+	#list #leftMenuList .menuList {
+		border-top: 1px solid #e5e5e5;
+		padding: 10px 10px;
+		height: 91px;
+	}
+
+	#list #leftMenuList .menuList .menuTitle {
+		overflow: hidden;
+		text-overflow: ellipsis;
+		display: -webkit-box;
+		-webkit-box-orient: vertical;
+		-webkit-line-clamp: 2;
+		font-size: 16px;
+		height: 50px;
+		line-height: 25px;
+	}
+
+	#list #leftMenuList .menuList .menuInfo {
+		height: 30px;
+		line-height: 30px;
+		color: #AAA;
+		font-size: 12px;
+	}
+
+	#list #leftMenuList .menuList .menuInfo .menuTime {
+		float: left;
+	}
+
+	#list #leftMenuList .menuList .menuInfo .menuNumber {
+		float: right;
+	}
+
+	#list #leftMenuList .menuList .menuInfo .menuNumber .menuUnread {
+		color: #fc3801;
+	}
+
+	#list #leftMenuList .menuHref {
+		color: #000;
+	}
+
+	#list #leftMenuList .active {
+		background: #F2F2F2;
+	}
+</style>
+<ul class="nav nav-tabs">
+	<li class="active"><a href="javascript:;">留言列表</a></li>
+</ul>
+<div class="app-content">
+	<div class="app-filter">
+		<div class="filter-list">
+			<form class="form-horizontal" action="#" method="post">
+
+			</form>
+		</div>
+	</div>
+	<div class="app-table-list">
+		<div id="list" class="panel tab-pane panel-default">
+			<div class="table-responsive">
+				<div id="leftMenuList">
+					{loop $list $listKey $listVal}
+					<a href="{php echo web_url('headline/headline/commentList',array('id'=>$listVal['id']))}" class="menuHref">
+						<div class="menuList {if $listVal['id'] == $id}active{/if} ">
+							<div class="menuTitle">{$listVal['title']}</div>
+							<div class="menuInfo">
+								<span class="menuTime">{$listVal['release_time']}</span>
+								<span class="menuNumber">共{$listVal['total']}条{if $listVal['num'] > 0 && $listVal['id'] != $id}/<span class="menuUnread">未读{$listVal['num']}条</span>{/if}</span>
+							</div>
+						</div>
+					</a>
+					{/loop}
+				</div>
+				<table class="table table-hover table-bordered">
+					<thead>
+						<tr>
+							<th class="text-center" width="80%">留言内容</th>
+							<th class="text-center" width="20%">操作</th>
+						</tr>
+					</thead>
+					<tbody id="tables">
+						{loop $commentList $index $item}
+						<tr class="text-left text-left">
+							<td class="textarea textarea-pd">
+								<div class="dis-flex">
+									<div class="user-image" style="background-image:url({$item['avatar']})"></div>
+									<div class="user-detail">
+										<div class="user-name content-color">{$item['nickname']}</div>
+										<div class="comment-content">{php echo json_decode($item['text'])}</div>
+										<div class="comment-date content-color">{$item['times']}</div>
+									</div>
+								</div>
+								{if $item['reply']}
+								<div class="reply-text">
+									<span class="content-color">作者回复：</span>
+									<p class="content-color">{php echo json_decode($item['reply'])}</p>
+								</div>
+								{/if}
+							</td>
+							<td comment_id="{$item['id']}">
+								<a class="btn btn-sm btn-default btn-selected" href="javascript:;" selectedState="{$item['selected']}">
+									{if $item['selected'] == 0}
+									精选
+									{else}
+									取消精选
+									{/if}
+								</a>
+								<a class="btn btn-sm btn-warning btn-setTop" href="javascript:;" topState="{$item['set_top']}">
+									{if $item['set_top'] == 0}
+									置顶
+									{else}
+									取消置顶
+									{/if}
+								</a>
+								{if $item['reply'] == ''}
+								<a class="btn btn-sm btn-info btn-reply" href="javascript:;">回复</a>
+								{else}
+								<a class="btn btn-sm btn-disabled" href="javascript:;">已回复</a>
+								{/if}
+							</td>
+						</tr>
+						{/loop}
+					</tbody>
+				</table>
+			</div>
+			<div class="app-table-foot clearfix">
+				<div class="pull-left">
+				</div>
+				<div class="pull-right">
+					{$pager}
+				</div>
+			</div>
+		</div>
+	</div>
+</div>
+<script	>
+	//留言精选
+	$("#tables").on('click','.btn-selected', function() {
+		var the = $(this);
+		var id = the.parent("td").attr("comment_id");
+		var selected = the.attr("selectedState");
+		var html = $.trim($(this).html());
+		var htmls = '精选';
+		$.post("{php echo web_url('headline/headline/selected');}", {
+			id: id,
+			selected: selected
+		}, function(res) {
+			if (res.errno == 1) {
+				if (html == '精选') {
+					htmls = '取消精选';
+				}
+				the.html(htmls);
+				the.attr("selectedState", res.data);
+			}
+
+		}, 'json');
+	});
+	//留言置顶
+	$("#tables").on('click','.btn-setTop', function() {
+		var the = $(this);
+		var id = the.parent("td").attr("comment_id");
+		var topState = the.attr("topState");
+		var hid = "{php echo $id}";
+		var html = $.trim($(this).html());
+		$(".btn-setTop").html('置顶');
+		$(".btn-setTop").attr("topState", 0);
+		$.post("{php echo web_url('headline/headline/setTop');}", {
+			id: id,
+			topState: topState,
+			hid: hid
+		}, function(res) {
+			if (res.errno == 1) {
+				//修改状态
+				if (topState == 0) {
+					the.attr("topState", 1);
+					the.html('取消置顶');
+					//内容置顶
+					the.parent("td").parent("tr").prependTo($("#tables"));
+				}
+			}
+		}, 'json');
+	});
+	//回复留言 —— 弹出文本框
+	$("#tables").on('click','.btn-reply', function() {
+		$('.t-reply').remove();
+		var replyHtml =
+				'<div class="t-reply"><div class="reply-text"><span>作者回复：</span><div class="reply-text-c"><textarea class="reply-texta textarea-style" id="reply_text" maxlength="1024" placeholder="请输入回复内容..."></textarea><div class="reply-text-c-b"><div class="wordCount wordCount-tb">0/1024</div><a class="btn btn-sm comment-btn-reply submitBut" comment_id=""  href="javascript:;">回复</a><a class="btn btn-sm comment-btn-cancel cancelBut" href="javascript:;">取消</a></div></div></div></div>';
+		$(this).parents('.text-left').find('.textarea').append(replyHtml);
+		$(this).parents('.text-left').find('.submitBut').attr("comment_id", $(this).parent("td").attr("comment_id"));
+		$('.reply-texta').focus();
+		apd_textarea();
+	});
+
+	function apd_textarea() {
+		$("textarea").on('keyup', function() {
+			var length = $(this).val().length;
+			var maxlength = $(this).attr("maxlength");
+			$(this).parent().find('.wordCount').html(length + "/" + maxlength);
+		});
+		$('.cancelBut').on('click', function() {
+			$(this).parents('.text-left').find('.t-reply').remove();
+		});
+		//回复留言 —— 提交内容
+		$(".submitBut").on('click', function() {
+			var the = $(this);
+			var id = the.attr("comment_id");
+			var text = $("#reply_text").val();
+			$.post("{php echo web_url('headline/headline/reply');}", {
+				id: id,
+				text: text
+			}, function(res) {
+				if (res.errno == 1) {
+					the.parents('.text-left').find('.btn-reply').parent().append(
+							'<a class="btn btn-sm btn-disabled" href="javascript:;">已回复</a>');
+					the.parents('.text-left').find('.btn-reply').remove();
+					the.parents('.text-left').find('.t-reply').remove();
+					var html = "<div class='reply-text'>\n" +
+							"<span>作者回复：</span>" + text +
+							"</div>";
+					$("[comment_id='" + id + "']").prev(".textarea").append(html);
+				}
+				$("#reply-model").click();
+			}, 'json');
+		});
+	}
+</script>-->
+{php include wl_template('common/footer');}

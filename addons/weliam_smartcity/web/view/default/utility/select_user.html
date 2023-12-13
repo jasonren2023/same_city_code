@@ -1,0 +1,69 @@
+<style>
+    #selectUserList .userAvatar img{
+        width: 50px!important;
+        height: 50px!important;
+    }
+    #selectUserInfo .modal-content{
+        max-height: 1000px!important;
+    }
+    #selectUserInfo .modal-body.form-horizontal{
+        padding-bottom: 0!important;
+    }
+    #selectUserInfo svg{
+        display: inline-block!important;
+    }
+</style>
+<div class="modal-dialog" id="selectUserInfo" style="min-width: 60%!important;">
+    <div class="modal-content">
+        <div class="modal-header">
+            <button data-dismiss="modal" class="close" type="button">×</button>
+            <h4 class="modal-title">请选择用户</h4>
+        </div>
+        <div class="modal-body form-horizontal">
+            <!--搜索-->
+            <div class="form-group">
+                <div class="col-sm-10">
+                    <input class="form-control" placeholder="用户昵称/MID/用户姓名/联系方式..." id="searchUserInfoInput" value=""/>
+                </div>
+                <div class="btn btn-primary searchSelectUserInfo" data-plugin="plugin">搜索</div>
+            </div>
+            <!--表格-->
+            <div class="app-table-list">
+                <div class="panel panel-default" style="height: 500px;overflow: auto;">
+                    <table class="table table-hover table-responsive table-bordered" style="border: 1px solid #e5e5e5;">
+                        <thead>
+                            <tr>
+                                <th class="text-center" width="15%">用户头像</th>
+                                <th class="text-center" width="15%">用户昵称</th>
+                                <th class="text-center" width="15%">真实姓名</th>
+                                <th class="text-center" width="15%">联系方式</th>
+                                <th class="text-center" width="20%">渠道信息</th>
+                                <th class="text-center" width="20%">操作</th>
+                            </tr>
+                        </thead>
+                        <tbody class="text-center" id="selectUserList">
+                            {php include wl_template('utility/select_user_tpl');}
+                        </tbody>
+                    </table>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+<script>
+    $("#selectUserInfo").on('click','.searchSelectUserInfo',function () {
+        let search = $("#searchUserInfoInput").val();//获取搜索信息
+        if (!search) {
+            tip.msgbox.err('请输入搜索内容');
+            return;
+        }
+        var url = biz.url('utility/select/selectUserInfo',{search:search,get_type:'list',params:"{$params}"},'');
+        $.ajax(url, {
+            type: "get",
+            dataType: "html",
+            cache: false,
+        }).done(function(html) {
+            $(document).find("#selectUserList").html(html);
+        })
+    });
+</script>

@@ -1,0 +1,188 @@
+{php include wl_template('common/header');}
+<style>
+    .user{
+        height: 60px;
+        min-width: 180px;
+    }
+    .user .img{
+        width: 60px;
+        height: 60px;
+        float: left;
+        position: relative;
+    }
+    .user .img img{
+        width: 60px;
+        height: 60px;
+        border-radius: 50%;
+        border: 1px solid #CCC;
+    }
+    .user .info{
+        float: left;
+        height: 60px;
+        width: calc(100% - 60px);
+        padding-left: 10px;
+        padding-top: 10px;
+        font-size: 15px;
+        text-align: left;
+        line-height: 20px;
+    }
+    .dynamicContent{
+        max-height: 80px;
+        overflow: auto;
+        text-align: left;
+    }
+</style>
+<ul class="nav nav-tabs" id="myTab">
+    <li class="active"><a href="javascript:;">动态列表</a></li>
+</ul>
+<div class="app-content">
+    <!--顶部操作-->
+    <div class="app-filter">
+        <div class="filter-action">
+            <a href="{php echo web_url('dating/member/dynamicEdit')}" class="btn btn-primary">发布虚拟动态</a>
+        </div>
+        <div class="filter-list">
+            <form action="" method="get" class="form-horizontal" role="form" id="form1">
+                <input type="hidden" name="c" value="site" />
+                <input type="hidden" name="a" value="entry" />
+                <input type="hidden" name="m" value="{MODULE_NAME}" />
+                <input type="hidden" name="p" value="dating" />
+                <input type="hidden" name="ac" value="member" />
+                <input type="hidden" name="do" value="dynamicList" />
+                <input type="hidden" name="is_fictitious" value="{$isFictitious}" />
+                <input type="hidden" name="examine" value="{$examine}" />
+                <div class="form-group">
+                    <div class="col-sm-2 control-label">动态内容</div>
+                    <div class="col-sm-9">
+                        <input type="text" class="form-control" name="content" value="{$content}" placeholder="请输入动态内容...">
+                    </div>
+                </div>
+                <div class="form-group">
+                    <label class="col-sm-2 control-label">动态类型</label>
+                    <div class="col-sm-9">
+                        <div class="btn-group">
+                            <a href="{php echo wl_filter_url('is_fictitious:0');}" class="btn {if $isFictitious == 0}btn-primary{else}btn-default{/if}">全部动态</a>
+                            <a href="{php echo wl_filter_url('is_fictitious:1');}" class="btn {if $isFictitious == 1}btn-primary{else}btn-default{/if}">真实动态</a>
+                            <a href="{php echo wl_filter_url('is_fictitious:2');}" class="btn {if $isFictitious == 2}btn-primary{else}btn-default{/if}">虚拟动态</a>
+                        </div>
+                    </div>
+                </div>
+                <div class="form-group">
+                    <label class="col-sm-2 control-label">状态</label>
+                    <div class="col-sm-9">
+                        <div class="btn-group">
+                            <a href="{php echo wl_filter_url('examine:0');}" class="btn {if $examine == 0}btn-primary{else}btn-default{/if}">全部</a>
+                            <a href="{php echo wl_filter_url('examine:1');}" class="btn {if $examine == 1}btn-primary{else}btn-default{/if}">待审核</a>
+                            <a href="{php echo wl_filter_url('examine:2');}" class="btn {if $examine == 2}btn-primary{else}btn-default{/if}">未通过</a>
+                            <a href="{php echo wl_filter_url('examine:3');}" class="btn {if $examine == 3}btn-primary{else}btn-default{/if}">显示中</a>
+                        </div>
+                    </div>
+                </div>
+                <div class="form-group">
+                    <div class="col-sm-2 control-label"></div>
+                    <div class="col-sm-9">
+                        <button class="btn btn-primary" type="submit">搜索</button>
+                        <a href="{php echo web_url('dating/member/labelList')}" class="btn btn-danger">清除</a>
+                    </div>
+                </div>
+            </form>
+        </div>
+    </div>
+    <!--表格信息-->
+    <div class="app-table-list">
+        <!--列表信息-->
+        <div class="table-responsive order-list">
+            <table class="table table-hover">
+                <thead>
+                    <tr>
+                        <th class="text-center" width="5%"><input type="checkbox" /></th>
+                        <th class="text-left" width="5%">ID</th>
+                        <th class="text-left" width="10%">用户信息</th>
+                        <th class="text-left"  width="35%">动态信息</th>
+                        <th class="text-center" width="10%">发布时间</th>
+                        <th class="text-center" width="5%">浏览量</th>
+                        <th class="text-center" width="5%">状态</th>
+                        <th class="text-center" width="5%">是否为虚拟动态</th>
+                        <th class="text-center" width="20%">操作</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    {loop $list $key $item}
+                        <tr class="text-center">
+                            <td><input type="checkbox" value="{$item['id']}" /></td>
+                            <td>{$item['id']}</td>
+                            <td>
+                                <div class="user">
+                                    <div class="img">
+                                        <img src="{$item['avatar']}">
+                                    </div>
+                                    <div class="info">
+                                        <div>{$item['nickname']}</div>
+                                    </div>
+                                </div>
+                            </td>
+                            <td>
+                                <div class="dynamicContent">{$item['content']}</div>
+                            </td>
+                            <td>{$item['create_time']}</td>
+                            <td>{$item['pv']}</td>
+                            <td>
+                                {if $item['status'] == 1}
+                                    <label class="label label-default">审核中</label>
+                                {elseif $item['status'] == 2}
+                                    <label class="label label-danger">未通过</label>
+                                {else}
+                                    <label class="label label-success">显示中</label>
+                                {/if}
+                            </td>
+                            <td>
+                                {if $item['is_fictitious'] == 1}
+                                    <label class="label label-success">不是</label>
+                                {else}
+                                    <label class="label label-danger">是</label>
+                                {/if}
+                            </td>
+                            <td>
+                                {if $item['is_fictitious'] == 1}
+                                    <a href="{php echo web_url('dating/member/dynamicSee',['id'=>$item['id']])}" class="btn btn-info btn-sm">查看</a>
+                                    {if $item['status'] == 1}
+                                        <a href="{php echo web_url('dating/member/dynamicExamine',['id'=>$item['id'],'status'=>3])}" data-toggle="ajaxPost" class="btn btn-primary btn-sm">通过</a>
+                                        <a href="javascript:;" class="btn btn-success btn-sm btn-reject" data-id="{$item['id']}">驳回</a>
+                                    {/if}
+                                {else}
+                                    <a href="{php echo web_url('dating/member/dynamicEdit',['id'=>$item['id']])}" class="btn btn-warning btn-sm">编辑</a>
+                                {/if}
+                                <a href="{php echo web_url('dating/member/dynamicDel',['ids'=>$item['id']])}" class="btn btn-danger btn-sm" data-toggle="ajaxRemove" data-confirm="确定删除当前动态信息？">删除</a>
+                                <a href="{php echo web_url('dating/member/commentList',['dynamic_id'=>$item['id']])}" class="btn btn-success btn-sm">评论</a>
+                            </td>
+                        </tr>
+                    {/loop}
+                </tbody>
+            </table>
+        </div>
+        <!--操作按钮 分页信息-->
+        <div class="app-table-foot clearfix">
+            <div class="pull-left">
+                <button class="btn btn-default" type="button" data-toggle='batch-remove' data-confirm="确定删除当前选中的所有动态信息？" data-href="{php echo web_url('dating/member/dynamicDel')}">批量删除</button>
+            </div>
+            <div class="pull-right">{$pager}</div>
+        </div>
+    </div>
+</div>
+<script>
+    //点击驳回
+    $(document).on('click','.btn-reject',function (){
+        let id = $(this).data('id'),
+            url = "{php echo web_url('dating/member/dynamicExamine')}";
+        tip.prompt('请输入驳回原因！', {
+            maxlength: 230,
+            callback: function (reason) {
+                $.post(url,{id:id,status:2,reason:reason},function (res){
+                    if(res.status == 0) tip.msgbox.err(res.result.message);
+                    else tip.msgbox.suc(res.result.message,res.result.url);
+                },'json');
+            }
+        });
+    });
+</script>
+{php include wl_template('common/footer');}

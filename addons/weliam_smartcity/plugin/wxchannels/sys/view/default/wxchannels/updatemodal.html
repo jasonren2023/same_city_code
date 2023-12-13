@@ -1,0 +1,43 @@
+<style type="text/css">
+    #ajaxModal{z-index: 799!important;}
+</style>
+<form class="form-horizontal form-validate" action="{php echo web_url('wxchannels/channelweb/updategoodsapi',['id'=>$id,'out_sku_id' => $channelsinfo['skus'][0]['out_sku_id']])}" method="post" enctype="multipart/form-data">
+    <div class="modal-dialog">
+        <div class="modal-content">
+            <div class="modal-header">
+                <button data-dismiss="modal" class="close" type="button">×</button>
+                <h4 class="modal-title">更新商品</h4>
+            </div>
+            <div class="modal-body form-horizontal">
+                <div class="form-group">
+                    <div class="col-sm-2 control-label">售卖价</div>
+                    <div class="col-sm-9">
+                        <div class="input-group">
+                            <input type="number" class="form-control" min="0" placeholder="请输入售卖价" value="{$sealprice}" name="sealprice" />
+                            <span class="input-group-addon">元</span>
+                        </div>
+                    </div>
+                </div>
+                <div class="form-group">
+                    <div class="col-sm-2 control-label">市场价</div>
+                    <div class="col-sm-9">
+                        <div class="input-group">
+                            <input type="number" class="form-control" min="0" placeholder="请输入市场价" value="{$market_price}" name="market_price" />
+                            <span class="input-group-addon">元</span>
+                        </div>
+                    </div>
+                </div>
+                <div class="form-group">
+                    <div class="col-sm-2 control-label">库存</div>
+                    <div class="col-sm-9">
+                        <input type="number" class="form-control" placeholder="库存" value="{$stock_num}" name="stock_num" />
+                    </div>
+                </div>
+            </div>
+            <div class="modal-footer">
+                <button class="btn btn-primary" type="submit">提交</button>
+                <button data-dismiss="modal" class="btn btn-default" type="button">取消</button>
+            </div>
+        </div>
+    </div>
+</form>

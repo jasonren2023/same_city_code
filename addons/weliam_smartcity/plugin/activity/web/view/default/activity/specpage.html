@@ -1,0 +1,18 @@
+<div class="bigdata" style="margin-top: 10px;">
+    <div class="input-group data-item">
+        <span class="input-group-addon">规格名</span>
+        <input type="text" name="specname[]" class="form-control" value="{$itmes['name']}">
+        <span class="input-group-addon">报名价￥</span>
+        <input type="number" name="specprice[]" class="form-control" value="{$itmes['price']}">
+        <span class="input-group-addon">最大人数</span>
+        <input type="number" digits="true" name="specmax[]" class="form-control" value="{$itmes['maxnum']}">
+        <span class="input-group-addon">最少人数</span>
+        <input type="number" digits="true" name="specmin[]" class="form-control" value="{$itmes['minnum']}">
+        <input type="hidden" name="specids[]" class="form-control" value="{$itmes['id']}">
+        {if !is_store()}
+        <span class="input-group-addon">结算金额￥</span>
+        <input type="number" name="settlementmoney[]" class="form-control" value="{$itmes['settlementmoney']}">
+        {/if}
+        <span onclick="removes(this)" class="input-group-addon btn btn-default data-item-delete"><i class="fa fa-remove"></i> 删除</span>
+    </div>
+</div>

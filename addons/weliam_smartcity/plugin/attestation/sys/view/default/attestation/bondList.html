@@ -1,0 +1,147 @@
+{php include wl_template('common/header');}
+<style type='text/css'>
+    .goods-info{position:relative; padding-left:60px;}
+    .goods-info .img{position:absolute;top:50%; margin-top:-25px; background: url({IMAGE_LOADING}) center center no-repeat; width:50px;height:50px; }
+    .goods-info span {white-space: nowrap;overflow: hidden;text-overflow: ellipsis;display: block;}
+</style>
+<ul class="nav nav-tabs">
+    <li class="active"><a href="#">认证列表</a></li>
+</ul>
+<div class="app-content">
+    <div class="app-filter">
+        <div class="filter-list">
+            <form action="" method="get" class="form-horizontal" role="form" id="form1">
+                <input type="hidden" name="c" value="site" />
+                <input type="hidden" name="a" value="entry" />
+                <input type="hidden" name="m" value="{MODULE_NAME}" />
+                <input type="hidden" name="p" value="attestation" />
+                <input type="hidden" name="ac" value="attestation" />
+                <input type="hidden" name="do" value="bondList" />
+                <input type="hidden" name="status" value="{$_GPC['status']}" />
+                <div class="form-group">
+                    <label class="col-sm-2 control-label">缴纳状态</label>
+                    <div class="col-sm-9">
+                        <div class="btn-group">
+                            <a href="{php echo wl_filter_url('status:0');}" class="btn {if intval($_GPC['status']) == 0}btn-primary{else}btn-default{/if}">全部</a>
+                            <a href="{php echo wl_filter_url('status:1');}" class="btn {if $_GPC['status'] == 1}btn-primary{else}btn-default{/if}">已缴纳</a>
+                            <a href="{php echo wl_filter_url('status:2');}" class="btn {if $_GPC['status'] == 2}btn-primary{else}btn-default{/if}">未缴纳</a>
+                        </div>
+                    </div>
+                </div>
+                <div class="form-group form-inline">
+                    <label class="col-sm-2 control-label">关键字搜索</label>
+                    <div class="col-md-2">
+                        <select name="keywordtype" class="form-control">
+                            <option value="">关键字类型</option>
+                            <option value="1" {if $_GPC['keywordtype']==1}selected="selected"{/if}>用户昵称</option>
+                            <option value="2" {if $_GPC['keywordtype']==2}selected="selected"{/if}>用户id</option>
+                        </select>
+                    </div>
+                    <div class="col-sm-3">
+                        <input type="text" name="keyword" class="form-control" value="{$_GPC['keyword']}"  placeholder="请输入关键字"/>
+                    </div>
+                </div>
+                <div class="form-group">
+                    <label class="col-sm-2 control-label">支付时间筛选</label>
+                    <div class="col-md-2">
+                        <select name="timetype" class="form-control">
+                            <option value="0" {if $_GPC['timetype']==0}selected="selected"{/if}>关闭</option>
+                            <option value="1" {if $_GPC['timetype']==1}selected="selected"{/if}>开启</option>
+                        </select>
+                    </div>
+                    <div class="col-md-3">
+                        {php echo tpl_select_time_info('time_limit', array('starttime' => date('Y-m-d',$starttime), 'endtime' => date('Y-m-d', $endtime)));}
+                    </div>
+                </div>
+                <div class="form-group">
+                    <label class="col-sm-2 control-label"></label>
+                    <div class="col-sm-9">
+                        <button class="btn btn-primary" id="search">筛选</button>
+                    </div>
+                </div>
+            </form>
+        </div>
+    </div>
+    <div class="app-table-list">
+        <div class="table-responsive" style="min-height: 200px;">
+            <table class="table table-hover table-bordered order-list">
+                <thead style="background-color: #FFFFFF;">
+                <tr>
+                    <th style="width:80px;">用户信息</th>
+                    <th style="width:80px;text-align:center;">姓名/商家名称</th>
+                    <th style="width:60px; text-align:center;">保证金类型</th>
+                    <th style="width:60px; text-align:center;">保证金金额</th>
+                    <th style="width:70px; text-align:center;">订单号/三方单号</th>
+                    <th style="width:120px; text-align:center;">缴纳时间</th>
+                    <th style="width:100px; text-align:center;">保证金状态</th>
+                </tr>
+                </thead>
+                <tbody>
+                {loop $list $item}
+                <tr>
+                    <td class="goods-info line-feed">
+                        <div class="img"><img class="scrollLoading" src="{IMAGE_PIXEL}" data-url="{php echo tomedia($item['avatar'])}" height="50" width="50" onerror="this.src='{IMAGE_NOPIC_SMALL}'" ></div>
+                        <div class="title" style="padding-left: 60px;">
+                            <span>{$item['nickname']}</span>
+                            <span>MID:{$item['mid']}</span>
+                            <span>{$item['mobile']}</span>
+                        </div>
+                    </td>
+                    <td class="line-feed" style="width:150px;padding-left: 5px;">
+                        <span>{$item['attestationname']}</span>
+                        {if $item['type']==2}
+                        <br/><span style="color: #19BDA0;">商家ID:{$item['storeid']}</span>
+                        {/if}
+                    </td>
+                    <td class="text-center" style="width:60px;">
+                        {if $item['type']==1}
+                        <span class="label label-success">个人保证金</span>
+                        {else if $item['type']==2}
+                        <span class="label label-warning">商家保证金</span>
+                        {/if}
+                    </td>
+                    <td class="text-center" style="width:60px;">
+                        {$item['money']}
+                    </td>
+                    <td class="text-center" style="width:60px;">
+                        {$item['orderno']}
+                        {if $item['transid']}
+                        <br/>({$item['transid']})
+                        {/if}
+                    </td>
+                    <td class="text-center" style="width:70px;">
+                        {if $item['paytime']>0}
+                        {php echo date('Y-m-d H:i:s',$item['paytime'])}
+                        {else}
+                        <span class="label label-default">未缴纳</span>
+                        {/if}
+                    </td>
+                    <td class="text-center" style="width:70px;">
+                        {if $item['status']==1}
+                        <span class="label label-success">已缴纳</span>
+                        {else if $item['status']==0}
+                        <span class="label label-default">未缴纳</span>
+                        {/if}
+                        {if $item['refund']}
+                        <span class="label label-warning"><a href="{php echo web_url('attestation/attestation/refundorder',array('id'=>$item['id']))}" data-toggle="ajaxRemove" data-confirm="确定退还保证金？" style="color: white;">退还保证金</a></span>
+                        {else if $item['refundflag']==1}
+                        <span class="label label-default">已退保证金</span>
+                        {/if}
+                        <br/><br/><span class="label label-danger"><a href="{php echo web_url('attestation/attestation/deleteorder',array('id'=>$item['id']))}" data-toggle="ajaxRemove" data-confirm="确定删除此订单？" style="color: white;">删除</a></span>
+                    </td>
+                </tr>
+                {/loop}
+                </tbody>
+            </table>
+        </div>
+        <div class="app-table-foot clearfix">
+            <div class="pull-left">
+
+            </div>
+            <div class="pull-right">
+                {$pager}
+            </div>
+        </div>
+    </div>
+</div>
+{php include wl_template('common/footer');}

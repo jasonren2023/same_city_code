@@ -1,0 +1,76 @@
+{php include wl_template('common/header');}
+<ul class="nav nav-tabs">
+    <li class="active"><a href="javascript:;">套餐管理</a></li>
+</ul>
+<div class="app-content">
+    <div class="app-filter">
+        <div class="filter-action">
+            <a href="{php echo web_url('yellowpage/yellowpage/meal_edit')}" class="btn btn-primary">添加套餐</a>
+        </div>
+    </div>
+    <div class="app-table-list">
+        {if !empty($lists)}
+        <div class="table-responsive">
+            <table class="table table-hover table-bordered">
+                <thead>
+                    <tr>
+                        <th class="text-center"><input type="checkbox" /></th>
+                        <th class="text-center">排序</th>
+                        <th class="text-center">套餐名称</th>
+                        <th class="text-center">费用/时间</th>
+                        <th class="text-center">审核</th>
+                        <th class="text-center">已入驻</th>
+                        <th class="text-center">状态</th>
+                        <th class="text-center">操作</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    {loop $lists $list}
+                    <tr class="text-center">
+                        <td>
+                            <input type="checkbox" value="{$list['id']}" />
+                        </td>
+                        <td>
+                            {$list['sort']}
+                        </td>
+                        <td>
+                            {$list['name']}
+                        </td>
+                        <td>
+                            {if $list['is_free'] == 1}免费{else}￥{$list['price']}{/if}/入驻{$list['day']}天
+                        </td>
+                        <td>
+                            <span class='label {if $list['check']!=1}label-primary{else}label-warning{/if}'>
+                            {if $list['check']!=1}无需审核{else}需要审核{/if}</span>
+                        </td>
+                        <td>
+                            {$list['usenum']}
+                        </td>
+                        <td>
+                            {php echo tpl_change_status('yellowpage/yellowpage/meal_status&id='.$list['id'], $list['status'])}
+                        </td>
+                        <td>
+                            <a class="btn btn-sm btn-primary" href="{php echo web_url('yellowpage/yellowpage/meal_edit', array('id' => $list['id']))}">编辑</a>
+                            <a class="btn btn-sm btn-danger"  data-toggle="ajaxRemove" href="{php echo web_url('yellowpage/yellowpage/meal_del', array('id' => $list['id']))}" data-confirm="确定删除当前套餐？">删除</a>
+                        </td>
+                    </tr>
+                    {/loop}
+                </tbody>
+            </table>
+        </div>
+        <div class="app-table-foot clearfix">
+            <div class="pull-left">
+                <button class="btn btn-default" type="button" data-toggle='batch-remove' data-confirm="确定删除当前选择的套餐？" data-href="{php echo web_url('yellowpage/yellowpage/meal_del')}">批量删除</button>
+            </div>
+            <div class="pull-right">
+                {$pager}
+            </div>
+        </div>
+        {else}
+        <div class="no-result">
+            <p>还没有相关数据</p>
+        </div>
+        {/if}
+    </div>
+</div>
+{php include wl_template('common/footer');}

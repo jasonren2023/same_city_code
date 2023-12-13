@@ -1,0 +1,315 @@
+<!--------------------------  选项卡组件群  ----------------------------------->
+<!-- 首页选项卡 -->
+<script type="text/html" id="tpl_edit_options">
+    <div class="form-group">
+        <div class="col-sm-2 control-label">下边距</div>
+        <div class="col-sm-9">
+            <div class="form-group">
+                <div class="slider col-sm-8" data-value="<%style.marginBottom%>" data-min="0" data-max="30"></div>
+                <div class="col-sm-9 control-labe count"><span><%style.marginBottom%></span>px(像素)</div>
+                <input class="diy-bind input" data-bind-child="style" data-bind="marginBottom" value="<%style.marginBottom%>" type="hidden" />
+            </div>
+        </div>
+    </div>
+    <div class="form-group">
+        <div class="col-sm-2 control-label">背景颜色</div>
+        <div class="col-sm-9">
+            <div class="input-group input-group-sm">
+                <input class="form-control diy-bind color" data-bind="background" value="<%style.background%>" type="color" data-bind-child="style"/>
+                <span class="input-group-addon btn btn-default" onclick="$(this).prev().val('#FFFFFF').trigger('propertychange')">重置</span>
+            </div>
+        </div>
+    </div>
+    <div class="form-group">
+        <div class="col-sm-2 control-label">默认字体颜色</div>
+        <div class="col-sm-9">
+            <div class="input-group input-group-sm">
+                <input class="form-control diy-bind color" data-bind="defaultBg" value="<%style.defaultBg%>" type="color" data-bind-child="style"/>
+                <span class="input-group-addon btn btn-default" onclick="$(this).prev().val('#000000').trigger('propertychange')">重置</span>
+            </div>
+        </div>
+    </div>
+    <div class="form-group">
+        <div class="col-sm-2 control-label">选中字体颜色</div>
+        <div class="col-sm-9">
+            <div class="input-group input-group-sm">
+                <input class="form-control diy-bind color" data-bind="selectBg" value="<%style.selectBg%>" type="color" data-bind-child="style"/>
+                <span class="input-group-addon btn btn-default" onclick="$(this).prev().val('#ff2d2d').trigger('propertychange')">重置</span>
+            </div>
+        </div>
+    </div>
+    <div class="line"></div>
+    <div class="form-group">
+        <div class="col-sm-15 sort_append">
+            <div>排序方式为从小到大，排序值越小越在前面</div>
+            <%each data as item index %>
+            <div class="config-option">
+                <span class="option_show" style="margin: 0;"><%item.name%></span>
+                <span class="option_show">是否显示</span>
+                <input type="checkbox" class="option_checkbox diy-bind"  data-bind-child="<%index%>" value="<%if item.status == 1%>0<%else%>1<%/if%>"  data-bind-parent="data" data-bind="status" data-bind-init="true" data-bind-nopush="yes" <%if item.status == 1%>checked="checked"<%/if%> >
+                <span class="option_sort">排序</span>
+                <input class="form-control option_input diy-bind" value="<%item.sort%>"  data-bind="sort"  data-bind-child="<%index%>"  data-bind-parent="data" data-bind-sort="true" />
+                <span class="option_sort">别名</span>
+                <input class="form-control option_nickname diy-bind" value="<%item.nickname%>"  data-bind="nickname"  data-bind-child="<%index%>" maxlength="4"  data-bind-parent="data" data-bind-sort="true" />
+            </div>
+            <%/each%>
+        </div>
+    </div>
+</script>
+<!-- 商品选项卡 -->
+<script type="text/html" id="tpl_edit_options2">
+    <div class="form-group">
+        <div class="col-sm-2 control-label">下边距</div>
+        <div class="col-sm-9">
+            <div class="form-group">
+                <div class="slider col-sm-8" data-value="<%style.marginBottom%>" data-min="0" data-max="30"></div>
+                <div class="col-sm-9 control-labe count"><span><%style.marginBottom%></span>px(像素)</div>
+                <input class="diy-bind input" data-bind-child="style" data-bind="marginBottom" value="<%style.marginBottom%>" type="hidden" />
+            </div>
+        </div>
+    </div>
+    <div class="form-group">
+        <div class="col-sm-2 control-label">背景颜色</div>
+        <div class="col-sm-9">
+            <div class="input-group input-group-sm">
+                <input class="form-control diy-bind color" data-bind="background" value="<%style.background%>" type="color" data-bind-child="style"/>
+                <span class="input-group-addon btn btn-default" onclick="$(this).prev().val('#FFFFFF').trigger('propertychange')">重置</span>
+            </div>
+        </div>
+    </div>
+    <div class="form-group">
+        <div class="col-sm-2 control-label">默认字体颜色</div>
+        <div class="col-sm-9">
+            <div class="input-group input-group-sm">
+                <input class="form-control diy-bind color" data-bind="defaultBg" value="<%style.defaultBg%>" type="color" data-bind-child="style"/>
+                <span class="input-group-addon btn btn-default" onclick="$(this).prev().val('#000000').trigger('propertychange')">重置</span>
+            </div>
+        </div>
+    </div>
+    <div class="form-group">
+        <div class="col-sm-2 control-label">选中字体颜色</div>
+        <div class="col-sm-9">
+            <div class="input-group input-group-sm">
+                <input class="form-control diy-bind color" data-bind="selectBg" value="<%style.selectBg%>" type="color" data-bind-child="style"/>
+                <span class="input-group-addon btn btn-default" onclick="$(this).prev().val('#ff2d2d').trigger('propertychange')">重置</span>
+            </div>
+        </div>
+    </div>
+    <div class="line"></div>
+    <div class="form-group">
+        <div class="col-sm-2 control-label">商品类型</div>
+        <div class="col-sm-9">
+            <%if plugins.rush%>
+                <label class="radio-inline"><input type="radio" name="goods_type" value="rush" class="diy-bind" data-bind="goods_type"  data-bind-child="params" <%if params.goods_type == 'rush'%>checked="checked"<%/if%>> 抢购</label>
+            <%/if%>
+            <%if plugins.groupon%>
+                <label class="radio-inline"><input type="radio" name="goods_type" value="groupon" class="diy-bind" data-bind="goods_type"  data-bind-child="params" <%if params.goods_type == 'groupon'%>checked="checked"<%/if%>> 团购</label>
+            <%/if%>
+            <%if plugins.fightgroup%>
+                <label class="radio-inline"><input type="radio" name="goods_type" value="wlfightgroup" class="diy-bind" data-bind="goods_type"  data-bind-child="params" <%if params.goods_type == 'wlfightgroup'%>checked="checked"<%/if%>> 拼团</label>
+            <%/if%>
+            <%if plugins.bargain%>
+                <label class="radio-inline"><input type="radio" name="goods_type" value="bargain" class="diy-bind" data-bind="goods_type"  data-bind-child="params" <%if params.goods_type == 'bargain'%>checked="checked"<%/if%>> 砍价</label>
+            <%/if%>
+            <%if plugins.coupon%>
+                <label class="radio-inline"><input type="radio" name="goods_type" value="coupon" class="diy-bind" data-bind="goods_type"  data-bind-child="params" <%if params.goods_type == 'coupon'%>checked="checked"<%/if%>> 卡券</label>
+            <%/if%>
+            <%if plugins.activity%>
+                <label class="radio-inline"><input type="radio" name="goods_type" value="activity" class="diy-bind" data-bind="goods_type"  data-bind-child="params" <%if params.goods_type == 'activity'%>checked="checked"<%/if%>> 活动</label>
+            <%/if%>
+            <%if plugins.pocket%>
+            <label class="radio-inline"><input type="radio" name="goods_type" value="pocket" class="diy-bind" data-bind="goods_type"  data-bind-child="params" <%if params.goods_type == 'pocket'%>checked="checked"<%/if%>> 掌上信息</label>
+            <%/if%>
+            <%if plugins.recruit%>
+                <label class="radio-inline"><input type="radio" name="goods_type" value="recruit" class="diy-bind" data-bind="goods_type"  data-bind-child="params" <%if params.goods_type == 'recruit'%>checked="checked"<%/if%>> 招聘信息</label>
+            <%/if%>
+            <%if plugins.dating%>
+                <label class="radio-inline"><input type="radio" name="goods_type" value="dating" class="diy-bind" data-bind="goods_type"  data-bind-child="params" <%if params.goods_type == 'dating'%>checked="checked"<%/if%>> 相亲交友</label>
+            <%/if%>
+            <%if plugins.housekeep%>
+                <label class="radio-inline"><input type="radio" name="goods_type" value="housekeep" class="diy-bind" data-bind="goods_type"  data-bind-child="params" <%if params.goods_type == 'housekeep'%>checked="checked"<%/if%>> 家政服务</label>
+            <%/if%>
+            <%if plugins.house%>
+            <label class="radio-inline"><input type="radio" name="goods_type" value="house" class="diy-bind" data-bind="goods_type"  data-bind-child="params" <%if params.goods_type == 'house'%>checked="checked"<%/if%>> 房产</label>
+            <%/if%>
+        </div>
+    </div>
+    <div class="form-items indent" data-min="2">
+        <div class="inner config-option2" id="form-items">
+            <div>排序方式为从小到大，排序值越小越在前面</div>
+            <%each data as item index %>
+            <div class="item form-group" data-id="<%index%>">
+                <span class="btn-del" title="删除"></span>
+                <label class="option_title">名称</label>
+                <input class="form-control option_name diy-bind" value="<%item.name%>"  data-bind="name"  data-bind-child="<%index%>"  data-bind-parent="data" maxlength="6" data-bind-sort="true" />
+                <label class="option_title">排序</label>
+                <input class="form-control option_sort diy-bind" value="<%item.sort%>"  data-bind="sort"  data-bind-child="<%index%>"  data-bind-parent="data" data-bind-sort="true" />
+                <div class="line" style="margin: 5px 0;"></div>
+                <%if params.goods_type != 'pocket'%>
+                <label class="option_status">
+                    <%if params.goods_type == 'housekeep'%>
+                        加载内容
+                    <%else%>
+                        状态选择
+                    <%/if%>
+                </label>
+                <%/if%>
+                <div  class="option_status_list">
+                    <%if params.goods_type == 'rush'%>
+                    <!--  未开始=1；进行中=2；已结束=3； 已下架=4；待审核=5；未通过=6；已抢完=7-->
+                    <label class="checkbox-inline"><input type="checkbox" class="option_checkbox diy-bind"  data-bind-child="<%index%>" value="1"  data-bind-parent="data" data-bind="status" data-bind-init="true" <%if item.status.indexOf('1') > -1%>checked='checked'<%/if%> >未开始</label>
+                    <label class="checkbox-inline"><input type="checkbox" class="option_checkbox diy-bind"  data-bind-child="<%index%>" value="2"  data-bind-parent="data" data-bind="status" data-bind-init="true" <%if item.status.indexOf('2') > -1%>checked='checked'<%/if%> >进行中</label>
+                    <label class="checkbox-inline"><input type="checkbox" class="option_checkbox diy-bind"  data-bind-child="<%index%>" value="3"  data-bind-parent="data" data-bind="status" data-bind-init="true" <%if item.status.indexOf('3') > -1%>checked='checked'<%/if%> >已结束</label>
+                    <label class="checkbox-inline"><input type="checkbox" class="option_checkbox diy-bind"  data-bind-child="<%index%>" value="7"  data-bind-parent="data" data-bind="status" data-bind-init="true" <%if item.status.indexOf('7') > -1%>checked='checked'<%/if%> >已抢完</label>
+                    <%else if params.goods_type == 'groupon'%>
+                    <!--未上架=0；未开始=1；进行中=2；已结束=3；下架中=4；待审核=5；未通过=6；已抢完=7-->
+                    <label class="checkbox-inline"><input type="checkbox" class="option_checkbox diy-bind"  data-bind-child="<%index%>" value="1"  data-bind-parent="data" data-bind="status" data-bind-init="true" <%if item.status.indexOf('1') > -1%>checked='checked'<%/if%> >未开始</label>
+                    <label class="checkbox-inline"><input type="checkbox" class="option_checkbox diy-bind"  data-bind-child="<%index%>" value="2"  data-bind-parent="data" data-bind="status" data-bind-init="true" <%if item.status.indexOf('2') > -1%>checked='checked'<%/if%> >进行中</label>
+                    <label class="checkbox-inline"><input type="checkbox" class="option_checkbox diy-bind"  data-bind-child="<%index%>" value="3"  data-bind-parent="data" data-bind="status" data-bind-init="true" <%if item.status.indexOf('3') > -1%>checked='checked'<%/if%> >已结束</label>
+                    <label class="checkbox-inline"><input type="checkbox" class="option_checkbox diy-bind"  data-bind-child="<%index%>" value="7"  data-bind-parent="data" data-bind="status" data-bind-init="true" <%if item.status.indexOf('7') > -1%>checked='checked'<%/if%> >已抢完</label>
+                    <%else if params.goods_type == 'wlfightgroup'%>
+                    <!--未上架=0；未开始=1；销售中=2；已结束=3；已删除=4；审核中=5；未通过=6-->
+                    <label class="checkbox-inline"><input type="checkbox" class="option_checkbox diy-bind"  data-bind-child="<%index%>" value="1"  data-bind-parent="data" data-bind="status" data-bind-init="true" <%if item.status.indexOf('1') > -1%>checked='checked'<%/if%> >未开始</label>
+                    <label class="checkbox-inline"><input type="checkbox" class="option_checkbox diy-bind"  data-bind-child="<%index%>" value="2"  data-bind-parent="data" data-bind="status" data-bind-init="true" <%if item.status.indexOf('2') > -1%>checked='checked'<%/if%> >销售中</label>
+                    <%else if params.goods_type == 'bargain'%>
+                    <!--已下架=0；未开始=1；进行中=2；已结束=3；待审核=5；未通过=6；-->
+                    <label class="checkbox-inline"><input type="checkbox" class="option_checkbox diy-bind"  data-bind-child="<%index%>" value="1"  data-bind-parent="data" data-bind="status" data-bind-init="true" <%if item.status.indexOf('1') > -1%>checked='checked'<%/if%> >未开始</label>
+                    <label class="checkbox-inline"><input type="checkbox" class="option_checkbox diy-bind"  data-bind-child="<%index%>" value="2"  data-bind-parent="data" data-bind="status" data-bind-init="true" <%if item.status.indexOf('2') > -1%>checked='checked'<%/if%> >进行中</label>
+                    <label class="checkbox-inline"><input type="checkbox" class="option_checkbox diy-bind"  data-bind-child="<%index%>" value="3"  data-bind-parent="data" data-bind="status" data-bind-init="true" <%if item.status.indexOf('3') > -1%>checked='checked'<%/if%> >已结束</label>
+                    <%else if params.goods_type == 'coupon'%>
+                    <!--未开始=1；进行中=2；已结束=3；-->
+                    <label class="checkbox-inline"><input type="checkbox" class="option_checkbox diy-bind"  data-bind-child="<%index%>" value="1"  data-bind-parent="data" data-bind="status" data-bind-init="true" <%if item.status.indexOf('1') > -1%>checked='checked'<%/if%> >未开始</label>
+                    <label class="checkbox-inline"><input type="checkbox" class="option_checkbox diy-bind"  data-bind-child="<%index%>" value="2"  data-bind-parent="data" data-bind="status" data-bind-init="true" <%if item.status.indexOf('2') > -1%>checked='checked'<%/if%> >进行中</label>
+                    <label class="checkbox-inline"><input type="checkbox" class="option_checkbox diy-bind"  data-bind-child="<%index%>" value="3"  data-bind-parent="data" data-bind="status" data-bind-init="true" <%if item.status.indexOf('3') > -1%>checked='checked'<%/if%> >已结束</label>
+                    <%else if params.goods_type == 'activity'%>
+                        <!--未开始报名=1；报名中=2；已结束=3； -->
+                        <label class="checkbox-inline"><input type="checkbox" class="option_checkbox diy-bind"  data-bind-child="<%index%>" value="1"  data-bind-parent="data" data-bind="status" data-bind-init="true" <%if item.status.indexOf('1') > -1%>checked='checked'<%/if%> >未开始</label>
+                        <label class="checkbox-inline"><input type="checkbox" class="option_checkbox diy-bind"  data-bind-child="<%index%>" value="2"  data-bind-parent="data" data-bind="status" data-bind-init="true" <%if item.status.indexOf('2') > -1%>checked='checked'<%/if%> >进行中</label>
+                        <label class="checkbox-inline"><input type="checkbox" class="option_checkbox diy-bind"  data-bind-child="<%index%>" value="3"  data-bind-parent="data" data-bind="status" data-bind-init="true" <%if item.status.indexOf('3') > -1%>checked='checked'<%/if%> >已结束</label>
+                    <%else if params.goods_type == 'recruit'%>
+                        <!-- 招聘状态：1=待付款，2=审核中，3=未通过，4=招聘中，5=已结束 -->
+                        <label class="checkbox-inline"><input type="checkbox" class="option_checkbox diy-bind"  data-bind-child="<%index%>" value="4"  data-bind-parent="data" data-bind="status" data-bind-init="true" <%if item.status.indexOf('4') > -1%>checked='checked'<%/if%> >招聘中</label>
+                        <label class="checkbox-inline"><input type="checkbox" class="option_checkbox diy-bind"  data-bind-child="<%index%>" value="5"  data-bind-parent="data" data-bind="status" data-bind-init="true" <%if item.status.indexOf('5') > -1%>checked='checked'<%/if%> >已结束</label>
+                    <%else if params.goods_type == 'dating'%>
+                        <!-- 性别:1=男,2=女 gneder -->
+                        <%if !item.gneder%><%item.gneder = '';%><%/if%>
+                        <label class="checkbox-inline"><input type="checkbox" class="option_checkbox diy-bind"  data-bind-child="<%index%>" value="1"  data-bind-parent="data" data-bind="gneder" data-bind-init="true" <%if item.gneder.indexOf('1') > -1%>checked='checked'<%/if%> >男</label>
+                        <label class="checkbox-inline"><input type="checkbox" class="option_checkbox diy-bind"  data-bind-child="<%index%>" value="2"  data-bind-parent="data" data-bind="gneder" data-bind-init="true" <%if item.gneder.indexOf('2') > -1%>checked='checked'<%/if%> >女</label>
+                    <%else if params.goods_type == 'housekeep'%>
+                        <!-- 类型:1=商户服务商,2=个人服务商,3=客户需求,4=服务项目  type -->
+                        <label class="radio-inline"><input type="radio" class="option_checkbox diy-bind"  data-bind-child="<%index%>" value="1"  data-bind-parent="data" data-bind="service_type" data-bind-init="true" <%if item.service_type == 1%>checked='checked'<%/if%> >商户服务商</label>
+                        <label class="radio-inline"><input type="radio" class="option_checkbox diy-bind"  data-bind-child="<%index%>" value="2"  data-bind-parent="data" data-bind="service_type" data-bind-init="true" <%if item.service_type == 2%>checked='checked'<%/if%> >个人服务商</label>
+                        <label class="radio-inline"><input type="radio" class="option_checkbox diy-bind"  data-bind-child="<%index%>" value="3"  data-bind-parent="data" data-bind="service_type" data-bind-init="true" <%if item.service_type == 3%>checked='checked'<%/if%> >客户需求</label>
+                        <label class="radio-inline"><input type="radio" class="option_checkbox diy-bind"  data-bind-child="<%index%>" value="4"  data-bind-parent="data" data-bind="service_type" data-bind-init="true" <%if item.service_type == 4%>checked='checked'<%/if%> >服务项目</label>
+                    <%else if params.goods_type == 'house'%>
+                        <!-- 类型:1=新房,2=二手房,3=租房  type -->
+                        <label class="radio-inline"><input type="radio" class="option_checkbox diy-bind"  data-bind-child="<%index%>" value="1"  data-bind-parent="data" data-bind="house_type" data-bind-init="true" <%if item.house_type == 1%>checked='checked'<%/if%> >新房</label>
+                        <label class="radio-inline"><input type="radio" class="option_checkbox diy-bind"  data-bind-child="<%index%>" value="2"  data-bind-parent="data" data-bind="house_type" data-bind-init="true" <%if item.house_type == 2%>checked='checked'<%/if%> >二手房</label>
+                        <label class="radio-inline"><input type="radio" class="option_checkbox diy-bind"  data-bind-child="<%index%>" value="3"  data-bind-parent="data" data-bind="house_type" data-bind-init="true" <%if item.house_type == 3%>checked='checked'<%/if%> >租房</label>
+                    <%/if%>
+                </div>
+                <div class="line" style="margin: 5px 0;"></div>
+                <label class="option_status">排序选择</label>
+                <div  class="option_status_list">
+                    <%if params.goods_type == 'recruit' || params.goods_type == 'dating'%>
+                        <!-- 1=推荐排序  2=浏览量  3=发布时间  4=距离排序 -->
+                        <select name="orders" class="form-control select2 diy-bind" data-bind="orders" data-bind-child="<%index%>" data-bind-parent="data">
+                            <option value="1" <%if item.orders==1%>selected<%/if%>>推荐排序</option>
+                            <option value="2" <%if item.orders==2%>selected<%/if%>>浏览量</option>
+                            <option value="3" <%if item.orders==3%>selected<%/if%>>发布时间</option>
+                            <option value="4" <%if item.orders==4%>selected<%/if%>>距离排序</option>
+                        </select>
+                    <%else if params.goods_type == 'housekeep'%>
+                        <select name="orders" class="form-control select2 diy-bind" data-bind="orders" data-bind-child="<%index%>" data-bind-parent="data">
+                            <%if item.service_type == 1 || item.service_type == 4%>
+                                <!-- 商户服务商(service_type=1)：1=推荐，2=时间，3=距离，4=销量 -->
+                                <!-- 服务项目(service_type=4)：1=推荐，2=时间，3=距离，4=销量 -->
+                                <option value="1" <%if item.orders==1%>selected<%/if%>>推荐</option>
+                                <option value="2" <%if item.orders==2%>selected<%/if%>>时间</option>
+                                <option value="3" <%if item.orders==3%>selected<%/if%>>距离</option>
+                                <option value="4" <%if item.orders==4%>selected<%/if%>>销量</option>
+                            <%else if  item.service_type == 2%>
+                                <!-- 个人服务商(service_type=2)：1=推荐，2=时间，3=距离 -->
+                                <option value="1" <%if item.orders==1%>selected<%/if%>>推荐</option>
+                                <option value="2" <%if item.orders==2%>selected<%/if%>>时间</option>
+                                <option value="3" <%if item.orders==3%>selected<%/if%>>距离</option>
+                            <%else if  item.service_type == 3%>
+                                <!-- 客户需求(service_type=3)：1=推荐，2=发布时间，3=上门时间，4=距离 -->
+                                <option value="1" <%if item.orders==1%>selected<%/if%>>推荐</option>
+                                <option value="2" <%if item.orders==1%>selected<%/if%>>发布时间</option>
+                                <option value="3" <%if item.orders==2%>selected<%/if%>>上门时间</option>
+                                <option value="4" <%if item.orders==3%>selected<%/if%>>距离</option>
+                            <%/if%>
+                        </select>
+                    <%else if params.goods_type == 'pocket'%>
+                        <select name="orders" class="form-control select2 diy-bind" data-bind="orders" data-bind-child="<%index%>" data-bind-parent="data">
+                            <option value="0" <%if item.orders==0%>selected<%/if%>>发帖时间</option>
+                            <option value="1" <%if item.orders==1%>selected<%/if%>>浏览人气</option>
+                            <option value="2" <%if item.orders==2%>selected<%/if%>>分享数量</option>
+                            <option value="3" <%if item.orders==3%>selected<%/if%>>点赞数量</option>
+                            <option value="4" <%if item.orders==4%>selected<%/if%>>回复时间</option>
+                        </select>
+                    <%else if params.goods_type == 'house'%>
+                        <select name="orders" class="form-control select2 diy-bind" data-bind="orders" data-bind-child="<%index%>" data-bind-parent="data">
+                            <option value="1" <%if item.orders==1%>selected<%/if%>>推荐</option>
+                            <option value="2" <%if item.orders==2%>selected<%/if%>>发布时间</option>
+                            <option value="3" <%if item.orders==3%>selected<%/if%>>价格</option>
+                        </select>
+                    <%else%>
+                        <!-- 1=创建时间  2=店铺距离  3=推荐设置  4=浏览人气  5=商品销量 -->
+                        <select name="orders" class="form-control select2 diy-bind" data-bind="orders" data-bind-child="<%index%>" data-bind-parent="data">
+                            <option value="1" <%if item.orders==1%>selected<%/if%>>创建时间</option>
+                            <option value="2" <%if item.orders==2%>selected<%/if%>>店铺距离</option>
+                            <option value="3" <%if item.orders==3%>selected<%/if%>>推荐设置</option>
+                            <option value="4" <%if item.orders==4%>selected<%/if%>>浏览人气</option>
+                            <option value="5" <%if item.orders==5%>selected<%/if%>>商品销量</option>
+                        </select>
+                    <%/if%>
+                </div>
+            </div>
+            <%/each%>
+        </div>
+        <div class="btn btn-w-m btn-block btn-default btn-outline" id="addChild"><i class="fa fa-plus"></i> 添加一个</div>
+    </div>
+</script>
+<!-- 商户选项卡 -->
+<script type="text/html" id="tpl_edit_options3">
+    <div class="form-group">
+        <div class="col-sm-2 control-label">内容下边距</div>
+        <div class="col-sm-9">
+            <div class="form-group">
+                <div class="slider col-sm-8" data-value="<%style.marginBottom%>" data-min="0" data-max="30"></div>
+                <div class="col-sm-9 control-labe count"><span><%style.marginBottom%></span>px(像素)</div>
+                <input class="diy-bind input" data-bind-child="style" data-bind="marginBottom" value="<%style.marginBottom%>" type="hidden" />
+            </div>
+        </div>
+    </div>
+    <div class="form-items indent" data-min="1" data-max="4">
+        <div class="inner">
+            <%each data as item itemid%>
+            <div class="item" data-id="<%itemid%>">
+                <span class="btn-del" title="删除"></span>
+                <div class="item-form">
+                    <div class="input-group" style="margin-bottom:0px;">
+                        <span class="input-group-addon btn btn-default">标题</span>
+                        <input class="form-control diy-bind" value="<%item.title%>"  data-bind="title"  data-bind-child="<%itemid%>" maxlength="4"  data-bind-parent="data" data-bind-sort="true" />
+                    </div>
+                    <div class="input-group" style="margin-top:10px;margin-bottom:0px;">
+                        <label class="option_status">排序方式</label>
+                        <div  class="option_status_list">
+                            <!--  1=时间排序；2=距离排序；3=推荐排序；4=人气排序  -->
+                            <label class="radio-inline"><input type="radio" class="diy-bind"  data-bind-child="<%itemid%>" value="1"  data-bind-parent="data" data-bind="order" data-bind-init="true" <%if item.order == 1%>checked="checked"<%/if%> >时间</label>
+                            <label class="radio-inline"><input type="radio" class="diy-bind"  data-bind-child="<%itemid%>" value="2"  data-bind-parent="data" data-bind="order" data-bind-init="true" <%if item.order == 2%>checked="checked"<%/if%> >距离</label>
+                            <label class="radio-inline"><input type="radio" class="diy-bind"  data-bind-child="<%itemid%>" value="3"  data-bind-parent="data" data-bind="order" data-bind-init="true" <%if item.order == 3%>checked="checked"<%/if%> >推荐</label>
+                            <label class="radio-inline"><input type="radio" class="diy-bind"  data-bind-child="<%itemid%>" value="4"  data-bind-parent="data" data-bind="order" data-bind-init="true" <%if item.order == 4%>checked="checked"<%/if%> >人气</label>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <%/each%>
+        </div>
+        <div class="btn btn-w-m btn-block btn-default btn-outline" id="addChild"><i class="fa fa-plus"></i> 添加一个</div>
+    </div>
+</script>
+
+

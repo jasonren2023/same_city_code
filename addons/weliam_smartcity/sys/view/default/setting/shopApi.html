@@ -1,0 +1,291 @@
+{php include wl_template('common/header');}
+<ul class="nav nav-tabs" id="myTab">
+	<li class="active"><a href="javascript:;">接口设置</a></li>
+</ul>
+<div class="app-content">
+<div class="app-form" id="interfaceManagement">
+	<form action="" method="post" class="form-horizontal form form-validate">
+		<!--基本接口设置-->
+		<div class="panel-heading">基本接口设置</div>
+		<div class="tab-content">
+			<div class="form-group">
+				<label class="col-sm-2 control-label">腾讯地图KEY</label>
+				<div class="col-sm-9">
+					<input type="text" class="form-control" v-model="info.txmapkey" />
+					<span class="help-block">不填则无法进行定位服务与操作。</span>
+				</div>
+			</div>
+		</div>
+		<!--物流查询接口管理-->
+		<div class="panel-heading">物流查询接口管理</div>
+		<div class="tab-content">
+			<div class="form-group">
+				<label class="col-sm-2 control-label">接口类型</label>
+				<div class="col-sm-9">
+					<label class="radio-inline"><input type="radio" v-model="info.logistics.type" value="0">关闭</label>
+					<label class="radio-inline"><input type="radio" v-model="info.logistics.type" value="1">快递鸟</label>
+					<label class="radio-inline"><input type="radio" v-model="info.logistics.type" value="2">阿里云</label>
+<!--				<label class="radio-inline"><input type="radio" v-model="info.logistics.type" value="2">菜鸟裹裹</label>-->
+<!--				<label class="radio-inline"><input type="radio" v-model="info.logistics.type" value="3">快递100</label>-->
+				</div>
+			</div>
+			<!--快递鸟配置信息-->
+			<span v-if="info.logistics.type == 1">
+				<div class="form-group">
+					<label class="col-sm-2 control-label">用户ID</label>
+					<div class="col-sm-9">
+						<input type="text" class="form-control" v-model="info.logistics.id"/>
+					</div>
+				</div>
+				<div class="form-group">
+					<label class="col-sm-2 control-label">appKey</label>
+					<div class="col-sm-9">
+						<input type="text" class="form-control" v-model="info.logistics.app_key"/>
+					</div>
+				</div>
+				<div class="form-group">
+					<label class="col-sm-2 control-label">青龙编码</label>
+					<div class="col-sm-9">
+						<input type="text" class="form-control" v-model="info.logistics.jd_code"/>
+						<span class="help-block">使用京东物流必须，请自行与京东官方沟通申请！</span>
+					</div>
+				</div>
+				<div class="form-group">
+					<label class="col-sm-2 control-label">接口版本</label>
+					<div class="col-sm-9">
+						<label class="radio-inline"><input type="radio" v-model="info.logistics.kdntype" value="0">免费版</label>
+						<label class="radio-inline"><input type="radio" v-model="info.logistics.kdntype" value="1">付费版</label>
+					</div>
+				</div>
+			</span>
+			<span v-if="info.logistics.type == 2">
+				<div class="form-group">
+					<label class="col-sm-2 control-label">阿里云appcode</label>
+					<div class="col-sm-9">
+						<input type="text" class="form-control" v-model="info.logistics.appcode"/>
+					</div>
+				</div>
+				<div class="form-group">
+					<label class="col-sm-2 control-label">数据缓存时间</label>
+					<div class="col-sm-9">
+						<div class="input-group">
+							<input type="number" class="form-control" v-model="info.logistics.datatime"/>
+							<span class="input-group-addon">小时</span>
+						</div>
+						<span class="help-block">为避免浪费接口使用次数，设置缓存时间后指定时间内只会读取缓存信息而不是调用接口，数据保留整数，不填或填0默认为1小时。</span>
+					</div>
+				</div>
+			</span>
+			<!--菜鸟裹裹配置信息-->
+<!--			<span v-if="info.logistics.type == 2">暂未启用</span>-->
+			<!--快递100配置信息-->
+<!--			<span v-if="info.logistics.type == 3">暂未启用</span>-->
+		</div>
+		<!--七牛云文件上传  移动端未对接第一帧截图 暂时隐藏给设置-->
+		{if p('pocket')}
+			<div class="panel-heading hide">视频缩略图设置(七牛云)</div>
+			<div class="tab-content hide">
+				<div class="form-group">
+					<label class="col-sm-2 control-label">接口设置</label>
+					<div class="col-sm-9">
+						<label class="radio-inline"><input type="radio" v-model="info.upload.type" value="0">关闭</label>
+						<label class="radio-inline"><input type="radio" v-model="info.upload.type" value="1">开启</label>
+					</div>
+				</div>
+				<span v-if="info.upload.type == 1">
+					<div class="form-group">
+						<label class="col-sm-2 control-label">域名</label>
+						<div class="col-sm-9">
+							<input type="text" class="form-control" v-model="info.upload.domain_name"/>
+							<span class="help-block">例如：http://q3u34fitq.bkt.clouddn.com/</span>
+						</div>
+					</div>
+					<div class="form-group">
+						<label class="col-sm-2 control-label">储存空间</label>
+						<div class="col-sm-9">
+							<input type="text" class="form-control" v-model="info.upload.bucket"/>
+						</div>
+					</div>
+					<div class="form-group">
+						<label class="col-sm-2 control-label">队列名称</label>
+						<div class="col-sm-9">
+							<input type="text" class="form-control" v-model="info.upload.queue_name"/>
+							<span class="help-block">请保证当前队列存在七牛云开发者后台的多媒体队列中</span>
+						</div>
+					</div>
+					<div class="form-group">
+						<label class="col-sm-2 control-label">accessKey</label>
+						<div class="col-sm-9">
+							<input type="text" class="form-control" v-model="info.upload.access_key"/>
+						</div>
+					</div>
+					<div class="form-group">
+						<label class="col-sm-2 control-label">secretKey</label>
+						<div class="col-sm-9">
+							<input type="text" class="form-control" v-model="info.upload.secret_key"/>
+						</div>
+					</div>
+				</span>
+			</div>
+		{/if}
+		{if p('citydelivery')}
+		<div class="panel-heading">三方跑腿接口设置</div>
+		<div class="form-group">
+			<label class="col-sm-2 control-label">跑腿公司</label>
+			<div class="col-sm-9">
+				<label class="radio-inline"><input type="radio" v-model="info.citydelivery.type" value="0">{if $_W['wlsetting']['trade']['maketext']}{$_W['wlsetting']['trade']['maketext']}{else}码科{/if}</label>
+				<label class="radio-inline"><input type="radio" v-model="info.citydelivery.type" value="1">达达</label>
+				<label class="radio-inline"><input type="radio" v-model="info.citydelivery.type" value="2">UU跑腿</label>
+			</div>
+		</div>
+		<div v-if="info.citydelivery.type == 0" >
+			<div class="form-group">
+				<label class="col-sm-2 control-label">{if $_W['wlsetting']['trade']['maketext']}{$_W['wlsetting']['trade']['maketext']}{else}码科{/if}跑腿系统域名</label>
+				<div class="col-sm-9">
+					<input type="text" class="form-control" v-model="info.make.domain"/>
+					<span class="help-block">安装{if $_W['wlsetting']['trade']['maketext']}{$_W['wlsetting']['trade']['maketext']}{else}码科{/if}跑腿系统的域名，默认使用智慧城市当前域名,结尾需要'/'。</span>
+				</div>
+			</div>
+			<div class="form-group">
+				<label class="col-sm-2 control-label">小程序Appid</label>
+				<div class="col-sm-9">
+					<input type="text" class="form-control" v-model="info.make.appid"/>
+					<span class="help-block">{if $_W['wlsetting']['trade']['maketext']}{$_W['wlsetting']['trade']['maketext']}{else}码科{/if}跑腿的小程序appid</span>
+				</div>
+			</div>
+			<div class="form-group">
+				<label class="col-sm-2 control-label">对接Token</label>
+				<div class="col-sm-9">
+					<input type="text" class="form-control" v-model="info.make.token"/>
+					<span class="help-block">{if $_W['wlsetting']['trade']['maketext']}{$_W['wlsetting']['trade']['maketext']}{else}码科{/if}跑腿系统生成的对接token参数</span>
+				</div>
+			</div>
+		</div>
+		<div v-if="info.citydelivery.type == 1" >
+			<div class="form-group">
+				<label class="col-sm-2 control-label">app_key</label>
+				<div class="col-sm-9">
+					<input type="text" class="form-control" v-model="info.dada.appKey"/>
+					<span class="help-block">达达开发者账号app_key</span>
+				</div>
+			</div>
+			<div class="form-group">
+				<label class="col-sm-2 control-label">app_secret</label>
+				<div class="col-sm-9">
+					<input type="text" class="form-control" v-model="info.dada.appSecret"/>
+					<span class="help-block">达达开发者账号app_secret</span>
+				</div>
+			</div>
+		</div>
+		<div v-if="info.citydelivery.type == 2" >
+			<div class="form-group">
+				<label class="col-sm-2 control-label">APPID</label>
+				<div class="col-sm-9">
+					<input type="text" class="form-control" v-model="info.uu.appid"/>
+					<span class="help-block">UU跑腿应用appid</span>
+				</div>
+			</div>
+			<div class="form-group">
+				<label class="col-sm-2 control-label">APPKEY</label>
+				<div class="col-sm-9">
+					<input type="text" class="form-control" v-model="info.uu.appkey"/>
+					<span class="help-block">UU跑腿应用appkey</span>
+				</div>
+			</div>
+			<div class="form-group">
+				<label class="col-sm-2 control-label">OPENID</label>
+				<div class="col-sm-9">
+					<input type="text" class="form-control" v-model="info.uu.openid"/>
+					<span class="help-block">UU跑腿应用openid</span>
+				</div>
+			</div>
+		</div>
+		{/if}
+		<!--提交按钮-->
+		<div class="form-group">
+			<label class="col-sm-2 control-label"></label>
+			<div class="col-sm-9">
+				<input type="button" value="提交" class="btn btn-primary min-width" @click="submitSetInfo()" />
+			</div>
+		</div>
+	</form>
+</div>
+</div>
+<script>
+new Vue({
+	el:"#interfaceManagement",
+	data: {
+		info:{
+			txmapkey:'',//腾讯地图key；默认空
+			guide:1,//是否开启引导切换地区；默认开启
+			logistics:{
+				type:0,//物流接口类型：0=关闭，1=快递鸟，2=阿里云
+				id:'',//唯一id：快递鸟（电商id）
+				app_key:'',//appKey
+				jd_code:'',
+                kdntype:0,//快递鸟接口版本：0=免费版 1=付费版
+                appcode:'',
+                datatime:'1'
+            },//物流信息
+			upload:{
+				type:0,//接口类型：0=关闭，1=开启
+				access_key:'',
+				secret_key:'',
+				bucket:'',
+				domain_name:'',
+				queue_name:'',
+			},//文件上传设置 七牛
+			citydelivery:{
+				type:0,//跑腿三方类型 0码科 1达达
+			},
+			dada:{
+				appKey: '',
+				appSecret:''
+			},
+			uu:{
+				appid: '',
+				appkey:'',
+				openid:''
+			},
+			make:{
+				domain: "{$_W['siteroot']}", //域名默认为智慧城市当前域名
+				appid:'',
+				token:'',
+			},
+		},
+	},
+	methods:{
+		//获取设置信息
+		getSetInfo() {
+			let logistics = this.info.logistics, upload = this.info.upload,make = this.info.make;
+			let result = commonVue.requestAjax('setting/shopset/api', {'type': 'get'}, false,false,false,"{$_W['siteroot']}");
+			//兼容旧版本操作
+			this.info.txmapkey = result.txmapkey ? result.txmapkey : '';
+			this.info.guide = result.guide ? result.guide : 1;
+			this.info.logistics = result.logistics ? result.logistics : logistics;
+			this.info.upload = result.upload ? result.upload : upload;
+			this.info.make = result.make ? result.make : make;
+			this.info.dada = result.dada ? result.dada : dada;
+			this.info.uu = result.uu ? result.uu : uu;
+			this.info.citydelivery = result.citydelivery ? result.citydelivery : citydelivery;
+
+		},
+		//提交设置信息
+		submitSetInfo(){
+			let res = commonVue.requestAjax('setting/shopset/api',{'type':'set','info':this.info},true,false,false,"{$_W['siteroot']}");
+			tip.alert(res.message,function () {
+				history.go(0);
+			});
+		},
+	},
+	mounted() {
+		this.getSetInfo();//获取设置信息
+	}
+});
+
+
+
+
+
+</script>
+{php include wl_template('common/footer');}

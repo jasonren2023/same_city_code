@@ -1,0 +1,649 @@
+2021-03-05 14:58:33 pid:1 Error: Class 'Im' not found in D:\Software\phpstudy_pro\WWW\merchant\addons\weliam_smartcity\api\Im.php:32
+Stack trace:
+#0 D:\Software\phpstudy_pro\WWW\merchant\addons\weliam_smartcity\vendor\workerman\workerman\Connection\TcpConnection.php(637): {closure}(Object(Workerman\Connection\TcpConnection), '{"im_type":4,"s...')
+#1 D:\Software\phpstudy_pro\WWW\merchant\addons\weliam_smartcity\vendor\workerman\workerman\Events\Select.php(293): Workerman\Connection\TcpConnection->baseRead(Resource id #18)
+#2 D:\Software\phpstudy_pro\WWW\merchant\addons\weliam_smartcity\vendor\workerman\workerman\Worker.php(2430): Workerman\Events\Select->loop()
+#3 D:\Software\phpstudy_pro\WWW\merchant\addons\weliam_smartcity\vendor\workerman\workerman\Worker.php(1418): Workerman\Worker->run()
+#4 D:\Software\phpstudy_pro\WWW\merchant\addons\weliam_smartcity\vendor\workerman\workerman\Worker.php(1361): Workerman\Worker::forkWorkersForWindows()
+#5 D:\Software\phpstudy_pro\WWW\merchant\addons\weliam_smartcity\vendor\workerman\workerman\Worker.php(542): Workerman\Worker::forkWorkers()
+#6 D:\Software\phpstudy_pro\WWW\merchant\addons\weliam_smartcity\api\Im.php(36): Workerman\Worker::runAll()
+#7 {main}
+2021-03-05 14:58:33 pid:1 Worker process terminated
+2021-03-05 14:59:04 pid:1 Error: Class 'Im' not found in D:\Software\phpstudy_pro\WWW\merchant\addons\weliam_smartcity\api\Im.php:32
+Stack trace:
+#0 D:\Software\phpstudy_pro\WWW\merchant\addons\weliam_smartcity\vendor\workerman\workerman\Connection\TcpConnection.php(637): {closure}(Object(Workerman\Connection\TcpConnection), '{"im_type":4,"s...')
+#1 D:\Software\phpstudy_pro\WWW\merchant\addons\weliam_smartcity\vendor\workerman\workerman\Events\Select.php(293): Workerman\Connection\TcpConnection->baseRead(Resource id #18)
+#2 D:\Software\phpstudy_pro\WWW\merchant\addons\weliam_smartcity\vendor\workerman\workerman\Worker.php(2430): Workerman\Events\Select->loop()
+#3 D:\Software\phpstudy_pro\WWW\merchant\addons\weliam_smartcity\vendor\workerman\workerman\Worker.php(1418): Workerman\Worker->run()
+#4 D:\Software\phpstudy_pro\WWW\merchant\addons\weliam_smartcity\vendor\workerman\workerman\Worker.php(1361): Workerman\Worker::forkWorkersForWindows()
+#5 D:\Software\phpstudy_pro\WWW\merchant\addons\weliam_smartcity\vendor\workerman\workerman\Worker.php(542): Workerman\Worker::forkWorkers()
+#6 D:\Software\phpstudy_pro\WWW\merchant\addons\weliam_smartcity\api\Im.php(36): Workerman\Worker::runAll()
+#7 {main}
+2021-03-05 14:59:04 pid:1 Worker process terminated
+2021-03-05 15:32:32 pid:1 Error: Class 'Im' not found in D:\Software\phpstudy_pro\WWW\merchant\addons\weliam_smartcity\api\Im.php:32
+Stack trace:
+#0 D:\Software\phpstudy_pro\WWW\merchant\addons\weliam_smartcity\vendor\workerman\workerman\Connection\TcpConnection.php(637): {closure}(Object(Workerman\Connection\TcpConnection), '{"im_type":4,"s...')
+#1 D:\Software\phpstudy_pro\WWW\merchant\addons\weliam_smartcity\vendor\workerman\workerman\Events\Select.php(293): Workerman\Connection\TcpConnection->baseRead(Resource id #18)
+#2 D:\Software\phpstudy_pro\WWW\merchant\addons\weliam_smartcity\vendor\workerman\workerman\Worker.php(2430): Workerman\Events\Select->loop()
+#3 D:\Software\phpstudy_pro\WWW\merchant\addons\weliam_smartcity\vendor\workerman\workerman\Worker.php(1418): Workerman\Worker->run()
+#4 D:\Software\phpstudy_pro\WWW\merchant\addons\weliam_smartcity\vendor\workerman\workerman\Worker.php(1361): Workerman\Worker::forkWorkersForWindows()
+#5 D:\Software\phpstudy_pro\WWW\merchant\addons\weliam_smartcity\vendor\workerman\workerman\Worker.php(542): Workerman\Worker::forkWorkers()
+#6 D:\Software\phpstudy_pro\WWW\merchant\addons\weliam_smartcity\api\Im.php(36): Workerman\Worker::runAll()
+#7 {main}
+2021-03-05 15:32:32 pid:1 Worker process terminated
+2021-03-05 15:32:55 pid:1 Error: Class 'Im' not found in D:\Software\phpstudy_pro\WWW\merchant\addons\weliam_smartcity\api\Im.php:32
+Stack trace:
+#0 D:\Software\phpstudy_pro\WWW\merchant\addons\weliam_smartcity\vendor\workerman\workerman\Connection\TcpConnection.php(637): {closure}(Object(Workerman\Connection\TcpConnection), '{"im_type":4,"s...')
+#1 D:\Software\phpstudy_pro\WWW\merchant\addons\weliam_smartcity\vendor\workerman\workerman\Events\Select.php(293): Workerman\Connection\TcpConnection->baseRead(Resource id #18)
+#2 D:\Software\phpstudy_pro\WWW\merchant\addons\weliam_smartcity\vendor\workerman\workerman\Worker.php(2430): Workerman\Events\Select->loop()
+#3 D:\Software\phpstudy_pro\WWW\merchant\addons\weliam_smartcity\vendor\workerman\workerman\Worker.php(1418): Workerman\Worker->run()
+#4 D:\Software\phpstudy_pro\WWW\merchant\addons\weliam_smartcity\vendor\workerman\workerman\Worker.php(1361): Workerman\Worker::forkWorkersForWindows()
+#5 D:\Software\phpstudy_pro\WWW\merchant\addons\weliam_smartcity\vendor\workerman\workerman\Worker.php(542): Workerman\Worker::forkWorkers()
+#6 D:\Software\phpstudy_pro\WWW\merchant\addons\weliam_smartcity\api\Im.php(36): Workerman\Worker::runAll()
+#7 {main}
+2021-03-05 15:32:55 pid:1 Worker process terminated
+2021-03-05 15:34:26 pid:1 Error: Class 'ImModuleUniapp' not found in D:\Software\phpstudy_pro\WWW\merchant\addons\weliam_smartcity\api\Im.php:32
+Stack trace:
+#0 D:\Software\phpstudy_pro\WWW\merchant\addons\weliam_smartcity\vendor\workerman\workerman\Connection\TcpConnection.php(637): {closure}(Object(Workerman\Connection\TcpConnection), '{"im_type":4,"s...')
+#1 D:\Software\phpstudy_pro\WWW\merchant\addons\weliam_smartcity\vendor\workerman\workerman\Events\Select.php(293): Workerman\Connection\TcpConnection->baseRead(Resource id #18)
+#2 D:\Software\phpstudy_pro\WWW\merchant\addons\weliam_smartcity\vendor\workerman\workerman\Worker.php(2430): Workerman\Events\Select->loop()
+#3 D:\Software\phpstudy_pro\WWW\merchant\addons\weliam_smartcity\vendor\workerman\workerman\Worker.php(1418): Workerman\Worker->run()
+#4 D:\Software\phpstudy_pro\WWW\merchant\addons\weliam_smartcity\vendor\workerman\workerman\Worker.php(1361): Workerman\Worker::forkWorkersForWindows()
+#5 D:\Software\phpstudy_pro\WWW\merchant\addons\weliam_smartcity\vendor\workerman\workerman\Worker.php(542): Workerman\Worker::forkWorkers()
+#6 D:\Software\phpstudy_pro\WWW\merchant\addons\weliam_smartcity\api\Im.php(36): Workerman\Worker::runAll()
+#7 {main}
+2021-03-05 15:34:26 pid:1 Worker process terminated
+2021-03-05 17:20:53 pid:1 ArgumentCountError: Too few arguments to function {closure}(), 1 passed in D:\Software\phpstudy_pro\WWW\merchant\addons\weliam_smartcity\vendor\workerman\workerman\Connection\TcpConnection.php on line 931 and exactly 2 expected in D:\Software\phpstudy_pro\WWW\merchant\addons\weliam_smartcity\core\common\Im.php:58
+Stack trace:
+#0 D:\Software\phpstudy_pro\WWW\merchant\addons\weliam_smartcity\vendor\workerman\workerman\Connection\TcpConnection.php(931): {closure}(Object(Workerman\Connection\TcpConnection))
+#1 D:\Software\phpstudy_pro\WWW\merchant\addons\weliam_smartcity\vendor\workerman\workerman\Connection\TcpConnection.php(755): Workerman\Connection\TcpConnection->destroy()
+#2 D:\Software\phpstudy_pro\WWW\merchant\addons\weliam_smartcity\vendor\workerman\workerman\Connection\TcpConnection.php(561): Workerman\Connection\TcpConnection->doSslHandshake(Resource id #64)
+#3 D:\Software\phpstudy_pro\WWW\merchant\addons\weliam_smartcity\vendor\workerman\workerman\Events\Select.php(293): Workerman\Connection\TcpConnection->baseRead(Resource id #64)
+#4 D:\Software\phpstudy_pro\WWW\merchant\addons\weliam_smartcity\vendor\workerman\workerman\Worker.php(2430): Workerman\Events\Select->loop()
+#5 D:\Software\phpstudy_pro\WWW\merchant\addons\weliam_smartcity\vendor\workerman\workerman\Worker.php(1418): Workerman\Worker->run()
+#6 D:\Software\phpstudy_pro\WWW\merchant\addons\weliam_smartcity\vendor\workerman\workerman\Worker.php(1361): Workerman\Worker::forkWorkersForWindows()
+#7 D:\Software\phpstudy_pro\WWW\merchant\addons\weliam_smartcity\vendor\workerman\workerman\Worker.php(542): Workerman\Worker::forkWorkers()
+#8 D:\Software\phpstudy_pro\WWW\merchant\addons\weliam_smartcity\core\common\Im.php(168): Workerman\Worker::runAll()
+#9 {main}
+2021-03-05 17:20:53 pid:1 Worker process terminated
+2021-03-09 16:34:34 pid:1 Error: Access to undeclared static property: handle::$table in D:\Software\phpstudy_pro\WWW\merchant\addons\weliam_smartcity\core\common\Im.php:139
+Stack trace:
+#0 D:\Software\phpstudy_pro\WWW\merchant\addons\weliam_smartcity\core\common\Im.php(40): handle->handleData()
+#1 D:\Software\phpstudy_pro\WWW\merchant\addons\weliam_smartcity\vendor\workerman\workerman\Connection\TcpConnection.php(637): {closure}(Object(Workerman\Connection\TcpConnection), '{"im_type":4,"s...')
+#2 D:\Software\phpstudy_pro\WWW\merchant\addons\weliam_smartcity\vendor\workerman\workerman\Events\Select.php(293): Workerman\Connection\TcpConnection->baseRead(Resource id #67)
+#3 D:\Software\phpstudy_pro\WWW\merchant\addons\weliam_smartcity\vendor\workerman\workerman\Worker.php(2430): Workerman\Events\Select->loop()
+#4 D:\Software\phpstudy_pro\WWW\merchant\addons\weliam_smartcity\vendor\workerman\workerman\Worker.php(1418): Workerman\Worker->run()
+#5 D:\Software\phpstudy_pro\WWW\merchant\addons\weliam_smartcity\vendor\workerman\workerman\Worker.php(1361): Workerman\Worker::forkWorkersForWindows()
+#6 D:\Software\phpstudy_pro\WWW\merchant\addons\weliam_smartcity\vendor\workerman\workerman\Worker.php(542): Workerman\Worker::forkWorkers()
+#7 D:\Software\phpstudy_pro\WWW\merchant\addons\weliam_smartcity\core\common\Im.php(204): Workerman\Worker::runAll()
+#8 {main}
+2021-03-09 16:34:34 pid:1 Worker process terminated
+2021-03-09 16:34:52 pid:1 Error: Access to undeclared static property: handle::$table in D:\Software\phpstudy_pro\WWW\merchant\addons\weliam_smartcity\core\common\Im.php:139
+Stack trace:
+#0 D:\Software\phpstudy_pro\WWW\merchant\addons\weliam_smartcity\core\common\Im.php(40): handle->handleData()
+#1 D:\Software\phpstudy_pro\WWW\merchant\addons\weliam_smartcity\vendor\workerman\workerman\Connection\TcpConnection.php(637): {closure}(Object(Workerman\Connection\TcpConnection), '{"im_type":4,"s...')
+#2 D:\Software\phpstudy_pro\WWW\merchant\addons\weliam_smartcity\vendor\workerman\workerman\Events\Select.php(293): Workerman\Connection\TcpConnection->baseRead(Resource id #67)
+#3 D:\Software\phpstudy_pro\WWW\merchant\addons\weliam_smartcity\vendor\workerman\workerman\Worker.php(2430): Workerman\Events\Select->loop()
+#4 D:\Software\phpstudy_pro\WWW\merchant\addons\weliam_smartcity\vendor\workerman\workerman\Worker.php(1418): Workerman\Worker->run()
+#5 D:\Software\phpstudy_pro\WWW\merchant\addons\weliam_smartcity\vendor\workerman\workerman\Worker.php(1361): Workerman\Worker::forkWorkersForWindows()
+#6 D:\Software\phpstudy_pro\WWW\merchant\addons\weliam_smartcity\vendor\workerman\workerman\Worker.php(542): Workerman\Worker::forkWorkers()
+#7 D:\Software\phpstudy_pro\WWW\merchant\addons\weliam_smartcity\core\common\Im.php(204): Workerman\Worker::runAll()
+#8 {main}
+2021-03-09 16:34:52 pid:1 Worker process terminated
+2021-03-09 16:35:46 pid:1 Error: Access to undeclared static property: handle::$table in D:\Software\phpstudy_pro\WWW\merchant\addons\weliam_smartcity\core\common\Im.php:141
+Stack trace:
+#0 D:\Software\phpstudy_pro\WWW\merchant\addons\weliam_smartcity\core\common\Im.php(40): handle->handleData()
+#1 D:\Software\phpstudy_pro\WWW\merchant\addons\weliam_smartcity\vendor\workerman\workerman\Connection\TcpConnection.php(637): {closure}(Object(Workerman\Connection\TcpConnection), '{"im_type":4,"s...')
+#2 D:\Software\phpstudy_pro\WWW\merchant\addons\weliam_smartcity\vendor\workerman\workerman\Events\Select.php(293): Workerman\Connection\TcpConnection->baseRead(Resource id #67)
+#3 D:\Software\phpstudy_pro\WWW\merchant\addons\weliam_smartcity\vendor\workerman\workerman\Worker.php(2430): Workerman\Events\Select->loop()
+#4 D:\Software\phpstudy_pro\WWW\merchant\addons\weliam_smartcity\vendor\workerman\workerman\Worker.php(1418): Workerman\Worker->run()
+#5 D:\Software\phpstudy_pro\WWW\merchant\addons\weliam_smartcity\vendor\workerman\workerman\Worker.php(1361): Workerman\Worker::forkWorkersForWindows()
+#6 D:\Software\phpstudy_pro\WWW\merchant\addons\weliam_smartcity\vendor\workerman\workerman\Worker.php(542): Workerman\Worker::forkWorkers()
+#7 D:\Software\phpstudy_pro\WWW\merchant\addons\weliam_smartcity\core\common\Im.php(206): Workerman\Worker::runAll()
+#8 {main}
+2021-03-09 16:35:46 pid:1 Worker process terminated
+2021-03-09 16:37:03 pid:1 Error: Access to undeclared static property: handle::$table in D:\Software\phpstudy_pro\WWW\merchant\addons\weliam_smartcity\core\common\Im.php:141
+Stack trace:
+#0 D:\Software\phpstudy_pro\WWW\merchant\addons\weliam_smartcity\core\common\Im.php(40): handle->handleData()
+#1 D:\Software\phpstudy_pro\WWW\merchant\addons\weliam_smartcity\vendor\workerman\workerman\Connection\TcpConnection.php(637): {closure}(Object(Workerman\Connection\TcpConnection), '{"im_type":4,"s...')
+#2 D:\Software\phpstudy_pro\WWW\merchant\addons\weliam_smartcity\vendor\workerman\workerman\Events\Select.php(293): Workerman\Connection\TcpConnection->baseRead(Resource id #67)
+#3 D:\Software\phpstudy_pro\WWW\merchant\addons\weliam_smartcity\vendor\workerman\workerman\Worker.php(2430): Workerman\Events\Select->loop()
+#4 D:\Software\phpstudy_pro\WWW\merchant\addons\weliam_smartcity\vendor\workerman\workerman\Worker.php(1418): Workerman\Worker->run()
+#5 D:\Software\phpstudy_pro\WWW\merchant\addons\weliam_smartcity\vendor\workerman\workerman\Worker.php(1361): Workerman\Worker::forkWorkersForWindows()
+#6 D:\Software\phpstudy_pro\WWW\merchant\addons\weliam_smartcity\vendor\workerman\workerman\Worker.php(542): Workerman\Worker::forkWorkers()
+#7 D:\Software\phpstudy_pro\WWW\merchant\addons\weliam_smartcity\core\common\Im.php(206): Workerman\Worker::runAll()
+#8 {main}
+2021-03-09 16:37:03 pid:1 Worker process terminated
+2021-03-09 16:37:46 pid:1 Error: Access to undeclared static property: handle::$table in D:\Software\phpstudy_pro\WWW\merchant\addons\weliam_smartcity\core\common\Im.php:142
+Stack trace:
+#0 D:\Software\phpstudy_pro\WWW\merchant\addons\weliam_smartcity\core\common\Im.php(41): handle->handleData()
+#1 D:\Software\phpstudy_pro\WWW\merchant\addons\weliam_smartcity\vendor\workerman\workerman\Connection\TcpConnection.php(637): {closure}(Object(Workerman\Connection\TcpConnection), '{"im_type":4,"s...')
+#2 D:\Software\phpstudy_pro\WWW\merchant\addons\weliam_smartcity\vendor\workerman\workerman\Events\Select.php(293): Workerman\Connection\TcpConnection->baseRead(Resource id #68)
+#3 D:\Software\phpstudy_pro\WWW\merchant\addons\weliam_smartcity\vendor\workerman\workerman\Worker.php(2430): Workerman\Events\Select->loop()
+#4 D:\Software\phpstudy_pro\WWW\merchant\addons\weliam_smartcity\vendor\workerman\workerman\Worker.php(1418): Workerman\Worker->run()
+#5 D:\Software\phpstudy_pro\WWW\merchant\addons\weliam_smartcity\vendor\workerman\workerman\Worker.php(1361): Workerman\Worker::forkWorkersForWindows()
+#6 D:\Software\phpstudy_pro\WWW\merchant\addons\weliam_smartcity\vendor\workerman\workerman\Worker.php(542): Workerman\Worker::forkWorkers()
+#7 D:\Software\phpstudy_pro\WWW\merchant\addons\weliam_smartcity\core\common\Im.php(207): Workerman\Worker::runAll()
+#8 {main}
+2021-03-09 16:37:46 pid:1 Worker process terminated
+2021-03-09 16:38:01 pid:1 Error: Access to undeclared static property: handle::$table in D:\Software\phpstudy_pro\WWW\merchant\addons\weliam_smartcity\core\common\Im.php:143
+Stack trace:
+#0 D:\Software\phpstudy_pro\WWW\merchant\addons\weliam_smartcity\core\common\Im.php(41): handle->handleData()
+#1 D:\Software\phpstudy_pro\WWW\merchant\addons\weliam_smartcity\vendor\workerman\workerman\Connection\TcpConnection.php(637): {closure}(Object(Workerman\Connection\TcpConnection), '{"im_type":4,"s...')
+#2 D:\Software\phpstudy_pro\WWW\merchant\addons\weliam_smartcity\vendor\workerman\workerman\Events\Select.php(293): Workerman\Connection\TcpConnection->baseRead(Resource id #68)
+#3 D:\Software\phpstudy_pro\WWW\merchant\addons\weliam_smartcity\vendor\workerman\workerman\Worker.php(2430): Workerman\Events\Select->loop()
+#4 D:\Software\phpstudy_pro\WWW\merchant\addons\weliam_smartcity\vendor\workerman\workerman\Worker.php(1418): Workerman\Worker->run()
+#5 D:\Software\phpstudy_pro\WWW\merchant\addons\weliam_smartcity\vendor\workerman\workerman\Worker.php(1361): Workerman\Worker::forkWorkersForWindows()
+#6 D:\Software\phpstudy_pro\WWW\merchant\addons\weliam_smartcity\vendor\workerman\workerman\Worker.php(542): Workerman\Worker::forkWorkers()
+#7 D:\Software\phpstudy_pro\WWW\merchant\addons\weliam_smartcity\core\common\Im.php(208): Workerman\Worker::runAll()
+#8 {main}
+2021-03-09 16:38:01 pid:1 Worker process terminated
+2021-03-09 16:53:16 pid:1 PDOException: SQLSTATE[HY000] [1045] Access denied for user ''@'localhost' (using password: NO) in D:\Software\phpstudy_pro\WWW\merchant\addons\weliam_smartcity\vendor\workerman\mysql\src\Connection.php:1711
+Stack trace:
+#0 D:\Software\phpstudy_pro\WWW\merchant\addons\weliam_smartcity\vendor\workerman\mysql\src\Connection.php(1711): PDO->__construct('mysql:dbname=;h...', NULL, NULL, Array)
+#1 D:\Software\phpstudy_pro\WWW\merchant\addons\weliam_smartcity\vendor\workerman\mysql\src\Connection.php(1698): Workerman\MySQL\Connection->connect()
+#2 D:\Software\phpstudy_pro\WWW\merchant\addons\weliam_smartcity\core\common\Im.php(41): Workerman\MySQL\Connection->__construct(NULL, NULL, NULL, NULL, NULL)
+#3 D:\Software\phpstudy_pro\WWW\merchant\addons\weliam_smartcity\vendor\workerman\workerman\Worker.php(2415): {closure}(Object(Workerman\Worker))
+#4 D:\Software\phpstudy_pro\WWW\merchant\addons\weliam_smartcity\vendor\workerman\workerman\Worker.php(1418): Workerman\Worker->run()
+#5 D:\Software\phpstudy_pro\WWW\merchant\addons\weliam_smartcity\vendor\workerman\workerman\Worker.php(1361): Workerman\Worker::forkWorkersForWindows()
+#6 D:\Software\phpstudy_pro\WWW\merchant\addons\weliam_smartcity\vendor\workerman\workerman\Worker.php(542): Workerman\Worker::forkWorkers()
+#7 D:\Software\phpstudy_pro\WWW\merchant\addons\weliam_smartcity\core\common\Im.php(171): Workerman\Worker::runAll()
+#8 {main}
+2021-03-09 16:53:17 pid:1 Worker process terminated
+2021-03-09 16:54:22 pid:1 PDOException: SQLSTATE[HY000] [1045] Access denied for user ''@'localhost' (using password: NO) in D:\Software\phpstudy_pro\WWW\merchant\addons\weliam_smartcity\vendor\workerman\mysql\src\Connection.php:1711
+Stack trace:
+#0 D:\Software\phpstudy_pro\WWW\merchant\addons\weliam_smartcity\vendor\workerman\mysql\src\Connection.php(1711): PDO->__construct('mysql:dbname=;h...', NULL, NULL, Array)
+#1 D:\Software\phpstudy_pro\WWW\merchant\addons\weliam_smartcity\vendor\workerman\mysql\src\Connection.php(1698): Workerman\MySQL\Connection->connect()
+#2 D:\Software\phpstudy_pro\WWW\merchant\addons\weliam_smartcity\core\common\Im.php(41): Workerman\MySQL\Connection->__construct(NULL, NULL, NULL, NULL, NULL)
+#3 D:\Software\phpstudy_pro\WWW\merchant\addons\weliam_smartcity\vendor\workerman\workerman\Worker.php(2415): {closure}(Object(Workerman\Worker))
+#4 D:\Software\phpstudy_pro\WWW\merchant\addons\weliam_smartcity\vendor\workerman\workerman\Worker.php(1418): Workerman\Worker->run()
+#5 D:\Software\phpstudy_pro\WWW\merchant\addons\weliam_smartcity\vendor\workerman\workerman\Worker.php(1361): Workerman\Worker::forkWorkersForWindows()
+#6 D:\Software\phpstudy_pro\WWW\merchant\addons\weliam_smartcity\vendor\workerman\workerman\Worker.php(542): Workerman\Worker::forkWorkers()
+#7 D:\Software\phpstudy_pro\WWW\merchant\addons\weliam_smartcity\core\common\Im.php(171): Workerman\Worker::runAll()
+#8 {main}
+2021-03-09 16:54:23 pid:1 Worker process terminated
+2021-03-09 16:55:24 pid:1 PDOException: SQLSTATE[HY000] [1045] Access denied for user ''@'localhost' (using password: NO) in D:\Software\phpstudy_pro\WWW\merchant\addons\weliam_smartcity\vendor\workerman\mysql\src\Connection.php:1711
+Stack trace:
+#0 D:\Software\phpstudy_pro\WWW\merchant\addons\weliam_smartcity\vendor\workerman\mysql\src\Connection.php(1711): PDO->__construct('mysql:dbname=;h...', NULL, NULL, Array)
+#1 D:\Software\phpstudy_pro\WWW\merchant\addons\weliam_smartcity\vendor\workerman\mysql\src\Connection.php(1698): Workerman\MySQL\Connection->connect()
+#2 D:\Software\phpstudy_pro\WWW\merchant\addons\weliam_smartcity\core\common\Im.php(42): Workerman\MySQL\Connection->__construct(NULL, NULL, NULL, NULL, NULL)
+#3 D:\Software\phpstudy_pro\WWW\merchant\addons\weliam_smartcity\vendor\workerman\workerman\Worker.php(2415): {closure}(Object(Workerman\Worker))
+#4 D:\Software\phpstudy_pro\WWW\merchant\addons\weliam_smartcity\vendor\workerman\workerman\Worker.php(1418): Workerman\Worker->run()
+#5 D:\Software\phpstudy_pro\WWW\merchant\addons\weliam_smartcity\vendor\workerman\workerman\Worker.php(1361): Workerman\Worker::forkWorkersForWindows()
+#6 D:\Software\phpstudy_pro\WWW\merchant\addons\weliam_smartcity\vendor\workerman\workerman\Worker.php(542): Workerman\Worker::forkWorkers()
+#7 D:\Software\phpstudy_pro\WWW\merchant\addons\weliam_smartcity\core\common\Im.php(172): Workerman\Worker::runAll()
+#8 {main}
+2021-03-09 16:55:25 pid:1 Worker process terminated
+2021-03-09 16:55:35 pid:1 PDOException: SQLSTATE[HY000] [1045] Access denied for user ''@'localhost' (using password: NO) in D:\Software\phpstudy_pro\WWW\merchant\addons\weliam_smartcity\vendor\workerman\mysql\src\Connection.php:1711
+Stack trace:
+#0 D:\Software\phpstudy_pro\WWW\merchant\addons\weliam_smartcity\vendor\workerman\mysql\src\Connection.php(1711): PDO->__construct('mysql:dbname=;h...', NULL, NULL, Array)
+#1 D:\Software\phpstudy_pro\WWW\merchant\addons\weliam_smartcity\vendor\workerman\mysql\src\Connection.php(1698): Workerman\MySQL\Connection->connect()
+#2 D:\Software\phpstudy_pro\WWW\merchant\addons\weliam_smartcity\core\common\Im.php(42): Workerman\MySQL\Connection->__construct(NULL, NULL, NULL, NULL, NULL)
+#3 D:\Software\phpstudy_pro\WWW\merchant\addons\weliam_smartcity\vendor\workerman\workerman\Worker.php(2415): {closure}(Object(Workerman\Worker))
+#4 D:\Software\phpstudy_pro\WWW\merchant\addons\weliam_smartcity\vendor\workerman\workerman\Worker.php(1418): Workerman\Worker->run()
+#5 D:\Software\phpstudy_pro\WWW\merchant\addons\weliam_smartcity\vendor\workerman\workerman\Worker.php(1361): Workerman\Worker::forkWorkersForWindows()
+#6 D:\Software\phpstudy_pro\WWW\merchant\addons\weliam_smartcity\vendor\workerman\workerman\Worker.php(542): Workerman\Worker::forkWorkers()
+#7 D:\Software\phpstudy_pro\WWW\merchant\addons\weliam_smartcity\core\common\Im.php(172): Workerman\Worker::runAll()
+#8 {main}
+2021-03-09 16:55:36 pid:1 Worker process terminated
+2021-03-09 16:55:52 pid:1 PDOException: SQLSTATE[HY000] [1045] Access denied for user ''@'localhost' (using password: NO) in D:\Software\phpstudy_pro\WWW\merchant\addons\weliam_smartcity\vendor\workerman\mysql\src\Connection.php:1711
+Stack trace:
+#0 D:\Software\phpstudy_pro\WWW\merchant\addons\weliam_smartcity\vendor\workerman\mysql\src\Connection.php(1711): PDO->__construct('mysql:dbname=;h...', NULL, NULL, Array)
+#1 D:\Software\phpstudy_pro\WWW\merchant\addons\weliam_smartcity\vendor\workerman\mysql\src\Connection.php(1698): Workerman\MySQL\Connection->connect()
+#2 D:\Software\phpstudy_pro\WWW\merchant\addons\weliam_smartcity\core\common\Im.php(42): Workerman\MySQL\Connection->__construct(NULL, NULL, NULL, NULL, NULL)
+#3 D:\Software\phpstudy_pro\WWW\merchant\addons\weliam_smartcity\vendor\workerman\workerman\Worker.php(2415): {closure}(Object(Workerman\Worker))
+#4 D:\Software\phpstudy_pro\WWW\merchant\addons\weliam_smartcity\vendor\workerman\workerman\Worker.php(1418): Workerman\Worker->run()
+#5 D:\Software\phpstudy_pro\WWW\merchant\addons\weliam_smartcity\vendor\workerman\workerman\Worker.php(1361): Workerman\Worker::forkWorkersForWindows()
+#6 D:\Software\phpstudy_pro\WWW\merchant\addons\weliam_smartcity\vendor\workerman\workerman\Worker.php(542): Workerman\Worker::forkWorkers()
+#7 D:\Software\phpstudy_pro\WWW\merchant\addons\weliam_smartcity\core\common\Im.php(172): Workerman\Worker::runAll()
+#8 {main}
+2021-03-09 16:55:53 pid:1 Worker process terminated
+2021-03-09 16:59:18 pid:1 Error: Access to undeclared static property: handle::$table in D:\Software\phpstudy_pro\WWW\merchant\addons\weliam_smartcity\core\common\Im.php:143
+Stack trace:
+#0 D:\Software\phpstudy_pro\WWW\merchant\addons\weliam_smartcity\core\common\Im.php(47): handle->handleData()
+#1 D:\Software\phpstudy_pro\WWW\merchant\addons\weliam_smartcity\vendor\workerman\workerman\Connection\TcpConnection.php(637): {closure}(Object(Workerman\Connection\TcpConnection), '{"im_type":4,"s...')
+#2 D:\Software\phpstudy_pro\WWW\merchant\addons\weliam_smartcity\vendor\workerman\workerman\Events\Select.php(293): Workerman\Connection\TcpConnection->baseRead(Resource id #70)
+#3 D:\Software\phpstudy_pro\WWW\merchant\addons\weliam_smartcity\vendor\workerman\workerman\Worker.php(2430): Workerman\Events\Select->loop()
+#4 D:\Software\phpstudy_pro\WWW\merchant\addons\weliam_smartcity\vendor\workerman\workerman\Worker.php(1418): Workerman\Worker->run()
+#5 D:\Software\phpstudy_pro\WWW\merchant\addons\weliam_smartcity\vendor\workerman\workerman\Worker.php(1361): Workerman\Worker::forkWorkersForWindows()
+#6 D:\Software\phpstudy_pro\WWW\merchant\addons\weliam_smartcity\vendor\workerman\workerman\Worker.php(542): Workerman\Worker::forkWorkers()
+#7 D:\Software\phpstudy_pro\WWW\merchant\addons\weliam_smartcity\core\common\Im.php(219): Workerman\Worker::runAll()
+#8 {main}
+2021-03-09 16:59:18 pid:1 Worker process terminated
+2021-03-09 17:05:09 pid:1 Error: Access to undeclared static property: handle::$table in D:\Software\phpstudy_pro\WWW\merchant\addons\weliam_smartcity\core\common\Im.php:139
+Stack trace:
+#0 D:\Software\phpstudy_pro\WWW\merchant\addons\weliam_smartcity\core\common\Im.php(47): handle->handleData()
+#1 D:\Software\phpstudy_pro\WWW\merchant\addons\weliam_smartcity\vendor\workerman\workerman\Connection\TcpConnection.php(637): {closure}(Object(Workerman\Connection\TcpConnection), '{"im_type":4,"s...')
+#2 D:\Software\phpstudy_pro\WWW\merchant\addons\weliam_smartcity\vendor\workerman\workerman\Events\Select.php(293): Workerman\Connection\TcpConnection->baseRead(Resource id #70)
+#3 D:\Software\phpstudy_pro\WWW\merchant\addons\weliam_smartcity\vendor\workerman\workerman\Worker.php(2430): Workerman\Events\Select->loop()
+#4 D:\Software\phpstudy_pro\WWW\merchant\addons\weliam_smartcity\vendor\workerman\workerman\Worker.php(1418): Workerman\Worker->run()
+#5 D:\Software\phpstudy_pro\WWW\merchant\addons\weliam_smartcity\vendor\workerman\workerman\Worker.php(1361): Workerman\Worker::forkWorkersForWindows()
+#6 D:\Software\phpstudy_pro\WWW\merchant\addons\weliam_smartcity\vendor\workerman\workerman\Worker.php(542): Workerman\Worker::forkWorkers()
+#7 D:\Software\phpstudy_pro\WWW\merchant\addons\weliam_smartcity\core\common\Im.php(205): Workerman\Worker::runAll()
+#8 {main}
+2021-03-09 17:05:09 pid:1 Worker process terminated
+2021-03-09 17:05:13 pid:1 Error: Access to undeclared static property: handle::$table in D:\Software\phpstudy_pro\WWW\merchant\addons\weliam_smartcity\core\common\Im.php:139
+Stack trace:
+#0 D:\Software\phpstudy_pro\WWW\merchant\addons\weliam_smartcity\core\common\Im.php(47): handle->handleData()
+#1 D:\Software\phpstudy_pro\WWW\merchant\addons\weliam_smartcity\vendor\workerman\workerman\Connection\TcpConnection.php(637): {closure}(Object(Workerman\Connection\TcpConnection), '{"im_type":4,"s...')
+#2 D:\Software\phpstudy_pro\WWW\merchant\addons\weliam_smartcity\vendor\workerman\workerman\Events\Select.php(293): Workerman\Connection\TcpConnection->baseRead(Resource id #70)
+#3 D:\Software\phpstudy_pro\WWW\merchant\addons\weliam_smartcity\vendor\workerman\workerman\Worker.php(2430): Workerman\Events\Select->loop()
+#4 D:\Software\phpstudy_pro\WWW\merchant\addons\weliam_smartcity\vendor\workerman\workerman\Worker.php(1418): Workerman\Worker->run()
+#5 D:\Software\phpstudy_pro\WWW\merchant\addons\weliam_smartcity\vendor\workerman\workerman\Worker.php(1361): Workerman\Worker::forkWorkersForWindows()
+#6 D:\Software\phpstudy_pro\WWW\merchant\addons\weliam_smartcity\vendor\workerman\workerman\Worker.php(542): Workerman\Worker::forkWorkers()
+#7 D:\Software\phpstudy_pro\WWW\merchant\addons\weliam_smartcity\core\common\Im.php(205): Workerman\Worker::runAll()
+#8 {main}
+2021-03-09 17:05:13 pid:1 Worker process terminated
+2021-03-09 17:05:18 pid:1 Error: Access to undeclared static property: handle::$table in D:\Software\phpstudy_pro\WWW\merchant\addons\weliam_smartcity\core\common\Im.php:139
+Stack trace:
+#0 D:\Software\phpstudy_pro\WWW\merchant\addons\weliam_smartcity\core\common\Im.php(47): handle->handleData()
+#1 D:\Software\phpstudy_pro\WWW\merchant\addons\weliam_smartcity\vendor\workerman\workerman\Connection\TcpConnection.php(637): {closure}(Object(Workerman\Connection\TcpConnection), '{"im_type":4,"s...')
+#2 D:\Software\phpstudy_pro\WWW\merchant\addons\weliam_smartcity\vendor\workerman\workerman\Events\Select.php(293): Workerman\Connection\TcpConnection->baseRead(Resource id #70)
+#3 D:\Software\phpstudy_pro\WWW\merchant\addons\weliam_smartcity\vendor\workerman\workerman\Worker.php(2430): Workerman\Events\Select->loop()
+#4 D:\Software\phpstudy_pro\WWW\merchant\addons\weliam_smartcity\vendor\workerman\workerman\Worker.php(1418): Workerman\Worker->run()
+#5 D:\Software\phpstudy_pro\WWW\merchant\addons\weliam_smartcity\vendor\workerman\workerman\Worker.php(1361): Workerman\Worker::forkWorkersForWindows()
+#6 D:\Software\phpstudy_pro\WWW\merchant\addons\weliam_smartcity\vendor\workerman\workerman\Worker.php(542): Workerman\Worker::forkWorkers()
+#7 D:\Software\phpstudy_pro\WWW\merchant\addons\weliam_smartcity\core\common\Im.php(205): Workerman\Worker::runAll()
+#8 {main}
+2021-03-09 17:05:18 pid:1 Worker process terminated
+2021-03-09 17:05:30 pid:1 Error: Access to undeclared static property: handle::$table in D:\Software\phpstudy_pro\WWW\merchant\addons\weliam_smartcity\core\common\Im.php:139
+Stack trace:
+#0 D:\Software\phpstudy_pro\WWW\merchant\addons\weliam_smartcity\core\common\Im.php(47): handle->handleData()
+#1 D:\Software\phpstudy_pro\WWW\merchant\addons\weliam_smartcity\vendor\workerman\workerman\Connection\TcpConnection.php(637): {closure}(Object(Workerman\Connection\TcpConnection), '{"im_type":4,"s...')
+#2 D:\Software\phpstudy_pro\WWW\merchant\addons\weliam_smartcity\vendor\workerman\workerman\Events\Select.php(293): Workerman\Connection\TcpConnection->baseRead(Resource id #70)
+#3 D:\Software\phpstudy_pro\WWW\merchant\addons\weliam_smartcity\vendor\workerman\workerman\Worker.php(2430): Workerman\Events\Select->loop()
+#4 D:\Software\phpstudy_pro\WWW\merchant\addons\weliam_smartcity\vendor\workerman\workerman\Worker.php(1418): Workerman\Worker->run()
+#5 D:\Software\phpstudy_pro\WWW\merchant\addons\weliam_smartcity\vendor\workerman\workerman\Worker.php(1361): Workerman\Worker::forkWorkersForWindows()
+#6 D:\Software\phpstudy_pro\WWW\merchant\addons\weliam_smartcity\vendor\workerman\workerman\Worker.php(542): Workerman\Worker::forkWorkers()
+#7 D:\Software\phpstudy_pro\WWW\merchant\addons\weliam_smartcity\core\common\Im.php(205): Workerman\Worker::runAll()
+#8 {main}
+2021-03-09 17:05:30 pid:1 Worker process terminated
+2021-03-09 17:06:02 pid:1 Error: Access to undeclared static property: handle::$table in D:\Software\phpstudy_pro\WWW\merchant\addons\weliam_smartcity\core\common\Im.php:139
+Stack trace:
+#0 D:\Software\phpstudy_pro\WWW\merchant\addons\weliam_smartcity\core\common\Im.php(47): handle->handleData()
+#1 D:\Software\phpstudy_pro\WWW\merchant\addons\weliam_smartcity\vendor\workerman\workerman\Connection\TcpConnection.php(637): {closure}(Object(Workerman\Connection\TcpConnection), '{"im_type":4,"s...')
+#2 D:\Software\phpstudy_pro\WWW\merchant\addons\weliam_smartcity\vendor\workerman\workerman\Events\Select.php(293): Workerman\Connection\TcpConnection->baseRead(Resource id #70)
+#3 D:\Software\phpstudy_pro\WWW\merchant\addons\weliam_smartcity\vendor\workerman\workerman\Worker.php(2430): Workerman\Events\Select->loop()
+#4 D:\Software\phpstudy_pro\WWW\merchant\addons\weliam_smartcity\vendor\workerman\workerman\Worker.php(1418): Workerman\Worker->run()
+#5 D:\Software\phpstudy_pro\WWW\merchant\addons\weliam_smartcity\vendor\workerman\workerman\Worker.php(1361): Workerman\Worker::forkWorkersForWindows()
+#6 D:\Software\phpstudy_pro\WWW\merchant\addons\weliam_smartcity\vendor\workerman\workerman\Worker.php(542): Workerman\Worker::forkWorkers()
+#7 D:\Software\phpstudy_pro\WWW\merchant\addons\weliam_smartcity\core\common\Im.php(206): Workerman\Worker::runAll()
+#8 {main}
+2021-03-09 17:06:02 pid:1 Worker process terminated
+2021-03-09 17:20:39 pid:1 PDOException: SQL:INSERT INTO ``ims_wlmerchant_im`` ( `uniacid`,`send_id`,`send_type`,`receive_id`,`receive_type`,`create_time`,`type`,`content`) VALUES ( :uniacid,:send_id,:send_type,:receive_id,:receive_type,:create_time,:type,:content) SQLSTATE[42000]: Syntax error or access violation: 1064 You have an error in your SQL syntax; check the manual that corresponds to your MySQL server version for the right syntax to use near 'ims_wlmerchant_im`` ( `uniacid`,`send_id`,`send_type`,`receive_id`,`receive_type' at line 1 in D:\Software\phpstudy_pro\WWW\merchant\addons\weliam_smartcity\vendor\workerman\mysql\src\Connection.php:1770
+Stack trace:
+#0 D:\Software\phpstudy_pro\WWW\merchant\addons\weliam_smartcity\vendor\workerman\mysql\src\Connection.php(1828): Workerman\MySQL\Connection->execute('INSERT INTO ``i...', Array)
+#1 D:\Software\phpstudy_pro\WWW\merchant\addons\weliam_smartcity\core\common\Im.php(100): Workerman\MySQL\Connection->query()
+#2 D:\Software\phpstudy_pro\WWW\merchant\addons\weliam_smartcity\core\common\Im.php(47): handle->handleData()
+#3 D:\Software\phpstudy_pro\WWW\merchant\addons\weliam_smartcity\vendor\workerman\workerman\Connection\TcpConnection.php(637): {closure}(Object(Workerman\Connection\TcpConnection), '{"im_type":2,"s...')
+#4 D:\Software\phpstudy_pro\WWW\merchant\addons\weliam_smartcity\vendor\workerman\workerman\Events\Select.php(293): Workerman\Connection\TcpConnection->baseRead(Resource id #70)
+#5 D:\Software\phpstudy_pro\WWW\merchant\addons\weliam_smartcity\vendor\workerman\workerman\Worker.php(2430): Workerman\Events\Select->loop()
+#6 D:\Software\phpstudy_pro\WWW\merchant\addons\weliam_smartcity\vendor\workerman\workerman\Worker.php(1418): Workerman\Worker->run()
+#7 D:\Software\phpstudy_pro\WWW\merchant\addons\weliam_smartcity\vendor\workerman\workerman\Worker.php(1361): Workerman\Worker::forkWorkersForWindows()
+#8 D:\Software\phpstudy_pro\WWW\merchant\addons\weliam_smartcity\vendor\workerman\workerman\Worker.php(542): Workerman\Worker::forkWorkers()
+#9 D:\Software\phpstudy_pro\WWW\merchant\addons\weliam_smartcity\core\common\Im.php(222): Workerman\Worker::runAll()
+#10 {main}
+2021-03-09 17:20:39 pid:1 Worker process terminated
+2021-03-09 17:21:21 pid:1 PDOException: SQL:INSERT INTO ``ims_wlmerchant_im`` ( `uniacid`,`send_id`,`send_type`,`receive_id`,`receive_type`,`create_time`,`type`,`content`) VALUES ( :uniacid,:send_id,:send_type,:receive_id,:receive_type,:create_time,:type,:content) SQLSTATE[42000]: Syntax error or access violation: 1064 You have an error in your SQL syntax; check the manual that corresponds to your MySQL server version for the right syntax to use near 'ims_wlmerchant_im`` ( `uniacid`,`send_id`,`send_type`,`receive_id`,`receive_type' at line 1 in D:\Software\phpstudy_pro\WWW\merchant\addons\weliam_smartcity\vendor\workerman\mysql\src\Connection.php:1770
+Stack trace:
+#0 D:\Software\phpstudy_pro\WWW\merchant\addons\weliam_smartcity\vendor\workerman\mysql\src\Connection.php(1828): Workerman\MySQL\Connection->execute('INSERT INTO ``i...', Array)
+#1 D:\Software\phpstudy_pro\WWW\merchant\addons\weliam_smartcity\core\common\Im.php(101): Workerman\MySQL\Connection->query()
+#2 D:\Software\phpstudy_pro\WWW\merchant\addons\weliam_smartcity\core\common\Im.php(47): handle->handleData()
+#3 D:\Software\phpstudy_pro\WWW\merchant\addons\weliam_smartcity\vendor\workerman\workerman\Connection\TcpConnection.php(637): {closure}(Object(Workerman\Connection\TcpConnection), '{"im_type":2,"s...')
+#4 D:\Software\phpstudy_pro\WWW\merchant\addons\weliam_smartcity\vendor\workerman\workerman\Events\Select.php(293): Workerman\Connection\TcpConnection->baseRead(Resource id #70)
+#5 D:\Software\phpstudy_pro\WWW\merchant\addons\weliam_smartcity\vendor\workerman\workerman\Worker.php(2430): Workerman\Events\Select->loop()
+#6 D:\Software\phpstudy_pro\WWW\merchant\addons\weliam_smartcity\vendor\workerman\workerman\Worker.php(1418): Workerman\Worker->run()
+#7 D:\Software\phpstudy_pro\WWW\merchant\addons\weliam_smartcity\vendor\workerman\workerman\Worker.php(1361): Workerman\Worker::forkWorkersForWindows()
+#8 D:\Software\phpstudy_pro\WWW\merchant\addons\weliam_smartcity\vendor\workerman\workerman\Worker.php(542): Workerman\Worker::forkWorkers()
+#9 D:\Software\phpstudy_pro\WWW\merchant\addons\weliam_smartcity\core\common\Im.php(223): Workerman\Worker::runAll()
+#10 {main}
+2021-03-09 17:21:21 pid:1 Worker process terminated
+2021-03-12 10:02:19 pid:1 Error: Call to a member function send() on int in D:\Software\phpstudy_pro\WWW\merchant\addons\weliam_smartcity\core\common\Im.php:203
+Stack trace:
+#0 D:\Software\phpstudy_pro\WWW\merchant\addons\weliam_smartcity\core\common\Im.php(178): handle->socketSend(3, '\xE9\x80\x9A\xE8\xAE\xAF\xE8\xAE\xB0\xE5\xBD\x95', 4, 5, Array)
+#1 D:\Software\phpstudy_pro\WWW\merchant\addons\weliam_smartcity\core\common\Im.php(47): handle->handleData()
+#2 D:\Software\phpstudy_pro\WWW\merchant\addons\weliam_smartcity\vendor\workerman\workerman\Connection\TcpConnection.php(637): {closure}(Object(Workerman\Connection\TcpConnection), '{"im_type":4,"s...')
+#3 D:\Software\phpstudy_pro\WWW\merchant\addons\weliam_smartcity\vendor\workerman\workerman\Events\Select.php(293): Workerman\Connection\TcpConnection->baseRead(Resource id #70)
+#4 D:\Software\phpstudy_pro\WWW\merchant\addons\weliam_smartcity\vendor\workerman\workerman\Worker.php(2430): Workerman\Events\Select->loop()
+#5 D:\Software\phpstudy_pro\WWW\merchant\addons\weliam_smartcity\vendor\workerman\workerman\Worker.php(1418): Workerman\Worker->run()
+#6 D:\Software\phpstudy_pro\WWW\merchant\addons\weliam_smartcity\vendor\workerman\workerman\Worker.php(1361): Workerman\Worker::forkWorkersForWindows()
+#7 D:\Software\phpstudy_pro\WWW\merchant\addons\weliam_smartcity\vendor\workerman\workerman\Worker.php(542): Workerman\Worker::forkWorkers()
+#8 D:\Software\phpstudy_pro\WWW\merchant\addons\weliam_smartcity\core\common\Im.php(222): Workerman\Worker::runAll()
+#9 {main}
+2021-03-12 10:02:19 pid:1 Worker process terminated
+2021-03-12 10:02:52 pid:1 Error: Call to a member function send() on int in D:\Software\phpstudy_pro\WWW\merchant\addons\weliam_smartcity\core\common\Im.php:203
+Stack trace:
+#0 D:\Software\phpstudy_pro\WWW\merchant\addons\weliam_smartcity\core\common\Im.php(178): handle->socketSend(24, '\xE9\x80\x9A\xE8\xAE\xAF\xE8\xAE\xB0\xE5\xBD\x95', 4, 5, Array)
+#1 D:\Software\phpstudy_pro\WWW\merchant\addons\weliam_smartcity\core\common\Im.php(47): handle->handleData()
+#2 D:\Software\phpstudy_pro\WWW\merchant\addons\weliam_smartcity\vendor\workerman\workerman\Connection\TcpConnection.php(637): {closure}(Object(Workerman\Connection\TcpConnection), '{"im_type":4,"s...')
+#3 D:\Software\phpstudy_pro\WWW\merchant\addons\weliam_smartcity\vendor\workerman\workerman\Events\Select.php(293): Workerman\Connection\TcpConnection->baseRead(Resource id #70)
+#4 D:\Software\phpstudy_pro\WWW\merchant\addons\weliam_smartcity\vendor\workerman\workerman\Worker.php(2430): Workerman\Events\Select->loop()
+#5 D:\Software\phpstudy_pro\WWW\merchant\addons\weliam_smartcity\vendor\workerman\workerman\Worker.php(1418): Workerman\Worker->run()
+#6 D:\Software\phpstudy_pro\WWW\merchant\addons\weliam_smartcity\vendor\workerman\workerman\Worker.php(1361): Workerman\Worker::forkWorkersForWindows()
+#7 D:\Software\phpstudy_pro\WWW\merchant\addons\weliam_smartcity\vendor\workerman\workerman\Worker.php(542): Workerman\Worker::forkWorkers()
+#8 D:\Software\phpstudy_pro\WWW\merchant\addons\weliam_smartcity\core\common\Im.php(222): Workerman\Worker::runAll()
+#9 {main}
+2021-03-12 10:02:52 pid:1 Worker process terminated
+2021-03-12 11:16:54 pid:1 Error: Call to a member function send() on null in D:\Software\phpstudy_pro\WWW\merchant\addons\weliam_smartcity\core\common\Im.php:200
+Stack trace:
+#0 D:\Software\phpstudy_pro\WWW\merchant\addons\weliam_smartcity\core\common\Im.php(173): handle->socketSend(3, '\xE9\x80\x9A\xE8\xAE\xAF\xE8\xAE\xB0\xE5\xBD\x95', 4, 5, Array)
+#1 D:\Software\phpstudy_pro\WWW\merchant\addons\weliam_smartcity\core\common\Im.php(47): handle->handleData()
+#2 D:\Software\phpstudy_pro\WWW\merchant\addons\weliam_smartcity\vendor\workerman\workerman\Connection\TcpConnection.php(637): {closure}(Object(Workerman\Connection\TcpConnection), '{"im_type":4,"s...')
+#3 D:\Software\phpstudy_pro\WWW\merchant\addons\weliam_smartcity\vendor\workerman\workerman\Events\Select.php(293): Workerman\Connection\TcpConnection->baseRead(Resource id #70)
+#4 D:\Software\phpstudy_pro\WWW\merchant\addons\weliam_smartcity\vendor\workerman\workerman\Worker.php(2430): Workerman\Events\Select->loop()
+#5 D:\Software\phpstudy_pro\WWW\merchant\addons\weliam_smartcity\vendor\workerman\workerman\Worker.php(1418): Workerman\Worker->run()
+#6 D:\Software\phpstudy_pro\WWW\merchant\addons\weliam_smartcity\vendor\workerman\workerman\Worker.php(1361): Workerman\Worker::forkWorkersForWindows()
+#7 D:\Software\phpstudy_pro\WWW\merchant\addons\weliam_smartcity\vendor\workerman\workerman\Worker.php(542): Workerman\Worker::forkWorkers()
+#8 D:\Software\phpstudy_pro\WWW\merchant\addons\weliam_smartcity\core\common\Im.php(292): Workerman\Worker::runAll()
+#9 {main}
+2021-03-12 11:16:54 pid:1 Worker process terminated
+2021-03-12 11:17:20 pid:1 Error: Call to a member function send() on null in D:\Software\phpstudy_pro\WWW\merchant\addons\weliam_smartcity\core\common\Im.php:200
+Stack trace:
+#0 D:\Software\phpstudy_pro\WWW\merchant\addons\weliam_smartcity\core\common\Im.php(173): handle->socketSend(3, '\xE9\x80\x9A\xE8\xAE\xAF\xE8\xAE\xB0\xE5\xBD\x95', 4, 5, Array)
+#1 D:\Software\phpstudy_pro\WWW\merchant\addons\weliam_smartcity\core\common\Im.php(47): handle->handleData()
+#2 D:\Software\phpstudy_pro\WWW\merchant\addons\weliam_smartcity\vendor\workerman\workerman\Connection\TcpConnection.php(637): {closure}(Object(Workerman\Connection\TcpConnection), '{"im_type":4,"s...')
+#3 D:\Software\phpstudy_pro\WWW\merchant\addons\weliam_smartcity\vendor\workerman\workerman\Events\Select.php(293): Workerman\Connection\TcpConnection->baseRead(Resource id #70)
+#4 D:\Software\phpstudy_pro\WWW\merchant\addons\weliam_smartcity\vendor\workerman\workerman\Worker.php(2430): Workerman\Events\Select->loop()
+#5 D:\Software\phpstudy_pro\WWW\merchant\addons\weliam_smartcity\vendor\workerman\workerman\Worker.php(1418): Workerman\Worker->run()
+#6 D:\Software\phpstudy_pro\WWW\merchant\addons\weliam_smartcity\vendor\workerman\workerman\Worker.php(1361): Workerman\Worker::forkWorkersForWindows()
+#7 D:\Software\phpstudy_pro\WWW\merchant\addons\weliam_smartcity\vendor\workerman\workerman\Worker.php(542): Workerman\Worker::forkWorkers()
+#8 D:\Software\phpstudy_pro\WWW\merchant\addons\weliam_smartcity\core\common\Im.php(292): Workerman\Worker::runAll()
+#9 {main}
+2021-03-12 11:17:20 pid:1 Worker process terminated
+2021-03-12 11:18:23 pid:1 Error: Call to a member function send() on null in D:\Software\phpstudy_pro\WWW\merchant\addons\weliam_smartcity\core\common\Im.php:200
+Stack trace:
+#0 D:\Software\phpstudy_pro\WWW\merchant\addons\weliam_smartcity\core\common\Im.php(173): handle->socketSend(3, '\xE9\x80\x9A\xE8\xAE\xAF\xE8\xAE\xB0\xE5\xBD\x95', 4, 5, Array)
+#1 D:\Software\phpstudy_pro\WWW\merchant\addons\weliam_smartcity\core\common\Im.php(47): handle->handleData()
+#2 D:\Software\phpstudy_pro\WWW\merchant\addons\weliam_smartcity\vendor\workerman\workerman\Connection\TcpConnection.php(637): {closure}(Object(Workerman\Connection\TcpConnection), '{"im_type":4,"s...')
+#3 D:\Software\phpstudy_pro\WWW\merchant\addons\weliam_smartcity\vendor\workerman\workerman\Events\Select.php(293): Workerman\Connection\TcpConnection->baseRead(Resource id #70)
+#4 D:\Software\phpstudy_pro\WWW\merchant\addons\weliam_smartcity\vendor\workerman\workerman\Worker.php(2430): Workerman\Events\Select->loop()
+#5 D:\Software\phpstudy_pro\WWW\merchant\addons\weliam_smartcity\vendor\workerman\workerman\Worker.php(1418): Workerman\Worker->run()
+#6 D:\Software\phpstudy_pro\WWW\merchant\addons\weliam_smartcity\vendor\workerman\workerman\Worker.php(1361): Workerman\Worker::forkWorkersForWindows()
+#7 D:\Software\phpstudy_pro\WWW\merchant\addons\weliam_smartcity\vendor\workerman\workerman\Worker.php(542): Workerman\Worker::forkWorkers()
+#8 D:\Software\phpstudy_pro\WWW\merchant\addons\weliam_smartcity\core\common\Im.php(292): Workerman\Worker::runAll()
+#9 {main}
+2021-03-12 11:18:23 pid:1 Worker process terminated
+2021-03-12 11:18:57 pid:1 Error: Call to a member function send() on null in D:\Software\phpstudy_pro\WWW\merchant\addons\weliam_smartcity\core\common\Im.php:200
+Stack trace:
+#0 D:\Software\phpstudy_pro\WWW\merchant\addons\weliam_smartcity\core\common\Im.php(103): handle->socketSend(24, '\xE8\xBF\x99\xE9\x87\x8C\xE6\x98\xAF\xE5\x8F\x91\xE9\x80\x81...', 2, 0)
+#1 D:\Software\phpstudy_pro\WWW\merchant\addons\weliam_smartcity\core\common\Im.php(47): handle->handleData()
+#2 D:\Software\phpstudy_pro\WWW\merchant\addons\weliam_smartcity\vendor\workerman\workerman\Connection\TcpConnection.php(637): {closure}(Object(Workerman\Connection\TcpConnection), '{"im_type":2,"s...')
+#3 D:\Software\phpstudy_pro\WWW\merchant\addons\weliam_smartcity\vendor\workerman\workerman\Events\Select.php(293): Workerman\Connection\TcpConnection->baseRead(Resource id #70)
+#4 D:\Software\phpstudy_pro\WWW\merchant\addons\weliam_smartcity\vendor\workerman\workerman\Worker.php(2430): Workerman\Events\Select->loop()
+#5 D:\Software\phpstudy_pro\WWW\merchant\addons\weliam_smartcity\vendor\workerman\workerman\Worker.php(1418): Workerman\Worker->run()
+#6 D:\Software\phpstudy_pro\WWW\merchant\addons\weliam_smartcity\vendor\workerman\workerman\Worker.php(1361): Workerman\Worker::forkWorkersForWindows()
+#7 D:\Software\phpstudy_pro\WWW\merchant\addons\weliam_smartcity\vendor\workerman\workerman\Worker.php(542): Workerman\Worker::forkWorkers()
+#8 D:\Software\phpstudy_pro\WWW\merchant\addons\weliam_smartcity\core\common\Im.php(296): Workerman\Worker::runAll()
+#9 {main}
+2021-03-12 11:18:57 pid:1 Worker process terminated
+2021-03-12 11:19:18 pid:1 Error: Call to a member function send() on null in D:\Software\phpstudy_pro\WWW\merchant\addons\weliam_smartcity\core\common\Im.php:200
+Stack trace:
+#0 D:\Software\phpstudy_pro\WWW\merchant\addons\weliam_smartcity\core\common\Im.php(103): handle->socketSend(24, '\xE8\xBF\x99\xE9\x87\x8C\xE6\x98\xAF\xE5\x8F\x91\xE9\x80\x81...', 2, 0)
+#1 D:\Software\phpstudy_pro\WWW\merchant\addons\weliam_smartcity\core\common\Im.php(47): handle->handleData()
+#2 D:\Software\phpstudy_pro\WWW\merchant\addons\weliam_smartcity\vendor\workerman\workerman\Connection\TcpConnection.php(637): {closure}(Object(Workerman\Connection\TcpConnection), '{"im_type":2,"s...')
+#3 D:\Software\phpstudy_pro\WWW\merchant\addons\weliam_smartcity\vendor\workerman\workerman\Events\Select.php(293): Workerman\Connection\TcpConnection->baseRead(Resource id #70)
+#4 D:\Software\phpstudy_pro\WWW\merchant\addons\weliam_smartcity\vendor\workerman\workerman\Worker.php(2430): Workerman\Events\Select->loop()
+#5 D:\Software\phpstudy_pro\WWW\merchant\addons\weliam_smartcity\vendor\workerman\workerman\Worker.php(1418): Workerman\Worker->run()
+#6 D:\Software\phpstudy_pro\WWW\merchant\addons\weliam_smartcity\vendor\workerman\workerman\Worker.php(1361): Workerman\Worker::forkWorkersForWindows()
+#7 D:\Software\phpstudy_pro\WWW\merchant\addons\weliam_smartcity\vendor\workerman\workerman\Worker.php(542): Workerman\Worker::forkWorkers()
+#8 D:\Software\phpstudy_pro\WWW\merchant\addons\weliam_smartcity\core\common\Im.php(296): Workerman\Worker::runAll()
+#9 {main}
+2021-03-12 11:19:18 pid:1 Worker process terminated
+2021-03-12 11:20:17 pid:1 Error: Call to a member function send() on null in D:\Software\phpstudy_pro\WWW\merchant\addons\weliam_smartcity\core\common\Im.php:204
+Stack trace:
+#0 D:\Software\phpstudy_pro\WWW\merchant\addons\weliam_smartcity\core\common\Im.php(103): handle->socketSend(24, '\xE8\xBF\x99\xE9\x87\x8C\xE6\x98\xAF\xE5\x8F\x91\xE9\x80\x81...', 2, 0)
+#1 D:\Software\phpstudy_pro\WWW\merchant\addons\weliam_smartcity\core\common\Im.php(47): handle->handleData()
+#2 D:\Software\phpstudy_pro\WWW\merchant\addons\weliam_smartcity\vendor\workerman\workerman\Connection\TcpConnection.php(637): {closure}(Object(Workerman\Connection\TcpConnection), '{"im_type":2,"s...')
+#3 D:\Software\phpstudy_pro\WWW\merchant\addons\weliam_smartcity\vendor\workerman\workerman\Events\Select.php(293): Workerman\Connection\TcpConnection->baseRead(Resource id #70)
+#4 D:\Software\phpstudy_pro\WWW\merchant\addons\weliam_smartcity\vendor\workerman\workerman\Worker.php(2430): Workerman\Events\Select->loop()
+#5 D:\Software\phpstudy_pro\WWW\merchant\addons\weliam_smartcity\vendor\workerman\workerman\Worker.php(1418): Workerman\Worker->run()
+#6 D:\Software\phpstudy_pro\WWW\merchant\addons\weliam_smartcity\vendor\workerman\workerman\Worker.php(1361): Workerman\Worker::forkWorkersForWindows()
+#7 D:\Software\phpstudy_pro\WWW\merchant\addons\weliam_smartcity\vendor\workerman\workerman\Worker.php(542): Workerman\Worker::forkWorkers()
+#8 D:\Software\phpstudy_pro\WWW\merchant\addons\weliam_smartcity\core\common\Im.php(249): Workerman\Worker::runAll()
+#9 {main}
+2021-03-12 11:20:17 pid:1 Worker process terminated
+2021-03-18 11:02:30 pid:1 Error: Call to a member function send() on null in D:\Software\phpstudy_pro\WWW\merchant\addons\weliam_smartcity\core\common\Im.php:218
+Stack trace:
+#0 D:\Software\phpstudy_pro\WWW\merchant\addons\weliam_smartcity\core\common\Im.php(119): handle->socketSend(24, '\xE5\x8D\xB3\xE6\x97\xB6\xE9\x80\x9A\xE8\xAE\xAF\xE4\xBF\xA1...', 2, 0, Array)
+#1 D:\Software\phpstudy_pro\WWW\merchant\addons\weliam_smartcity\core\common\Im.php(47): handle->handleData()
+#2 D:\Software\phpstudy_pro\WWW\merchant\addons\weliam_smartcity\vendor\workerman\workerman\Connection\TcpConnection.php(637): {closure}(Object(Workerman\Connection\TcpConnection), '{"im_type":2,"s...')
+#3 D:\Software\phpstudy_pro\WWW\merchant\addons\weliam_smartcity\vendor\workerman\workerman\Events\Select.php(293): Workerman\Connection\TcpConnection->baseRead(Resource id #70)
+#4 D:\Software\phpstudy_pro\WWW\merchant\addons\weliam_smartcity\vendor\workerman\workerman\Worker.php(2430): Workerman\Events\Select->loop()
+#5 D:\Software\phpstudy_pro\WWW\merchant\addons\weliam_smartcity\vendor\workerman\workerman\Worker.php(1418): Workerman\Worker->run()
+#6 D:\Software\phpstudy_pro\WWW\merchant\addons\weliam_smartcity\vendor\workerman\workerman\Worker.php(1361): Workerman\Worker::forkWorkersForWindows()
+#7 D:\Software\phpstudy_pro\WWW\merchant\addons\weliam_smartcity\vendor\workerman\workerman\Worker.php(542): Workerman\Worker::forkWorkers()
+#8 D:\Software\phpstudy_pro\WWW\merchant\addons\weliam_smartcity\core\common\Im.php(265): Workerman\Worker::runAll()
+#9 {main}
+2021-03-18 11:02:30 pid:1 Worker process terminated
+2021-03-18 11:03:16 pid:1 Error: Call to a member function send() on null in D:\Software\phpstudy_pro\WWW\merchant\addons\weliam_smartcity\core\common\Im.php:218
+Stack trace:
+#0 D:\Software\phpstudy_pro\WWW\merchant\addons\weliam_smartcity\core\common\Im.php(119): handle->socketSend(24, '\xE5\x8D\xB3\xE6\x97\xB6\xE9\x80\x9A\xE8\xAE\xAF\xE4\xBF\xA1...', 2, 0, Array)
+#1 D:\Software\phpstudy_pro\WWW\merchant\addons\weliam_smartcity\core\common\Im.php(47): handle->handleData()
+#2 D:\Software\phpstudy_pro\WWW\merchant\addons\weliam_smartcity\vendor\workerman\workerman\Connection\TcpConnection.php(637): {closure}(Object(Workerman\Connection\TcpConnection), '{"im_type":2,"s...')
+#3 D:\Software\phpstudy_pro\WWW\merchant\addons\weliam_smartcity\vendor\workerman\workerman\Events\Select.php(293): Workerman\Connection\TcpConnection->baseRead(Resource id #70)
+#4 D:\Software\phpstudy_pro\WWW\merchant\addons\weliam_smartcity\vendor\workerman\workerman\Worker.php(2430): Workerman\Events\Select->loop()
+#5 D:\Software\phpstudy_pro\WWW\merchant\addons\weliam_smartcity\vendor\workerman\workerman\Worker.php(1418): Workerman\Worker->run()
+#6 D:\Software\phpstudy_pro\WWW\merchant\addons\weliam_smartcity\vendor\workerman\workerman\Worker.php(1361): Workerman\Worker::forkWorkersForWindows()
+#7 D:\Software\phpstudy_pro\WWW\merchant\addons\weliam_smartcity\vendor\workerman\workerman\Worker.php(542): Workerman\Worker::forkWorkers()
+#8 D:\Software\phpstudy_pro\WWW\merchant\addons\weliam_smartcity\core\common\Im.php(265): Workerman\Worker::runAll()
+#9 {main}
+2021-03-18 11:03:16 pid:1 Worker process terminated
+2021-03-18 11:05:22 pid:1 Error: Call to a member function send() on null in D:\Software\phpstudy_pro\WWW\merchant\addons\weliam_smartcity\core\common\Im.php:219
+Stack trace:
+#0 D:\Software\phpstudy_pro\WWW\merchant\addons\weliam_smartcity\core\common\Im.php(120): handle->socketSend(24, '\xE5\x8D\xB3\xE6\x97\xB6\xE9\x80\x9A\xE8\xAE\xAF\xE4\xBF\xA1...', 2, 0, Array)
+#1 D:\Software\phpstudy_pro\WWW\merchant\addons\weliam_smartcity\core\common\Im.php(47): handle->handleData()
+#2 D:\Software\phpstudy_pro\WWW\merchant\addons\weliam_smartcity\vendor\workerman\workerman\Connection\TcpConnection.php(637): {closure}(Object(Workerman\Connection\TcpConnection), '{"im_type":2,"s...')
+#3 D:\Software\phpstudy_pro\WWW\merchant\addons\weliam_smartcity\vendor\workerman\workerman\Events\Select.php(293): Workerman\Connection\TcpConnection->baseRead(Resource id #70)
+#4 D:\Software\phpstudy_pro\WWW\merchant\addons\weliam_smartcity\vendor\workerman\workerman\Worker.php(2430): Workerman\Events\Select->loop()
+#5 D:\Software\phpstudy_pro\WWW\merchant\addons\weliam_smartcity\vendor\workerman\workerman\Worker.php(1418): Workerman\Worker->run()
+#6 D:\Software\phpstudy_pro\WWW\merchant\addons\weliam_smartcity\vendor\workerman\workerman\Worker.php(1361): Workerman\Worker::forkWorkersForWindows()
+#7 D:\Software\phpstudy_pro\WWW\merchant\addons\weliam_smartcity\vendor\workerman\workerman\Worker.php(542): Workerman\Worker::forkWorkers()
+#8 D:\Software\phpstudy_pro\WWW\merchant\addons\weliam_smartcity\core\common\Im.php(266): Workerman\Worker::runAll()
+#9 {main}
+2021-03-18 11:05:22 pid:1 Worker process terminated
+2021-03-18 11:05:54 pid:1 Error: Call to a member function send() on null in D:\Software\phpstudy_pro\WWW\merchant\addons\weliam_smartcity\core\common\Im.php:217
+Stack trace:
+#0 D:\Software\phpstudy_pro\WWW\merchant\addons\weliam_smartcity\core\common\Im.php(118): handle->socketSend(24, '\xE5\x8D\xB3\xE6\x97\xB6\xE9\x80\x9A\xE8\xAE\xAF\xE4\xBF\xA1...', 2, 0, Array)
+#1 D:\Software\phpstudy_pro\WWW\merchant\addons\weliam_smartcity\core\common\Im.php(47): handle->handleData()
+#2 D:\Software\phpstudy_pro\WWW\merchant\addons\weliam_smartcity\vendor\workerman\workerman\Connection\TcpConnection.php(637): {closure}(Object(Workerman\Connection\TcpConnection), '{"im_type":2,"s...')
+#3 D:\Software\phpstudy_pro\WWW\merchant\addons\weliam_smartcity\vendor\workerman\workerman\Events\Select.php(293): Workerman\Connection\TcpConnection->baseRead(Resource id #70)
+#4 D:\Software\phpstudy_pro\WWW\merchant\addons\weliam_smartcity\vendor\workerman\workerman\Worker.php(2430): Workerman\Events\Select->loop()
+#5 D:\Software\phpstudy_pro\WWW\merchant\addons\weliam_smartcity\vendor\workerman\workerman\Worker.php(1418): Workerman\Worker->run()
+#6 D:\Software\phpstudy_pro\WWW\merchant\addons\weliam_smartcity\vendor\workerman\workerman\Worker.php(1361): Workerman\Worker::forkWorkersForWindows()
+#7 D:\Software\phpstudy_pro\WWW\merchant\addons\weliam_smartcity\vendor\workerman\workerman\Worker.php(542): Workerman\Worker::forkWorkers()
+#8 D:\Software\phpstudy_pro\WWW\merchant\addons\weliam_smartcity\core\common\Im.php(264): Workerman\Worker::runAll()
+#9 {main}
+2021-03-18 11:05:54 pid:1 Worker process terminated
+2021-03-18 11:06:19 pid:1 Error: Call to a member function send() on null in D:\Software\phpstudy_pro\WWW\merchant\addons\weliam_smartcity\core\common\Im.php:217
+Stack trace:
+#0 D:\Software\phpstudy_pro\WWW\merchant\addons\weliam_smartcity\core\common\Im.php(118): handle->socketSend(24, '\xE5\x8D\xB3\xE6\x97\xB6\xE9\x80\x9A\xE8\xAE\xAF\xE4\xBF\xA1...', 2, 0, Array)
+#1 D:\Software\phpstudy_pro\WWW\merchant\addons\weliam_smartcity\core\common\Im.php(47): handle->handleData()
+#2 D:\Software\phpstudy_pro\WWW\merchant\addons\weliam_smartcity\vendor\workerman\workerman\Connection\TcpConnection.php(637): {closure}(Object(Workerman\Connection\TcpConnection), '{"im_type":2,"s...')
+#3 D:\Software\phpstudy_pro\WWW\merchant\addons\weliam_smartcity\vendor\workerman\workerman\Events\Select.php(293): Workerman\Connection\TcpConnection->baseRead(Resource id #70)
+#4 D:\Software\phpstudy_pro\WWW\merchant\addons\weliam_smartcity\vendor\workerman\workerman\Worker.php(2430): Workerman\Events\Select->loop()
+#5 D:\Software\phpstudy_pro\WWW\merchant\addons\weliam_smartcity\vendor\workerman\workerman\Worker.php(1418): Workerman\Worker->run()
+#6 D:\Software\phpstudy_pro\WWW\merchant\addons\weliam_smartcity\vendor\workerman\workerman\Worker.php(1361): Workerman\Worker::forkWorkersForWindows()
+#7 D:\Software\phpstudy_pro\WWW\merchant\addons\weliam_smartcity\vendor\workerman\workerman\Worker.php(542): Workerman\Worker::forkWorkers()
+#8 D:\Software\phpstudy_pro\WWW\merchant\addons\weliam_smartcity\core\common\Im.php(264): Workerman\Worker::runAll()
+#9 {main}
+2021-03-18 11:06:19 pid:1 Worker process terminated
+2021-03-18 11:06:37 pid:1 Error: Call to a member function send() on null in D:\Software\phpstudy_pro\WWW\merchant\addons\weliam_smartcity\core\common\Im.php:216
+Stack trace:
+#0 D:\Software\phpstudy_pro\WWW\merchant\addons\weliam_smartcity\core\common\Im.php(118): handle->socketSend(24, '\xE5\x8D\xB3\xE6\x97\xB6\xE9\x80\x9A\xE8\xAE\xAF\xE4\xBF\xA1...', 2, 0, Array)
+#1 D:\Software\phpstudy_pro\WWW\merchant\addons\weliam_smartcity\core\common\Im.php(47): handle->handleData()
+#2 D:\Software\phpstudy_pro\WWW\merchant\addons\weliam_smartcity\vendor\workerman\workerman\Connection\TcpConnection.php(637): {closure}(Object(Workerman\Connection\TcpConnection), '{"im_type":2,"s...')
+#3 D:\Software\phpstudy_pro\WWW\merchant\addons\weliam_smartcity\vendor\workerman\workerman\Events\Select.php(293): Workerman\Connection\TcpConnection->baseRead(Resource id #70)
+#4 D:\Software\phpstudy_pro\WWW\merchant\addons\weliam_smartcity\vendor\workerman\workerman\Worker.php(2430): Workerman\Events\Select->loop()
+#5 D:\Software\phpstudy_pro\WWW\merchant\addons\weliam_smartcity\vendor\workerman\workerman\Worker.php(1418): Workerman\Worker->run()
+#6 D:\Software\phpstudy_pro\WWW\merchant\addons\weliam_smartcity\vendor\workerman\workerman\Worker.php(1361): Workerman\Worker::forkWorkersForWindows()
+#7 D:\Software\phpstudy_pro\WWW\merchant\addons\weliam_smartcity\vendor\workerman\workerman\Worker.php(542): Workerman\Worker::forkWorkers()
+#8 D:\Software\phpstudy_pro\WWW\merchant\addons\weliam_smartcity\core\common\Im.php(263): Workerman\Worker::runAll()
+#9 {main}
+2021-03-18 11:06:37 pid:1 Worker process terminated
+2021-03-18 11:07:08 pid:1 Error: Call to a member function send() on null in D:\Software\phpstudy_pro\WWW\merchant\addons\weliam_smartcity\core\common\Im.php:216
+Stack trace:
+#0 D:\Software\phpstudy_pro\WWW\merchant\addons\weliam_smartcity\core\common\Im.php(118): handle->socketSend(24, '\xE5\x8D\xB3\xE6\x97\xB6\xE9\x80\x9A\xE8\xAE\xAF\xE4\xBF\xA1...', 2, 0, Array)
+#1 D:\Software\phpstudy_pro\WWW\merchant\addons\weliam_smartcity\core\common\Im.php(47): handle->handleData()
+#2 D:\Software\phpstudy_pro\WWW\merchant\addons\weliam_smartcity\vendor\workerman\workerman\Connection\TcpConnection.php(637): {closure}(Object(Workerman\Connection\TcpConnection), '{"im_type":2,"s...')
+#3 D:\Software\phpstudy_pro\WWW\merchant\addons\weliam_smartcity\vendor\workerman\workerman\Events\Select.php(293): Workerman\Connection\TcpConnection->baseRead(Resource id #70)
+#4 D:\Software\phpstudy_pro\WWW\merchant\addons\weliam_smartcity\vendor\workerman\workerman\Worker.php(2430): Workerman\Events\Select->loop()
+#5 D:\Software\phpstudy_pro\WWW\merchant\addons\weliam_smartcity\vendor\workerman\workerman\Worker.php(1418): Workerman\Worker->run()
+#6 D:\Software\phpstudy_pro\WWW\merchant\addons\weliam_smartcity\vendor\workerman\workerman\Worker.php(1361): Workerman\Worker::forkWorkersForWindows()
+#7 D:\Software\phpstudy_pro\WWW\merchant\addons\weliam_smartcity\vendor\workerman\workerman\Worker.php(542): Workerman\Worker::forkWorkers()
+#8 D:\Software\phpstudy_pro\WWW\merchant\addons\weliam_smartcity\core\common\Im.php(263): Workerman\Worker::runAll()
+#9 {main}
+2021-03-18 11:07:08 pid:1 Worker process terminated
+2021-03-18 11:14:16 pid:1 PDOException: SQL:INSERT INTO `ims_wlmerchant_im` ( `uniacid`,`send_id`,`send_type`,`receive_id`,`receive_type`,`create_time`,`type`,`content`) VALUES ( :uniacid,:send_id,:send_type,:receive_id,:receive_type,:create_time,:type,:content) SQLSTATE[HY000]: General error: 1366 Incorrect string value: '\xF0\x9F\x98\x8A\xF0\x9F...' for column 'content' at row 1 in D:\Software\phpstudy_pro\WWW\merchant\addons\weliam_smartcity\vendor\workerman\mysql\src\Connection.php:1770
+Stack trace:
+#0 D:\Software\phpstudy_pro\WWW\merchant\addons\weliam_smartcity\vendor\workerman\mysql\src\Connection.php(1828): Workerman\MySQL\Connection->execute('INSERT INTO `im...', Array)
+#1 D:\Software\phpstudy_pro\WWW\merchant\addons\weliam_smartcity\core\common\Im.php(100): Workerman\MySQL\Connection->query()
+#2 D:\Software\phpstudy_pro\WWW\merchant\addons\weliam_smartcity\core\common\Im.php(47): handle->handleData()
+#3 D:\Software\phpstudy_pro\WWW\merchant\addons\weliam_smartcity\vendor\workerman\workerman\Connection\TcpConnection.php(637): {closure}(Object(Workerman\Connection\TcpConnection), '{"im_type":2,"s...')
+#4 D:\Software\phpstudy_pro\WWW\merchant\addons\weliam_smartcity\vendor\workerman\workerman\Events\Select.php(293): Workerman\Connection\TcpConnection->baseRead(Resource id #70)
+#5 D:\Software\phpstudy_pro\WWW\merchant\addons\weliam_smartcity\vendor\workerman\workerman\Worker.php(2430): Workerman\Events\Select->loop()
+#6 D:\Software\phpstudy_pro\WWW\merchant\addons\weliam_smartcity\vendor\workerman\workerman\Worker.php(1418): Workerman\Worker->run()
+#7 D:\Software\phpstudy_pro\WWW\merchant\addons\weliam_smartcity\vendor\workerman\workerman\Worker.php(1361): Workerman\Worker::forkWorkersForWindows()
+#8 D:\Software\phpstudy_pro\WWW\merchant\addons\weliam_smartcity\vendor\workerman\workerman\Worker.php(542): Workerman\Worker::forkWorkers()
+#9 D:\Software\phpstudy_pro\WWW\merchant\addons\weliam_smartcity\core\common\Im.php(280): Workerman\Worker::runAll()
+#10 {main}
+2021-03-18 11:14:16 pid:1 Worker process terminated
+2021-03-18 11:16:05 pid:1 PDOException: SQL:INSERT INTO `ims_wlmerchant_im` ( `uniacid`,`send_id`,`send_type`,`receive_id`,`receive_type`,`create_time`,`type`,`content`) VALUES ( :uniacid,:send_id,:send_type,:receive_id,:receive_type,:create_time,:type,:content) SQLSTATE[HY000]: General error: 1366 Incorrect string value: '\xF0\x9F\x98\xA2\xF0\x9F...' for column 'content' at row 1 in D:\Software\phpstudy_pro\WWW\merchant\addons\weliam_smartcity\vendor\workerman\mysql\src\Connection.php:1770
+Stack trace:
+#0 D:\Software\phpstudy_pro\WWW\merchant\addons\weliam_smartcity\vendor\workerman\mysql\src\Connection.php(1828): Workerman\MySQL\Connection->execute('INSERT INTO `im...', Array)
+#1 D:\Software\phpstudy_pro\WWW\merchant\addons\weliam_smartcity\core\common\Im.php(100): Workerman\MySQL\Connection->query()
+#2 D:\Software\phpstudy_pro\WWW\merchant\addons\weliam_smartcity\core\common\Im.php(47): handle->handleData()
+#3 D:\Software\phpstudy_pro\WWW\merchant\addons\weliam_smartcity\vendor\workerman\workerman\Connection\TcpConnection.php(637): {closure}(Object(Workerman\Connection\TcpConnection), '{"im_type":2,"s...')
+#4 D:\Software\phpstudy_pro\WWW\merchant\addons\weliam_smartcity\vendor\workerman\workerman\Events\Select.php(293): Workerman\Connection\TcpConnection->baseRead(Resource id #70)
+#5 D:\Software\phpstudy_pro\WWW\merchant\addons\weliam_smartcity\vendor\workerman\workerman\Worker.php(2430): Workerman\Events\Select->loop()
+#6 D:\Software\phpstudy_pro\WWW\merchant\addons\weliam_smartcity\vendor\workerman\workerman\Worker.php(1418): Workerman\Worker->run()
+#7 D:\Software\phpstudy_pro\WWW\merchant\addons\weliam_smartcity\vendor\workerman\workerman\Worker.php(1361): Workerman\Worker::forkWorkersForWindows()
+#8 D:\Software\phpstudy_pro\WWW\merchant\addons\weliam_smartcity\vendor\workerman\workerman\Worker.php(542): Workerman\Worker::forkWorkers()
+#9 D:\Software\phpstudy_pro\WWW\merchant\addons\weliam_smartcity\core\common\Im.php(280): Workerman\Worker::runAll()
+#10 {main}
+2021-03-18 11:16:05 pid:1 Worker process terminated
+2021-03-18 11:17:07 pid:1 PDOException: SQL:INSERT INTO `ims_wlmerchant_im` ( `uniacid`,`send_id`,`send_type`,`receive_id`,`receive_type`,`create_time`,`type`,`content`) VALUES ( :uniacid,:send_id,:send_type,:receive_id,:receive_type,:create_time,:type,:content) SQLSTATE[HY000]: General error: 1366 Incorrect string value: '\xF0\x9F\xA4\xA6\xE2\x80...' for column 'content' at row 1 in D:\Software\phpstudy_pro\WWW\merchant\addons\weliam_smartcity\vendor\workerman\mysql\src\Connection.php:1770
+Stack trace:
+#0 D:\Software\phpstudy_pro\WWW\merchant\addons\weliam_smartcity\vendor\workerman\mysql\src\Connection.php(1828): Workerman\MySQL\Connection->execute('INSERT INTO `im...', Array)
+#1 D:\Software\phpstudy_pro\WWW\merchant\addons\weliam_smartcity\core\common\Im.php(100): Workerman\MySQL\Connection->query()
+#2 D:\Software\phpstudy_pro\WWW\merchant\addons\weliam_smartcity\core\common\Im.php(47): handle->handleData()
+#3 D:\Software\phpstudy_pro\WWW\merchant\addons\weliam_smartcity\vendor\workerman\workerman\Connection\TcpConnection.php(637): {closure}(Object(Workerman\Connection\TcpConnection), '{"im_type":2,"s...')
+#4 D:\Software\phpstudy_pro\WWW\merchant\addons\weliam_smartcity\vendor\workerman\workerman\Events\Select.php(293): Workerman\Connection\TcpConnection->baseRead(Resource id #70)
+#5 D:\Software\phpstudy_pro\WWW\merchant\addons\weliam_smartcity\vendor\workerman\workerman\Worker.php(2430): Workerman\Events\Select->loop()
+#6 D:\Software\phpstudy_pro\WWW\merchant\addons\weliam_smartcity\vendor\workerman\workerman\Worker.php(1418): Workerman\Worker->run()
+#7 D:\Software\phpstudy_pro\WWW\merchant\addons\weliam_smartcity\vendor\workerman\workerman\Worker.php(1361): Workerman\Worker::forkWorkersForWindows()
+#8 D:\Software\phpstudy_pro\WWW\merchant\addons\weliam_smartcity\vendor\workerman\workerman\Worker.php(542): Workerman\Worker::forkWorkers()
+#9 D:\Software\phpstudy_pro\WWW\merchant\addons\weliam_smartcity\core\common\Im.php(280): Workerman\Worker::runAll()
+#10 {main}
+2021-03-18 11:17:07 pid:1 Worker process terminated
+2021-03-18 11:17:36 pid:1 PDOException: SQL:INSERT INTO `ims_wlmerchant_im` ( `uniacid`,`send_id`,`send_type`,`receive_id`,`receive_type`,`create_time`,`type`,`content`) VALUES ( :uniacid,:send_id,:send_type,:receive_id,:receive_type,:create_time,:type,:content) SQLSTATE[HY000]: General error: 1366 Incorrect string value: '\xF0\x9F\x8E\xB6' for column 'content' at row 1 in D:\Software\phpstudy_pro\WWW\merchant\addons\weliam_smartcity\vendor\workerman\mysql\src\Connection.php:1770
+Stack trace:
+#0 D:\Software\phpstudy_pro\WWW\merchant\addons\weliam_smartcity\vendor\workerman\mysql\src\Connection.php(1828): Workerman\MySQL\Connection->execute('INSERT INTO `im...', Array)
+#1 D:\Software\phpstudy_pro\WWW\merchant\addons\weliam_smartcity\core\common\Im.php(101): Workerman\MySQL\Connection->query()
+#2 D:\Software\phpstudy_pro\WWW\merchant\addons\weliam_smartcity\core\common\Im.php(47): handle->handleData()
+#3 D:\Software\phpstudy_pro\WWW\merchant\addons\weliam_smartcity\vendor\workerman\workerman\Connection\TcpConnection.php(637): {closure}(Object(Workerman\Connection\TcpConnection), '{"im_type":2,"s...')
+#4 D:\Software\phpstudy_pro\WWW\merchant\addons\weliam_smartcity\vendor\workerman\workerman\Events\Select.php(293): Workerman\Connection\TcpConnection->baseRead(Resource id #70)
+#5 D:\Software\phpstudy_pro\WWW\merchant\addons\weliam_smartcity\vendor\workerman\workerman\Worker.php(2430): Workerman\Events\Select->loop()
+#6 D:\Software\phpstudy_pro\WWW\merchant\addons\weliam_smartcity\vendor\workerman\workerman\Worker.php(1418): Workerman\Worker->run()
+#7 D:\Software\phpstudy_pro\WWW\merchant\addons\weliam_smartcity\vendor\workerman\workerman\Worker.php(1361): Workerman\Worker::forkWorkersForWindows()
+#8 D:\Software\phpstudy_pro\WWW\merchant\addons\weliam_smartcity\vendor\workerman\workerman\Worker.php(542): Workerman\Worker::forkWorkers()
+#9 D:\Software\phpstudy_pro\WWW\merchant\addons\weliam_smartcity\core\common\Im.php(281): Workerman\Worker::runAll()
+#10 {main}
+2021-03-18 11:17:36 pid:1 Worker process terminated
+2021-03-18 11:18:25 pid:1 PDOException: SQL:INSERT INTO `ims_wlmerchant_im` ( `uniacid`,`send_id`,`send_type`,`receive_id`,`receive_type`,`create_time`,`type`,`content`) VALUES ( :uniacid,:send_id,:send_type,:receive_id,:receive_type,:create_time,:type,:content) SQLSTATE[HY000]: General error: 1366 Incorrect string value: '\xF0\x9F\x98\x81' for column 'content' at row 1 in D:\Software\phpstudy_pro\WWW\merchant\addons\weliam_smartcity\vendor\workerman\mysql\src\Connection.php:1770
+Stack trace:
+#0 D:\Software\phpstudy_pro\WWW\merchant\addons\weliam_smartcity\vendor\workerman\mysql\src\Connection.php(1828): Workerman\MySQL\Connection->execute('INSERT INTO `im...', Array)
+#1 D:\Software\phpstudy_pro\WWW\merchant\addons\weliam_smartcity\core\common\Im.php(101): Workerman\MySQL\Connection->query()
+#2 D:\Software\phpstudy_pro\WWW\merchant\addons\weliam_smartcity\core\common\Im.php(47): handle->handleData()
+#3 D:\Software\phpstudy_pro\WWW\merchant\addons\weliam_smartcity\vendor\workerman\workerman\Connection\TcpConnection.php(637): {closure}(Object(Workerman\Connection\TcpConnection), '{"im_type":2,"s...')
+#4 D:\Software\phpstudy_pro\WWW\merchant\addons\weliam_smartcity\vendor\workerman\workerman\Events\Select.php(293): Workerman\Connection\TcpConnection->baseRead(Resource id #70)
+#5 D:\Software\phpstudy_pro\WWW\merchant\addons\weliam_smartcity\vendor\workerman\workerman\Worker.php(2430): Workerman\Events\Select->loop()
+#6 D:\Software\phpstudy_pro\WWW\merchant\addons\weliam_smartcity\vendor\workerman\workerman\Worker.php(1418): Workerman\Worker->run()
+#7 D:\Software\phpstudy_pro\WWW\merchant\addons\weliam_smartcity\vendor\workerman\workerman\Worker.php(1361): Workerman\Worker::forkWorkersForWindows()
+#8 D:\Software\phpstudy_pro\WWW\merchant\addons\weliam_smartcity\vendor\workerman\workerman\Worker.php(542): Workerman\Worker::forkWorkers()
+#9 D:\Software\phpstudy_pro\WWW\merchant\addons\weliam_smartcity\core\common\Im.php(281): Workerman\Worker::runAll()
+#10 {main}
+2021-03-18 11:18:25 pid:1 Worker process terminated
+2021-03-18 11:18:46 pid:1 PDOException: SQL:INSERT INTO `ims_wlmerchant_im` ( `uniacid`,`send_id`,`send_type`,`receive_id`,`receive_type`,`create_time`,`type`,`content`) VALUES ( :uniacid,:send_id,:send_type,:receive_id,:receive_type,:create_time,:type,:content) SQLSTATE[HY000]: General error: 1366 Incorrect string value: '\xF0\x9F\x8E\xB6' for column 'content' at row 1 in D:\Software\phpstudy_pro\WWW\merchant\addons\weliam_smartcity\vendor\workerman\mysql\src\Connection.php:1770
+Stack trace:
+#0 D:\Software\phpstudy_pro\WWW\merchant\addons\weliam_smartcity\vendor\workerman\mysql\src\Connection.php(1828): Workerman\MySQL\Connection->execute('INSERT INTO `im...', Array)
+#1 D:\Software\phpstudy_pro\WWW\merchant\addons\weliam_smartcity\core\common\Im.php(100): Workerman\MySQL\Connection->query()
+#2 D:\Software\phpstudy_pro\WWW\merchant\addons\weliam_smartcity\core\common\Im.php(47): handle->handleData()
+#3 D:\Software\phpstudy_pro\WWW\merchant\addons\weliam_smartcity\vendor\workerman\workerman\Connection\TcpConnection.php(637): {closure}(Object(Workerman\Connection\TcpConnection), '{"im_type":2,"s...')
+#4 D:\Software\phpstudy_pro\WWW\merchant\addons\weliam_smartcity\vendor\workerman\workerman\Events\Select.php(293): Workerman\Connection\TcpConnection->baseRead(Resource id #70)
+#5 D:\Software\phpstudy_pro\WWW\merchant\addons\weliam_smartcity\vendor\workerman\workerman\Worker.php(2430): Workerman\Events\Select->loop()
+#6 D:\Software\phpstudy_pro\WWW\merchant\addons\weliam_smartcity\vendor\workerman\workerman\Worker.php(1418): Workerman\Worker->run()
+#7 D:\Software\phpstudy_pro\WWW\merchant\addons\weliam_smartcity\vendor\workerman\workerman\Worker.php(1361): Workerman\Worker::forkWorkersForWindows()
+#8 D:\Software\phpstudy_pro\WWW\merchant\addons\weliam_smartcity\vendor\workerman\workerman\Worker.php(542): Workerman\Worker::forkWorkers()
+#9 D:\Software\phpstudy_pro\WWW\merchant\addons\weliam_smartcity\core\common\Im.php(281): Workerman\Worker::runAll()
+#10 {main}
+2021-03-18 11:18:46 pid:1 Worker process terminated
+2021-03-18 11:19:21 pid:1 PDOException: SQL:INSERT INTO `ims_wlmerchant_im` ( `uniacid`,`send_id`,`send_type`,`receive_id`,`receive_type`,`create_time`,`type`,`content`) VALUES ( :uniacid,:send_id,:send_type,:receive_id,:receive_type,:create_time,:type,:content) SQLSTATE[HY000]: General error: 1366 Incorrect string value: '\xF0\x9F\xA4\xA6\xE2\x80...' for column 'content' at row 1 in D:\Software\phpstudy_pro\WWW\merchant\addons\weliam_smartcity\vendor\workerman\mysql\src\Connection.php:1770
+Stack trace:
+#0 D:\Software\phpstudy_pro\WWW\merchant\addons\weliam_smartcity\vendor\workerman\mysql\src\Connection.php(1828): Workerman\MySQL\Connection->execute('INSERT INTO `im...', Array)
+#1 D:\Software\phpstudy_pro\WWW\merchant\addons\weliam_smartcity\core\common\Im.php(100): Workerman\MySQL\Connection->query()
+#2 D:\Software\phpstudy_pro\WWW\merchant\addons\weliam_smartcity\core\common\Im.php(47): handle->handleData()
+#3 D:\Software\phpstudy_pro\WWW\merchant\addons\weliam_smartcity\vendor\workerman\workerman\Connection\TcpConnection.php(637): {closure}(Object(Workerman\Connection\TcpConnection), '{"im_type":2,"s...')
+#4 D:\Software\phpstudy_pro\WWW\merchant\addons\weliam_smartcity\vendor\workerman\workerman\Events\Select.php(293): Workerman\Connection\TcpConnection->baseRead(Resource id #70)
+#5 D:\Software\phpstudy_pro\WWW\merchant\addons\weliam_smartcity\vendor\workerman\workerman\Worker.php(2430): Workerman\Events\Select->loop()
+#6 D:\Software\phpstudy_pro\WWW\merchant\addons\weliam_smartcity\vendor\workerman\workerman\Worker.php(1418): Workerman\Worker->run()
+#7 D:\Software\phpstudy_pro\WWW\merchant\addons\weliam_smartcity\vendor\workerman\workerman\Worker.php(1361): Workerman\Worker::forkWorkersForWindows()
+#8 D:\Software\phpstudy_pro\WWW\merchant\addons\weliam_smartcity\vendor\workerman\workerman\Worker.php(542): Workerman\Worker::forkWorkers()
+#9 D:\Software\phpstudy_pro\WWW\merchant\addons\weliam_smartcity\core\common\Im.php(281): Workerman\Worker::runAll()
+#10 {main}
+2021-03-18 11:19:21 pid:1 Worker process terminated
+2021-03-18 11:19:46 pid:1 PDOException: SQL:INSERT INTO `ims_wlmerchant_im` ( `uniacid`,`send_id`,`send_type`,`receive_id`,`receive_type`,`create_time`,`type`,`content`) VALUES ( :uniacid,:send_id,:send_type,:receive_id,:receive_type,:create_time,:type,:content) SQLSTATE[HY000]: General error: 1366 Incorrect string value: '\xF0\x9F\x98\x8D' for column 'content' at row 1 in D:\Software\phpstudy_pro\WWW\merchant\addons\weliam_smartcity\vendor\workerman\mysql\src\Connection.php:1770
+Stack trace:
+#0 D:\Software\phpstudy_pro\WWW\merchant\addons\weliam_smartcity\vendor\workerman\mysql\src\Connection.php(1828): Workerman\MySQL\Connection->execute('INSERT INTO `im...', Array)
+#1 D:\Software\phpstudy_pro\WWW\merchant\addons\weliam_smartcity\core\common\Im.php(100): Workerman\MySQL\Connection->query()
+#2 D:\Software\phpstudy_pro\WWW\merchant\addons\weliam_smartcity\core\common\Im.php(47): handle->handleData()
+#3 D:\Software\phpstudy_pro\WWW\merchant\addons\weliam_smartcity\vendor\workerman\workerman\Connection\TcpConnection.php(637): {closure}(Object(Workerman\Connection\TcpConnection), '{"im_type":2,"s...')
+#4 D:\Software\phpstudy_pro\WWW\merchant\addons\weliam_smartcity\vendor\workerman\workerman\Events\Select.php(293): Workerman\Connection\TcpConnection->baseRead(Resource id #70)
+#5 D:\Software\phpstudy_pro\WWW\merchant\addons\weliam_smartcity\vendor\workerman\workerman\Worker.php(2430): Workerman\Events\Select->loop()
+#6 D:\Software\phpstudy_pro\WWW\merchant\addons\weliam_smartcity\vendor\workerman\workerman\Worker.php(1418): Workerman\Worker->run()
+#7 D:\Software\phpstudy_pro\WWW\merchant\addons\weliam_smartcity\vendor\workerman\workerman\Worker.php(1361): Workerman\Worker::forkWorkersForWindows()
+#8 D:\Software\phpstudy_pro\WWW\merchant\addons\weliam_smartcity\vendor\workerman\workerman\Worker.php(542): Workerman\Worker::forkWorkers()
+#9 D:\Software\phpstudy_pro\WWW\merchant\addons\weliam_smartcity\core\common\Im.php(282): Workerman\Worker::runAll()
+#10 {main}
+2021-03-18 11:19:46 pid:1 Worker process terminated
+2021-03-18 11:20:11 pid:1 PDOException: SQL:INSERT INTO `ims_wlmerchant_im` ( `uniacid`,`send_id`,`send_type`,`receive_id`,`receive_type`,`create_time`,`type`,`content`) VALUES ( :uniacid,:send_id,:send_type,:receive_id,:receive_type,:create_time,:type,:content) SQLSTATE[HY000]: General error: 1366 Incorrect string value: '\xF0\x9F\x90\xB1\xE2\x80...' for column 'content' at row 1 in D:\Software\phpstudy_pro\WWW\merchant\addons\weliam_smartcity\vendor\workerman\mysql\src\Connection.php:1770
+Stack trace:
+#0 D:\Software\phpstudy_pro\WWW\merchant\addons\weliam_smartcity\vendor\workerman\mysql\src\Connection.php(1828): Workerman\MySQL\Connection->execute('INSERT INTO `im...', Array)
+#1 D:\Software\phpstudy_pro\WWW\merchant\addons\weliam_smartcity\core\common\Im.php(100): Workerman\MySQL\Connection->query()
+#2 D:\Software\phpstudy_pro\WWW\merchant\addons\weliam_smartcity\core\common\Im.php(47): handle->handleData()
+#3 D:\Software\phpstudy_pro\WWW\merchant\addons\weliam_smartcity\vendor\workerman\workerman\Connection\TcpConnection.php(637): {closure}(Object(Workerman\Connection\TcpConnection), '{"im_type":2,"s...')
+#4 D:\Software\phpstudy_pro\WWW\merchant\addons\weliam_smartcity\vendor\workerman\workerman\Events\Select.php(293): Workerman\Connection\TcpConnection->baseRead(Resource id #70)
+#5 D:\Software\phpstudy_pro\WWW\merchant\addons\weliam_smartcity\vendor\workerman\workerman\Worker.php(2430): Workerman\Events\Select->loop()
+#6 D:\Software\phpstudy_pro\WWW\merchant\addons\weliam_smartcity\vendor\workerman\workerman\Worker.php(1418): Workerman\Worker->run()
+#7 D:\Software\phpstudy_pro\WWW\merchant\addons\weliam_smartcity\vendor\workerman\workerman\Worker.php(1361): Workerman\Worker::forkWorkersForWindows()
+#8 D:\Software\phpstudy_pro\WWW\merchant\addons\weliam_smartcity\vendor\workerman\workerman\Worker.php(542): Workerman\Worker::forkWorkers()
+#9 D:\Software\phpstudy_pro\WWW\merchant\addons\weliam_smartcity\core\common\Im.php(283): Workerman\Worker::runAll()
+#10 {main}
+2021-03-18 11:20:11 pid:1 Worker process terminated
+2021-03-18 11:20:34 pid:1 PDOException: SQL:INSERT INTO `ims_wlmerchant_im` ( `uniacid`,`send_id`,`send_type`,`receive_id`,`receive_type`,`create_time`,`type`,`content`) VALUES ( :uniacid,:send_id,:send_type,:receive_id,:receive_type,:create_time,:type,:content) SQLSTATE[HY000]: General error: 1366 Incorrect string value: '\xF0\x9F\x98\x81' for column 'content' at row 1 in D:\Software\phpstudy_pro\WWW\merchant\addons\weliam_smartcity\vendor\workerman\mysql\src\Connection.php:1770
+Stack trace:
+#0 D:\Software\phpstudy_pro\WWW\merchant\addons\weliam_smartcity\vendor\workerman\mysql\src\Connection.php(1828): Workerman\MySQL\Connection->execute('INSERT INTO `im...', Array)
+#1 D:\Software\phpstudy_pro\WWW\merchant\addons\weliam_smartcity\core\common\Im.php(101): Workerman\MySQL\Connection->query()
+#2 D:\Software\phpstudy_pro\WWW\merchant\addons\weliam_smartcity\core\common\Im.php(47): handle->handleData()
+#3 D:\Software\phpstudy_pro\WWW\merchant\addons\weliam_smartcity\vendor\workerman\workerman\Connection\TcpConnection.php(637): {closure}(Object(Workerman\Connection\TcpConnection), '{"im_type":2,"s...')
+#4 D:\Software\phpstudy_pro\WWW\merchant\addons\weliam_smartcity\vendor\workerman\workerman\Events\Select.php(293): Workerman\Connection\TcpConnection->baseRead(Resource id #70)
+#5 D:\Software\phpstudy_pro\WWW\merchant\addons\weliam_smartcity\vendor\workerman\workerman\Worker.php(2430): Workerman\Events\Select->loop()
+#6 D:\Software\phpstudy_pro\WWW\merchant\addons\weliam_smartcity\vendor\workerman\workerman\Worker.php(1418): Workerman\Worker->run()
+#7 D:\Software\phpstudy_pro\WWW\merchant\addons\weliam_smartcity\vendor\workerman\workerman\Worker.php(1361): Workerman\Worker::forkWorkersForWindows()
+#8 D:\Software\phpstudy_pro\WWW\merchant\addons\weliam_smartcity\vendor\workerman\workerman\Worker.php(542): Workerman\Worker::forkWorkers()
+#9 D:\Software\phpstudy_pro\WWW\merchant\addons\weliam_smartcity\core\common\Im.php(284): Workerman\Worker::runAll()
+#10 {main}
+2021-03-18 11:20:34 pid:1 Worker process terminated
+2021-03-18 11:21:27 pid:1 PDOException: SQL:INSERT INTO `ims_wlmerchant_im` ( `uniacid`,`send_id`,`send_type`,`receive_id`,`receive_type`,`create_time`,`type`,`content`) VALUES ( :uniacid,:send_id,:send_type,:receive_id,:receive_type,:create_time,:type,:content) SQLSTATE[HY000]: General error: 1366 Incorrect string value: '\xF0\x9F\x98\x8D' for column 'content' at row 1 in D:\Software\phpstudy_pro\WWW\merchant\addons\weliam_smartcity\vendor\workerman\mysql\src\Connection.php:1770
+Stack trace:
+#0 D:\Software\phpstudy_pro\WWW\merchant\addons\weliam_smartcity\vendor\workerman\mysql\src\Connection.php(1828): Workerman\MySQL\Connection->execute('INSERT INTO `im...', Array)
+#1 D:\Software\phpstudy_pro\WWW\merchant\addons\weliam_smartcity\core\common\Im.php(101): Workerman\MySQL\Connection->query()
+#2 D:\Software\phpstudy_pro\WWW\merchant\addons\weliam_smartcity\core\common\Im.php(47): handle->handleData()
+#3 D:\Software\phpstudy_pro\WWW\merchant\addons\weliam_smartcity\vendor\workerman\workerman\Connection\TcpConnection.php(637): {closure}(Object(Workerman\Connection\TcpConnection), '{"im_type":2,"s...')
+#4 D:\Software\phpstudy_pro\WWW\merchant\addons\weliam_smartcity\vendor\workerman\workerman\Events\Select.php(293): Workerman\Connection\TcpConnection->baseRead(Resource id #70)
+#5 D:\Software\phpstudy_pro\WWW\merchant\addons\weliam_smartcity\vendor\workerman\workerman\Worker.php(2430): Workerman\Events\Select->loop()
+#6 D:\Software\phpstudy_pro\WWW\merchant\addons\weliam_smartcity\vendor\workerman\workerman\Worker.php(1418): Workerman\Worker->run()
+#7 D:\Software\phpstudy_pro\WWW\merchant\addons\weliam_smartcity\vendor\workerman\workerman\Worker.php(1361): Workerman\Worker::forkWorkersForWindows()
+#8 D:\Software\phpstudy_pro\WWW\merchant\addons\weliam_smartcity\vendor\workerman\workerman\Worker.php(542): Workerman\Worker::forkWorkers()
+#9 D:\Software\phpstudy_pro\WWW\merchant\addons\weliam_smartcity\core\common\Im.php(281): Workerman\Worker::runAll()
+#10 {main}
+2021-03-18 11:21:27 pid:1 Worker process terminated

@@ -1,0 +1,101 @@
+{php include wl_template('common/header');}
+<ul class="nav nav-tabs" id="myTab">
+    <li class="active"><a href="javascript:;">红娘列表</a></li>
+</ul>
+<div class="app-content">
+    <!--顶部操作-->
+    <div class="app-filter">
+        <div class="filter-list">
+            <form action="" method="get" class="form-horizontal" role="form" id="form1">
+                <input type="hidden" name="c" value="site" />
+                <input type="hidden" name="a" value="entry" />
+                <input type="hidden" name="m" value="weliam_smartcity" />
+                <input type="hidden" name="p" value="dating" />
+                <input type="hidden" name="ac" value="member" />
+                <input type="hidden" name="do" value="changeMatchmaker" />
+                <input type="hidden" name="type" value="get" />
+                <input type="hidden" name="id" value="{$id}" />
+                <input type="hidden" name="mid" value="{$mid}" />
+                <input type="hidden" name="status" value="{$status}" />
+                <div class="form-group">
+                    <div class="col-sm-2 control-label">昵称</div>
+                    <div class="col-sm-9">
+                        <input type="text" class="form-control" name="nickname" value="{$nickname}" placeholder="请输入红娘昵称...">
+                    </div>
+                </div>
+                <div class="form-group">
+                    <label class="col-sm-2 control-label">状态</label>
+                    <div class="col-sm-9">
+                        <div class="btn-group">
+                            <a href="{php echo wl_filter_url('status:5');}" class="btn {if $status == 5}btn-primary{else}btn-default{/if}">全部</a>
+                            <a href="{php echo wl_filter_url('status:1');}" class="btn {if $status == 1}btn-primary{else}btn-default{/if}">待付款</a>
+                            <a href="{php echo wl_filter_url('status:2');}" class="btn {if $status == 2}btn-primary{else}btn-default{/if}">待审核</a>
+                            <a href="{php echo wl_filter_url('status:3');}" class="btn {if $status == 3}btn-primary{else}btn-default{/if}">已通过</a>
+                            <a href="{php echo wl_filter_url('status:4');}" class="btn {if $status == 4}btn-primary{else}btn-default{/if}">未通过</a>
+                        </div>
+                    </div>
+                </div>
+                <div class="form-group">
+                    <div class="col-sm-2 control-label"></div>
+                    <div class="col-sm-9">
+                        <button class="btn btn-primary" type="submit">搜索</button>
+                        <a href="{php echo web_url('dating/member/changeMatchmaker',['type'=>'get','id'=>$id,'mid'=>$mid])}" class="btn btn-danger">清除</a>
+                    </div>
+                </div>
+            </form>
+        </div>
+    </div>
+    <!--表格信息-->
+    <div class="app-table-list">
+        <!--列表信息-->
+        <div class="table-responsive order-list">
+            <table class="table table-hover">
+                <thead>
+                    <tr>
+                        <th class="text-center">ID</th>
+                        <th class="text-center">头像</th>
+                        <th class="text-center">昵称</th>
+                        <th class="text-center">状态</th>
+                        <th class="text-center">操作</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    {loop $list $key $item}
+                        <tr class="text-center">
+                            <td>{$item['id']}</td>
+                            <td>
+                                <img src="{$item['avatar']}" style="width: 80px;height: 80px;border-radius: 50%;">
+                            </td>
+                            <td>{$item['nickname']}</td>
+                            <td>
+                                {if $item['status'] == 1}
+                                    <label class="label label-inverse">待付款</label>
+                                {elseif $item['status'] == 2}
+                                    <label class="label label-info">待审核</label>
+                                {elseif $item['status'] == 3}
+                                    <label class="label label-primary">已通过</label>
+                                {elseif $item['status'] == 4}
+                                    <label class="label label-danger">未通过</label>
+                                {/if}
+                            </td>
+                            <td>
+                                {if $item['id'] == $id}
+
+                                {else}
+                                    <a href="{php echo web_url('dating/member/changeMatchmaker',['type'=>'post','id'=>$item['id'],'mid'=>$mid,'member_id'=>$memberId])}"
+                                       class="btn btn-info btn-sm" data-toggle="ajaxPost" data-confirm="确定设置为当前红娘？修改后所有推荐关系将被取消！">切换</a>
+                                {/if}
+                            </td>
+                        </tr>
+                    {/loop}
+                </tbody>
+            </table>
+        </div>
+        <!--操作按钮 分页信息-->
+        <div class="app-table-foot clearfix">
+            <div class="pull-left"></div>
+            <div class="pull-right">{$pager}</div>
+        </div>
+    </div>
+</div>
+{php include wl_template('common/footer');}

@@ -1,0 +1,37 @@
+<?xml version="1.0" encoding="utf-8"?>
+<manifest>
+	<application>
+		<name><![CDATA[商户二维码]]></name>
+		<identifie><![CDATA[storeqr]]></identifie>
+		<version><![CDATA[1.0.0]]></version>
+		<type><![CDATA[help]]></type>
+		<description><![CDATA[商户二维码，可方便平台快速入驻商家，商家吸引粉丝，平台吸粉粉丝。]]></description>
+		<author><![CDATA[微连科技]]></author>
+		<url><![CDATA[http://www.weliam.cn/]]></url>
+	</application>
+	<setting>
+		<agent embed="false" />
+		<system embed="false" />
+		<task embed="false" />
+	</setting>
+	<agentmenu>
+		<menu title="概况" font="fa-inbox">
+			<entry title="二维码统计" ac="sqrcode" do="summary" />
+			<entry title="二维码列表" ac="sqrcode" do="qrlist" iscover="true" />
+		</menu>
+		<!--<menu title="二维码管理" font="fa-inbox">
+			<entry title="申请列表" ac="sqrcode" do="apply" />
+			<entry title="申请二维码" ac="sqrcode" do="applypost" />
+		</menu>-->
+	</agentmenu>
+	<systemmenu>
+		<menu title="概况" font="fa-inbox">
+			<entry title="二维码统计" ac="sqrcode" do="summary" />
+		</menu>
+		<menu title="二维码管理" font="fa-inbox">
+			<entry title="二维码列表" ac="sqrcode" do="qrlist" iscover="true" />
+			<!--<entry title="申请列表" ac="sqrcode" do="apply" />-->
+			<entry title="生成二维码" ac="sqrcode" do="post" />
+		</menu>
+	</systemmenu>
+</manifest>

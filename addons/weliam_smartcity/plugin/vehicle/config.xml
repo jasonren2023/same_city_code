@@ -1,0 +1,37 @@
+<?xml version="1.0" encoding="utf-8"?>
+<manifest>
+	<application>
+		<name><![CDATA[顺风车]]></name>
+		<identifie><![CDATA[vehicle]]></identifie>
+		<version><![CDATA[1.0.0]]></version>
+		<type><![CDATA[expand]]></type>
+		<description><![CDATA[顺风车]]></description>
+		<author><![CDATA[微连科技]]></author>
+		<url><![CDATA[http://www.weliam.cn/]]></url>
+	</application>
+	<setting>
+		<agent embed="true" />
+		<system embed="true" />
+		<task embed="false" />
+	</setting>
+	<agentmenu>
+		<menu title="基本管理" font="fa-inbox">
+			<entry title="路线列表" ac="route" do="routeList" actions='["do",["routeList","routeEdit"]]' iscover="true" />
+			<entry title="标签管理" ac="route" do="labelList" actions='["do",["labelList","labelEdit"]]'/>
+			<entry title="举报信息" ac="report" do="reportList" actions='["do",["reportList","reportSee"]]'/>
+		</menu>
+		<menu title="基本设置" font="fa-inbox">
+			<entry title="设置" ac="route" do="vehicleSet" actions='["do",["vehicleSet"]]'/>
+		</menu>
+	</agentmenu>
+	<systemmenu>
+		<menu title="基本管理" font="fa-inbox">
+			<entry title="路线列表" ac="route" do="routeList" actions='["do",["routeList","routeEdit"]]' iscover="true" />
+			<entry title="标签管理" ac="route" do="labelList" actions='["do",["labelList","labelEdit"]]'/>
+			<entry title="举报信息" ac="report" do="reportList" actions='["do",["reportList","reportSee"]]'/>
+		</menu>
+		<menu title="基本设置" font="fa-inbox">
+			<entry title="设置" ac="route" do="vehicleSet" actions='["do",["vehicleSet"]]'/>
+		</menu>
+	</systemmenu>
+</manifest>

@@ -1,0 +1,96 @@
+{php include wl_template('common/header');}
+<ul class="nav nav-tabs" id="myTab">
+    <li class="active"><a href="#tab_share">代理设置</a></li>
+</ul>
+<div class="app-content">
+    <div class="app-form">
+        <form action="" method="post" class="form-horizontal form form-validate">
+            <div class="panel-heading">代理设置</div>
+            <div class="tab-content">
+                <div class="form-group">
+                    <label class="col-sm-2 control-label">地区定位方式</label>
+                    <div class="col-sm-9">
+                        <label class="radio radio-success radio-inline" onclick="$('#noagentarea').hide();">
+                            <input type="radio" name="data[location]" value="0" {if intval($settings['location']) == 0 || empty($settings['location'])}checked="checked"{/if}>城市定位
+                        </label>
+                        <label class="radio-inline" onclick="$('#noagentarea').show();">
+                            <input type="radio" name="data[location]" value="1" {if intval($settings['location']) == 1}checked="checked"{/if}>精确定位
+                        </label>
+                        <span class="help-block">系统默认使用城市定位，精确定位会定位到用户当前位置，并根据用户所在位置加载代理数据</span>
+                    </div>
+                </div>
+                <div id="noagentarea" {if intval($settings['location']) != 1}style="display: none"{/if}>
+                    <div class="form-group">
+                        <label class="col-sm-2 control-label">未开通地区</label>
+                        <div class="col-sm-9">
+                            <label class="radio radio-success radio-inline">
+                                <input type="radio" name="data[datashow]" value="0" {if intval($settings['datashow']) == 0 || empty($settings['datashow'])}checked="checked"{/if}>加载总后台数据
+                            </label>
+                            <label class="radio-inline">
+                                <input type="radio" name="data[datashow]" value="1" {if intval($settings['datashow']) == 1}checked="checked"{/if}>显示加盟申请
+                            </label>
+                            <label class="radio-inline">
+                                <input type="radio" name="data[datashow]" value="2" {if intval($settings['datashow']) == 2}checked="checked"{/if}>显示暂未开通
+                            </label>
+                            <label class="radio-inline">
+                                <input type="radio" name="data[datashow]" value="3" {if intval($settings['datashow']) == 3}checked="checked"{/if}>默认代理地区
+                            </label>
+                        </div>
+                    </div>
+                    <div class="form-group {if (($settings['datashow'] != 1 && $settings['datashow'] != 2) || $settings['location'] != 1)}hide{/if}" id="showImg">
+                        <label class="col-sm-2 control-label">显示图片</label>
+                        <div class="col-sm-9">
+                            {php echo attachment_select('data[show_img]',$settings['show_img']);}
+                            <div class="help-block">不上传图片则使用默认图片。推荐图片比例：500*500
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                <div class="form-group" >
+                    <label class="col-sm-2 control-label">默认代理</label>
+                    <div class="col-sm-9">
+                        <select name="data[defaultAid]" style="width: 100%;">
+                            <option value="0" {if $settings['defaultAid'] == 0} selected="selected" {/if} >总后台</option>
+                            {loop $arealist $area}
+                            <option value="{$area['id']}" {if $settings['defaultAid'] == $area['id']} selected="selected" {/if} >{$area['agentname']}</option>
+                            {/loop}
+                        </select>
+                    </div>
+                </div>
+            </div>
+            <div class="form-group">
+                <label class="col-sm-2 control-label"></label>
+                <div class="col-sm-9">
+                    <input type="submit" name="submit" value="提交" class="btn btn-primary min-width" />
+                    <input type="hidden" name="token" value="{$_W['token']}" />
+                </div>
+            </div>
+        </form>
+    </div>
+</div>
+<script>
+    $(function () {
+        window.optionchanged = false;
+        $('#myTab a').click(function (e) {
+            e.preventDefault();//阻止a链接的跳转行为
+            $(this).tab('show');//显示当前选中的链接及关联的content
+        })
+    });
+    //改变地区定位方式
+    $(document).on('click',"[name='data[location]']",function () {
+        let status = $(this).val(),
+            datashow = $("[name='data[datashow]']:checked").val();
+        if(status == 1 && datashow != 0) $("#showImg").removeClass('hide');
+        else $("#showImg").addClass('hide');
+    })
+    //改变未开通地区显示类型
+    $(document).on('click',"[name='data[datashow]']",function () {
+        let status = $(this).val();
+        if(status == 1 || status == 2){
+            $("#showImg").removeClass('hide');
+        }else{
+            $("#showImg").addClass('hide');
+        }
+    })
+</script>
+{php include wl_template('common/footer');}

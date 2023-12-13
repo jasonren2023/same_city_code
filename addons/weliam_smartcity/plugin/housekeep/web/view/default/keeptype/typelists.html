@@ -1,0 +1,229 @@
+{php include wl_template('common/header');}
+<style>
+    td>i{cursor:pointer; display:inline-block; width:100%; height:100%; color:#428bca;}
+    .category-caret{display:inline-block; width:20px; margin: 0 10px; text-align:center; cursor:pointer; color: #d9534f;}
+    .clearfix{margin-top:10px;}
+</style>
+<ul class="nav nav-tabs" id="myTab">
+    <li class="active">
+        <a href="#">分类列表</a>
+    </li>
+</ul>
+<div class="app-content">
+    <div class="app-filter">
+        <div class="filter-action">
+            <a href="{php echo web_url('housekeep/KeepType/editType')}" class="btn btn-primary">添加一级分类</a>
+            <a href="javascript:;" class="btn btn-default js-category-all js-collapse">折叠分类</a>
+            <a href="javascript:;" class="btn btn-info" id="createButton" title="一键生成默认的家政服务分类">导入默认分类</a>
+        </div>
+        <div class="filter-list">
+            <form action="" method="get" class="form-horizontal" role="form" id="form1">
+                <input type="hidden" name="c" value="site" />
+                <input type="hidden" name="a" value="entry" />
+                <input type="hidden" name="m" value="{MODULE_NAME}" />
+                <input type="hidden" name="p" value="housekeep" />
+                <input type="hidden" name="ac" value="KeepType" />
+                <input type="hidden" name="do" value="typelists" />
+                <div class="form-group">
+                    <div class="col-sm-2 control-label">类型名称</div>
+                    <div class="col-sm-9">
+                        <input type="text" class="form-control" name="title" value="{$title}" placeholder="请输入行业名称...">
+                    </div>
+                </div>
+                <div class="form-group">
+                    <div class="col-sm-2 control-label"></div>
+                    <div class="col-sm-9">
+                        <button class="btn btn-primary" type="submit">搜索</button>
+                        <a href="{php echo web_url('recruit/industryPosition/industryExport',['title'=>$title])}" class="btn btn-warning">导出</a>
+                    </div>
+                </div>
+            </form>
+        </div>
+    </div>
+    <div class="app-table-list">
+        <div class="main panel panel-default">
+            <div class="table-responsive">
+                <table class="table table-hover">
+                    <thead>
+                    <tr>
+                        <th width="5%" class="text-center"><input type="checkbox" /></th>
+                        <th width="8%" class="text-center">分类ID</th>
+                        <th width="8%">分类图片</th>
+                        <th width="24%">分类名称</th>
+                        <th width="10%" class="text-center">标签种类</th>
+                        <th width="10%" class="text-center">开启状态</th>
+                        <th width="10%" class="text-center">排序参数(越大越靠前)</th>
+                        <th width="25%" class="text-center">操作</th>
+                    </tr>
+                    </thead>
+                    <tbody >
+                    {loop $list $item}
+                    <tr class="text-center">
+                        <td>
+                            <input type="checkbox" value="{$item['id']}" />
+                        </td>
+                        <td>
+                            <label class='label label-warning'>{$item['id']}</label>
+                        </td>
+                        <td >
+                            <img class="scrollLoading" src="{php echo tomedia($item['img'])}"  height="45" width="45" style='float:left;'/>
+                        </td>
+                        <td class="text-left">
+                            <div>
+                                <span style="overflow: hidden; display:block;width:100px;text-align:left;float:left;margin-right:10px;text-overflow: ellipsis;white-space: nowrap;color: {$item['color']};">
+                                   <a href="javascript:;" data-toggle="ajaxEdit" data-href="{php echo web_url('housekeep/KeepType/setInfo',array('id'=>$item['id'],'type'=>'title'))}" style="color: {$item['color']};">{$item['title']}</a>
+                                </span>
+                            </div>
+                            <div class="{if $item['isnav'] ==1}hide{/if}">
+								<span style='display:block;width:100px;text-align:left;float:left;'>
+									<a href="{php echo web_url('housekeep/KeepType/editType',array('parentid'=>$item['id']))}" class="add add_level1" title="添加子分类" >
+										<i class="fa fa-plus-circle"></i>添加子分类
+									</a>
+								</span>
+                                <span class="category-caret">
+									<i class="fa fa-caret-down js-category-down" style="display:none;" pid="{$item['id']}"></i>
+									<i class="fa fa-caret-up js-category-up" pid="{$item['id']}"></i>
+								</span>
+                            </div>
+                        </td>
+                        <td>
+                            {if $item['isnav'] ==1}
+                            <label class='label label-primary'>导航标签</label>
+                            {else}
+                            <label class='label label-danger'>普通分类</label>
+                            {/if}
+                        </td>
+                        <td>{php echo tpl_change_status('housekeep/KeepType/changeStatus&id='.$item['id'],$item['status'])}</td>
+                        <td class="text-center">
+                            <a href="javascript:;" data-toggle="ajaxEdit" data-href="{php echo web_url('housekeep/KeepType/setInfo',array('id'=>$item['id'],'type'=>'sort'))}" style="color: #000;">{$item['sort']}</a>
+                        </td>
+                        <td class="text-center" style="position: relative">
+                            {if $item['isnav'] != 1}
+                            {if p('wxplatform')}
+                            <a href="javascript:;" data-id="{$category['id']}"  data-url="{php echo h5_url('pages/subPages2/homemaking/homemakingMerchant/homemakingMerchant',['onelevelid'=>$item['id'],'twolevelid' =>0,'title'=>$item['title']])}"  class="js-clip" >
+                                复制链接
+                            </a>
+                            -
+                            {/if}
+                            {if p('wxapp')}
+                            <a href="javascript:;" data-id="{$category['id']}"  data-url="pages/subPages2/homemaking/homemakingMerchant/homemakingMerchant?onelevelid={$item['id']}&title={$item['title']}&twolevelid=0"  class="js-clip" >
+                                复制路径
+                            </a>
+                            -
+                            {/if}
+                            {/if}
+                            <a href="{php echo web_url('housekeep/KeepType/editType',array('id'=>$item['id']))}">编辑 </a>
+                            -
+                            <a href="{php echo web_url('housekeep/KeepType/typeDel',array('ids'=>$item['id']))}" data-toggle="ajaxRemove" data-confirm="确定删除当前类型？">删除 </a>
+                        </td>
+                    </tr>
+
+                    {loop $item['list'] $iitem}
+                    <tr class="js-collpase js-child-category text-center" pid="{$item['id']}" >
+                        <td>
+                            <input type="checkbox" value="{$iitem['id']}" />
+                        </td>
+                        <td>
+                            <label class='label label-default'>{$iitem['id']}</label>
+                        </td>
+                        <td></td>
+                        <td class="text-left">
+                            <div style="padding-left:50px;height:30px;line-height:30px;background:url('./resource/images/bg_repno.gif') no-repeat -245px -545px;width: 200px;overflow: hidden;text-overflow: ellipsis;white-space: nowrap;color: {$iitem['color']};">
+                                <a href="javascript:;" data-toggle="ajaxEdit" data-href="{php echo web_url('housekeep/KeepType/setInfo',array('id'=>$iitem['id'],'type'=>'title'))}" style="color: {$iitem['color']};">{$iitem['title']}</a>
+                            </div>
+                        </td>
+                        <td>
+                            {if $iitem['isnav'] ==1}
+                            <label class='label label-primary'>导航标签</label>
+                            {else}
+                            <label class='label label-danger'>普通分类</label>
+                            {/if}
+                        </td>
+                        <td>{php echo tpl_change_status('housekeep/KeepType/changeStatus&id='.$iitem['id'],$iitem['status'])}</td>
+                        <td class="text-center">
+                            <a href="javascript:;" data-toggle="ajaxEdit" data-href="{php echo web_url('housekeep/KeepType/setInfo',array('id'=>$iitem['id'],'type'=>'sort'))}" style="color: #000;">{$iitem['sort']}</a>
+                        </td>
+                        <td class="text-center" style="position: relative">
+                            {if $iitem['isnav'] != 1}
+                            {if p('wxplatform')}
+                            <a href="javascript:;" data-id="{$category['id']}"  data-url="{php echo h5_url('pages/subPages2/homemaking/homemakingMerchant/homemakingMerchant',['onelevelid'=>$item['id'],'twolevelid' =>$iitem['id'],'title'=>$iitem['title']])}"  class="js-clip" >
+                                复制链接
+                            </a>
+                            -
+                            {/if}
+                            {if p('wxapp')}
+                            <a href="javascript:;" data-id="{$category['id']}"  data-url="pages/subPages2/homemaking/homemakingMerchant/homemakingMerchant?onelevelid={$item['id']}&title={$iitem['title']}&twolevelid={$iitem['id']}"  class="js-clip" >
+                                复制路径
+                            </a>
+                            -
+                            {/if}
+                            {/if}
+                            <a href="{php echo web_url('housekeep/KeepType/editType',array('id'=>$iitem['id']))}">编辑 </a>
+                            -
+                            <a href="{php echo web_url('housekeep/KeepType/typeDel',array('ids'=>$iitem['id']))}" data-toggle="ajaxRemove" data-confirm="确定删除当前类型？">删除 </a>
+                        </td>
+                    </tr>
+                    {/loop}
+                    {/loop}
+                    </tbody>
+                </table>
+            </div>
+        </div>
+        <!--操作按钮 分页信息-->
+        <div class="app-table-foot clearfix">
+            <div class="pull-left">
+                <button class="btn btn-default" type="button" data-toggle='batch-remove' data-confirm="删除一级类型将删除此类型下所有二级类型，确定删除当前选中的所有类型？" data-href="{php echo web_url('housekeep/KeepType/typeDel')}">批量删除</button>
+            </div>
+            <div class="pull-right">{$pager}</div>
+        </div>
+    </div>
+</div>
+<script type="text/javascript">
+    //控制显示
+    $(function(){
+        $('.js-category-all').click(function() {
+            if($(this).hasClass('js-collapse')) {
+                $('.js-child-category').fadeOut("slow");
+                $('.fa-caret-up').hide();
+                $('.fa-caret-down').show();
+                $(this).text('全部展开').removeClass('js-collapse');
+            } else {
+                $('.js-child-category').fadeIn("slow");
+                $('.fa-caret-up').show();
+                $('.fa-caret-down').hide();
+                $(this).text('全部折叠').addClass('js-collapse');
+            }
+        });
+        $('.js-category-up').click(function() {
+            var parentId = $(this).attr('pid');
+            $('tr[pid="'+parentId+'"]').fadeOut("slow");
+            $(this).prev().show();
+            $(this).hide();
+        });
+        $('.js-category-down').click(function() {
+            var parentId = $(this).attr('pid');
+            $('tr[pid="'+parentId+'"]').fadeIn("slow");
+            $(this).next().show();
+            $(this).hide();
+        });
+    });
+
+    /**
+     * 默认行业信息生成
+     */
+    $("#createButton").on('click',function () {
+        tip.confirm('是否生成默认的家政服务分类数据？',function () {
+            //显示加载动画
+            $("#page-loading").show();
+            //请求生成
+            let link = "{php echo web_url('housekeep/KeepType/importType');}";
+            $.post(link,function (res) {
+                tip.alert(res.message,function () {
+                    history.go(0);
+                });
+            },'json');
+        });
+    });
+
+</script>
+{php include wl_template('common/footer');}

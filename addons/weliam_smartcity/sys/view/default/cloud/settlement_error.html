@@ -1,0 +1,72 @@
+{php include wl_template('common/header');}
+<ul class="nav nav-tabs">
+    <li class="active"><a href="javascript:;">重复结算数据</a></li>
+</ul>
+<div class="app-content">
+    <div class="app-filter">
+        <div class="alert alert-warning">
+            累计重复结算金额：<span class="text-danger">￥{php echo $allmoney['allagentmoney'] + $allmoney['alldismoney'] + $allmoney['allstoremoney']}</span>，其中商户累计重复结算金额：<span class="text-danger">￥{$allmoney['allstoremoney']}</span>，代理累计重复结算金额：<span class="text-danger">￥{$allmoney['allagentmoney']}</span>，分销累计重复结算金额：<span class="text-danger">￥{$allmoney['alldismoney']}</span>
+        </div>
+    </div>
+    <div class="app-table-list">
+        {if !empty($lists)}
+        <div class="table-responsive">
+            <table class="table table-hover table-bordered">
+                <thead>
+                <tr>
+                    <th class="text-center">订单号 \ 核销码</th>
+                    <th class="text-center">重复总次数 \ 重复总金额</th>
+                    <th class="text-center">商户结算错误金额 \ 商户当前余额 \ 商户名称</th>
+                    <th class="text-center">代理结算错误金额 \ 代理当前余额 \ 代理名称</th>
+                    <th class="text-center">分销结算错误金额</th>
+                    <th class="text-center">一级分销结算错误金额 \ 分销商当前余额 \ 分销商名称</th>
+                    <th class="text-center">二级分销结算错误金额 \ 分销商当前余额 \ 分销商名称</th>
+                    <th class="text-center">操作</th>
+                </tr>
+                </thead>
+                <tbody>
+                {loop $lists $list}
+                <tr class="text-center">
+                    <td>
+                        {$list['orderno']} \ {$list['checkcode']}
+                    </td>
+                    <td>
+                        {$list['count']} \ ￥{php echo $list['allstoremoney'] + $list['allagentmoney'] + $list['alldismoney'];}
+                    </td>
+                    <td>
+                        ￥{$list['allstoremoney']} \ ￥{$list['nowstoremoney']} \ {$list['storename']}
+                    </td>
+                    <td>
+                        ￥{$list['allagentmoney']} \ ￥{$list['nowagentmoney']} \ {$list['agentname']}
+                    </td>
+                    <td>
+                        ￥{$list['alldismoney']}
+                    </td>
+                    <td>
+                        ￥{$list['oneerrormoney']} \ ￥{$list['onenowmoney']} \ {$list['onedisname']}
+                    </td>
+                    <td>
+                        ￥{$list['twoerrormoney']} \ ￥{$list['twonowmoney']} \ {$list['twodisname']}
+                    </td>
+                    <td>
+                        <a class="btn btn-sm btn-primary" data-toggle="ajaxPost" href="{php echo web_url('cloud/database/repair_settlement_error', array('checkcode' => $list['checkcode']))}" data-confirm="修复以后，商户余额变更为￥{php echo $list['nowstoremoney'] - $list['allstoremoney'];}，{if !empty($list['allagentmoney'])}代理余额变更为￥{php echo $list['nowagentmoney'] - $list['allagentmoney'];}，{/if}确定修复?">修复结算</a>
+                    </td>
+                </tr>
+                {/loop}
+                </tbody>
+            </table>
+        </div>
+        <div class="app-table-foot clearfix">
+            <div class="pull-left">
+            </div>
+            <div class="pull-right">
+            </div>
+        </div>
+        {else}
+        <div class="no-result">
+            <p>还没有相关数据</p>
+        </div>
+        {/if}
+    </div>
+</div>
+{php include wl_template('common/footer');}

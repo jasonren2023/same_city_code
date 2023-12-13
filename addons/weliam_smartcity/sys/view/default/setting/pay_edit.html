@@ -1,0 +1,509 @@
+{php include wl_template('common/header');}
+<style>
+    .file_button{
+        align-items: flex-start;
+        background-attachment: scroll;
+        background-clip: border-box;
+        background-color: rgb(240, 249, 235);
+        background-image: none;
+        background-origin: padding-box;
+        background-position-x: 0%;
+        background-position-y: 0%;
+        background-repeat-x: ;
+        background-repeat-y: ;
+        background-size: auto;
+        border-bottom-color: rgb(194, 231, 176);
+        border-bottom-left-radius: 3px;
+        border-bottom-right-radius: 3px;
+        border-bottom-style: solid;
+        border-bottom-width: 1px;
+        border-image-outset: 0px;
+        border-image-repeat: stretch;
+        border-image-slice: 100%;
+        border-image-source: none;
+        border-image-width: 1;
+        border-left-color: rgb(194, 231, 176);
+        border-left-style: solid;
+        border-left-width: 1px;
+        border-right-color: rgb(194, 231, 176);
+        border-right-style: solid;
+        border-right-width: 1px;
+        border-top-color: rgb(194, 231, 176);
+        border-top-left-radius: 3px;
+        border-top-right-radius: 3px;
+        border-top-style: solid;
+        border-top-width: 1px;
+        box-sizing: border-box;
+        color: rgb(103, 194, 58);
+        cursor: pointer;
+        display: inline-block;
+        font-family: sans-serif;
+        font-size: 12px;
+        font-stretch: 100%;
+        font-style: normal;
+        font-variant-caps: normal;
+        font-variant-east-asian: normal;
+        font-variant-ligatures: normal;
+        font-variant-numeric: normal;
+        font-weight: 500;
+        height: 32px;
+        letter-spacing: normal;
+        line-height: 12px;
+        margin-bottom: 0px;
+        margin-left: 0px;
+        margin-right: 0px;
+        margin-top: 0px;
+        outline-color: rgb(103, 194, 58);
+        outline-style: none;
+        outline-width: 0px;
+        overflow-x: visible;
+        overflow-y: visible;
+        padding-bottom: 9px;
+        padding-left: 15px;
+        padding-right: 15px;
+        padding-top: 9px;
+        text-align: center;
+        text-indent: 0px;
+        text-rendering: auto;
+        text-shadow: none;
+        nonebutton
+        text-size-adjust: 100%;
+        text-transform: none;
+        nonebutton, select
+        nonebutton
+        transition-delay: 0s;
+        transition-duration: 0.1s;
+        transition-property: all;
+        transition-timing-function: ease;
+        user-select: none;
+        white-space: nowrap;
+        width: 80px;
+        word-spacing: 0px;
+        writing-mode: horizontal-tb;
+        -webkit-appearance: none;
+        -webkit-font-smoothing: antialiased;
+        -webkit-tap-highlight-color: rgba(0, 0, 0, 0);
+        -webkit-border-image: none;
+    }
+    textarea{
+        resize: none;
+    }
+    .file_tips{
+        color: red;
+        position: relative;
+        top: 5px;
+        font-size: 12px;
+    }
+</style>
+<ul class="nav nav-tabs" id="myTab">
+    <li class="active"><a href="#tab_basic">添加支付方式</a></li>
+</ul>
+<div class="app-content" id="mainContent">
+    <div class="app-form">
+        <form action="" method="post" class="form-horizontal form form-validate">
+            <div class="alert alert-warning" role="alert">
+                支付授权目录：<a href="javascript:;" target="_blank">{$_W['siteroot']}</a>
+            </div>
+            <div class="panel panel-default">
+                <div class="panel-heading">添加支付方式</div>
+                <div class="panel-body">
+                    <!--基本信息配置-->
+                    <div class="form-group">
+                        <label class="col-sm-2 control-label">支付名称<span class="must-fill">*</span></label>
+                        <div class="col-sm-9">
+                            <input type="text" v-model="info.name" required placeholder="请输入支付名称" autocomplete="off" class="form-control" >
+                        </div>
+                    </div>
+                    <div class="form-group">
+                        <label class="col-sm-2 control-label">支付类型<span class="must-fill">*</span></label>
+                        <div class="col-sm-9">
+                            <label class="radio-inline"><input type="radio" v-model="info.type" value="1">微信支付</label>
+                            <label class="radio-inline"><input type="radio" v-model="info.type" value="2">支付宝支付</label>
+                            {if Customized::init('yunmis160') > 0}
+                            <label class="radio-inline"><input type="radio" v-model="info.type" value="3">云收单</label>
+                            {/if}
+
+                        </div>
+                    </div>
+                    <!--微信支付方式-->
+                    <span v-if="info.type == 1">
+                        <div class="form-group" v-if="info.type == 2">
+                            <label class="col-sm-2 control-label">AppId<span class="must-fill">*</span></label>
+                            <div class="col-sm-9">
+                                <input type="text" v-model="info.app_id" required placeholder="请输入appid" autocomplete="off" class="form-control">
+                            </div>
+                        </div>
+                        <div class="form-group">
+                            <label class="col-sm-2 control-label">商户类型<span class="must-fill">*</span></label>
+                            <div class="col-sm-9">
+                                <label class="radio-inline"><input type="radio" v-model="info.shop_type" value="1">微信支付（您是一般商户）</label>
+                                <label class="radio-inline"><input type="radio" v-model="info.shop_type" value="2">服务商子商户（您是子商户请选这个）</label>
+                            </div>
+                        </div>
+                        <div class="form-group">
+                            <label class="col-sm-2 control-label">商户名称</label>
+                            <div class="col-sm-9">
+                                <input type="text" v-model="info.merchantname" placeholder="商户名称,分账时必须填写" autocomplete="off" class="form-control">
+                            </div>
+                        </div>
+                        <!--一般商户-->
+                        <span v-if="info.shop_type == 1">
+                            <div class="form-group">
+                                <label class="col-sm-2 control-label">商户号<span class="must-fill">*</span></label>
+                                <div class="col-sm-9">
+                                    <input type="text" v-model="info.shop_number" required placeholder="请输入商户号"
+                                           autocomplete="off" class="form-control">
+                                </div>
+                            </div>
+                            <div class="form-group">
+                                <label class="col-sm-2 control-label">微信支付密钥<span class="must-fill">*</span></label>
+                                <div class="col-sm-9">
+                                    <input type="text" v-model="info.secret_key" required placeholder="请输入微信支付密钥"
+                                           autocomplete="off" class="form-control">
+                                </div>
+                            </div>
+                            <div class="form-group">
+                                <label class="col-sm-2 control-label">cert证书<span class="must-fill">*</span></label>
+                                <div class="col-sm-9">
+                                    <button type="button" class="file_button" @click="selectFile('cert_certificate')">
+                                        <span>点击上传</span>
+                                    </button>
+                                    <span class="file_tips" v-if="!info.cert_certificate">请上传证书</span>
+                                    <span class="file_tips" v-else>证书存在</span>
+                                </div>
+                            </div>
+                            <div class="form-group">
+                                <label class="col-sm-2 control-label">key证书<span class="must-fill">*</span></label>
+                                <div class="col-sm-9">
+                                    <button type="button" class="file_button" @click="selectFile('key_certificate')">
+                                        <span>点击上传</span>
+                                    </button>
+                                    <span class="file_tips" v-if="!info.key_certificate">请上传证书</span>
+                                    <span class="file_tips" v-else>证书存在</span>
+                                </div>
+                            </div>
+                            {if Customized::init('yuecashback') > 0}
+                            <div class="form-group">
+                                <label class="col-sm-2 control-label">订单优惠标记</label>
+                                <div class="col-sm-9">
+                                    <input type="text" v-model="info.shop_goods_tag" required placeholder="请输入订单优惠标记"
+                                           autocomplete="off" class="form-control">
+                                </div>
+                            </div>
+                            {/if}
+                        </span>
+                        <!--子商户-->
+                        <span v-if="info.shop_type == 2">
+                            <div class="form-group">
+                                <label class="col-sm-2 control-label">服务商微信公众号APPID<span class="must-fill">*</span></label>
+                                <div class="col-sm-9">
+                                    <input type="text" v-model="info.sub_up_app_id" required placeholder="请输入服务商微信公众号APPID" autocomplete="off" class="form-control">
+                                </div>
+                            </div>
+                            <div class="form-group">
+                                <label class="col-sm-2 control-label">子商户号<span class="must-fill">*</span></label>
+                                <div class="col-sm-9">
+                                    <input type="text" v-model="info.sub_shop_number" required placeholder="请输入子商户号" autocomplete="off" class="form-control">
+                                </div>
+                            </div>
+                            <div class="form-group">
+                                <label class="col-sm-2 control-label">服务商商户号<span class="must-fill">*</span></label>
+                                <div class="col-sm-9">
+                                    <input type="text" v-model="info.shop_number" required placeholder="请输入服务商商户号" autocomplete="off" class="form-control">
+                                </div>
+                            </div>
+                            <div class="form-group">
+                                <label class="col-sm-2 control-label">服务商微信支付密钥<span class="must-fill">*</span></label>
+                                <div class="col-sm-9">
+                                    <input type="text" v-model="info.secret_key" required placeholder="请输入服务商微信支付密钥" autocomplete="off" class="form-control">
+                                </div>
+                            </div>
+                            <div class="form-group">
+                                <label class="col-sm-2 control-label">子商户微信支付密钥<span class="must-fill">*</span></label>
+                                <div class="col-sm-9">
+                                    <input type="text" v-model="info.sub_secret_key" required placeholder="子商户微信支付密钥" autocomplete="off" class="form-control">
+                                </div>
+                            </div>
+                            <div class="form-group">
+                                <label class="col-sm-2 control-label">服务商cert证书<span class="must-fill">*</span></label>
+                                <div class="col-sm-9">
+                                    <button type="button" class="file_button" @click="selectFile('cert_certificate')">
+                                        <span>点击上传</span>
+                                    </button>
+                                    <span class="file_tips" v-if="!info.cert_certificate">请上传证书</span>
+                                    <span class="file_tips" v-else>证书存在</span>
+                                </div>
+                            </div>
+                            <div class="form-group">
+                                <label class="col-sm-2 control-label">服务商key证书<span class="must-fill">*</span></label>
+                                <div class="col-sm-9">
+                                    <button type="button" class="file_button" @click="selectFile('key_certificate')">
+                                        <span>点击上传</span>
+                                    </button>
+                                    <span class="file_tips" v-if="!info.key_certificate">请上传证书</span>
+                                    <span class="file_tips" v-else>证书存在</span>
+                                </div>
+                            </div>
+                            <div class="form-group">
+                                <label class="col-sm-2 control-label">子商户cert证书<span class="must-fill">*</span></label>
+                                <div class="col-sm-9">
+                                    <button type="button" class="file_button" @click="selectFile('sub_cert_certificate')">
+                                        <span>点击上传</span>
+                                    </button>
+                                    <span class="file_tips" v-if="!info.sub_cert_certificate">请上传证书</span>
+                                    <span class="file_tips" v-else>证书存在</span>
+                                </div>
+                            </div>
+                            <div class="form-group">
+                                <label class="col-sm-2 control-label">子商户key证书<span class="must-fill">*</span></label>
+                                <div class="col-sm-9">
+                                    <button type="button" class="file_button" @click="selectFile('sub_key_certificate')">
+                                        <span>点击上传</span>
+                                    </button>
+                                    <span class="file_tips" v-if="!info.sub_key_certificate">请上传证书</span>
+                                    <span class="file_tips" v-else>证书存在</span>
+                                </div>
+                            </div>
+                         </span>
+                        <!--子商户企业付款-->
+                        <!--<span v-if="info.shop_type == 2">
+                            <div class="form-group">
+                                <label class="col-sm-2 control-label">子商户企业付款<span class="must-fill">*</span></label>
+                                <div class="col-sm-9">
+                                    <label class="radio-inline"><input type="radio" v-model="info.sub_enterprise_payment" value="1">不开启</label>
+                                    <label class="radio-inline"><input type="radio" v-model="info.sub_enterprise_payment" value="2">开启</label>
+                                </div>
+                            </div>
+                            <span  v-if="info.sub_enterprise_payment == 2">
+                                <div class="form-group">
+                                    <label class="col-sm-2 control-label">子商户支付秘钥<span class="must-fill">*</span></label>
+                                    <div class="col-sm-9">
+                                        <input type="text" v-model="info.sub_secret_key" required placeholder="请输入子商户支付秘钥" autocomplete="off" class="form-control">
+                                    </div>
+                                </div>
+
+                                <div class="form-group">
+                                    <label class="col-sm-2 control-label">子商户cert证书<span class="must-fill">*</span></label>
+                                    <div class="col-sm-9">
+                                        <button type="button" class="file_button" @click="selectFile('sub_cert_certificate')">
+                                            <span>点击上传</span>
+                                        </button>
+                                        <span class="file_tips" v-if="!info.sub_cert_certificate">请上传证书</span>
+                                        <span class="file_tips" v-else>证书存在</span>
+                                    </div>
+                                </div>
+                                <div class="form-group">
+                                    <label class="col-sm-2 control-label">子商户key证书<span class="must-fill">*</span></label>
+                                    <div class="col-sm-9">
+                                        <button type="button" class="file_button" @click="selectFile('sub_key_certificate')">
+                                            <span>点击上传</span>
+                                        </button>
+                                        <span class="file_tips" v-if="!info.sub_key_certificate">请上传证书</span>
+                                        <span class="file_tips" v-else>证书存在</span>
+                                    </div>
+                                </div>
+                            </span>
+                        </span>-->
+                    </span>
+                    <!--支付宝支付方式-->
+                    <span v-if="info.type == 2">
+                        <div class="form-group">
+                            <label class="col-sm-2 control-label">应用id<span class="must-fill">*</span></label>
+                            <div class="col-sm-9">
+                                <input type="text" v-model="info.ali_app_id" required placeholder="请输入应用id" autocomplete="off" class="form-control" >
+                            </div>
+                        </div>
+                        <div class="form-group">
+                            <label class="col-sm-2 control-label">支付宝公匙<span class="must-fill">*</span></label>
+                            <div class="col-sm-9">
+                                <textarea v-model="info.ali_public_key" rows="5" required placeholder="请输入支付宝公匙" autocomplete="off" class="form-control" ></textarea>
+                            </div>
+                        </div>
+                        <div class="form-group">
+                            <label class="col-sm-2 control-label">应用私匙<span class="must-fill">*</span></label>
+                            <div class="col-sm-9">
+                                <textarea v-model="info.app_private_key" rows="5" required placeholder="请输入应用私匙" autocomplete="off" class="form-control" ></textarea>
+                            </div>
+                        </div>
+                        <div class="form-group" >
+                            <label class="col-sm-2 control-label">支付宝打款接口<span class="must-fill">*</span></label>
+                            <div class="col-sm-9">
+                                <label class="radio-inline"><input type="radio" v-model="info.apiversion" value="0">旧版</label>
+                                <label class="radio-inline"><input type="radio" v-model="info.apiversion" value="1">新版</label>
+                                <div class="help-block">旧版接口使用公钥,新版接口使用公钥证书。</div>
+                            </div>
+                        </div>
+                        <div class="form-group" v-if="info.apiversion == 1">
+                            <label class="col-sm-2 control-label">应用证书(CertPublicKey)<span class="must-fill">*</span></label>
+                            <div class="col-sm-9">
+                                <button type="button" class="file_button" @click="selectFile('publicKey')">
+                                    <span>点击上传</span>
+                                </button>
+                                <span class="file_tips" v-if="!info.publicKey">请上传证书</span>
+                                <span class="file_tips" v-else>证书存在</span>
+                            </div>
+                        </div>
+                        <div class="form-group" v-if="info.apiversion == 1">
+                            <label class="col-sm-2 control-label">根目录证书(RootCert)<span class="must-fill">*</span></label>
+                            <div class="col-sm-9">
+                                <button type="button" class="file_button" @click="selectFile('rootCert')">
+                                    <span>点击上传</span>
+                                </button>
+                                <span class="file_tips" v-if="!info.rootCert">请上传证书</span>
+                                <span class="file_tips" v-else>证书存在</span>
+                            </div>
+                        </div>
+
+                    </span>
+                    <!--云收单-->
+                    <span v-if="info.type == 3">
+                        <div class="form-group">
+                            <label class="col-sm-2 control-label">云收单商户号<span class="must-fill">*</span></label>
+                            <div class="col-sm-9">
+                                <input type="text" v-model="info.yun_merchantNo" required placeholder="请输入云收单商户号" autocomplete="off" class="form-control" >
+                            </div>
+                        </div>
+                        <div class="form-group">
+                            <label class="col-sm-2 control-label">云收单终端号<span class="must-fill">*</span></label>
+                            <div class="col-sm-9">
+                                <input type="text" v-model="info.yun_terminalNo" required placeholder="请输入云收单终端号" autocomplete="off" class="form-control" >
+                            </div>
+                        </div>
+                        <div class="form-group">
+                            <label class="col-sm-2 control-label">云收单商户KEY<span class="must-fill">*</span></label>
+                            <div class="col-sm-9">
+                                <input type="text" v-model="info.yun_KEY" required placeholder="请输入云收单商户KEY" autocomplete="off" class="form-control" >
+                            </div>
+                        </div>
+                    </span>
+
+
+                </div>
+            </div>
+            <div class="form-group">
+                <label class="col-sm-2 control-label"></label>
+                <div class="col-sm-9">
+                    <button type="button" class="btn btn-primary min-width" @click="submit()"><span>提交</span></button>
+                    <input type="file" id="upload" class="hide" @change="uploadFile($event)"/>
+                </div>
+            </div>
+        </form>
+    </div>
+</div>
+<script>
+    let obj = new Vue({
+        el:"#mainContent",
+        data:{
+            id: "{php echo $id}",
+            file_name:'',
+            info: {
+                name: '',//支付方式名称
+                status: 1,//1启用 0 未启用
+                app_id: '',//appid
+                type: 1,//1=微信支付；2=支付宝支付
+                shop_type: 1,//1=微信支付（您是一般商户）；2=服务商子商户（您是子商户请选这个）
+                shop_number: '',//商户号
+                secret_key: '',//支付密钥
+                merchantname : '',//商户名称
+                cert_certificate: "",//cert证书
+                key_certificate: "",//key证书
+                shop_goods_tag:"",//订单优惠标记
+                sub_up_app_id: '',//子商户 - sppid
+                sub_shop_number: '',//子商户 - 商户号
+                sub_enterprise_payment: 1,//子商户 - 企业付款：1=不开启；2=开启
+                sub_secret_key: '',//子商户 - 支付密钥
+                sub_cert_certificate: "",//子商户 - cert证书
+                sub_key_certificate: "",//子商户 - key证书
+                ali_app_id: '',//支付宝 - 应用id
+                ali_public_key: '',//支付宝 - 支付宝公匙
+                app_private_key: '',//支付宝 - 应用私匙
+                apiversion:0,  //支付宝打款接口
+                rootCert:'',  //支付宝根目录证书
+                publicKey:'',  //支付宝应用公钥证书
+                yun_merchantNo:'', //云收单商户号
+                yun_terminalNo:'',//云收单终端
+                yun_KEY:'' //云收单商户key
+            },
+            //类型信息：0=公共；1=微信；2=支付宝 3=云收单
+            type: {
+                name: 0,
+                //app_id: 0,
+                type: 0,
+                shop_type: 1,
+                shop_number: 1,
+                secret_key: 1,
+                cert_certificate: 1,
+                key_certificate: 1,
+                ali_app_id: 2,
+                ali_public_key: 2,
+                app_private_key: 2,
+                //rootCert:2,
+                //publicKey:2,
+                yun_merchantNo:3,
+                yun_terminalNo:3,
+                yun_KEY:3,
+            }
+        },
+        methods:{
+            //提交信息
+            submit(){
+                let info = this.info;
+                let id   = this.id;
+                let type = this.type;
+                let thisType = info.type;
+                tip.confirm('确定提交信息!',function () {
+                    //判断是否允许提交
+                    let status = true;
+                    $.each(info,function (item,values) {
+                        if((type[item] == thisType || type[item] == 0) && values == '') {
+                            status = false;
+                            tip.alert("请完善信息!");
+                            return false; //跳出循环
+                        }
+                    });
+                    //提交信息
+                    if(status){
+                        let res = commonVue.requestAjax('setting/pay/editInfo',{info:info,id:id},true,false);
+                        if(res.errno == 0){
+                            tip.alert('操作成功!',function () {
+                                window.location.href = common.sysUrl('setting/pay/administration','',true);
+                            })
+                        }else{
+                            tip.alert('操作失败，请重试!',function () {
+                                history.go(0);
+                            })
+                        }
+                    }
+                });
+            },
+            //选择文件
+            selectFile(name){
+                this.file_name = name;
+                $("#upload").click();
+            },
+            //上传文件
+            uploadFile(e){
+                let file = e.target.files[0];
+                let info = new FormData();
+                info.append("file", file);
+                let res = commonVue.requestAjax('setting/pay/uploadCertificate',info,false,false,true);
+                if(res == ''){
+                    tip.alert('上传失败,请检查文件类型或文件夹权限')
+                }else{
+                    this.info[this.file_name] = res.image;
+                }
+            },
+            //获取信息
+            getInfo(){
+                if(this.id > 0){
+                    let data = {id:this.id};
+                    this.info = commonVue.requestAjax('setting/pay/getInfo',data,false,false);
+                }
+            },
+        },
+        mounted() {
+            this.getInfo();
+        }
+    });
+</script>
+{php include wl_template('common/footer');}

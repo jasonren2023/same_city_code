@@ -1,0 +1,27 @@
+<?xml version="1.0" encoding="utf-8"?>
+<manifest>
+	<application>
+		<name><![CDATA[支付返现]]></name>
+		<identifie><![CDATA[cashback]]></identifie>
+		<version><![CDATA[1.0.0]]></version>
+		<type><![CDATA[market]]></type>
+		<description><![CDATA[用户购买指定商品来获取平台余额返现。]]></description>
+		<author><![CDATA[微连科技]]></author>
+		<url><![CDATA[http://www.weliam.cn/]]></url>
+	</application>
+	<setting>
+		<agent embed="false" />
+		<system embed="true" />
+		<task embed="false" />
+	</setting>
+	<agentmenu>
+	</agentmenu>
+	<systemmenu>
+		<menu title="返现" font="fa-inbox">
+			<entry title="返现记录" ac="cashback" do="cashBackRecord" iscover="true"/>
+		</menu>
+		<menu title="设置" font="fa-inbox">
+			<entry title="基本设置" ac="cashback" do="setting"/>
+		</menu>
+	</systemmenu>
+</manifest>

@@ -1,0 +1,19 @@
+<svg xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink" width="27.812" height="39" viewBox="0 0 27.812 39">
+  <defs>
+    <style>
+      .cls-1 {
+        fill: #333;
+      }
+
+      .cls-2 {
+        clip-path: url(#clip-path);
+      }
+    </style>
+    <clipPath id="clip-path">
+      <rect id="矩形_90" data-name="矩形 90" class="cls-1" width="27.812" height="39"/>
+    </clipPath>
+  </defs>
+  <g id="组_182" data-name="组 182" class="cls-2">
+    <path id="路径_59" data-name="路径 59" class="cls-1" d="M726.262,182.08a5.548,5.548,0,0,1,5.555,5.555v27.831a5.547,5.547,0,0,1-5.563,5.558h-16.69A5.554,5.554,0,0,1,704,215.482V187.621a5.56,5.56,0,0,1,5.591-5.541Zm-8.353,30.6a2.782,2.782,0,1,0,2.782,2.782,2.782,2.782,0,0,0-2.782-2.782Zm4.173-27.817h-8.345a1.391,1.391,0,0,0,0,2.782h8.345a1.391,1.391,0,0,0,0-2.782Zm0,0" transform="translate(-704 -182.076)"/>
+  </g>
+</svg>

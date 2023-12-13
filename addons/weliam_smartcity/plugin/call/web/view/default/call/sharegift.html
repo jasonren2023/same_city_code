@@ -1,0 +1,12 @@
+<div class="input-group data-item" style="margin-top: 10px;">
+    <span class="input-group-addon">助力人数</span>
+    <input type="number" name="usernum[]" class="form-control" value="{$ba['usernum']}">
+    <span class="input-group-addon">获得奖品</span>
+    <select name="prizeids[]"  class="form-control chosen-select">
+        <option value="">请选择活动奖品</option>
+        {loop $prizeList $k $v}
+        <option value="{$v['id']}" {if $ba['prizeids'] == $v['id']}selected{/if}>{$v['title']}</option>
+        {/loop}
+    </select>
+    <span onclick="removes(this)" class="input-group-addon btn btn-default data-item-delete"><i class="fa fa-remove"></i> 删除</span>
+</div>

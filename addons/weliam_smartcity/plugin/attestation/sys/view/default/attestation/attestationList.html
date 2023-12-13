@@ -1,0 +1,323 @@
+{php include wl_template('common/header');}
+<style type='text/css'>
+    .goods-info{position:relative; padding-left:60px;}
+    .goods-info .img{position:absolute;top:50%; margin-top:-25px; background: url({IMAGE_LOADING}) center center no-repeat; width:50px;height:50px; }
+    .goods-info span {white-space: nowrap;overflow: hidden;text-overflow: ellipsis;display: block;}
+    .certification-materials{cursor: pointer}
+    .todetail{text-align: center;display: inline-block;font-size: 14px;width: 100%;overflow: hidden;text-overflow: ellipsis;color: deepskyblue;}
+    .todetail:hover{cursor:pointer;}
+    .newmater:hover{cursor:pointer;}
+</style>
+<ul class="nav nav-tabs">
+    <li class="active"><a href="#">认证列表</a></li>
+</ul>
+<div class="app-content">
+    <div class="app-filter">
+        <div class="filter-list">
+            <form action="" method="get" class="form-horizontal" role="form" id="form1">
+                <input type="hidden" name="c" value="site" />
+                <input type="hidden" name="a" value="entry" />
+                <input type="hidden" name="m" value="{MODULE_NAME}" />
+                <input type="hidden" name="p" value="attestation" />
+                <input type="hidden" name="ac" value="attestation" />
+                <input type="hidden" name="do" value="attestationList" />
+                <input type="hidden" name="status" value="{$_GPC['status']}" />
+                <input type="hidden" name="checkstatus" value="{$_GPC['checkstatus']}" />
+                <input type="hidden" name="type" value="{$_GPC['type']}" />
+                <div class="form-group">
+                    <label class="col-sm-2 control-label">认证状态</label>
+                    <div class="col-sm-9">
+                        <div class="btn-group">
+                            <a href="{php echo wl_filter_url('status:0');}" class="btn {if intval($_GPC['status']) == 0}btn-primary{else}btn-default{/if}">全部</a>
+                            <a href="{php echo wl_filter_url('status:1');}" class="btn {if $_GPC['status'] == 1}btn-primary{else}btn-default{/if}">开启</a>
+                            <a href="{php echo wl_filter_url('status:2');}" class="btn {if $_GPC['status'] == 2}btn-primary{else}btn-default{/if}">禁用</a>
+                        </div>
+                    </div>
+                </div>
+                <div class="form-group">
+                    <label class="col-sm-2 control-label">审核状态</label>
+                    <div class="col-sm-9">
+                        <div class="btn-group">
+                            <a href="{php echo wl_filter_url('checkstatus:0');}" class="btn {if intval($_GPC['checkstatus']) == 0}btn-primary{else}btn-default{/if}">全部</a>
+                            <a href="{php echo wl_filter_url('checkstatus:1');}" class="btn {if $_GPC['checkstatus'] == 1}btn-primary{else}btn-default{/if}">待审核</a>
+                            <a href="{php echo wl_filter_url('checkstatus:2');}" class="btn {if $_GPC['checkstatus'] == 2}btn-primary{else}btn-default{/if}">已通过</a>
+                            <a href="{php echo wl_filter_url('checkstatus:3');}" class="btn {if $_GPC['checkstatus'] == 3}btn-primary{else}btn-default{/if}">被驳回</a>
+                        </div>
+                    </div>
+                </div>
+                {if empty($_W['aid'])}
+                <div class="form-group">
+                    <label class="col-sm-2 control-label">认证类型</label>
+                    <div class="col-sm-9">
+                        <div class="btn-group">
+                            <a href="{php echo wl_filter_url('type:0');}" class="btn {if intval($_GPC['type']) == 0}btn-primary{else}btn-default{/if}">全部</a>
+                            <a href="{php echo wl_filter_url('type:1');}" class="btn {if $_GPC['type'] == 1}btn-primary{else}btn-default{/if}">个人认证</a>
+                            <a href="{php echo wl_filter_url('type:2');}" class="btn {if $_GPC['type'] == 2}btn-primary{else}btn-default{/if}">商户认证</a>
+                        </div>
+                    </div>
+                </div>
+                {/if}
+                <div class="form-group form-inline">
+                    <label class="col-sm-2 control-label">关键字搜索</label>
+                    <div class="col-md-2">
+                        <select name="keywordtype" class="form-control">
+                            <option value="">关键字类型</option>
+                            <option value="1" {if $_GPC['keywordtype']==1}selected="selected"{/if}>用户昵称</option>
+                            <option value="2" {if $_GPC['keywordtype']==2}selected="selected"{/if}>用户id</option>
+                        </select>
+                    </div>
+                    <div class="col-sm-3">
+                        <input type="text" name="keyword" class="form-control" value="{$_GPC['keyword']}"  placeholder="请输入关键字"/>
+                    </div>
+                </div>
+                <div class="form-group">
+                    <label class="col-sm-2 control-label">认证时间筛选</label>
+                    <div class="col-md-2">
+                        <select name="timetype" class="form-control">
+                            <option value="0" {if $_GPC['timetype']==0}selected="selected"{/if}>关闭</option>
+                            <option value="1" {if $_GPC['timetype']==1}selected="selected"{/if}>开启</option>
+                        </select>
+                    </div>
+                    <div class="col-md-3">
+                        {php echo tpl_select_time_info('time_limit', array('starttime' => date('Y-m-d',$starttime), 'endtime' => date('Y-m-d', $endtime)));}
+                    </div>
+                </div>
+                <div class="form-group">
+                    <label class="col-sm-2 control-label"></label>
+                    <div class="col-sm-9">
+                        <button class="btn btn-primary" id="search">筛选</button>
+                        <button class="btn btn-warning" type="submit" name="export" value="1">导出</button>
+                    </div>
+                </div>
+            </form>
+        </div>
+    </div>
+    <div class="app-table-list">
+        <div class="table-responsive" style="min-height: 200px;">
+            <table class="table table-hover table-bordered order-list">
+                <thead style="background-color: #FFFFFF;">
+                <tr>
+                    <th class="text-center"><input type="checkbox" onclick="var ck = this.checked;$(':checkbox').each(function(){this.checked = ck});" /></th>
+                    <th class="text-center">用户信息</th>
+                    <th class="text-center">姓名/商家名称</th>
+                    <th class="text-center">手机号</th>
+                    <th class="text-center">认证类型</th>
+                    <th class="text-center">身份证/营业执照号码</th>
+                    <th class="text-center">认证材料</th>
+                    <th class="text-center">认证时间</th>
+                    <th class="text-center">最近编辑</th>
+                    <th class="text-center">状态</th>
+                    <th class="text-center">审核状态</th>
+                </tr>
+                </thead>
+                <tbody>
+                {loop $list $item}
+                <tr class="text-center">
+                    <td>
+                        <input type="checkbox" name="checkbox[]" class="checkbox" value="{$item['id']}" />
+                    </td>
+                    <td class="goods-info line-feed">
+                        <div class="img"><img class="scrollLoading" src="{IMAGE_PIXEL}" data-url="{php echo tomedia($item['avatar'])}" height="50" width="50" onerror="this.src='{IMAGE_NOPIC_SMALL}'" ></div>
+                        <div class="title" style="padding-left: 60px;">
+                            <span>{$item['nickname']}</span>
+                            <span>MID:{$item['mid']}</span>
+                        </div>
+                    </td>
+                    <td class="line-feed">
+                        <span>{$item['attestationname']}</span>
+                        {if $item['type']==2}
+                        <br/><span style="color: #19BDA0;">商家ID:{$item['storeid']}</span>
+                        {/if}
+                    </td>
+                    <td>
+                        {$item['mobile']}
+                    </td>
+                    <td>
+                        {if $item['type']==1}
+                        <span class="label label-success">个人认证</span>
+                        {else if $item['type']==2}
+                        <span class="label label-warning">商家认证</span>
+                        {/if}
+                    </td>
+                    <td>
+                        {$item['cardnum']}
+                    </td>
+                    <td>
+                        {loop $item['pic'] $p}
+                        <img src="{IMAGE_PIXEL}" class="scrollLoading certification-materials" data-url="{php echo tomedia($p)}" height="50" width="80" >
+                        {/loop}
+                        {if !empty($item['moreinfo'])}
+                        <a class="todetail"  href="{php echo web_url('attestation/attestation/moInfoEdit',array('id' => $item['id']))}" >查看编辑</a>
+                        {/if}
+                    </td>
+                    <td>
+                        {php echo date('Y-m-d H:i:s',$item['createtime'])}
+                    </td>
+                    <td>
+                        {php echo date('Y-m-d H:i:s',$item['updatetime'])}
+                    </td>
+                    <td>
+                        {php echo tpl_change_status('attestation/attestation/changeStatus&id='.$item['id'],$item['status'])}
+                    </td>
+                    <td>
+                        <div class="btn-group" style="width: 68px;">
+                            {if $item['checkstatus'] == 1}
+                            <button type="button" class="btn btn-warning dropdown-toggle" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">待审核</button>
+                            {else if $item['checkstatus'] == 2}
+                            <button type="button" class="btn btn-success dropdown-toggle" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">已通过</button>
+                            {else if $item['checkstatus'] == 3}
+                            <button type="button" class="btn btn-danger dropdown-toggle" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">被驳回</button>
+                            {/if}
+                            <ul class="dropdown-menu" style="width: 68px;min-width: 68px;">
+                                {if $item['checkstatus'] != 1}
+                                <li><a href="{php echo web_url('attestation/attestation/changeCheckStatus', array('id'=>$item['id'],'status'=>1))}" data-toggle="ajaxRemove" data-confirm="确认修改为待审核吗？" style="margin: 0;">待审核</a></li>
+                                {/if}
+                                {if $item['checkstatus'] != 2}
+                                <li><a href="{php echo web_url('attestation/attestation/changeCheckStatus', array('id'=>$item['id'],'status'=>2))}" data-toggle="ajaxRemove" data-confirm="确认通过审核吗？" style="margin: 0;">通过</a></li>
+                                {/if}
+                                {if $item['checkstatus'] != 3}
+                                <li><a href="javascritp:;" class="rejectdis" appid="{$item['id']}"  style="margin: 0;">驳回</a></li>
+                                {/if}
+                            </ul>
+                        </div>
+                    </td>
+                </tr>
+                {/loop}
+                </tbody>
+            </table>
+        </div>
+        <div class="app-table-foot clearfix">
+            <div class="pull-left">
+                <div class="pull-left de1">
+                    <a href="javascript:;" status="2" class="btn btn-default min-width js-batch js-delete pass">批量通过</a>
+                </div>
+                <div class="pull-left de1" style="margin-left: 5px;">
+                    <a href="javascript:;" status="3" class="btn btn-default min-width js-batch js-delete pass">批量拒绝</a>
+                </div>
+                <div class="pull-left de1" style="margin-left: 5px;">
+                    <a href="javascript:;" status="4" class="btn btn-default min-width js-batch js-delete pass">批量删除</a>
+                </div>
+            </div>
+            <div class="pull-right">
+                {$pager}
+            </div>
+        </div>
+    </div>
+
+    <div id="modal-module-gift" class="modal fade" tabindex="-1">
+        <div class="modal-dialog" style='width: 920px;'>
+            <div class="modal-content" style="overflow: auto;">
+                <div class="modal-header">
+                    <button aria-hidden="true" data-dismiss="modal" class="close" type="button">×</button>
+                    <h2>更多素材</h2>
+                </div>
+                <div class="modal-body">
+                    <div id="detail" class="modal-body" style="padding:0;"></div>
+                </div>
+                <div class="modal-footer" style="padding: 5px 15px;">
+                    <a class="btn btn-primary js-order-remark-post" data-dismiss="modal" aria-hidden="true">确定</a>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <div id="modal-module-gift22" class="modal fade" tabindex="-1">
+        <div class="modal-dialog" style='width: 920px;'>
+            <div class="modal-content">
+                <div class="modal-header">
+                    <button aria-hidden="true" data-dismiss="modal" class="close" type="button">×</button>
+                    <h3>驳回理由</h3></div>
+                <div class="modal-body" style="padding: 0;">
+                    <div class="modal-body">
+                        <textarea id="remark" name="admin_remark" class="form-control" rows="5"></textarea>
+                    </div>
+                </div>
+                <div class="modal-footer" style="padding:15px;">
+                    <a class="btn btn-default js-cancel" aria-hidden="true" data-dismiss="modal">取消</a>
+                    <a class="btn btn-primary js-order-id-post" order-id="" data-dismiss="modal" aria-hidden="true">确定</a>
+                </div>
+            </div>
+        </div>
+    </div>
+
+</div>
+
+<script>
+    $('.de1').delegate('.pass','click',function(e){
+        e.stopPropagation();
+        var status = $(this).attr('status');
+        if(status == 2){
+           var text = '通过';
+        }else if(status == 3){
+            var text = '通过';
+        }else if(status == 4){
+            var text = '删除';
+        }
+        var order_ids = [];
+        var $checks=$('.checkbox:checkbox:checked');
+        $checks.each(function() {
+            if (this.checked) {
+                order_ids.push(this.value);
+            };
+        });
+        var $this = $(this);
+        var ids = order_ids;
+        util.nailConfirm(this, function(state) {
+            if(!state) return;
+            $.post("{php echo web_url('attestation/attestation/allChange')}", { ids : ids ,status:status}, function(data){
+                if(!data.errno){
+                    util.tips("操作成功！");
+                    location.reload();
+                }else{
+                    util.tips(data.message);
+                };
+            }, 'json');
+        }, {html: '确认'+text+'所选商户?'});
+    });
+    /**
+     * 点击在新的页面打开图片
+     */
+    $(".certification-materials").on('click',function () {
+        let _this = $(this),
+            link = _this.data("url");
+        window.open(link,"_blank");
+    });
+
+    // $('.todetail').click(function(){
+    //     $("#detail").html('');
+    //     popwin = $('#modal-module-gift').modal();
+    //     var id = $(this).attr('attid');
+    //     $.ajax({
+    //         url: "{php echo web_url('attestation/attestation/moreinfo')}&id="+id,
+    //         cache: false
+    //     }).done(function (html) {
+    //         $("#detail").html(html);
+    //     });
+    // });
+
+    //驳回申请理由
+    $('.rejectdis').click(function(){
+        var appid = $(this).attr('appid');
+        $('.js-order-id-post').attr("order-id",appid);
+        popwin = $('#modal-module-gift22').modal();
+    });
+
+    $('.js-order-id-post').click(function() {
+        var order_id = $(this).attr('order-id');
+        var remark = $('#remark').val();
+        $.post("{php echo web_url('attestation/attestation/rejectreason')}",{id:order_id,reason:remark},function(d){
+            if(!d.errno){
+                util.tips('驳回成功!');
+                location.reload();
+            }
+        },"json");
+        //$('#order-remark-container').hide();
+        $('.main').css("opacity","1");$('.nav').css("opacity","1");$('.big-menu').css("opacity","1");
+    });
+
+</script>
+
+
+
+
+{php include wl_template('common/footer');}

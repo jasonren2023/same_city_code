@@ -1,0 +1,149 @@
+<!--------------------------  标题配置群  ----------------------------------->
+<!-- 风格一 -->
+<script type="text/html" id="tpl_edit_title">
+    <div class="form-group">
+        <div class="col-sm-2 control-label">背景颜色</div>
+        <div class="col-sm-9">
+            <div class="input-group input-group-sm">
+                <input class="form-control diy-bind color" data-bind-child="style" data-bind="background" value="<%style.background%>" type="color" />
+                <span class="input-group-addon btn btn-default" onclick="$(this).prev().val('#ffffff').trigger('propertychange')">清除</span>
+            </div>
+        </div>
+    </div>
+    <div class="form-group">
+        <div class="col-sm-2 control-label">文字颜色</div>
+        <div class="col-sm-9">
+            <div class="input-group input-group-sm">
+                <input class="form-control diy-bind color" data-bind-child="style" data-bind="color" value="<%style.color%>" type="color" />
+                <span class="input-group-addon btn btn-default" onclick="$(this).prev().val('#ffffff').trigger('propertychange')">清除</span>
+            </div>
+        </div>
+    </div>
+    <div class="form-group">
+        <div class="col-sm-2 control-label">标题文字</div>
+        <div class="col-sm-9">
+            <div class="input-group form-group" style="margin: 0;">
+                <input class="form-control diy-bind" data-bind-child="params" data-bind="title" data-placeholder="" placeholder="请输入标题" value="<%params.title%>" />
+                <span class="input-group-addon btn btn-default" onclick="$(this).prev().val('').trigger('change');">清除</span>
+            </div>
+        </div>
+    </div>
+    <div class="form-group">
+        <div class="col-sm-2 control-label">按钮内容</div>
+        <div class="col-sm-9">
+            <div class="input-group form-group" style="margin: 0;">
+                <input class="form-control diy-bind" data-bind-child="params" data-bind="butname" placeholder="请输入按钮内容" value="<%params.butname%>" maxlength="8"/>
+                <span class="input-group-addon btn btn-default" onclick="$(this).prev().val('').trigger('change');">清除</span>
+            </div>
+        </div>
+    </div>
+    <div class="form-group">
+        <div class="col-sm-2 control-label">链接地址</div>
+        <div class="col-sm-9">
+            <div class="input-group form-group" style="margin: 0;">
+                <input class="form-control diy-bind" readonly="readonly" data-bind-child="params" data-bind="link" placeholder="请输入链接地址" value="<%params.link%>" id="curl-<%itemid%>"/>
+                <span class="input-group-addon btn btn-default" data-toggle="selectUrl" data-input="#curl-<%itemid%>">选择链接</span>
+            </div>
+        </div>
+    </div>
+    <div class="form-group">
+        <div class="col-sm-2 control-label">对齐方向</div>
+        <div class="col-sm-9">
+            <label class="radio-inline"><input type="radio" name="textalign" value="left" class="diy-bind" data-bind-child="style" data-bind="textalign" <%if style.textalign=='left'%>checked="checked"<%/if%> > 居左</label>
+            <label class="radio-inline"><input type="radio" name="textalign" value="center" class="diy-bind" data-bind-child="style" data-bind="textalign" <%if style.textalign=='center'%>checked="checked"<%/if%>> 居中</label>
+        </div>
+    </div>
+    <div class="form-group">
+        <div class="col-sm-2 control-label">下边距</div>
+        <div class="col-sm-9">
+            <div class="form-group">
+                <div class="slider col-sm-8" data-value="<%style.paddingBottom%>" data-min="0" data-max="30"></div>
+                <div class="col-sm-9 control-labe count"><span><%style.paddingBottom%></span>px(像素)</div>
+                <input class="diy-bind input" data-bind-child="style" data-bind="paddingBottom" value="<%style.paddingBottom%>" type="hidden" />
+            </div>
+        </div>
+    </div>
+</script>
+<!-- 风格二 -->
+<script type="text/html" id="tpl_edit_title2">
+    <div class="form-group">
+        <div class="col-sm-2 control-label">背景颜色</div>
+        <div class="col-sm-9">
+            <div class="input-group input-group-sm">
+                <input class="form-control diy-bind color" data-bind-child="style" data-bind="bgColor" value="<%style.bgColor%>" type="color" />
+                <span class="input-group-addon btn btn-default" onclick="$(this).prev().val('#ffffff').trigger('propertychange')">清除</span>
+            </div>
+        </div>
+    </div>
+    <div class="form-group">
+        <div class="col-sm-2 control-label">标题颜色</div>
+        <div class="col-sm-9">
+            <div class="input-group input-group-sm">
+                <input class="form-control diy-bind color" data-bind-child="style" data-bind="mainColor" value="<%style.mainColor%>" type="color" />
+                <span class="input-group-addon btn btn-default" onclick="$(this).prev().val('#ffffff').trigger('propertychange')">清除</span>
+            </div>
+        </div>
+    </div>
+    <div class="form-group">
+        <div class="col-sm-2 control-label">副标题颜色</div>
+        <div class="col-sm-9">
+            <div class="input-group input-group-sm">
+                <input class="form-control diy-bind color" data-bind-child="style" data-bind="viceColor" value="<%style.viceColor%>" type="color" />
+                <span class="input-group-addon btn btn-default" onclick="$(this).prev().val('#ffffff').trigger('propertychange')">清除</span>
+            </div>
+        </div>
+    </div>
+    <div class="form-group">
+        <div class="col-sm-2 control-label">标题文字</div>
+        <div class="col-sm-9">
+            <div class="input-group form-group" style="margin: 0;">
+                <input class="form-control diy-bind" data-bind-child="params" data-bind="mainText" data-placeholder="" placeholder="请输入标题" value="<%params.mainText%>" />
+                <span class="input-group-addon btn btn-default" onclick="$(this).prev().prev().val('').trigger('change');">清除</span>
+            </div>
+        </div>
+    </div>
+    <div class="form-group">
+        <div class="col-sm-2 control-label">副标题文字</div>
+        <div class="col-sm-9">
+            <div class="input-group form-group" style="margin: 0;">
+                <input class="form-control diy-bind" data-bind-child="params" data-bind="viceText" data-placeholder="" placeholder="请输入副标题" value="<%params.viceText%>" />
+                <span class="input-group-addon btn btn-default" onclick="$(this).prev().prev().val('').trigger('change');">清除</span>
+            </div>
+        </div>
+    </div>
+    <div class="form-group">
+        <div class="col-sm-2 control-label">按钮内容</div>
+        <div class="col-sm-9">
+            <div class="input-group form-group" style="margin: 0;">
+                <input class="form-control diy-bind" data-bind-child="params" data-bind="butname" placeholder="请输入按钮内容" value="<%params.butname%>" maxlength="8"/>
+                <span class="input-group-addon btn btn-default" onclick="$(this).prev().val('').trigger('change');">清除</span>
+            </div>
+        </div>
+    </div>
+    <div class="form-group">
+        <div class="col-sm-2 control-label">链接地址</div>
+        <div class="col-sm-9">
+            <div class="input-group form-group" style="margin: 0;">
+                <input class="form-control diy-bind" readonly="readonly" data-bind-child="params" data-bind="link" placeholder="请输入链接地址" value="<%params.link%>" id="curl-<%itemid%>"/>
+                <span class="input-group-addon btn btn-default" data-toggle="selectUrl" data-input="#curl-<%itemid%>">选择链接</span>
+            </div>
+        </div>
+    </div>
+    <div class="form-group">
+        <div class="col-sm-2 control-label">标题对齐方向</div>
+        <div class="col-sm-9">
+            <label class="radio-inline"><input type="radio" name="mainAlign" value="left" class="diy-bind" data-bind-child="style" data-bind="mainAlign" <%if style.mainAlign=='left'%>checked="checked"<%/if%> > 居左</label>
+            <label class="radio-inline"><input type="radio" name="mainAlign" value="center" class="diy-bind" data-bind-child="style" data-bind="mainAlign" <%if style.mainAlign=='center'%>checked="checked"<%/if%>> 居中</label>
+        </div>
+    </div>
+    <div class="form-group">
+        <div class="col-sm-2 control-label">下边距</div>
+        <div class="col-sm-9">
+            <div class="form-group">
+                <div class="slider col-sm-8" data-value="<%style.marginBottom%>" data-min="0" data-max="30"></div>
+                <div class="col-sm-9 control-labe count"><span><%style.marginBottom%></span>px(像素)</div>
+                <input class="diy-bind input" data-bind-child="style" data-bind="marginBottom" value="<%style.marginBottom%>" type="hidden" />
+            </div>
+        </div>
+    </div>
+</script>

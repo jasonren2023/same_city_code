@@ -1,0 +1,243 @@
+{php include wl_template('common/header');}
+<style>
+    .user{
+        height: 60px;
+        min-width: 180px;
+    }
+    .user .img{
+        width: 60px;
+        height: 60px;
+        float: left;
+        position: relative;
+    }
+    .user .img img{
+        width: 60px;
+        height: 60px;
+        border-radius: 50%;
+    }
+    .user .img i{
+        position: absolute;
+        top: 0;
+        right: 0px;
+        color: #FFF;
+        opacity: .7;
+        font-size: 13px;
+        border-radius: 50%;
+        width: 20px;
+        height: 20px;
+        line-height: 20px;
+        text-align: center;
+    }
+    .user .img i.icon-male{
+        background: #0d8ddb;
+    }
+    .user .img i.icon-female{
+        background: #ed5565;
+        transform: rotate(  30deg) skew(  0deg);
+    }
+    .user .info{
+        float: left;
+        height: 60px;
+        width: calc(100% - 60px);
+        padding-left: 10px;
+        font-size: 15px;
+        text-align: left;
+        line-height: 20px;
+    }
+</style>
+<style type='text/css'>
+    .order-rank img{width:16px; height:16px;}
+    .js-remark,.js-admin-remark{word-break:break-all; overflow:hidden; background: #FDEEEE;color: #ED5050;padding: 5px 10px;}
+    td.goods-info{position:relative; padding-left:60px;}
+    .goods-info .img{position:absolute;top:50%; margin-top:-25px; background: url({IMAGE_LOADING}) center center no-repeat; width:50px;height:50px; }
+    .goods-info span {white-space: nowrap;overflow: hidden;text-overflow: ellipsis;display: block;}
+    .status-text{cursor:pointer;}
+</style>
+<ul class="nav nav-tabs">
+    <li class="active"><a href="javascript:;">顾问列表</a></li>
+</ul>
+<div class="app-content">
+    <div class="app-filter">
+        <div class="filter-action">
+            <a href="{php echo web_url('house/Adviser/adviserEdit')}" class="btn btn-primary">添加顾问</a>
+        </div>
+        <div class="filter-list">
+            <form action="" method="get" class="form-horizontal" role="form" id="form1">
+                <input type="hidden" name="c" value="site" />
+                <input type="hidden" name="a" value="entry" />
+                <input type="hidden" name="m" value="{MODULE_NAME}" />
+                <input type="hidden" name="p" value="house" />
+                <input type="hidden" name="ac" value="Adviser" />
+                <input type="hidden" name="do" value="adviserList" />
+                <input type="hidden" name="status" value="{$_GPC['status']}" />
+                <div class="form-group">
+                    <label class="col-sm-2 control-label">状态</label>
+                    <div class="col-sm-9">
+                        <div class="btn-group">
+                            <a href="{php echo wl_filter_url('status:0');}" class="btn {if $_GPC['status'] == 0}btn-primary{else}btn-default{/if}">全部</a>
+                            <a href="{php echo wl_filter_url('status:1');}" class="btn {if $_GPC['status'] == 1}btn-primary{else}btn-default{/if}">启用</a>
+                            <a href="{php echo wl_filter_url('status:2');}" class="btn {if $_GPC['status'] == 2}btn-primary{else}btn-default{/if}">禁用</a>
+                        </div>
+                    </div>
+                </div>
+
+
+                <div class="form-group">
+                    <div class="col-sm-2 control-label">姓名</div>
+                    <div class="col-sm-9">
+                        <input type="text" class="form-control" name="name" value="{$name}" placeholder="请输入姓名">
+                    </div>
+                </div>
+
+
+                <div class="form-group">
+                    <label class="col-sm-2 control-label"></label>
+                    <div class="col-sm-9">
+                        <button class="btn btn-primary" id="search">筛选</button>
+                    </div>
+                </div>
+            </form>
+        </div>
+    </div>
+    <div class="app-table-list">
+        <div class="panel-body table-responsive collapse in order-list" id="order-template-item-4" style="padding: 0;">
+            <table class="table table-hover table-bordered">
+                <thead style="background-color: #FFFFFF;">
+                <tr>
+                    <th width="5%" class="text-center"><input type="checkbox" name="checkall" value="" id="checkall" class="checkboxall" onclick="var ck = this.checked; $(':checkbox').each(function(){this.checked = ck});"/></th>
+                    <!--<th width="10%" style="text-align:center;">头像</th>-->
+                    <!--<th width="10%" style="text-align:center;">姓名</th>-->
+                    <th width="25%" style="text-align:center;">用户信息</th>
+                    <th width="15%" style="text-align:center;">联系方式</th>
+                    <th width="20%" style="text-align:center;">所属商户</th>
+                    <th width="10%" style="text-align:center;">状态</th>
+                    <th width="25%" style="text-align:center;">操作</th>
+                </tr>
+                </thead>
+                <tbody>
+                {loop $list $item}
+                <tr>
+                    <td><center><input type="checkbox" name="items[]" value="{$item['id']}" class="checkbox" /></center></td>
+                    <!--<td class="text-center"><img class="scrollLoading" src="{IMAGE_PIXEL}" data-url="{php echo empty($item['avatar']) ? IMAGE_NOPIC_SMALL : $item['avatar'];}" height="50" width="50"/>-->
+                    <!--</td>-->
+                    <!--<td class="text-center">{$item['nickname']}</td>-->
+                    <td>
+                        <div class="user">
+                            <div class="img">
+                                <img src="{$item['avatar']}">
+                            </div>
+                            <div class="info">
+                                <div>{$item['nickname']}</div>
+                                <div>{$item['mobile']}</div>
+                                <div>MID:{$item['user_id']}</div>
+                            </div>
+                        </div>
+                    </td>
+                    <td class="text-center">{$item['phone']}</td>
+                    <td class="text-center">
+                        <div class="user">
+                            <div class="img">
+                                <img src="{$item['storelogo']}">
+                            </div>
+                            <div class="info">
+                                <div>{$item['storename']}</div>
+                                <div>SID:{$item['shop_id']}</div>
+                            </div>
+                        </div>
+                    </td>
+                    <td class="text-center">
+                        {if $item['status'] == 1}
+                        <label class="label label-success">启用</label>
+                        {else}
+                        <label class="label label-danger">禁用</label>
+                        {/if}
+                    </td>
+                    <td class="text-center" style="position: relative;">
+                        <p style="color: #428bca;display: inline-block;"><a href="{php echo web_url('house/Adviser/adviserEdit', array('id' => $item['id']))}">编辑</a> </p>
+                        <p style="color: #428bca;display: inline-block;"><a href="{php echo web_url('house/Adviser/adviserDel', array('ids'=>($item['id'])))}" data-toggle="ajaxRemove" data-confirm="确定删除此置业顾问？">删除</a></p>
+                    </td>
+                </tr>
+                {/loop}
+                </tbody>
+            </table>
+        </div>
+        <div class="app-table-foot clearfix">
+            <div class="pull-left">
+                <button class="btn btn-default btn-sm" type="button" onclick="location.reload();"><i class="fa fa-refresh"></i></button>
+                <!--<div class="btn-group btn-group-sm">-->
+                <!--    <button  class="btn btn-default" disabled="disabled" id="checkYse" onclick="checkOrDelete(1);">批量上架</button>-->
+                <!--    <button  class="btn btn-default" disabled="disabled" id="checkNo" onclick="checkOrDelete(0);">批量下架</button>-->
+                <!--</div>-->
+                <button class="btn btn-default btn-sm" type="button" disabled="disabled" id="delete" onclick="checkOrDelete(4);"><i class="fa fa-trash"></i> 回收站</button>
+            </div>
+            <div class="pull-right">
+                {$pager}
+            </div>
+        </div>
+    </div>
+
+
+</div>
+<script>
+
+    function checkOrDelete(check){
+        var content = '';
+        if(check==1) content = '确认上架选中置业顾问？';
+        if(check==0) content = '确认下架选中置业顾问？';
+        if(check==4) content = '确认把选中置业顾问放入回收站？如果置业顾问已在回收站将会被彻底删除。';
+        layer.open({
+            title: [
+                '提示',
+                'background-color:#18A689; color:#fff;'
+            ]
+            ,anim: 'up'
+            ,content: content
+            ,btn: ['确认', '取消']
+            ,yes:function(index){
+                $('.layer-anim').remove();
+                var ids = [];
+                var $checks=$('.checkbox:checkbox:checked');
+                $checks.each(function() {
+                    if (this.checked) {
+                        ids.push(this.value);
+                    };
+                });
+                //处理
+                $.post("{php echo web_url('house/House/labelDel')}", { ids : ids ,status:check}, function(data){
+                    if(!data.errno){
+                        util.tips("操作成功！");
+                        location.reload();
+                    }else{
+                        util.tips(data.message);
+                    };
+                }, 'json');
+            }
+        });
+    }
+
+    $(function(){
+        $('.checkbox,.checkboxall').click(function(){
+            var $checks=$('.checkbox:checkbox:checked');
+            $('#check').attr('disabled','');
+            if($checks.length>0) {
+                $('#checkYse').attr('disabled',false);
+                $('#checkNo').attr('disabled',false);
+                $('#delete').attr('disabled',false);
+            }else{
+                $('#checkYse').attr('disabled',true);
+                $('#checkNo').attr('disabled',true);
+                $('#delete').attr('disabled',true);
+            }
+        });
+
+        //驳回申请理由
+        $('.rejectdis').click(function(){
+            var appid = $(this).attr('appid');
+            $('.js-order-id-post').attr("order-id",appid);
+            popwin = $('#modal-module-gift22').modal();
+        });
+
+
+    });
+</script>
+{php include wl_template('common/footer');}

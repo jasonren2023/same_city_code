@@ -1,0 +1,148 @@
+{php include wl_template('common/header');}
+<style>
+    .show-image{
+        padding: 0!important;
+        width: 34px;
+        height: 34px;
+    }
+    .show-image img{
+        height:100%;
+        width:100%;
+    }
+    .show-link{
+        margin: 0!important;
+    }
+
+
+</style>
+<ul class="nav nav-tabs" id="myTab">
+    <li class="active"><a href="#tab_basic">个人中心设置</a></li>
+</ul>
+<div class="app-content">
+    <div class="app-form">
+        <form action="" method="post" class="form-horizontal form form-validate">
+            <div class="panel panel-default">
+                <div class="panel-body">
+                    <div class="tab-content">
+                        <div class="form-group">
+                            <label class="col-sm-1 control-label">{$yue}</label>
+                            <div class="col-sm-9">
+                                <label class="radio-inline">
+                                    <input type="radio" value="1" name="userset[hideyue]" {if $data['hideyue']==1} checked {/if}>隐藏
+                                </label>
+                                <label class="radio-inline">
+                                    <input type="radio" value="0" name="userset[hideyue]" {if $data['hideyue']==0} checked {/if}>显示
+                                </label>
+                            </div>
+                        </div>
+                        <div class="form-group">
+                            <label class="col-sm-1 control-label">{$jifen}</label>
+                            <div class="col-sm-9">
+                                <label class="radio-inline">
+                                    <input type="radio" value="1" name="userset[hidejifen]" {if $data['hidejifen']==1} checked {/if}>隐藏
+                                </label>
+                                <label class="radio-inline">
+                                    <input type="radio" value="0" name="userset[hidejifen]" {if $data['hidejifen']==0} checked {/if}>显示
+                                </label>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                <div class="app-table-list">
+                    <div class="table-responsive">
+                        <table class="table table-hover">
+                            <tbody id="param-items-level">
+                                {loop $setInfo $key $val}
+                                    <tr class="text-center" id="row_{$key}">
+                                        <td>{$val['title']}</td>
+                                        <td>
+                                            <input type="text" class="form-control set-title" maxlength="6" name="set[{$key}][diy_title]" value="{$val['diy_title']}" placeholder="{$val['title']}"/>
+                                        </td>
+                                        <td>
+                                            <div class="input-group img-item">
+                                                <div class="input-group-addon show-image">
+                                                    <img src="{php echo tomedia($val['icon'])}" id="pimg-{$key}" />
+                                                </div>
+                                                <input type="text" class="form-control set-image" id="cimg-{$key}" name="set[{$key}][icon]" readonly="readonly" value="{$val['icon']}"/>
+                                                <div class="input-group-btn">
+                                                    <button type="button" class="btn btn-default"
+                                                            data-toggle="selectAttachment"
+                                                            data-input="#cimg-{$key}"
+                                                            data-img="#pimg-{$key}">选择图片</button>
+                                                </div>
+                                            </div>
+                                        </td>
+                                        <td >
+                                            <div class="input-group form-group show-link">
+                                                <input name="set[{$key}][link]" type="text" readonly="readonly" class="form-control param_value set-link" value="{$val['link']}" id="advlink_{$key}" placeholder="跳转链接"/>
+                                                <span data-input="#advlink_{$key}" data-toggle="selectUrl" class="input-group-addon btn btn-default">选择链接</span>
+                                            </div>
+                                        </td>
+                                        <td>
+                                            <input class="js-switch" type="checkbox" name="set[{$key}][switch]" value="1" {if $val['switch']==1}checked="checked"{/if}/>
+                                        </td>
+                                        <td>
+                                            <a href="javascript:;" class="fa fa-move" title="拖动调整此显示顺序"><i class="fa fa-arrows"></i></a>&nbsp;
+                                        </td>
+                                        <td>
+                                            <input name="set[{$key}][title]" type="text" class="form-control hide default-title" value="{$val['title']}" />
+                                            <input name="set[{$key}][default]" type="text" class="form-control hide default-default" value="{$val['default']}"/>
+                                            <input type="text" class="form-control hide default-show_img" value="{$val['show_img']}"/>
+                                            <input name="set[{$key}][image]" type="text" class="form-control hide default-image" value="{$val['image']}"/>
+                                            <a class="btn btn-sm btn-default restore-default" data-row_id="#row_{$key}" href="javascript:;" >恢复默认</a>
+                                        </td>
+                                    </tr>
+                                {/loop}
+                            </tbody>
+                        </table>
+                    </div>
+                    <div class="app-table-foot clearfix">
+                        <div class="pull-left">
+                            <input type="submit" name="submit" value="保存" class="btn btn-primary col-lg-1 min-width" />
+                            <input type="hidden" name="token" value="{$_W['token']}" />
+                        </div>
+                        <div class="pull-right"></div>
+                    </div>
+                </div>
+            </div>
+        </form>
+    </div>
+</div>
+<script type="text/javascript">
+    $(function(){
+        require(['jquery.ui'],function($){
+            $("#param-items-level").sortable({handle:'.fa-move'});
+        });
+        bindEvents();
+    });
+    function bindEvents() {
+        require(['jquery', 'util'], function ($, util) {
+            $('.btn-select-pic').unbind('click').click(function () {
+                var imgitem = $(this).closest('.img-item');
+                util.image('', function (data) {
+                    imgitem.find('img').attr('src', data['url']);
+                    imgitem.find('input').val(data['attachment']);
+                });
+            });
+        });
+    }
+
+    /**
+     * 点击恢复默认
+     */
+    $(".restore-default").on('click',function () {
+        //参数信息获取
+        let _this = $(this),
+            id = _this.data("row_id"),
+            //title = _this.siblings(".default-title").val(),
+            defaults = _this.siblings(".default-default").val(),
+            show_img = _this.siblings(".default-show_img").val(),
+            image = _this.siblings(".default-image").val();
+        //默认信息获取
+        $(id).find(".set-title").val('');//标题
+        $(id).find(".set-link").val(defaults);//链接
+        $(id).find(".set-image").val(image);//图片
+        $(id).find(".show-image").children('img').attr('src',show_img);//显示图片
+    });
+</script>
+{php include wl_template('common/footer');}

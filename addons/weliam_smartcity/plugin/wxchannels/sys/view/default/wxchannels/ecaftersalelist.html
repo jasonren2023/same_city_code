@@ -1,0 +1,103 @@
+{php include wl_template('common/header');}
+<style type='text/css'>
+    .order-rank img{width:16px; height:16px;}
+    .js-remark,.js-admin-remark{word-break:break-all; overflow:hidden; background: #FDEEEE;color: #ED5050;padding: 5px 10px;}
+    td.goods-info{position:relative; padding-left:60px;}
+    .goods-info .img{position:absolute;top:50%; margin-top:-25px; background: url({IMAGE_LOADING}) center center no-repeat; width:50px;height:50px; }
+    .goods-info span {white-space: nowrap;overflow: hidden;text-overflow: ellipsis;display: block;}
+    .status-text{cursor:pointer;}
+</style>
+<ul class="nav nav-tabs">
+    <li class="active"><a href="javascript:;">售后列表</a></li>
+</ul>
+<div class="app-content">
+
+    <div class="app-table-list">
+        <div class="panel-body table-responsive collapse in order-list" id="order-template-item-4" style="padding: 0;">
+            <table class="table table-hover table-bordered">
+                <thead style="background-color: #FFFFFF;">
+                <tr>
+                    <th width="15%" style="text-align:center;">微信售后单号/微信订单id</th>
+                    <th width="10%">售后类型</th>
+                    <th width="15%">售后详情</th>
+                    <th width="20%" style="text-align:center;">详细原因</th>
+                    <th width="10%" style="text-align:center;">售后状态</th>
+                    <th width="10%" style="text-align:center;">创建/更新时间</th>
+                    <th width="20%" style="text-align:center;">操作</th>
+                </tr>
+                </thead>
+                <tbody>
+                {loop $list $item}
+                <tr>
+                    <td class="text-center">
+                        {$item['aftersale_id']}<br/>
+                        {$item['order_id']}
+                    </td>
+                    <td class="text-center">
+                        {if $item['type'] == 1}
+                        <span class="label label-warning">仅退款</span>
+                        {else if $item['type'] == 2}
+                        <span class="label label-danger">退货退款</span>
+                        {/if}
+                    </td>
+                    <td class="text-center">
+                        退款原因:{$item['refund_reason_type_text']}<br/>
+                        退款金额:￥{php echo  sprintf("%.2f",$item['orderamt']/100);}
+                    </td>
+                    <td class="text-center">
+                        {$item['refund_reason']}
+                    </td>
+                    <td class="text-center">
+                        {$item['status_text']}
+                    </td>
+                    <td class="text-center">
+                        {php echo date('Y-m-d H:i',sprintf("%.2f",$item['create_time']/1000));}<br/>
+                        {php echo date('Y-m-d H:i',sprintf("%.2f",$item['update_time']/1000));}<br/>
+                    </td>
+                    <td class="text-center" style="position: relative;">
+                        {if $item['status'] == 2}
+                        <p style="color: #428bca;display: inline-block;"><a href="{php echo web_url('wxchannels/channelweb/changeafter', array('id'=>$item['aftersale_id'],'status' =>1))}" data-toggle="ajaxRemove" data-confirm="确定同意退款？">同意</a></p>
+                        <p style="color: #428bca;display: inline-block;"><a href="{php echo web_url('wxchannels/channelweb/changeafter', array('id'=>$item['aftersale_id'],'status' =>2))}" data-toggle="ajaxRemove" data-confirm="确定拒绝售后申请？">拒绝</a></p>
+                        {/if}
+                    </td>
+                </tr>
+                {/loop}
+                </tbody>
+            </table>
+        </div>
+        <div class="app-table-foot clearfix">
+            <div class="pull-right">
+                {$pager}
+            </div>
+        </div>
+    </div>
+
+    <div id="modal-module-gift22" class="modal fade" tabindex="-1">
+        <div class="modal-dialog" style='width: 920px;'>
+            <div class="modal-content">
+                <div class="modal-header">
+                    <button aria-hidden="true" data-dismiss="modal" class="close" type="button">×</button>
+                    <h3>驳回理由</h3>
+                </div>
+                <div class="modal-body" style="padding: 0;">
+                    <div class="modal-body">
+                        <textarea id="remark" name="admin_remark" class="form-control" rows="5"></textarea>
+                    </div>
+                </div>
+                <div class="modal-footer" style="padding:15px;">
+                    <a class="btn btn-default js-cancel" aria-hidden="true" data-dismiss="modal">关闭</a>
+                </div>
+            </div>
+        </div>
+    </div>
+
+</div>
+<script>
+    //驳回理由查看
+    $('.rejectdis').click(function(){
+        var reason = $(this).attr('reason');
+        $('#remark').value(reason);
+        popwin = $('#modal-module-gift22').modal();
+    });
+</script>
+{php include wl_template('common/footer');}

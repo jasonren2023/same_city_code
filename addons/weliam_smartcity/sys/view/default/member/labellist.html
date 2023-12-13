@@ -1,0 +1,165 @@
+{php include wl_template('common/header');}
+<ul class="nav nav-tabs">
+	<li class="active"><a href="javascript:;">标签列表</a></li>
+</ul>
+<div class="app-content">
+	<div class="app-filter">
+		<div class="filter-action">
+			<span class="btn btn-primary" id="addCate"><i class="fa fa-plus"></i> 新建标签</span>
+		</div>
+		<div class="filter-list">
+			<form action="./index.php" method="get">
+				<input type="hidden" name="c" value="site" />
+	            <input type="hidden" name="a" value="entry" />
+	            <input type="hidden" name="m" value="{MODULE_NAME}" />
+				<input type="hidden" name="p" value="member" />
+				<input type="hidden" name="ac" value="userlabel" />
+				<input type="hidden" name="do" value="labellist" />
+				<div class="form-group">
+					<label class="col-sm-2 control-label">关键字</label>
+                    <div class="col-sm-9">
+                        <input type="text" name="keyword" class="form-control" value="{$_GPC['keyword']}"  placeholder="请输入关键字"/>
+                    </div>
+				</div>
+				<div class="form-group">
+					<label class="col-sm-2 control-label"></label>
+					<div class="col-sm-9">
+						<button class="btn btn-primary">筛选</button>
+						<a class="btn btn-primary"  href="{php echo web_url('member/userlabel/sendModal')}">消息推送</a>
+					</div>
+				</div>
+			</form>
+		</div>
+	</div>
+	<div class="app-table-list">
+		<div class="table-responsive">
+			<table class="table table-hover table-bordered">
+				<thead class="navbar-inner">
+				<tr>
+					<th style="width: 50px;">ID</th>
+					<th style="width: 120px;">标签名称(点击编辑)</th>
+					<th style="width: 50px;">排序(点击编辑)</th>
+					<th style="width: 50px;">状态(点击编辑)</th>
+					<th style="width: 50px;text-align: center;">标签用户</th>
+					<th style="width: 50px;text-align: center;">下单人次</th>
+					<th style="width: 80px">操作</th>
+				</tr>
+				</thead>
+				<tbody>
+				{loop $list $item}
+				<tr>
+					<td>{$item['id']}</td>
+					<td>
+						<a href='javascript:;' data-toggle='ajaxEdit' data-href="{php echo web_url('member/userlabel/changelabel',array('type'=>1,'id'=>$item['id']))}">
+							{$item['name']}
+						</a>
+					</td>
+					<td>
+						<a href='javascript:;' data-toggle='ajaxEdit' data-href="{php echo web_url('member/userlabel/changelabel',array('type'=>2,'id'=>$item['id']))}">
+							{$item['sort']}
+						</a>
+					</td>
+					<td>
+					<span class="change">
+						<span style="float: left;" class='label {if $item['status']==1}label label-primary {else}label-default{/if}'
+							data-toggle='ajaxSwitch'
+							data-switch-value='{$item['status']}'
+							data-switch-value0='0|禁用|label label-default|{php echo web_url('member/userlabel/changelabel',array('type'=>3,'value'=>1,'id'=>$item['id']))}'
+							data-switch-value1='1|启用|label label-primary|{php echo web_url('member/userlabel/changelabel',array('type'=>3,'value'=>0,'id'=>$item['id']))}'>
+							{if $item['status']==1}启用{else}禁用{/if}
+						</span>
+					</span>
+					</td>
+					<td style="text-align: center"><label class='label label-warning'>{$item['usernum']}</label></td>
+					<td style="text-align: center"><label class='label label-success'>{$item['timesnum']}</label></td>
+					<td style="position: relative;">
+						<a class="btn btn-sm btn-primary" href="{php echo web_url('member/userlabel/sendModal', array('id' => $item['id']))}">消息推送</a>
+						<a class="btn btn-sm btn-danger" data-toggle="ajaxRemove" href="{php echo web_url('member/userlabel/changelabel', array('type'=>4,'id'=>$item['id']))}" data-confirm="删除标签会删除所有对应的标签记录,确认删除此标签？">删除</a>
+					</td>
+				</tr>
+				{/loop}
+				</tbody>
+			</table>
+		</div>
+		<div class="app-table-foot clearfix">
+			<div class="pull-left">
+				
+			</div>
+			<div class="pull-right">
+				{$pager}
+			</div>
+		</div>
+	</div>
+	<div class="modal fade" id="addCateModal" aria-hidden="false">
+		<div class="modal-dialog">
+			<div class="modal-content">
+				<div class="modal-header">
+					<button data-dismiss="modal" class="close" type="button">×</button>
+					<h4 class="modal-title">新建标签</h4>
+				</div>
+				<div class="modal-body form-horizontal">
+					<div class="form-group">
+						<div class="col-sm-2 control-label">标签名称</div>
+						<div class="col-sm-9">
+							<input class="form-control" placeholder="请输入标签名称" id="saveTempName" value="" />
+						</div>
+					</div>
+					<div class="form-group">
+						<div class="col-sm-2 control-label">标签排序</div>
+						<div class="col-sm-9">
+							<input class="form-control" type="tel" placeholder="请输入标签排序" id="saveSort" value="" />
+						</div>
+					</div>
+					<div class="form-group">
+						<div class="col-sm-2 control-label">标签状态</div>
+						<div class="col-sm-9">
+							<label class="radio-inline"><input type="radio" value="1" name="saveStatus" checked="checked">启用</label>
+							<label class="radio-inline"><input type="radio" value="0" name="saveStatus">禁用</label>
+						</div>
+					</div>
+				</div>
+				<div class="modal-footer">
+					<div class="btn btn-primary" id="saveCate">保存</div>
+				</div>
+			</div>
+		</div>
+	</div>
+</div>
+<script type="text/javascript">
+    $("#addCate").unbind('click').click(function () {
+        $("#addCateModal").modal();
+        $("#saveCate").unbind('click').click(function () {
+            var status = $(this).data('status');
+            if(status) {
+                tip.msgbox.err("正在保存，请稍候。");
+                return;
+            }
+            var name = $.trim($("#saveTempName").val());
+            if(!name) {
+                tip.msgbox.err("请填写标签名称！");
+                $("#saveTempName").focus();
+                return;
+            }
+            var sort = $.trim($("#saveSort").val());
+            var status = $('input[name="saveStatus"]:checked').val();
+            $(this).data('status',1).text('保存中');
+            $.post("{php echo web_url('member/userlabel/add')}", {
+                name: name,
+                sort: sort,
+                status: status
+            }, function (ret) {
+                if(ret.status==0){
+                    tip.msgbox.err(ret.result.message);
+                }else{
+                    tip.msgbox.suc("保存成功！");
+                }
+                $("#addCateModal .close").trigger('click');
+                setTimeout(function () {
+                    location.reload();
+                }, 500);
+            }, 'json');
+        });
+    });
+
+</script>
+{php include wl_template('common/footer');}

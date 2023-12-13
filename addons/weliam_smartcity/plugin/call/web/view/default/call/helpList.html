@@ -1,0 +1,102 @@
+{php include wl_template('common/header');}
+<style type='text/css'>
+    .order-rank img{width:16px; height:16px;}
+    .js-remark,.js-admin-remark{word-break:break-all; overflow:hidden; background: #FDEEEE;color: #ED5050;padding: 5px 10px;}
+    td.goods-info{position:relative; padding-left:60px;height: 60px;}
+    .goods-info .img{position:absolute;top:50%; margin-top:-25px; background: url({IMAGE_LOADING}) center center no-repeat; width:50px;height:50px; }
+    .goods-info span {white-space: nowrap;overflow: hidden;text-overflow: ellipsis;display: block;text-align: left;}
+    .status-text{cursor:pointer;}
+</style>
+<ul class="nav nav-tabs">
+    <li class="active"><a href="javascript:;">助力记录</a></li>
+</ul>
+<div class="app-content">
+    <div class="app-filter">
+        <div class="filter-list">
+            <form class="form-horizontal" action="{php echo web_url('call/call/helpList')}" method="post">
+                <div class="form-group form-inline">
+                    <label class="col-sm-2 control-label">筛选条件</label>
+                    <div class="col-sm-9">
+                        <select name="keywordtype" class="form-control">
+                            <option value="1" {if $_GPC['keywordtype']==1}selected="selected"{/if}>助力人昵称</option>
+                            <option value="2" {if $_GPC['keywordtype']==2}selected="selected"{/if}>助力人电话</option>
+                            <option value="3" {if $_GPC['keywordtype']==3}selected="selected"{/if}>助力人mid</option>
+                            <option value="4" {if $_GPC['keywordtype']==4}selected="selected"{/if}>活动标题</option>
+                            <option value="5" {if $_GPC['keywordtype']==5}selected="selected"{/if}>活动id</option>
+                            <option value="6" {if $_GPC['keywordtype']==6}selected="selected"{/if}>参与记录id</option>
+
+                        </select>
+                        <input type="text" name="keyword" class="form-control" value="{$_GPC['keyword']}"  placeholder="请输入关键字"/>
+                    </div>
+                </div>
+                <div class="form-group">
+                    <label class="col-sm-2 control-label">助力时间</label>
+                    <div class="col-md-3">
+                        <select name="timetype" class="form-control">
+                            <option value="">时间筛选</option>
+                            <option value="0" {if $_GPC['timetype']==0}selected="selected"{/if}>关闭</option>
+                            <option value="1" {if $_GPC['timetype']==1}selected="selected"{/if}>开启</option>
+                        </select>
+                    </div>
+                    <div class="col-md-2">
+                        {php echo tpl_select_time_info('time_limit', array('starttime' => date('Y-m-d H:i',$starttime), 'endtime' => date('Y-m-d H:i', $endtime)));}
+                    </div>
+                </div>
+                <div class="form-group">
+                    <div class="col-sm-2 control-label"></div>
+                    <div class="col-sm-6">
+                        <div class="input-group">
+                            <button class="btn btn-primary" type="submit" >搜索</button>
+                        </div>
+                    </div>
+                </div>
+            </form>
+        </div>
+    </div>
+    <div class="app-table-list">
+        <div id="list" class="panel tab-pane panel-default">
+            <div class="table-responsive">
+                <table class="table table-hover table-bordered">
+                    <thead>
+                    <tr>
+                        <th class="text-center" width="10%">参与记录ID</th>
+                        <th class="text-center" width="25%">活动信息</th>
+                        <th class="text-center" width="25%">发起人信息</th>
+                        <th class="text-center" width="25%">助力人信息</th>
+                        <th class="text-center" width="15%">助力时间</th>
+                    </tr>
+                    </thead>
+                    <tbody>
+                    {loop $list $k $v}
+                    <tr class="text-center">
+                        <td>{$v['list_id']}</td>
+                        <td>{$v['title']}(ID:{$v['call_id']})</td>
+                        <td class="goods-info line-feed">
+                            <div class="img"><img class="scrollLoading" src="{IMAGE_PIXEL}" data-url="{php echo tomedia($v['launchavatar'])}" height="50" width="50" onerror="this.src='{IMAGE_NOPIC_SMALL}'" ></div>
+                            <div class="title" style="padding-left: 60px;">
+                                <span>{$v['launchname']}</span>
+                                <span>{$v['launchmobile']}</span>
+                                <span>MID:{$v['launchmid']}</span>
+                            </div>
+                        </td>
+                        <td class="goods-info line-feed">
+                            <div class="img"><img class="scrollLoading" src="{IMAGE_PIXEL}" data-url="{php echo tomedia($v['avatar'])}" height="50" width="50" onerror="this.src='{IMAGE_NOPIC_SMALL}'" ></div>
+                            <div class="title" style="padding-left: 60px;">
+                                <span>{$v['nickname']}</span>
+                                <span>{$v['mobile']}</span>
+                                <span>MID:{$v['mid']}</span>
+                            </div>
+                        </td>
+                        <td>
+                            {$v['hit_time']}
+                        </td>
+                    </tr>
+                    {/loop}
+                    </tbody>
+                </table>
+            </div>
+        </div>
+        {$pager}
+    </div>
+</div>
+{php include wl_template('common/footer');}

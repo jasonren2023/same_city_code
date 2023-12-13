@@ -1,0 +1,8 @@
+<div class="input-group data-item" style="margin-top: 10px;">
+    <span class="input-group-addon">链接名称</span>
+    <input type="text" name="urlname[]" class="form-control" value="{$data['name']}">
+    <span class="input-group-addon">链接地址</span>
+    <input type="text" name="url[]" class="form-control" value="{$data['url']}" readonly id="link{$id}">
+    <span data-input="#link{$id}" data-toggle="selectUrl" class="input-group-addon btn btn-default">选择链接</span>
+    <span onclick="removes(this)" class="input-group-addon btn btn-default data-item-delete"><i class="fa fa-remove"></i> 删除</span>
+</div>

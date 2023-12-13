@@ -1,0 +1,69 @@
+<!--------------------------  头条组件群  ----------------------------------->
+<!-- 风格一 -->
+<script type="text/html" id="tpl_show_headline">
+    <div class="drag" data-itemid="<%itemid%>" group_name="<%group_name%>" group_key="<%group_key%>" data-id="<%group_name%>">
+        <div class="fui-headline" style="margin-bottom: <%style.marginBottom%>px;">
+            <%each data as item%>
+            <div class="hdline-c">
+                <div class="goodstop-i" v-for="(item, key) in datas.headlineList" :key="key" style="background-color: <%style.bgColor%>;" >
+                    <div class="a" :url="'/pagesHeadline/headlinedetail/index?i='+item.id" hover-class="none">
+                        <div class="h1"><%item.title%></div>
+                        <div class="goodstop-i-t">
+                            <div class="goodstop-i-t-tag">
+                                <div class="i"><%item.one_name%></div><div class="i"><%item.two_name%></div>
+                            </div>
+                            <img src="<%imgsrc item.display_img%>" onerror="this.src='../addons/{MODULE_NAME}/web/resource/images/default.png';"/>
+                        </div>
+                        <div class="goodstop-i-c">
+                            <div class="h2"><%item.summary%></div>
+                            <div class="p">
+                                <div class="span"><div class="i"><img src="<%imgsrc item.author_img%>" onerror="this.src='../addons/{MODULE_NAME}/web/resource/images/default.png';"/></div><div class="b"><%item.author%></div></div>
+                                <div class="em">阅读&nbsp;<%item.browse%></div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <%/each%>
+        </div>
+    </div>
+</script>
+<!-- 风格二 -->
+<script type="text/html" id="tpl_show_headline2">
+    <div class="drag" data-itemid="<%itemid%>" group_name="<%group_name%>" group_key="<%group_key%>" data-id="<%group_name%>">
+        <div class="fui-headline2">
+            <div class="haodiantoutiao" style="background-color: <%style.bgColor%>;margin-bottom: <%style.marginBottom%>px;">
+                <div class="hdtt-t">
+                    <div class="hdtt-t-l">
+                        <div class="h1"><%params.title%></div>
+                        <div class="p"><%params.detailed%></div>
+                    </div>
+                    <div class="hdtt-t-r">
+                        <div class="span"><div class="em">1</div>/2</div>
+                    </div>
+                </div>
+                <div class="hdtt-c">
+                    <div class="goodstop-i">
+                        <%each data as val%>
+                        <div class="goodstop-i-a">
+                            <div class="goodstop-i-t">
+                                <img src="<%imgsrc val.display_img%>" onerror="this.src='../addons/{MODULE_NAME}/web/resource/images/default.png';"/>
+                            </div>
+                            <div class="goodstop-i-c">
+                                <div class="h1"><%val.title%></div>
+                                <div class="h2"><%val.summary%></div>
+                                <div class="p">
+                                    <div class="span">
+                                        <div class="a song"><%val.one_name%> - <%val.two_name%></div>
+                                    </div>
+                                    <div class="em">阅读&nbsp;<%val.browse%></div>
+                                </div>
+                            </div>
+                        </div>
+                        <%/each%>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</script>

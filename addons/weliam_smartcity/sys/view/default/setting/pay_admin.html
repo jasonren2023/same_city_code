@@ -1,0 +1,48 @@
+{php include wl_template('common/header');}
+<ul class="nav nav-tabs">
+    <li class="active"><a href="#tab_basic">支付管理</a></li>
+</ul>
+<div class="app-content">
+    <div class="app-filter">
+        <div class="filter-action">
+            <a href="{php echo web_url('setting/pay/editInfo')}" class="btn btn-primary">添加支付方式</a>
+        </div>
+    </div>
+    <div class="app-table-list">
+        <div class="table-responsive">
+            <table class="table table-bordered">
+                <thead>
+                <tr>
+                    <th style="text-align: center">支付名称</th>
+                    <th style="text-align: center">支付类型</th>
+                    <th style="text-align: center">支付状态</th>
+                    <th style="text-align: center">提交时间</th>
+                    <th style="text-align: center">操作</th>
+                </tr>
+                </thead>
+                <tbody>
+                    {loop $list $item}
+                        <tr style="text-align: center">
+                            <td>{$item['name']}</td>
+                            <td>{if $item['type']==1}微信支付{else if $item['type']==2}支付宝支付{else if $item['type']==3}银联云收单{/if}</td>
+                            <td>
+                                {if in_array($item['id'],$data)}
+                                    <span class="label label-success">使用中</span>
+                                {else}
+                                    <span class="label label-warning">未使用</span>
+                                {/if}
+                            </td>
+                            <td>{$item['create_time']}</td>
+                            <td>
+                                <a class='btn btn-primary btn-sm' href="{php echo web_url('setting/pay/editInfo', array('id' => $item['id']))}">编辑</a>
+                                <a class='btn btn-danger btn-sm' href="{php echo web_url('setting/pay/delete', array('id' => $item['id']))}"
+                                   data-toggle='ajaxRemove' data-confirm="确认删除此支付方式吗？">删除</a>
+                            </td>
+                        </tr>
+                    {/loop}
+                </tbody>
+            </table>
+        </div>
+    </div>
+</div>
+{php include wl_template('common/footer');}

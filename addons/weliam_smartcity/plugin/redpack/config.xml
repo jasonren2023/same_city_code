@@ -1,0 +1,40 @@
+<?xml version="1.0" encoding="utf-8"?>
+<manifest>
+	<application>
+		<name><![CDATA[线上红包]]></name>
+		<identifie><![CDATA[redpack]]></identifie>
+		<version><![CDATA[1.0.0]]></version>
+		<type><![CDATA[interact]]></type>
+		<description><![CDATA[红包模块集成多种红包玩儿法，首选营销方式。]]></description>
+		<author><![CDATA[微连科技]]></author>
+		<url><![CDATA[http://www.weliam.cn/]]></url>
+	</application>
+	<setting>
+		<agent embed="true" />
+		<system embed="true" />
+		<task embed="false" />
+	</setting>
+	<agentmenu>
+		<menu title="红包" font="fa-inbox">
+			<entry title="红包管理" ac="redpack" do="pack_lists" actions='["do",["pack_lists","pack_edit"]]' iscover="true"/>
+			<entry title="领取记录" ac="redpack" do="record_lists" actions='["do",["record_lists"]]' />
+		</menu>
+		<menu title="活动" font="fa-inbox">
+			<entry title="新人红包" ac="redpack" do="new_pack" actions='["do",["new_pack"]]' />
+			<entry title="节日红包" ac="redpack" do="festival_pack" actions='["do",["festival_pack","festival_pack_edit"]]' />
+		</menu>
+	</agentmenu>
+	<systemmenu>
+		<menu title="红包" font="fa-inbox">
+			<entry title="红包管理" ac="redpack" do="pack_lists" actions='["do",["pack_lists","pack_edit"]]' iscover="true"/>
+			<entry title="领取记录" ac="redpack" do="record_lists" actions='["do",["record_lists"]]' />
+		</menu>
+		<menu title="活动" font="fa-inbox">
+			<entry title="新人红包" ac="redpack" do="new_pack" actions='["do",["new_pack"]]' />
+			<entry title="节日红包" ac="redpack" do="festival_pack" actions='["do",["festival_pack","festival_pack_edit"]]' />
+		</menu>
+		<menu title="设置" font="fa-inbox">
+			<entry title="基本设置" ac="redpack" do="set" actions='["do",["set"]]' />
+		</menu>
+	</systemmenu>
+</manifest>

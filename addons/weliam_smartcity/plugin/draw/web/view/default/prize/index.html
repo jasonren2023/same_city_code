@@ -1,0 +1,187 @@
+{php include wl_template('common/header');}
+<style>
+    .user .image{
+        display: inline-block;
+    }
+    .user .image img{
+        width: 50px;
+        height: 50px;
+        border-radius: 50%;
+    }
+    .user .title{
+        display: inline-block;
+    }
+    .goods .image{
+        display: inline-block;
+        float: left;
+    }
+    .goods .image img{
+        width: 50px;
+        height: 50px;
+    }
+    .goods .title{
+        display: inline-block;
+        width: calc(100% - 80px);
+        height: 50px;
+        line-height: 25px;
+        text-align: left;
+    }
+    .cored{
+        color: orangered;
+        margin-right: 20px;
+    }
+</style>
+<ul class="nav nav-tabs" id="myTab">
+    <li class="active"><a href="javascript:;">奖品列表</a></li>
+</ul>
+<!-- 直播间信息列表 -->
+<div class="app-content">
+    <!-- 顶部搜索内容 -->
+    <div class="app-filter">
+        <div class="filter-action"></div>
+        <div class="filter-list">
+            <div class="alert alert-warning">
+                注意：默认获取当前月的信息列表，如需要其他时间段的信息请自行筛选！<br />
+                注意：删除中奖信息后不退还已领取奖品，但是会减少已抽奖次数，如果存在免费抽奖次数则会增加对应的免费抽奖次数！<br />
+                抽奖数(总)：<span class="cored">{$statisticsInfo['total_draw']}</span>
+                中奖数(总)：<span class="cored">{$statisticsInfo['total_prize']}</span>
+                抽奖数(当月)：<span class="cored">{$statisticsInfo['month_total_draw']}</span>
+                中奖数(当月)：<span class="cored">{$statisticsInfo['month_total_prize']}</span>
+                抽奖数(今天)：<span class="cored">{$statisticsInfo['day_total_draw']}</span>
+                中奖数(今天)：<span class="cored">{$statisticsInfo['day_total_prize']}</span>
+            </div>
+            <form action="" method="get" class="form-horizontal" role="form" id="form1">
+                <input type="hidden" name="c" value="site" />
+                <input type="hidden" name="a" value="entry" />
+                <input type="hidden" name="m" value="{MODULE_NAME}" />
+                <input type="hidden" name="p" value="draw" />
+                <input type="hidden" name="ac" value="prize" />
+                <input type="hidden" name="do" value="prizeIndex" />
+                <div class="form-group">
+                    <div class="col-sm-2 control-label">奖品名称</div>
+                    <div class="col-sm-9">
+                        <input type="text" class="form-control" name="title" value="{$title}" placeholder="请输入奖品名称...">
+                    </div>
+                </div>
+                <div class="form-group">
+                    <div class="col-sm-2 control-label">用户昵称</div>
+                    <div class="col-sm-9">
+                        <input type="text" class="form-control" name="nickname" value="{$nickname}" placeholder="请输入用户昵称...">
+                    </div>
+                </div>
+                <div class="form-group">
+                    <div class="col-sm-2 control-label">活动名称</div>
+                    <div class="col-sm-9">
+                        <input type="text" class="form-control" name="name" value="{$name}" placeholder="请输入活动名称...">
+                    </div>
+                </div>
+                <div class="form-group">
+                    <label class="col-sm-2 control-label">奖品类型</label>
+                    <div class="col-sm-9">
+                        <select name="type" class="form-control">
+                            <option value="0" {if $type == 0}selected{/if}>全部</option>
+                            <option value="1" {if $type == 1}selected{/if}>现金红包</option>
+                            <option value="2" {if $type == 2}selected{/if}>线上红包</option>
+                            <option value="3" {if $type == 3}selected{/if}>积分</option>
+                            <option value="4" {if $type == 4}selected{/if}>激活码</option>
+                            <option value="5" {if $type == 5}selected{/if}>商品</option>
+                        </select>
+                    </div>
+                </div>
+                <div class="form-group">
+                    <label class="col-sm-2 control-label">是否领取</label>
+                    <div class="col-sm-9">
+                        <select name="is_get" class="form-control">
+                            <option value="0" {if $isGet == 0}selected{/if}>全部</option>
+                            <option value="1" {if $isGet == 1}selected{/if}>未领取</option>
+                            <option value="2" {if $isGet == 2}selected{/if}>已领取</option>
+                        </select>
+                    </div>
+                </div>
+                <div class="form-group">
+                    <label class="col-sm-2 control-label">抽奖时间</label>
+                    <div class="col-sm-9">
+                        {php echo tpl_select_time_info('draw_times', [ 'starttime' => date('Y-m-d H:i',$startTime), 'endtime' => date("Y-m-d H:i",$endTime)]);}
+                    </div>
+                </div>
+                <div class="form-group">
+                    <div class="col-sm-2 control-label"></div>
+                    <div class="col-sm-9">
+                        <button class="btn btn-primary" type="submit">搜索</button>
+                        <button class="btn btn-warning" type="submit" name="export" value="1">导出</button>
+                        <a href="{php echo web_url('draw/prize/prizeIndex')}" class="btn btn-danger">清除</a>
+                    </div>
+                </div>
+            </form>
+        </div>
+    </div>
+    <!-- 表格内容 -->
+    <div class="app-table-list">
+        <div class="table-responsive order-list">
+            <table class="table table-hover">
+                <thead>
+                    <tr>
+                        <th class="text-center">
+                            <input type="checkbox" name="checkall" value="" id="checkall" class="checkboxall" onclick="var ck = this.checked; $(':checkbox').each(function(){this.checked = ck});"/>
+                        </th>
+                        <th class="text-center">活动信息</th>
+                        <th class="text-center">用户信息</th>
+                        <th class="text-center">中奖信息</th>
+                        <th class="text-center">抽奖时间</th>
+                        <th class="text-center">是否领取</th>
+                        <th class="text-center">操作</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    {loop $list $vo}
+                        <tr class="text-center">
+                            <td><center><input type="checkbox" name="items[]" value="{$vo['id']}" class="checkbox" /></center></td>
+                            <td>{$vo['draw_title']}</td>
+                            <td class="user">
+                                <div class="image">
+                                    <img src="{$vo['avatar']}" />
+                                </div>
+                                <div class="title">{$vo['nickname']}</div>
+                            </td>
+                            <td class="goods">
+                                {if $vo['draw_goods_id'] > 0}
+                                    <div class="image">
+                                        <img src="{$vo['image']}" />
+                                    </div>
+                                    <div class="title">{$vo['title']}</div>
+                                {else}
+                                    <label class="label label-danger">未中奖</label>
+                                {/if}
+                            </td>
+                            <td>{$vo['create_time']}</td>
+                            <td>
+                                {if $vo['is_get'] == 1}
+                                    <label class="label label-danger">未领取</label>
+                                {else}
+                                    <label class="label label-primary">已领取</label>
+                                {/if}
+                            </td>
+                            <td>
+                                <a class="btn btn-sm btn-danger"
+                                   data-toggle="ajaxRemove"
+                                   href="{php echo web_url('draw/prize/delete',['ids'=>$vo['id']]);}"
+                                   data-confirm="确认删除当前抽奖记录？删除后用户中奖奖品可能出现错误。请与用户沟通后删除否则后果自负!"
+                                >删除</a>
+                            </td>
+                        </tr>
+                    {/loop}
+                </tbody>
+            </table>
+        </div>
+        <div class="app-table-foot clearfix">
+            <div class="pull-left">
+                <button class="btn btn-default btn-sm" type="button" onclick="location.reload();"><i class="fa fa-refresh"></i></button>
+                <button class="btn btn-default" type="button" data-toggle='batch-remove'
+                        data-confirm="确定删除当前选择的奖品？"
+                        data-href="{php echo web_url('draw/prize/delete')}">批量删除</button>
+            </div>
+            <div class="pull-right">{$pager}</div>
+        </div>
+    </div>
+</div>
+{php include wl_template('common/footer');}

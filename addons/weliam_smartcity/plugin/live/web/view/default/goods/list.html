@@ -1,0 +1,163 @@
+{php include wl_template('common/header');}
+<meta name="referrer" content="never">
+<div class="app-content">
+    <ul class="nav nav-tabs">
+        <li {if $status == '0'} class="active" {/if}><a href="{php echo web_url('live/goods/goodsList', array('status'=>0));}">未审核</a></li>
+        <li {if $status == '1'} class="active" {/if}><a href="{php echo web_url('live/goods/goodsList', array('status'=>1));}">审核中</a></li>
+        <li {if $status == '2'} class="active" {/if}><a href="{php echo web_url('live/goods/goodsList', array('status'=>2));}">通过(使用中)</a></li>
+        <li {if $status == '3'} class="active" {/if}><a href="{php echo web_url('live/goods/goodsList', array('status'=>3));}">驳回(未通过)</a></li>
+    </ul>
+    <div class="app-filter">
+        <div class="alert alert-warning">
+            注意事项：<br />
+            1、商品列表每天只能查看10000次<br>
+            2、商品信息每天限制1000次(信息同步每50条消耗一次，不足50条也会消耗一次。每次进入商品编辑页面消耗一次)<br>
+            3、每天最多只能进行500次商品添加请求(重新提交也会消耗一次)<br>
+            4、每天最多只能进行1000次商品删除<br>
+            5、审核通过的商品仅允许修改价格类型与价格，未审核的商品允许修改所有信息，其他状态的商品不允许修改<br>
+            6、对商品进行添加、删除、重新审核、修改信息操作后请使用信息同步，否则可能数据和微信公众号后台不一致<br>
+            7、直播间请勿在微信公众号后台进行删除，否则可能导致平台直播间数据和微信公众号后台不一致<br>
+            8、同步商品信息时，如果商品在本平台不存在则不会同步且不会显示在本平台<br>
+        </div>
+        <div class="filter-action">
+            <a href="{php echo web_url('live/goods/add');}" class="btn btn-primary">发布商品</a>
+            <a href="javascript:;" id="infoSynchronization" class="btn btn-info">信息同步</a>
+        </div>
+    </div>
+    <div class="app-table-list">
+        <div class="table-responsive order-list">
+            <table class="table table-hover">
+                <thead>
+                    <tr>
+                        <th class="text-center">商品ID</th>
+                        <th class="text-center">所属代理</th>
+                        <th class="text-center">商品图片</th>
+                        <th class="text-center">商品名称</th>
+                        <th class="text-center">价格</th>
+                        <th class="text-center">操作</th>
+                    </tr>
+                </thead>
+                <tbody>
+                {loop $list $val}
+                    <tr class="text-center">
+                        <td>{$val['goods_id']}</td>
+                        <td>{$val['agent_name']}</td>
+                        <td>
+                            <img class="scrollLoading" src="{$val['goods_img']}" onerror="this.src='{IMAGE_NOPIC_SMALL}'" height="50" width="50"/>
+                        </td>
+                        <td>{$val['title']}</td>
+                        <td>
+                            <!-- 价格类型，1：一口价,2：价格区间,3：显示折扣价 -->
+                            {if $val['price_type'] == 1}
+                                <label class="label label-success">售价：{$val['price']}</label>
+                            {elseif $val['price_type'] == 2}
+                                <label class="label label-info">售价：{$val['price']} ~ {$val['price2']}</label>
+                            {else}
+                                <label class="label label-primary">原价：{$val['price']}</label><br />
+                                <label class="label label-danger" style="display: inline-block;margin-top: 5px;">现价：{$val['price2']}</label>
+                            {/if}
+                        </td>
+                        <td>
+                            <!--商品来源(thirdPartyTag)，1、2：表示是为 API 添加商品，否则是直播控制台添加的商品-->
+                            {if in_array($val['third_party_tag'],[1,2])}
+                                <!--商品状态，0：未审核。1：审核中，2：审核通过，3：审核驳回-->
+                                {if $status == 0}
+                                    <a href="javascript:;" class="btn btn-sm btn-success reSubmitButton" data-id="{$val['goods_id']}">重新提交</a>
+                                    <a href="{php echo web_url('live/goods/editGoods',['goods_id'=>$val['goods_id'],'status'=>$status]);}" class="btn btn-sm btn-info">编辑商品</a>
+                                {elseif  $status == 1}
+                                    <a href="javascript:;" class="btn btn-sm btn-info withdrawButton" data-id="{$val['goods_id']}">撤回审核</a>
+                                {elseif  $status == 2}
+                                    <a href="{php echo web_url('live/goods/editGoods',['goods_id'=>$val['goods_id'],'status'=>$status]);}" class="btn btn-sm btn-info">编辑商品</a>
+                                {elseif  $status == 3}
+                                <!--审核驳回-->
+                                {/if}
+                                <a href="javascript:;" class="btn btn-sm btn-danger deleteGoodsButton" data-id="{$val['goods_id']}">删除商品</a>
+                            {/if}
+                        </td>
+                    </tr>
+                {/loop}
+                </tbody>
+            </table>
+        </div>
+        <div class="app-table-foot clearfix">
+            <div class="pull-left"></div>
+            <div class="pull-right">{$pager}</div>
+        </div>
+    </div>
+</div>
+<script>
+    /**
+     * 请求撤回正在审核中的商品
+     */
+    $(".withdrawButton").on('click',function () {
+        //基本参数信息获取
+        let id = $(this).data('id');
+        //请求进行撤回操作
+        $.post("{php echo web_url('live/goods/cancelAdd');}", {
+            id: id,
+        }, function(res) {
+            tip.alert(res.message,function () {
+                history.go(0);
+            });
+        }, 'json');
+    });
+    /**
+     * 重新提交商品进行审核
+     */
+    $(".reSubmitButton").on('click',function () {
+        //基本参数信息获取
+        let id = $(this).data('id');
+        //请求进行撤回操作
+        $.post("{php echo web_url('live/goods/reSubmit');}", {
+            id: id,
+        }, function(res) {
+            tip.alert(res.message,function () {
+                history.go(0);
+            });
+        }, 'json');
+    });
+    /**
+     * 删除直播商品
+     */
+    $(".deleteGoodsButton").on('click',function () {
+        //基本参数信息获取
+        let id = $(this).data('id');
+        //请求进行撤回操作
+        $.post("{php echo web_url('live/goods/deleteLiveGoods');}", {
+            id: id,
+        }, function(res) {
+            tip.alert(res.message,function () {
+                history.go(0);
+            });
+        }, 'json');
+    });
+    /**
+     * 点击进行信息同步
+     */
+    $("#infoSynchronization").on('click',function () {
+        $('#page-loading').show();
+        let synchronizatio = function(page){
+            $.post("{php echo web_url('live/goods/infoSynchronization')}",{page:page},function (res) {
+                //判断是否成功
+                if(res.errno == 1){
+                    page++;
+                    if(res.data['total_page'] >= page){
+                        //总页数大于等于 下一页则继续进行信息同步
+                        synchronizatio(page);
+                    }else{
+                        //信息同步完成
+                        tip.alert("同步完成",function () {
+                            history.go(0);
+                        });
+                    }
+                }else{
+                    tip.alert(res.message,function () {
+                        history.go(0);
+                    });
+                }
+            },'json');
+        }
+        synchronizatio(1);
+    });
+</script>
+{php include wl_template('common/footer');}

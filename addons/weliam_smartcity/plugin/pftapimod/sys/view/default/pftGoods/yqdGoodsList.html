@@ -1,0 +1,118 @@
+{php include wl_template('common/header');}
+<style type='text/css'>
+    .order-rank img{width:16px; height:16px;}
+    .js-remark,.js-admin-remark{word-break:break-all; overflow:hidden; background: #FDEEEE;color: #ED5050;padding: 5px 10px;}
+    td.goods-info{position:relative; padding-left:60px;}
+    .goods-info .img{position:absolute;top:50%; margin-top:-25px; background: url({IMAGE_LOADING}) center center no-repeat; width:50px;height:50px; }
+    .goods-info span {white-space: nowrap;overflow: hidden;text-overflow: ellipsis;display: block;}
+    .status-text{cursor:pointer;}
+</style>
+<ul class="nav nav-tabs">
+    <li class="active"><a href="#">亿奇达商品列表</a></li>
+</ul>
+<div class="app-content" >
+    <div class="app-filter">
+        <div class="app-table-list">
+            {if empty($list['error'])}
+            <div class="panel-body table-responsive collapse in order-list" id="order-template-item-4" style="padding: 0;padding-bottom:65px;">
+                <table class="table table-hover table-bordered">
+                    <thead style="background-color: #FFFFFF;">
+                    <tr>
+                        <th style="width:30px;text-align:center;">产品id/规格id</th>
+                        <th style="width:120px;">商品</th>
+                        <th style="width:100px; text-align:center;">面值/结算价</th>
+                        <th style="width:60px; text-align:center;">商品类型</th>
+                        <th style="width:100px; text-align:center;">操作</th>
+                    </tr>
+                    </thead>
+                    <tbody>
+                    {loop $list $item}
+                    <tr>
+                        <td class="text-center">{$item['mainId']}/{$item['branchId']}</td>
+                        <td class="goods-info line-feed">
+                            <div class="img"><img class="scrollLoading" src="{IMAGE_PIXEL}" data-url="{$item['MainImg']}" height="50" width="50" onerror="this.src='{IMAGE_NOPIC_SMALL}'" ></div>
+                            <div class="title" style="padding-left: 60px;">
+                                <span>{$item['name']}</span>
+                            </div>
+                        </td>
+                        <td class="line-feed" style="width:150px;padding-left: 5px;">
+                            <div class="title" style="text-align: center;">
+                                <span class="label label-success">￥{$item['guidePrice']}</span>
+                                <span class="label label-warning">￥{$item['price']}</span>
+                            </div>
+                        </td>
+                        <td class="text-center" style="width:60px;">
+                            {$item['catalogName']}
+                        </td>
+                        <td class="text-center">
+                            <div class="btn-group">
+<!--                                <a class="btn btn-success"  data-toggle="ajaxModal" href="{php echo web_url('pftapimod/pftGoods/importYqdModel', array('id'=>$item['mainId']))}">导入为抢购商品</a>-->
+                                    <button type="button" class="btn btn-warning dropdown-toggle" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">导入系统</button>
+                                    <ul class="dropdown-menu" >
+                                        <li><a href="javascript:;" onclick="importGoods({$item['mainId']},'rush');" style="margin: 0;">抢购商品</a></li>
+                                        <li><a href="javascript:;" onclick="importGoods({$item['mainId']},'groupon');" style="margin: 0;">团购商品</a></li>
+                                    </ul>
+                            </div>
+                        </td>
+                    </tr>
+                    {/loop}
+                    </tbody>
+                </table>
+            </div>
+            <div class="app-table-foot clearfix">
+                <div class="pull-left">
+
+                </div>
+                <div class="pull-right">
+                    {$pager}
+                </div>
+            </div>
+            {else}
+            <div class="no-result">
+                {if !empty($msg)}
+                <p>{$msg}</p>
+                {else}
+                <p>暂无商品数据，请到亿奇达平台添加。</p>
+                {/if}
+            </div>
+            {/if}
+        </div>
+    </div>
+</div>
+<script>
+    function importGoods(id,plugin){
+        var content = '';
+        if(plugin=='rush') content = '确认将此商品导入成为抢购商品？';
+        if(plugin=='groupon') content = '确认将此商品导入成为团购商品？';
+        layer.open({
+            title: [
+                '提示',
+                'background-color:#18A689; color:#fff;'
+            ]
+            ,anim: 'up'
+            ,content: content
+            ,btn: ['确认', '取消']
+            ,yes:function(index){
+                $('.layer-anim').remove();
+                //处理
+                $.post("{php echo web_url('pftapimod/pftGoods/importYqdGoods')}", { id : id , plugin:plugin}, function(data){
+                    if(!data.status){
+                        util.tips("操作成功！");
+                        if(plugin == 'rush'){
+                            location.href = "{php echo web_url('goodshouse/goodshouse/createactive',array('plugin' => 'rush'))}&id="+data.id;
+                        }else if(plugin == 'groupon'){
+                            location.href = "{php echo web_url('goodshouse/goodshouse/createactive',array('plugin' => 'groupon'))}&id="+data.id;
+                        }else if(plugin == 'fightgroup'){
+                            location.href = "{php echo web_url('goodshouse/goodshouse/createactive',array('plugin' => 'wlfightgroup'))}&id="+data.id;
+                        }
+                    }else{
+                        util.tips(data.result.message);
+                    };
+                    $('.layui-layer-shade').remove();
+                }, 'json');
+            }
+        });
+    }
+
+</script>
+{php include wl_template('common/footer');}

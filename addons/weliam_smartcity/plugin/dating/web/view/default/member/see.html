@@ -1,0 +1,530 @@
+{php include wl_template('common/header');}
+<script type="text/javascript" src="{URL_WEB_JS}diyarea.js"></script>
+<style>
+    #memberInfo .form-group{
+        margin-bottom: 10px!important;
+    }
+    #memberInfo .img-photo{
+        max-width: 150px;
+        max-height: 150px;
+        float:left;
+        margin:2px;
+    }
+    #memberInfo video{
+        height: 300px!important;
+        width: auto!important;
+        border: 1px solid #ddd;
+        padding: 5px;
+    }
+    .margin-r-5{
+        margin-right: 5px;
+    }
+</style>
+<ul class="nav nav-tabs" id="myTab">
+    <li class="active"><a href="#tab_basic">基础信息</a></li>
+    <li><a href="#tab_contact">联系方式</a></li>
+    <li><a href="#tab_requirement">{if $university}兴趣交友{else}择偶要求{/if}</a></li>
+    <li><a href="#tab_personality">个性信息</a></li>
+    <li><a href="#tab_other">其他信息</a></li>
+</ul>
+<div class="app-content">
+    <div class="app-form" id="memberInfo">
+        <form class="form-horizontal form form-validate" method="post">
+            <div class="tab-content">
+                <!-- 基本信息 -->
+                <div class="tab-pane active" id="tab_basic">
+                    <div class="panel panel-default">
+                        <div class="panel-heading">基本信息</div>
+                        <div class="panel-body">
+                            {if empty($info['mid'])}
+                            <div class="form-group">
+                                <label class="col-sm-2 control-label">用户类型</label>
+                                <div class="col-sm-9">
+                                    <label class="radio-inline" onclick="$('#trueuser').hide();$('#falseuser').show();">
+                                        <input type="radio" name="memberstatus" value="1" checked  > 虚拟用户
+                                    </label>
+                                    <label class="radio-inline" onclick="$('#trueuser').show();$('#falseuser').hide();">
+                                        <input type="radio" name="memberstatus" value="0" > 微信用户
+                                    </label>
+                                </div>
+                            </div>
+                            <div class="form-group" id="trueuser" style="display: none;">
+                                <label class="col-sm-2 control-label">绑定用户</label>
+                                <div class="col-sm-9">
+                                    <input type='hidden' name="usermid" value="" />
+                                    {php echo tpl_select_user('info[mid]',0);}
+                                </div>
+                            </div>
+                            <div id="falseuser" >
+                                <div class="form-group">
+                                    <label class="col-sm-2 control-label">用户昵称</label>
+                                    <div class="col-sm-9">
+                                        <input type="text" name="info[falsename]" value="{$info['falsename']}"  class="form-control" placeholder="请输出虚拟用户昵称" />
+                                    </div>
+                                </div>
+                                <div class="form-group">
+                                    <label class="col-sm-2 control-label">用户头像</label>
+                                    <div class="col-sm-9">
+                                        {php echo attachment_select('info[falseavatar]',$info['falseavatar']);}
+                                    </div>
+                                </div>
+                            </div>
+                            {/if}
+                            <div class="form-group">
+                                <label class="col-sm-2 control-label"><span class="must-fill">*</span>用户信息</label>
+                                <div class="col-sm-9">
+                                    <div class="input-group">
+                                        <span class="input-group-addon">昵称</span>
+                                        <input type="text" class="form-control" disabled="disabled" name="info[nickname]"  value="{$info['nickname']}">
+                                        <span class="input-group-addon">姓名</span>
+                                        <input type="text" class="form-control" name="info[realname]"  value="{$info['realname']}">
+                                        <span class="input-group-addon">年龄</span>
+                                        <input type="text" class="form-control" disabled="disabled"  value="{$info['age']}">
+                                    </div>
+
+
+                                    <div class="input-group margin-t-5">
+                                        <span class="input-group-addon">身高</span>
+                                        <input type="text" class="form-control" name="info[height]"  value="{$info['height']}">
+                                        <span class="input-group-addon">cm</span>
+                                        <span class="input-group-addon">体重</span>
+                                        <input type="text" class="form-control" name="info[weight]"  value="{$info['weight']}">
+                                        <span class="input-group-addon">kg</span>
+                                        <span class="input-group-addon">民族</span>
+                                        <input type="text" class="form-control" name="info[nation]"  value="{$info['nation']}">
+                                    </div>
+
+                                </div>
+                            </div>
+
+                            <div class="form-group">
+                                <label class="col-sm-2 control-label"><span class="must-fill">*</span>生日</label>
+                                <div class="col-sm-9">
+                                    {php echo tpl_form_field_date('info[birth_text]',$info['birth_text'])}
+                                </div>
+                            </div>
+
+                            <div class="form-group">
+                                <label class="col-sm-2 control-label"><span class="form-must">*</span>性别</label>
+                                <div class="col-sm-9">
+                                    <label class="radio-inline" onclick="$('#serstore').show();$('#artificer').hide();" >
+                                        <input type="radio" name="info[gneder]" value="1" {if empty($info['gneder']) || $info['gneder'] == 1}checked{/if}> 男
+                                    </label>
+                                    <label class="radio-inline" onclick="$('#serstore').hide();$('#artificer').show();">
+                                        <input type="radio" name="info[gneder]" value="2" {if $info['gneder'] == 2} checked{/if}> 女
+                                    </label>
+                                </div>
+                            </div>
+
+                            <div class="form-group">
+                                <label class="col-sm-2 control-label"><span class="form-must">*</span>相片</label>
+                                <div class="col-sm-9">
+                                    {php echo attachment_select('info[cover]', $info['cover'])}
+                                    <span class="help-block">服务项目缩略图，建议使用正方形图片</span>
+                                </div>
+                            </div>
+
+
+                            <div class="form-group" id="marital_status" >
+                                <label class="col-sm-2 control-label"><span class="form-must">*</span>{if $university}年纪{else}婚姻情况{/if}</label>
+                                <div class="col-sm-7 col-xs-6">
+                                    <select name="info[marital_status]" class="form-control select2 col-sm-7 col-xs-6" style="width: 100%;">
+                                        {loop $marital_status $marital}
+                                        <option value="{$marital['id']}" {if $info['marital_status'] == $marital['id']} selected="selected" {/if}>{$marital['title']}</option>
+                                        {/loop}
+                                    </select>
+                                </div>
+                            </div>
+                            {if empty($university)}
+                            <div class="form-group">
+                                <label class="col-sm-2 control-label">工作职务</label>
+                                <div class="col-sm-9">
+                                    <input class="form-control" type="text" name="info[work]" value="{$info['work']}"  />
+                                </div>
+                            </div>
+                            {/if}
+                            <div class="form-group" id="education" >
+                                <label class="col-sm-2 control-label"><span class="form-must">*</span>{if $university}年纪{else}学历{/if}</label>
+                                <div class="col-sm-7 col-xs-6">
+                                    <select name="info[education]" class="form-control select2 col-sm-7 col-xs-6" style="width: 100%;">
+                                        {loop $education $educ}
+                                        <option value="{$educ['id']}" {if $info['education'] == $educ['id']} selected="selected" {/if}>{$educ['title']}</option>
+                                        {/loop}
+                                    </select>
+                                </div>
+                            </div>
+
+
+
+                            <div class="form-group">
+                                <label class="col-sm-2 control-label">当前所在城市</label>
+                                <div class="col-sm-9">
+                                    <div class="row row-fix js-address-selector selectArea">
+                                        <div class="col-md-3" id="tpl-province">
+                                            <select name="info[current_province]" data-value="{$info['current_province']}" level="1" class="form-control tpl-province changeArea">
+                                                {loop $province $item}
+                                                <option value="{$item['id']}" {if $item['id'] == $info['current_province']}selected="selected"{/if}>{$item['name']}</option>
+                                                {/loop}
+                                            </select>
+                                        </div>
+                                        <div class="col-md-3" id="tpl-city">
+                                            <select name="info[current_city]" data-value="{$info['current_city']}" level="2"  class="form-control tpl-city changeArea">
+                                                {loop $city $item}
+                                                <option value="{$item['id']}" {if $item['id'] == $info['current_city']}selected="selected"{/if}>{$item['name']}</option>
+                                                {/loop}
+                                            </select>
+                                        </div>
+                                        <div class="col-md-3"  id="tpl-district">
+                                            <select name="info[current_area]" data-value="{$info['current_area']}" level="3"  class="form-control tpl-district changeArea">
+                                                {loop $district $item}
+                                                <option value="{$item['id']}" {if $item['id'] == $info['current_area']}selected="selected"{/if}>{$item['name']}</option>
+                                                {/loop}
+                                            </select>
+                                        </div>
+                                    </div>
+                                </div>
+
+                            </div>
+
+
+                            <div class="form-group">
+                                <label class="col-sm-2 control-label">户籍所在城市</label>
+                                <div class="col-sm-9">
+                                    <div class="row row-fix js-address-selector selectArea2">
+                                        <div class="col-md-3" id="hometown-province">
+                                            <select name="info[hometown_province]" data-value="{$info['hometown_province']}" level="1" class="form-control tpl-province changeArea">
+                                                {loop $province $item}
+                                                <option value="{$item['id']}" {if $item['id'] == $info['hometown_province']}selected="selected"{/if}>{$item['name']}</option>
+                                                {/loop}
+                                            </select>
+                                        </div>
+                                        <div class="col-md-3" id="hometown-city">
+                                            <select name="info[hometown_city]" data-value="{$info['hometown_city']}" level="2"  class="form-control tpl-city changeArea">
+                                                {loop $hometown_city $item}
+                                                <option value="{$item['id']}" {if $item['id'] == $info['hometown_city']}selected="selected"{/if}>{$item['name']}</option>
+                                                {/loop}
+                                            </select>
+                                        </div>
+                                        <div class="col-md-3"  id="hometown-district">
+                                            <select name="info[hometown_area]" data-value="{$info['hometown_area']}" level="3"  class="form-control tpl-district changeArea">
+                                                {loop $hometown_district $item}
+                                                <option value="{$item['id']}" {if $item['id'] == $info['hometown_area']}selected="selected"{/if}>{$item['name']}</option>
+                                                {/loop}
+                                            </select>
+                                        </div>
+                                    </div>
+                                </div>
+
+                            </div>
+
+
+
+                            <div class="form-group" id="registered_residence_type" >
+                                <label class="col-sm-2 control-label"><span class="form-must">*</span>{if $university}社团协会{else}户籍类型{/if}</label>
+                                <div class="col-sm-7 col-xs-6">
+                                    <select name="info[registered_residence_type]" class="form-control select2 col-sm-7 col-xs-6" style="width: 100%;">
+                                        {loop $registered_residence_type $residence_type}
+                                        <option value="{$residence_type['id']}" {if $info['registered_residence_type'] == $residence_type['id']} selected="selected" {/if}>{$residence_type['title']}</option>
+                                        {/loop}
+                                    </select>
+                                </div>
+                            </div>
+                            {if empty($university)}
+                            <div class="form-group">
+                                <label class="col-sm-2 control-label">月收入(元)</label>
+                                <div class="col-sm-9">
+                                    <input class="form-control" type="text" name="info[income]" value="{$info['income']}"  />
+                                </div>
+                            </div>
+                            <div class="form-group" id="live" >
+                                <label class="col-sm-2 control-label"><span class="form-must">*</span>居住情况</label>
+                                <div class="col-sm-7 col-xs-6">
+                                    <select name="info[live]" class="form-control select2 col-sm-7 col-xs-6" style="width: 100%;">
+                                        {loop $live $liv}
+                                        <option value="{$liv['id']}" {if $info['live'] == $liv['id']} selected="selected" {/if}>{$liv['title']}</option>
+                                        {/loop}
+                                    </select>
+                                </div>
+                            </div>
+                            <div class="form-group" id="travel" >
+                                <label class="col-sm-2 control-label"><span class="form-must">*</span>出行情况</label>
+                                <div class="col-sm-7 col-xs-6">
+                                    <select name="info[travel]" class="form-control select2 col-sm-7 col-xs-6" style="width: 100%;">
+                                        {loop $travel $trav}
+                                        <option value="{$trav['id']}" {if $info['travel'] == $trav['id']} selected="selected" {/if}>{$trav['title']}</option>
+                                        {/loop}
+                                    </select>
+                                </div>
+                            </div>
+                            <div class="form-group {if $info['travel'] == 1}hide{/if}">
+                                <label class="col-sm-2 control-label">车型号</label>
+                                <div class="col-sm-9">
+                                    <input class="form-control" type="text" name="info[vehicle]" value="{$info['vehicle']}"  />
+                                </div>
+                            </div>
+                            {/if}
+                            <div class="form-group">
+                                <label class="col-sm-2 control-label">创建时间</label>
+                                <div class="col-sm-9">
+                                    <input class="form-control" type="text" disabled="disabled" value="{$info['create_time_text']}"  />
+                                </div>
+                            </div>
+
+                            <div class="form-group">
+                                <label class="col-sm-2 control-label">排序</label>
+                                <div class="col-sm-9">
+                                    <input class="form-control" type="text" name="info[sort]" value="{$info['sort']}"  />
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                <!-- 联系方式 -->
+                <div class="tab-pane" id="tab_contact">
+                    <div class="panel panel-default">
+                        <div class="panel-heading">联系方式</div>
+                        <div class="panel-body">
+                            <div class="form-group">
+                                <label class="col-sm-2 control-label">手机</label>
+                                <div class="col-sm-9">
+                                    <input class="form-control" type="text" name="info[phone]" value="{$info['phone']}"  />
+                                </div>
+                            </div>
+                            <div class="form-group">
+                                <label class="col-sm-2 control-label">微信号</label>
+                                <div class="col-sm-9">
+                                    <input class="form-control" type="text"   name="info[wechat_number]" value="{$info['wechat_number']}"  />
+                                </div>
+                            </div>
+                            <div class="form-group">
+                                <label class="col-sm-2 control-label">QQ号</label>
+                                <div class="col-sm-9">
+                                    <input class="form-control" type="text" name="info[qq_number]" value="{$info['qq_number']}"  />
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                <!-- 择偶要求 -->
+                <div class="tab-pane" id="tab_requirement">
+                    <div class="panel panel-default">
+                        <div class="panel-heading">择偶要求</div>
+                        <div class="panel-body">
+                            {if $university}
+                            <div class="form-group">
+                                <label class="col-sm-2 control-label">兴趣交友</label>
+                                <div class="col-sm-9">
+                                    {loop $live $liv}
+                                    <label class="checkbox-inline">
+                                        <input type="checkbox" value="{$liv['id']}" name="tag[]" {if in_array($liv['id'],$tags)} checked="checked" {/if}  /> {$liv['title']}
+                                    </label>
+                                    {/loop}
+                                </div>
+                            </div>
+                            {else}
+                            <div class="form-group">
+                                <label class="col-sm-2 control-label">年龄要求</label>
+                                <div class="col-sm-9">
+                                    <div class="input-group">
+                                        <input type="text" name="info[min_age]" class="form-control" value="{$info['min_age']}" />
+                                        <span class="input-group-addon">岁到</span>
+                                        <input type="text" name="info[max_age]" class="form-control" value="{$info['max_age']}" />
+                                        <span class="input-group-addon">岁</span>
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="form-group">
+                                <label class="col-sm-2 control-label">身高要求</label>
+                                <div class="col-sm-9">
+                                    <div class="input-group">
+                                        <input type="text" name="info[min_height]" class="form-control" value="{$info['min_height']}" />
+                                        <span class="input-group-addon">cm到</span>
+                                        <input type="text" name="info[max_height]" class="form-control" value="{$info['max_height']}" />
+                                        <span class="input-group-addon">cm</span>
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="form-group">
+                                <label class="col-sm-2 control-label">婚姻要求</label>
+                                <div class="col-sm-7 col-xs-6">
+                                    <select name="info[require_marital_status]" class="form-control select2 col-sm-7 col-xs-6" style="width: 100%;">
+                                        {loop $marital_status $marital}
+                                        <option value="{$marital['id']}" {if $info['require_marital_status'] == $marital['id']} selected="selected" {/if}>{$marital['title']}</option>
+                                        {/loop}
+                                    </select>
+                                </div>
+                            </div>
+                            <div class="form-group">
+                                <label class="col-sm-2 control-label">学历要求</label>
+                                <div class="col-sm-7 col-xs-6">
+                                    <select name="info[require_education]" class="form-control select2 col-sm-7 col-xs-6" style="width: 100%;">
+                                        {loop $education $educ}
+                                        <option value="{$educ['id']}" {if $info['require_education'] == $educ['id']} selected="selected" {/if}>{$educ['title']}</option>
+                                        {/loop}
+                                    </select>
+                                </div>
+                            </div>
+                            {/if}
+                            <div class="form-group">
+                                <label class="col-sm-2 control-label">其他要求</label>
+                                <div class="col-sm-9">
+                                    <textarea class="form-control"  name="info[require]"  style="height: 150px;resize: none;">{$info['require']}</textarea>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                <!-- 个性信息 -->
+                <div class="tab-pane" id="tab_personality">
+                    <div class="panel panel-default">
+                        <div class="panel-heading">个性信息</div>
+                        <div class="panel-body">
+                            <div class="form-group">
+                                <label class="col-sm-2 control-label">自我介绍</label>
+                                <div class="col-sm-9">
+                                    <textarea class="form-control"  name="info[introduce]"   style="height: 150px;resize: none;">{$info['introduce']}</textarea>
+                                </div>
+                            </div>
+                            <div class="form-group">
+                                <label class="col-sm-2 control-label">个性标签</label>
+                                <div class="col-sm-9">
+                                    {loop $labelList $label}
+                                    <label class="checkbox-inline">
+                                        <input type="checkbox" value="{$label['id']}" name="userlabel[]"  {if in_array($label['id'],$info['labelId'])}checked="checked"{/if} /> {$label['title']}
+                                    </label>
+                                    {/loop}
+                                </div>
+                            </div>
+                            <div class="form-group">
+                                <label class="col-sm-2 control-label">个人照片</label>
+                                <div class="col-sm-9" style="padding-top: 6px;">
+                                    {php echo attachment_select_multi('info[photo_show]',$info['photo_show']);}
+                                </div>
+                            </div>
+                            <div class="form-group">
+                                <label class="col-sm-2 control-label">个人视频</label>
+                                <div class="col-sm-9">
+                                    <div class="input-group">
+                                        <input type="text" value="{$info['video']}" name="info[video]" class="form-control" autocomplete="off" id="cimg-videourl">
+                                        <span class="input-group-btn">
+											<button class="btn btn-default" type="button" data-toggle="selectVideo" data-input="#cimg-videourl" data-img="#pimg-videourl" >选择媒体文件</button>
+										</span>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                <!-- 其他信息 -->
+                <div class="tab-pane" id="tab_other">
+                    <div class="panel panel-default">
+                        <div class="panel-heading">其他信息</div>
+                        <div class="panel-body">
+                            <div class="form-group">
+                                <label class="col-sm-2 control-label">是否公开基本信息</label>
+                                <div class="col-sm-9" style="padding-top: 6px;">
+                                    <label class="radio-inline">
+                                        <input type="radio" name="info[is_open_base]" value="2" {if $info['is_open_base'] == 2 } checked {/if}  > 公开
+                                    </label>
+                                    <label class="radio-inline">
+                                        <input type="radio" name="info[is_open_base]" value="1"  {if $info['is_open_base'] == 1 || empty($id)} checked {/if} > 不公开
+                                    </label>
+                                </div>
+                            </div>
+                            <div class="form-group">
+                                <label class="col-sm-2 control-label">是否公开联系方式</label>
+                                <div class="col-sm-9" style="padding-top: 6px;">
+                                    <label class="radio-inline">
+                                        <input type="radio" name="info[is_open_contact]" value="2" {if $info['is_open_contact'] == 2 } checked {/if}  > 公开
+                                    </label>
+                                    <label class="radio-inline">
+                                        <input type="radio" name="info[is_open_contact]" value="1"  {if $info['is_open_contact'] == 1 || empty($id)} checked {/if} > 不公开
+                                    </label>
+                                </div>
+                            </div>
+                            <div class="form-group">
+                                <label class="col-sm-2 control-label">是否公开联系方式</label>
+                                <div class="col-sm-9" style="padding-top: 6px;">
+                                    <label class="radio-inline">
+                                        <input type="radio" name="info[is_open_photo]" value="2" {if $info['is_open_photo'] == 2 } checked {/if}  > 公开
+                                    </label>
+                                    <label class="radio-inline">
+                                        <input type="radio" name="info[is_open_photo]" value="1"  {if $info['is_open_photo'] == 1 || empty($id)} checked {/if} > 不公开
+                                    </label>
+                                </div>
+                            </div>
+                            <div class="form-group">
+                                <label class="col-sm-2 control-label">审核状态</label>
+                                <div class="col-sm-9" style="padding-top: 6px;">
+                                    <label class="radio-inline">
+                                        <input type="radio" name="info[examine]" value="1" {if $info['examine'] == 1 } checked {/if}  > 待审核
+                                    </label>
+                                    <label class="radio-inline">
+                                        <input type="radio" name="info[examine]" value="2"  {if $info['examine'] == 2} checked {/if} > 未通过
+                                    </label>
+                                    <label class="radio-inline">
+                                        <input type="radio" name="info[examine]" value="3"  {if $info['examine'] == 3 || empty($id)} checked {/if} > 显示中
+                                    </label>
+                                </div>
+                            </div>
+                            <div class="form-group {if $info['examine'] != 2}hide{/if}">
+                                <label class="col-sm-2 control-label">未通过原因</label>
+                                <div class="col-sm-9">
+                                    <textarea class="form-control"   style="height: 150px;resize: none;">{$info['reason']}</textarea>
+                                </div>
+                            </div>
+                            <div class="form-group">
+                                <label class="col-sm-2 control-label">是否置顶</label>
+                                <div class="col-sm-9" style="padding-top: 6px;">
+                                    <label class="radio-inline">
+                                        <input type="radio" name="info[is_top]" onclick="$('#endtime').hide();" value="1" {if $info['is_top'] == 1 } checked {/if}  > 未置顶
+                                    </label>
+                                    <label class="radio-inline">
+                                        <input type="radio" name="info[is_top]" onclick="$('#endtime').show();" value="2"  {if $info['is_top'] == 2 || empty($id)} checked {/if} > 置顶
+                                    </label>
+                                </div>
+                            </div>
+                            <div class="form-group"  {if $info['is_top'] != 2} style="display: none;"  {/if} id="endtime">
+                                <label class="col-sm-2 control-label">置顶结束时间</label>
+                                <div class="col-sm-9">
+                                    {php echo tpl_form_field_date('info[top_end_time]', date('Y-m-d H:i:s', $info['top_end_time']),true);}
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <div class="form-group">
+                <label class="col-sm-2 control-label"></label>
+                <div class="col-sm-9">
+                    <input type="submit" name="submit" value="提交" class="btn btn-primary min-width" />
+                    <input type="hidden" name="token" value="{$_W['token']}" />
+                    <input type="hidden" name="id" value="{$_GPC['id']}" />
+
+                    <a href="{php echo web_url('dating/member/memberList')}" class="btn btn-danger min-width margin-r-5">返回</a>
+                    {if $info['examine'] == 1}
+                    <a href="{php echo web_url('dating/member/memberExamine',['id'=>$info['id'],'status'=>3])}" data-toggle="ajaxPost" data-confirm="确定通过审核？" class="btn btn-primary min-width margin-r-5">通过</a>
+                    <a href="javascript:;" class="btn btn-success btn-reject min-width margin-r-5" data-id="{$info['id']}">驳回</a>
+                    {/if}
+                </div>
+            </div>
+        </form>
+    </div>
+</div>
+<script>
+    //点击驳回
+    $(document).on('click','.btn-reject',function (){
+        let id = $(this).data('id'),
+            url = "{php echo web_url('dating/member/memberExamine')}";
+        tip.prompt('请输入驳回原因！', {
+            maxlength: 230,
+            callback: function (reason) {
+                $.post(url,{id:id,status:2,reason:reason},function (res){
+                    if(res.status == 0) tip.msgbox.err(res.result.message);
+                    else tip.msgbox.suc(res.result.message,res.result.url);
+                },'json');
+            }
+        });
+    });
+</script>
+{php include wl_template('common/footer');}

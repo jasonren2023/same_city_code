@@ -1,0 +1,315 @@
+<style>
+	#im-content{
+		height: 80vh;
+		margin-top: calc(10vh - 30px);
+	}
+	#im{
+		width: 500px;
+		height: 100%;
+		background: #f8f8f8;
+		margin: auto;
+		border-radius: 30px;
+		overflow: hidden;
+		position: relative;
+	}
+	#im #list{
+		width: 100%;
+		height: 100%;
+		overflow-y: auto;
+		padding: 20px 10px;
+	}
+	#im .block{
+		width: 100%;
+		padding: 5px 0px;
+		display: inline-block;
+	}
+	#im .block .avatar{
+		width: 80px;
+		height: 80px;
+		display: inline-block;
+		padding: 5px;
+		position: relative;
+	}
+	#im .block .avatar img{
+		width: 100%;
+		height: 100%;
+		border-radius: 50%;
+	}
+	#im .block .content{
+		max-width: calc(100% - 160px);
+		margin-top: 10px;
+	}
+	#im .block .content .time{
+		font-size: 12px;
+	}
+	#im .block .content .info{
+		padding: 5px 10px;
+		font-size: 13px;
+		width: 100%;
+		word-wrap: break-word;
+		word-break: break-all;
+		text-align: left;
+	}
+	#im .block .content .contentImg{
+		max-width: 80%;
+		max-height: 200px;
+	}
+	#im .block .content .contentVideo{
+		max-height: 300px!important;
+		max-width: 80%!important;
+	}
+	/*名片样式*/
+	#im .block .content .contentCard{
+		width: 300px;
+		height: 125px;
+		background-color: #FFF;
+		border-radius: 10px;
+		padding: 15px;
+	}
+	#im .block .content .contentCard .avatar{
+		width: 60px;
+		height: 60px;
+	}
+	#im .block .content .contentCard .baseInfo{
+		width: calc(100% - 60px);
+	}
+	#im .block .content .contentCard .baseInfo .baseInfoTop{
+		height: 40px;
+		line-height: 40px;
+	}
+	#im .block .content .contentCard .baseInfo .baseInfoTop .cardName{
+		max-width: 50%;
+		font-size: 17px;
+		font-weight: 600;
+		border-bottom: 1px solid #000;
+		padding: 0 10px;
+		height: 100%;
+	}
+	#im .block .content .contentCard .baseInfo .baseInfoTop .positionName{
+		max-width: 45%;
+		color: #CCC;
+		font-size: 13px;
+		line-height: 43px;
+		height: 100%;
+	}
+	#im .block .content .contentCard .baseInfo .baseInfoBottom{
+		height: 35px;
+		line-height: 35px;
+		width: 100%;
+		font-size: 13px;
+	}
+	#im .block .content .contentCard .cardLabel{
+		height: 20px;
+		line-height: 20px;
+		font-size: 12px;
+		color: #CCC;
+		width: 100%;
+		border-top: 1px solid #EFEFEF;
+	}
+	/*简历样式*/
+	#im .block .content .contentResume{
+		width: 300px;
+		height: 125px;
+		background-color: #FFF;
+		border-radius: 10px;
+		padding: 15px;
+	}
+	#im .block .content .contentResume .avatar{
+		width: 60px;
+		height: 60px;
+	}
+	#im .block .content .contentResume .baseInfo{
+		width: calc(100% - 60px);
+		float: left;
+	}
+	#im .block .content .contentResume .baseInfo .nickname{
+		font-size: 17px;
+		font-weight: 600;
+		height: 30px;
+		line-height: 30px;
+	}
+	#im .block .content .contentResume .baseInfo .desc{
+		font-size: 14px;
+		height: 25px;
+		line-height: 25px;
+		color: #BBB;
+	}
+	#im .block .content .contentResume .baseInfo .labelList{
+		height: 30px;
+		line-height: 30px;
+		width: 100%;
+		overflow: hidden;
+	}
+	#im .block .content .contentResume .baseInfo .labelList .labelItem{
+		background-color: #f1f1f1;
+		display: inline-block;
+		padding: 0px 5px;
+		font-size: 12px;
+		height: 20px;
+		line-height: 20px;
+		border-radius: 3px;
+		margin: 0 3px;
+	}
+	#im .block .content .contentResume .cardLabel{
+		height: 20px;
+		line-height: 20px;
+		font-size: 12px;
+		color: #CCC;
+		float: left;
+		width: 100%;
+		border-top: 1px solid #EFEFEF;
+	}
+	/*通讯方向*/
+	#im .fl .avatar{
+		float: left;
+	}
+	#im .fl .content{
+		float: left;
+		padding-right: 10px;
+		margin-left: 10px;
+		text-align: left;
+	}
+	#im .fl .content .info{
+		background-color: #f8ac59;
+		position: relative;
+		border-radius: 0px 15px 0px 15px;
+	}
+	#im .fr .avatar{
+		float: right;
+	}
+	#im .fr .content{
+		float: right;
+		padding-left: 10px;
+		margin-right: 10px;
+		text-align: right;
+	}
+	#im .fr .content .info{
+		background-color: #f44;
+		position: relative;
+		border-radius: 15px 0px 15px 0px;
+		color: #FFF;
+	}
+	#im .floatLeft{
+		float: left;
+	}
+	#im .floatRight{
+		float: right;
+	}
+	#closeButton{
+		position: absolute;
+		top: 15px;
+		right: 30px;
+		z-index: 999;
+		opacity: 0.8;
+	}
+</style>
+<div class="app-content" id="im-content">
+	<div id="im">
+		<div id="list" ref="Box"  @scroll="orderScroll">
+			<!-- 列表信息 -->
+			<div v-for="(item,index) in list" :class="{fl:(item.is_my == 0),fr:(item.is_my == 1),'block':true}">
+				<div class="avatar">
+					<img :src="item.avatar" />
+				</div>
+				<div class="content">
+					<div class="time">{{ item.date_time }}</div>
+					<!--内容类型:0=文本内容（可带表情），1=图片信息（不可带表情），2=视频信息（不可带表情），3=名片信息（不可带表情），4=简历信息（不可带表情）,5=其他信息(数组)-->
+					<!--文本内容-->
+					<div class="info" v-if="item.type == 0" v-html="item.content">{{item.content}}</div>
+					<!--图片-->
+					<img v-if="item.type == 1" :src="item.content" class="contentImg" />
+					<!--视频-->
+					<video v-if="item.type == 2" :src="item.content" controls="controls" class="contentVideo">您的浏览器不支持 video 标签。</video>
+					<!--名片-->
+					<div v-if="item.type == 3" class="contentCard">
+						<div class="avatar">
+							<img :src="item.other.logo" />
+						</div>
+						<div :class="{floatLeft:(item.is_my == 0),floatRight:(item.is_my == 1),'baseInfo':true}">
+							<div class="baseInfoTop">
+								<div :class="{floatLeft:(item.is_my == 0),floatRight:(item.is_my == 1),'cardName':true}">{{ item.other.name }}</div>
+								<div :class="{floatLeft:(item.is_my == 0),floatRight:(item.is_my == 1),'positionName':true}">{{ item.other.position }}</div>
+							</div>
+							<div :class="{floatLeft:(item.is_my == 0),floatRight:(item.is_my == 1),'baseInfoBottom':true}">{{ item.other.company }} | {{ item.other.branch }}</div>
+						</div>
+						<div :class="{floatLeft:(item.is_my == 0),floatRight:(item.is_my == 1),'cardLabel':true}">个人名片</div>
+					</div>
+					<!--简历-->
+					<div v-if="item.type == 4" class="contentResume">
+						<div class="avatar">
+							<img :src="item.other.avatar" />
+						</div>
+						<div class="baseInfo">
+							<div class="nickname">{{item.other.name}}**</div>
+							<div class="desc">{{item.other.age}}岁 · {{item.other.experience}} · {{item.other.education}}</div>
+							<div class="labelList">
+								<span class="labelItem" v-for="(val,key) in item.other.expect_position_list">{{val}}</span>
+							</div>
+						</div>
+						<div class="cardLabel">个人简历</div>
+					</div>
+				</div>
+			</div>
+			<!-- 按钮信息 -->
+			<button data-dismiss="modal" class="btn btn-danger btn-sm" type="button" id="closeButton">取消</button>
+		</div>
+	</div>
+</div>
+<script>
+	new Vue({
+		el:"#im",
+		data:{
+			id:"{$id}",
+			page:"{$page}",
+			total: 0,
+			scrollBottom: 0,
+			list: [],
+		},
+		methods:{
+			//获取列表信息
+			getRecordList() {
+				let link = biz.url('member/userIm/record'),
+						_this = this,
+						_page = _this.page;
+				$.post(link, {page: _page, id: _this.id}, function (res) {
+					let data = res.data;
+					_this.total = data.total;
+					_this.list = [...data.list,..._this.list];
+					_this.$forceUpdate();
+					//根据分页内容  对滚动条进行操作
+					setTimeout(()=>{
+						_this.positionScroll();
+					},0)
+				},'json');
+			},
+			//监听滚动条 进行分页操作
+			orderScroll(){
+				let box = this.$refs.Box,
+						scrollTop = box.scrollTop;
+				this.scrollBottom = box.scrollHeight - box.scrollTop - box.clientHeight;
+				if(this.page < this.total  && scrollTop <= 0){
+					this.page++;
+					this.getRecordList();
+				}
+			},
+			//定位滚动条  进行滚动条操作
+			positionScroll(){
+				if(this.page <= 1){
+					//进入页面  滚动条自动到达底部
+					$("#list").scrollTop(9999);
+				}else{
+					//分页后 固定滚动条位置
+					let box = this.$refs.Box,
+							height = box.scrollHeight -  box.clientHeight;
+					$("#list").scrollTop((height - this.scrollBottom));
+				}
+			},
+		},
+		mounted() {
+			//初始化列表
+			this.getRecordList();
+			// 监听滚动事件，然后用handleScroll这个方法进行相应的处理
+			document.addEventListener('scroll',this.orderScroll)
+		},
+	});
+</script>

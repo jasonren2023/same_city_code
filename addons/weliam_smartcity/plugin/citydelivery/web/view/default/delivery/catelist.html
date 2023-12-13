@@ -1,0 +1,96 @@
+{php include wl_template('common/header');}
+<style>
+    img {width: 50px;height: 50px;}
+</style>
+<ul class="nav nav-tabs">
+    <li class="active"><a href="#">分类管理</a></li>
+</ul>
+<div class="app-content">
+    <!--顶部内容-->
+    <div class="app-filter">
+        <div class="filter-action">
+            <a href="{php echo web_url('citydelivery/category/cateModel')}" class="btn btn-primary" data-toggle='ajaxModal'><i class="fa fa-plus"></i> 新建分类</a>
+        </div>
+        <div class="filter-list">
+            <form action="" method="get">
+                <input type="hidden" name="c" value="site" />
+                <input type="hidden" name="a" value="entry" />
+                <input type="hidden" name="m" value="{MODULE_NAME}" />
+                <input type="hidden" name="p" value="citydelivery" />
+                <input type="hidden" name="ac" value="category" />
+                <input type="hidden" name="do" value="catelist" />
+                <div class="form-group">
+                    <label class="col-sm-2 control-label">关键字</label>
+                    <div class="col-md-3">
+                        <select name="keywordtype" class="form-control">
+                            <option value="">关键字类型</option>
+                            <option value="1" {if $_GPC['keywordtype']==1}selected="selected"{/if}>分类名称</option>
+                            {if !is_store()}
+                            <option value="2" {if $_GPC['keywordtype']==2}selected="selected"{/if}>商家名称</option>
+                            {/if}
+                        </select>
+                    </div>
+                    <div class="col-md-4">
+                        <input type="text" class=" form-control" name="keyword" value="{$_GPC['keyword']}" placeholder="请输入关键字进行搜索">
+                    </div>
+                </div>
+                <div class="form-group">
+                    <label class="col-sm-2 control-label"></label>
+                    <div class="col-sm-9">
+                        <button class="btn btn-primary" id="submit">筛选</button>
+                    </div>
+                </div>
+            </form>
+        </div>
+    </div>
+    <!--分类列表-->
+    <div class="app-table-list">
+        <div class="table-responsive">
+            <table class="table table-hover">
+                <thead class="navbar-inner">
+                <tr>
+                    <th class="text-center">ID</th>
+                    <th>分类名称(点击编辑)</th>
+                    <th>排序(点击编辑)</th>
+                    <th class="text-center">所属商户</th>
+                    <th class="text-center">状态</th>
+                    <th class="text-center">操作</th>
+                </tr>
+                </thead>
+                <tbody>
+                {loop $list $item}
+                <tr class="text-center">
+                    <td>{$item['id']}</td>
+                    <td>
+                        <a href='javascript:;' data-toggle='ajaxEdit' data-href="{php echo web_url('citydelivery/category/cateNameChange',['id'=>$item['id'],'type'=>'name'])}" class="pull-left text-left">
+                            {$item['name']}
+                        </a>
+                    </td>
+                    <td>
+                        <a href='javascript:;' data-toggle='ajaxEdit' data-href="{php echo web_url('citydelivery/category/cateNameChange',['id'=>$item['id'],'type'=>'sort'])}" class="pull-left text-left">
+                            {$item['sort']}
+                        </a>
+                    </td>
+                    <td>{$item['merchantname']}</td>
+                    <td>{php echo tpl_change_status('citydelivery/category/changestatus&id='.$item['id'],$item['status'],1,0)}</td>
+                    <td>
+                        <a class="btn btn-sm btn-warning" href="{php echo web_url('citydelivery/category/cateModel',['id'=>$item['id']])}" data-toggle='ajaxModal'>编辑</a>
+                        <a class="btn btn-sm btn-danger" data-toggle="ajaxRemove" href="{php echo web_url('citydelivery/category/cateDelete',['id'=>$item['id']])}" data-confirm="确定要删除该分类吗？">删除</a>
+                    </td>
+                </tr>
+                {/loop}
+                </tbody>
+            </table>
+        </div>
+        <!--分页-->
+        <div class="app-table-foot clearfix">
+            <div class="pull-left">
+
+            </div>
+            <div class="pull-right">
+                {$pager}
+            </div>
+        </div>
+    </div>
+</div>
+{php include wl_template('common/footer');}

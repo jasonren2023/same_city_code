@@ -1,0 +1,151 @@
+{php include wl_template('common/header');}
+<style>
+	.prstyle{color: orangered;}
+	.order-rank img{width:16px; height:16px;}
+	td.goods-info{position:relative; padding-left:60px;}
+	.goods-info .img{position:absolute;top:50%; margin-top:-25px; background: url({IMAGE_LOADING}) center center no-repeat; width:50px;height:50px; }
+	.goods-info span {white-space: nowrap;overflow: hidden;text-overflow: ellipsis;display: block;}
+</style>
+<ul class="nav nav-tabs">
+	<li class="active"><a href="{php echo web_url('bargain/bargain_web/userlist')}">砍价列表</a></li>
+</ul>
+<div class="app-content">
+	<div class="app-filter">
+		<div class="filter-list">
+			<form action="" method="get" class="form-horizontal" role="form" id="form1">
+				<input type="hidden" name="c" value="site" />
+				<input type="hidden" name="a" value="entry" />
+				<input type="hidden" name="m" value="{MODULE_NAME}" />
+				<input type="hidden" name="p" value="bargain" />
+				<input type="hidden" name="ac" value="bargain_web" />
+				<input type="hidden" name="do" value="userlist" />
+				<div class="form-group">
+					<label class="col-sm-2 control-label">砍价状态</label>
+					<div class="col-sm-9">
+						<div class="btn-group">
+							<a href="{php echo wl_filter_url('status:0');}" class="btn {if intval($_GPC['status']) == 0}btn-primary{else}btn-default{/if}">全部</a>
+							<a href="{php echo wl_filter_url('status:1');}" class="btn {if $_GPC['status'] == 1}btn-primary{else}btn-default{/if}">砍价中</a>
+							<a href="{php echo wl_filter_url('status:2');}" class="btn {if $_GPC['status'] == 2}btn-primary{else}btn-default{/if}">已下单</a>
+							<a href="{php echo wl_filter_url('status:3');}" class="btn {if $_GPC['status'] == 3}btn-primary{else}btn-default{/if}">已失败</a>
+						</div>
+					</div>
+				</div>
+				<div class="form-group">
+					<label class="col-sm-2 control-label">关键字</label>
+					<div class="col-md-3">
+						<select name="keywordtype" class="form-control">
+							<option value="">关键字类型</option>
+							<option value="1" {if $_GPC['keywordtype']==1}selected="selected"{/if}>商品ID</option>
+							<option value="2" {if $_GPC['keywordtype']==2}selected="selected"{/if}>商家ID</option>
+							{if !is_store()}
+							<option value="3" {if $_GPC['keywordtype']==3}selected="selected"{/if}>商品名称</option>
+							<option value="4" {if $_GPC['keywordtype']==4}selected="selected"{/if}>商家名称</option>
+							{/if}
+						</select>
+                    </div>
+                    <div class="col-md-4">
+                        <input type="text" name="keyword" class="form-control" value="{$_GPC['keyword']}"  placeholder="请输入关键字"/>
+                    </div>
+				</div>
+				<div class="form-group">
+					<label class="col-sm-2 control-label">时间</label>
+					<div class="col-md-3">
+						<select name="timetype" class="form-control">
+							<option value="">时间类型</option>
+							<option value="1" {if $_GPC['timetype']==1}selected="selected"{/if}>开始时间</option>
+							<option value="2" {if $_GPC['timetype']==2}selected="selected"{/if}>最近砍价时间</option>
+						</select>
+                    </div>
+					<div class="col-md-2">
+						{php echo tpl_select_time_info('time_limit', array('starttime' => date('Y-m-d',$starttime), 'endtime' => date('Y-m-d', $endtime)));}
+					</div>
+				</div>
+				<div class="form-group">
+					<label class="col-sm-2 control-label"></label>
+					<div class="col-sm-9">
+						<button class="btn btn-primary" id="search">筛选</button>
+					</div>
+				</div>
+			</form>
+		</div>
+	</div>
+	<div class="app-table-list">
+		<div class="panel-body table-responsive collapse in order-list">
+			<table id="de1" class="table table-hover table-bordered">
+				<thead>
+				<tr>
+					<th class="text-center" style="width:30px;">序号</th>
+					<th class="text-center" style="width:150px;">商品</th>
+					<th class="text-center" style="width:120px;">所属商家</th>
+					<th class="text-center" style="width:90px;">开始时间</th>
+					<th class="text-center" style="width:90px;">最近砍价时间</th>
+					<th class="text-center" style="width:110px;">现价/起始价</th>
+					<th class="text-center" style="width:60px;">状态</th>
+					<th class="text-center" style="width:70px;">操作</th>
+				</tr>
+				</thead>
+				<tbody>
+				{loop $users $k $item}
+				<tr class="text-center" >
+					<td class="line-feed" style="width:30px;">
+						<center>{php echo $k+1}</center>
+					</td>
+					<!--商品-->
+					<td class="line-feed goods-info" style="width:150px;">
+						<div class="img">
+							<img style="height: 4.5rem;width: 4.5rem;" class="scrollLoading" src="{IMAGE_PIXEL}" data-url="{php echo tomedia($item['logo'])}">
+						</div>
+						<div class="title" style="padding-left: 60px;">
+							<span>{$item['name']}</span>
+							<span>商品ID：{$item['activityid']}</span>
+						</div>
+					</td>
+					<!--所属商家-->
+					<td style="width:120px;">
+						{$item['storename']}<br/>商家ID：{$item['merchantid']}
+					</td>
+					<!--开始时间-->
+					<td style="width:90px;">
+						{php echo date('Y-m-d',$item['createtime'])}<br />
+						{php echo date('H:i:s',$item['createtime'])}
+					</td>
+					<td style="width:90px;">
+						{php echo date('Y-m-d',$item['updatetime'])}<br />
+						{php echo date('H:i:s',$item['updatetime'])}
+					</td>
+					<!--人数-->
+					<td style="width:110px;">
+						<span><span class="prstyle">￥{$item['price']}</span> / ￥{$item['oldprice']}</span>
+					</td>
+					<!--状态-->
+					<td style="width:60px;">
+						{if $item['status'] == 1}<span class="label label-warning">砍价中</span>{/if}
+						{if $item['status'] == 2}<span class="label label-success">已下单</span>{/if}
+						{if $item['status'] == 3}<span class="label label-danger">已失败</span>{/if}
+					</td>
+					<!--操作-->
+					<td style="width:70px;">
+						{if $item['status'] == 2}<a href="{php echo web_url('order/wlOrder/orderlist',array('keywordtype'=>1,'keyword'=>$item['orderno']))}">查看订单</a><br/>{/if}
+						<a href="{php echo web_url('bargain/bargain_web/bargainrecord',array('userlistid'=>$item['id']))}">砍价记录</a>
+					</td>
+				</tr>
+				{/loop}
+				</tbody>
+			</table>
+		</div>
+		<div class="app-table-foot clearfix">
+			<div class="pull-left">
+				
+			</div>
+			<div class="pull-right">
+				{$pager}
+			</div>
+		</div>
+	</div>
+</div>
+<script type="text/javascript">
+	$("#search").click(function(){
+		$('#form1')[0].submit();
+	});
+</script>
+{php include wl_template('common/footer');}

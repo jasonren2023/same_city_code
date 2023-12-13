@@ -1,0 +1,10 @@
+{
+    "require": {
+        "yansongda/pay": "^2.8",
+        "overtrue/wechat": "~4.0",
+        "qiniu/php-sdk": "^7.2",
+        "workerman/workerman": "^4.0",
+        "workerman/mysql": "^1.0",
+        "wechatpay/wechatpay": "^1.0"
+    }
+}

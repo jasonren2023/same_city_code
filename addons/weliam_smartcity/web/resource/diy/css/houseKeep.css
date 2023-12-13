@@ -1,0 +1,247 @@
+/****************************************** 家政服务组样式 ************************************************************/
+/*公共样式*/
+.houseKeep .list .block .img{
+    overflow: hidden;
+    position: relative;
+}
+.houseKeep .list .block .img img {
+    width: 100%;
+    height: 100%;
+}
+.houseKeep .list .block .img .service_type {
+    position: absolute;
+    top: 0;
+    left: 0;
+    background-color: #f92929;
+    font-size: 12px;
+    border-radius: 5px;
+    padding: 0px 5px;
+    color: #FFF;
+    opacity: .6;
+}
+.houseKeep .list .block .info .name {
+    width: 100%;
+    height: 30px;
+    line-height: 30px;
+    word-break: keep-all;
+    white-space: nowrap;
+    overflow: hidden;
+    text-overflow: ellipsis;
+}
+.houseKeep .list .block .info .label-list {
+    border: none;
+    overflow: hidden;
+    white-space: nowrap;
+    width: 100%;
+    display: -webkit-inline-box;
+}
+.houseKeep .list .block .info .label-list .label-item {
+    background-color: #EEEEEE;
+    color: #A2A2A2;
+    height: 20px;
+    line-height: 20px;
+    float: left;
+    padding: 0 5px;
+    margin-right: 5px;
+    border-radius: 5px;
+    font-size: 12px;
+}
+
+
+/*风格一*/
+.houseKeep1 .top{
+    height: 35px;
+    line-height: 35px;
+    font-size: 18px;
+    font-weight: 600;
+    padding: 0 10px;
+}
+.houseKeep1 .top .title{
+    width: 70%;
+    float: left;
+}
+.houseKeep1 .top .more {
+    float: right;
+    width: 30%;
+    text-align: right;
+    font-size: 13px;
+    line-height: 35px;
+    font-weight: initial;
+    color: #AEAEAE;
+}
+.houseKeep1 .top .more i {
+    font-size: 13px;
+}
+.houseKeep1 .list {
+    padding: 10px 0;
+    border: none;
+    overflow: hidden;
+    white-space: nowrap;
+    width: 100%;
+    display: -webkit-inline-box;
+    background-color: transparent;
+}
+.houseKeep1 .list .block {
+    margin-left: 10px;
+    width: 165px;
+    float: left;
+}
+.houseKeep1 .list .block .img {
+    width: 100%;
+    height: 115px;
+    border-top-left-radius: 10px;
+    border-top-right-radius: 10px;
+}
+.houseKeep1 .list .block .info {
+    padding: 0 10px 10px 10px;
+    background-color: #F8F8F8;
+    border-bottom-left-radius: 10px;
+    border-bottom-right-radius: 10px;
+    overflow: hidden;
+    width: 100%;
+}
+.houseKeep1 .list .block .info .label-list {
+    border: none;
+    overflow: hidden;
+    white-space: nowrap;
+    width: 100%;
+    display: -webkit-inline-box;
+}
+.houseKeep1 .list .block .info .label-list .label-item {
+    background-color: #EEEEEE;
+    color: #A2A2A2;
+    height: 20px;
+    line-height: 20px;
+    float: left;
+    padding: 0 5px;
+    margin-right: 5px;
+    border-radius: 7px;
+    font-size: 12px;
+}
+/*风格二*/
+.houseKeep2{}
+.houseKeep2 .list{
+    border: none;
+    background-color: transparent;
+}
+.houseKeep2 .list .block{
+    background-color: #FFF;
+    border-radius: 10px;
+}
+.houseKeep2 .list .block:nth-child(n+2){
+    margin-top: 10px;
+}
+.houseKeep2 .list .block .img{
+    width: 80px;
+    height: 80px;
+    border-radius: 10px;
+    margin-right: 10px;
+    float: left;
+}
+.houseKeep2 .list .block .info{
+    float: right;
+    width: calc(100% - 90px);
+}
+.houseKeep2 .list .block .info .name .title-content{
+    float: left;
+    width: 175px;
+    word-break: keep-all;
+    white-space: nowrap;
+    overflow: hidden;
+    text-overflow: ellipsis;
+}
+.houseKeep2 .list .block .info .name .title-icon{
+    width: 20px;
+    height: 20px;
+    float: left;
+    margin: 0 2px;
+    line-height: 25px;
+}
+.houseKeep2 .list .block .info .name .title-icon img{
+    width: 100%;
+    height: 100%;
+}
+.houseKeep2 .list .block .info .address{
+    font-size: 13px;
+    height: 30px;
+    line-height: 30px;
+}
+.houseKeep2 .list .block .info .address .city{
+    width: 170px;
+    word-break: keep-all;
+    white-space: nowrap;
+    overflow: hidden;
+    text-overflow: ellipsis;
+    float: left;
+}
+.houseKeep2 .list .block .info .address .distances{
+    float: right;
+}
+.houseKeep2 .list .block .info .service .service-block{
+    border-top: 1px solid #EFEFEF;
+}
+.houseKeep2 .list .block .info .service .service-block .top{
+    height: 35px;
+    line-height: 35px;
+    font-size: 15px;
+    margin: 10px 0;
+}
+.houseKeep2 .list .block .info .service .service-block .top .img{
+    width: 35px;
+    height: 35px;
+}
+.houseKeep2 .list .block .info .service .service-block .top .img img{
+    width: 100%;
+    height: 100%;
+}
+.houseKeep2 .list .block .info .service .service-block .top .title{
+    float: left;
+    width: calc(100% - 45px);
+    word-break: keep-all;
+    white-space: nowrap;
+    overflow: hidden;
+    text-overflow: ellipsis;
+}
+.houseKeep2 .list .block .info .service .service-block .sale{
+    height: 30px;
+    line-height: 25px;
+}
+.houseKeep2 .list .block .info .service .service-block .sale .price{
+    color: #FF4444;
+    width: calc(100% - 80px);
+    float: left;
+    word-break: keep-all;
+}
+.houseKeep2 .list .block .info .service .service-block .sale .price .price-title{
+    float: left;
+    font-size: 13px;
+    width: 40px;
+}
+.houseKeep2 .list .block .info .service .service-block .sale .price .price-money{
+    float: left;
+    font-size: 12px;
+    line-height: 28px;
+    height: 20px;
+    width: 12px;
+}
+.houseKeep2 .list .block .info .service .service-block .sale .price .price-price{
+    float: left;
+    font-size: 16px;
+    font-weight: 600;
+    width: 100px;
+    word-break: keep-all;
+    white-space: nowrap;
+    overflow: hidden;
+    text-overflow: ellipsis;
+}
+.houseKeep2 .list .block .info .service .service-block .sale .sales{
+    float: right;
+    width: 80px;
+    text-align: right;
+    color: #CFCFCF;
+}
+
+
+
+
+

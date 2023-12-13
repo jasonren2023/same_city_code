@@ -1,0 +1,315 @@
+{php include wl_template('common/header');}
+<style type='text/css'>
+	.trbody td {text-align: center; vertical-align:top;border-left:1px solid #ccc; border-bottom: 1px solid #ddd;}
+	.order-rank img{width:16px; height:16px;}
+	.js-remark,.js-admin-remark{word-break:break-all; overflow:hidden; background: #FDEEEE;color: #ED5050;padding: 5px 10px;}
+	td.goods-info{position:relative; padding-left:60px;}
+	.goods-info .img{position:absolute;top:50%; margin-top:-25px; background: url({IMAGE_LOADING}) center center no-repeat; width:50px;height:50px; }
+	.goods-info span {white-space: inherit;overflow: hidden;text-overflow: ellipsis;display: block;}
+	.status-text{cursor:pointer;}
+	.table>thead>tr>th, .table>tbody>tr>th, .table>tfoot>tr>th, .table>thead>tr>td, .table>tbody>tr>td, .table>tfoot>tr>td {border-top: 1px solid rgba(221, 221, 221, 0);}
+	.col-md-1{padding-right: 0px;}
+	.asd{cursor: pointer;}
+	.label-status{margin: 5px;display: inline-block;}
+</style>
+<ul class="nav nav-tabs">
+	<li {if $_GPC['status']==5}class="active"{/if}><a href="{php echo web_url('pocket/Tiezi/lists',array('status'=>5));}">所有帖子<span class="label label-warning pull-right" style="margin-left: 10px;">{$status0}</span></a></li>
+	<li {if $_GPC['status']==1}class="active"{/if}><a href="{php echo web_url('pocket/Tiezi/lists',array('status'=>1));}">待审核<span class="label label-warning pull-right" style="margin-left: 10px;">{$status1}</span></a></li>
+	<li {if $_GPC['status']==0}class="active"{/if}><a href="{php echo web_url('pocket/Tiezi/lists',array('status'=>0));}">显示中<span class="label label-warning pull-right" style="margin-left: 10px;">{$status3}</span></a></li>
+	<li {if $_GPC['status']==4}class="active"{/if}><a href="{php echo web_url('pocket/Tiezi/lists',array('status'=>4));}">置顶中<span class="label label-warning pull-right" style="margin-left: 10px;">{$status4}</span></a></li>
+	<li {if $_GPC['status']==2}class="active"{/if}><a href="{php echo web_url('pocket/Tiezi/lists',array('status'=>2));}">未通过<span class="label label-warning pull-right" style="margin-left: 10px;">{$status2}</span></a></li>
+	<li {if $_GPC['status']==3}class="active"{/if}><a href="{php echo web_url('pocket/Tiezi/lists',array('status'=>3));}">已删除<span class="label label-warning pull-right" style="margin-left: 10px;">{$status5}</span></a></li>
+</ul>
+<div class="app-content">
+	<div class="app-filter">
+		<div class="filter-action">
+			<a href="{php echo web_url('pocket/Tiezi/createtop')}" class="btn btn-primary">发布帖子</a>
+		</div>
+		<div class="filter-list">
+			<form action="" method="get" class="form-horizontal" role="form" id="form1">
+				<input type="hidden" name="c" value="site" />
+				<input type="hidden" name="a" value="entry" />
+				<input type="hidden" name="m" value="{MODULE_NAME}" />
+				<input type="hidden" name="p" value="pocket" />
+				<input type="hidden" name="ac" value="Tiezi" />
+				<input type="hidden" name="do" value="lists" />
+				<input type="hidden" name="status" value="{$status}" />
+				<div class="form-group">
+					<label class="col-sm-2 control-label">关键字</label>
+					<div class="col-md-3">
+						<select name="keywordtype" class="form-control">
+							<option value="">关键字类型</option>
+							<option value="1" {if $_GPC['keywordtype']==1}selected="selected"{/if}>帖子内容</option>
+							<option value="2" {if $_GPC['keywordtype']==2}selected="selected"{/if}>帖子分类</option>
+							<option value="3" {if $_GPC['keywordtype']==3}selected="selected"{/if}>用户昵称</option>
+							<option value="4" {if $_GPC['keywordtype']==4}selected="selected"{/if}>用户电话</option>
+						</select>
+                    </div>
+                    <div class="col-md-4">
+                        <input type="text" name="keyword" class="form-control" value="{$_GPC['keyword']}"  placeholder="请输入关键字"/>
+                    </div>
+				</div>
+			 	<div class="form-group">
+					<label class="col-sm-2 control-label"></label>
+					<div class="col-sm-9">
+						<button class="btn btn-primary" id="search">筛选</button>
+						<button class="btn btn-default" name="export" type="submit" value="export"><i class="fa fa-download"></i>  导出</button>
+					</div>
+				</div>
+			</form>
+		</div>
+	</div>
+	<div class="app-table-list">
+		<div class="panel-body table-responsive collapse in" id="order-template-item-4" style="padding: 0;">
+			<table class="table table-bordered">
+				<thead style="background-color: #FFFFFF;">
+				<tr> 
+					<th width="5%" class="text-center"><input type="checkbox" onclick="var ck = this.checked;$(':checkbox').each(function(){this.checked = ck});" /></th>
+					<th width="15%" class="text-left">帖子内容</th>
+					{if $_GPC['status'] == 2}
+						<th width="15%" class="text-left">驳回理由</th>
+					{/if}
+					<th width="10%" class="text-center">帖子分类</th>
+					<th width="10%" class="text-center">帖子信息</th>
+					<th width="10%" class="text-center">发帖时间</th>
+					<th width="10%" class="text-center">发帖人</th>
+					<th width="10%" class="text-center">帖子状态</th>
+					<th width="20%" class="text-center">操作</th>
+				</tr>
+				</thead>
+				<tbody >
+				{loop $list $item}
+					<tr>
+						<td  ><center><input type="checkbox" name="checkbox[]" class="checkbox" value="{$item['id']}" /></center></td>
+						<td class="goods-info line-feed">
+							<div class="title" style="max-height:120px!important;overflow-y: auto;">
+								<span>{$item['content']}</span>
+							</div>
+						</td>
+						{if $_GPC['status'] == 2}
+							<td>
+								<div style="max-height:120px!important;overflow-y: auto;">{$item['reason']}</div>
+							</td>
+						{/if}
+						<td class="text-center" >
+							<div class="img"><img class="scrollLoading" src="{IMAGE_PIXEL}" data-url="{php echo tomedia($item['logo'])}" height="50" width="50" onerror="this.src='{IMAGE_NOPIC_SMALL}'" ></div>
+							<div class="title">
+								<span>{$item['type']}</span>
+							</div>
+						</td>
+						<td class="text-center" >
+							<p>分享：{$item['share']}</p>
+							<p>点赞：{$item['likenum']}</p>
+							<p>浏览：{$item['look']}</p>
+						</td>
+						<td class="text-center" >
+							<span>{php echo date("y-m-d",$item['createtime'])}</span><br>
+							<span>{php echo date("H:i:s",$item['createtime'])}</span>
+						</td>
+						<td class="goods-info line-feed" >
+							<div style="position: relative;top: 38px;left: 5px;" class="img"><img style="height: 100%;width: 100%;" class="scrollLoading" src="{IMAGE_PIXEL}" data-url="{php echo tomedia($item['avatar'])}"></div>
+							<div class="title" style="padding-left: 60px;position: relative;top: -15px;">
+								<span>{$item['nickname']}</span>
+								<span>{$item['phone']}</span>
+								<span>MID:{$item['mid']}</span>
+							</div>
+						</td>
+						<td class="text-center" >
+							{if $item['status']==2}<span class="label label-danger label-status">未通过</span>{/if}
+							{if $item['status']==1}<span class="label label-warning label-status">待审核</span>{/if}
+							{if $item['status']==0}<span class="label label-success label-status">显示中</span>{/if}
+							{if $item['status']==3}<span class="label label-danger label-status">已删除</span>{/if}
+							{if $item['status']==5}<span class="label label-danger label-status">未付款</span>{/if}
+							{if $item['top']==1}<br><span class="label label-danger label-status">置顶中</span>{/if}
+							{if $item['top']==2}<br><span class="label label-danger label-status">分类置顶</span>{/if}
+							{if $item['top']==3}<br><span class="label label-danger label-status">全局置顶</span>{/if}
+							{if $item['redpackstatus']==1 && $item['sredpack'] > 0}
+								<br><span class="label label-danger label-status">剩余红包：{$item['sredpack']}</span>
+							{/if}
+						</td>
+						<td class="text-center" >
+							{if $item['status'] !=0 && $item['status'] != 3}<a tieziid = "{$item['id']}" href="javascript:;" class="btn btn-sm btn-primary asd asdp">通过</a>{/if}
+							{if $item['status'] == 0}
+							<a tieziid = "{$item['id']}" href="javascript:;" class="btn btn-sm btn-danger asd asdn">关闭</a>
+							<a href="javascript:;" class="btn btn-sm btn-info js-clip" data-url="{php echo h5_url('pages/subPages/postDetails/postDetails',['id'=>$item['id']])}">复制链接</a>
+							<a href="javascript:;" class="btn btn-sm btn-warning js-clip" data-url="pages/subPages/postDetails/postDetails?id={$item['id']}">复制路径</a>
+							{/if}
+							{if $item['status'] == 1}<a tieziid = "{$item['id']}" href="javascript:;" class="btn btn-sm btn-danger asd reject">驳回</a>{/if}
+							<a class="btn btn-sm btn-success" href="{php echo web_url('pocket/Tiezi/details',array('id'=>$item['id']))}">编辑</a>
+							{if $item['diyformid'] > 0}
+							<a class="btn btn-sm btn-primary" href="{php echo web_url('agentset/diyForm/recordedit',array('id'=>$item['diyformid']))}">表单</a>
+							{/if}
+						</td>
+					</tr>
+				{/loop}
+				</tbody>
+			</table>
+		</div>
+		<div class="app-table-foot clearfix">
+			<div id="de1" class="pull-left">
+				{if $status == 3}
+				<a href="javascript:;" class="btn btn-default min-width js-batch js-delete thorough">彻底删除选中帖子</a>
+				{else}
+				<a href="javascript:;" class="btn btn-default min-width js-batch js-delete pass">通过选中帖子</a><a style="margin-left: 1rem;" href="javascript:;" class="btn btn-default min-width js-batch js-delete nopass">关闭选中帖子</a><a style="margin-left: 1rem;" href="javascript:;" class="btn btn-default min-width js-batch js-delete delete">删除选中帖子</a>
+				{/if}
+			</div>
+			<div class="pull-right">
+				{$pager}
+			</div>
+		</div>
+	</div>
+</div>
+<script type="text/javascript">
+	$("#search").click(function(){
+		$('#form1')[0].submit();
+	});
+</script>
+<script>
+	//批量软删除帖子
+	$('#de1').delegate('.delete','click',function(e){
+		e.stopPropagation();
+		var order_ids = [];
+		var $checks=$('.checkbox:checkbox:checked');
+		$checks.each(function() {
+			if (this.checked) {
+				order_ids.push(this.value);
+			};
+		});
+		var $this = $(this);
+		var ids = order_ids;
+		//alert(ids);
+		
+		util.nailConfirm(this, function(state) {
+		if(!state) return;
+			$.post("{php echo web_url('pocket/Tiezi/delete')}", { ids : ids,flag:1 }, function(data){
+				if(!data.errno){
+				util.tips("删除成功！");
+				location.reload();
+				}else{
+				util.tips(data.message);	
+				};
+			}, 'json');
+		}, {html: '确认删除?'});
+	});
+	//批量彻底删除帖子
+	$('#de1').delegate('.thorough','click',function(e){
+		e.stopPropagation();
+		var order_ids = [];
+		var $checks=$('.checkbox:checkbox:checked');
+		$checks.each(function() {
+			if (this.checked) {
+				order_ids.push(this.value);
+			};
+		});
+		var $this = $(this);
+		var ids = order_ids;
+		//alert(ids);
+		
+		util.nailConfirm(this, function(state) {
+		if(!state) return;
+			$.post("{php echo web_url('pocket/Tiezi/delete')}", { ids : ids,flag:2}, function(data){
+				if(!data.errno){
+				util.tips("彻底删除成功！");
+				location.reload();
+				}else{
+				util.tips(data.message);	
+				};
+			}, 'json');
+		}, {html: '彻底删除?'});
+	});
+	//批量通过帖子
+	$('#de1').delegate('.pass','click',function(e){
+		e.stopPropagation();
+		var order_ids = [];
+		var $checks=$('.checkbox:checkbox:checked');
+		$checks.each(function() {
+			if (this.checked) {
+				order_ids.push(this.value);
+			};
+		});
+		var $this = $(this);
+		var ids = order_ids;
+		//alert(ids);
+		
+		util.nailConfirm(this, function(state) {
+		if(!state) return;
+			$.post("{php echo web_url('pocket/Tiezi/pass')}", { ids : ids }, function(data){
+				if(!data.errno){
+				util.tips("通过审核成功！");
+				location.reload();
+				}else{
+				util.tips(data.message);	
+				};
+			}, 'json');
+		}, {html: '确认通过审核?'});
+	});
+	//批量禁用帖子
+	$('#de1').delegate('.nopass','click',function(e){
+		e.stopPropagation();
+		var order_ids = [];
+		var $checks=$('.checkbox:checkbox:checked');
+		$checks.each(function() {
+			if (this.checked) {
+				order_ids.push(this.value);
+			};
+		});
+		var $this = $(this);
+		var ids = order_ids;
+		//alert(ids);
+		
+		util.nailConfirm(this, function(state) {
+		if(!state) return;
+			$.post("{php echo web_url('pocket/Tiezi/nopass')}", { ids : ids }, function(data){
+				if(!data.errno){
+				util.tips("禁用成功！");
+				location.reload();
+				}else{
+				util.tips(data.message);	
+				};
+			}, 'json');
+		}, {html: '确认禁用?'});
+	});
+	//单个帖子通过
+	$('.asdp').click(function(){
+		var id = $(this).attr('tieziid');
+		$.post("{php echo web_url('pocket/Tiezi/pass')}", { id : id }, function(data){
+			if(!data.errno){
+			util.tips("通过审核成功！");
+			location.reload();
+			}else{
+			util.tips(data.message);	
+			};
+		}, 'json');
+	});
+	//单个帖子禁用
+	$('.asdn').click(function(){
+		var id = $(this).attr('tieziid');
+		$.post("{php echo web_url('pocket/Tiezi/nopass')}", { id : id }, function(data){
+			if(!data.errno){
+			util.tips("禁用成功！");
+			location.reload();
+			}else{
+			util.tips(data.message);	
+			};
+		}, 'json');
+	});
+	//驳回帖子
+    $('.reject').click(function(){
+        var id = $(this).attr('tieziid');
+        tip.prompt('请输入驳回理由!',function (text) {
+			console.log(text);
+            $.post("{php echo web_url('pocket/Tiezi/reject')}", { id : id ,text:text}, function(res){
+                console.log(res);
+                if(res.errno == 1){
+                    util.tips("驳回成功！");
+                    location.reload();
+				}else{
+                    tip.alert("驳回失败，请与页面刷新后再试!",function () {
+                        location.reload();
+                    });
+				}
+            }, 'json');
+        });
+    });
+</script>
+{php include wl_template('common/footer');}

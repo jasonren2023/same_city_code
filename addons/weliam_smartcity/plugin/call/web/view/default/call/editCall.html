@@ -1,0 +1,264 @@
+{php include wl_template('common/header');}
+
+<ul class="nav nav-tabs" id="myTab">
+    <li class="active"><a href="#tab_basic">活动信息</a></li>
+    <li><a href="#tab_share">广告分享</a></li>
+</ul>
+<div class="app-content">
+    <div class="app-form">
+        <div class="panel panel-default">
+            <form class="form-horizontal form-validate"  method="post" >
+                <div class="tab-content">
+                    <div class="tab-pane active" id="tab_basic">
+                        <div class="form-group-title">活动信息</div>
+                        <div class="form-group">
+                            <div class="col-sm-2 control-label must ">活动名称</div>
+                            <div class="col-sm-9">
+                                <input class="form-control" type="text" maxlength="25" name="data[title]" value="{$info['title']}" placeholder="请输入活动名称" />
+                            </div>
+                        </div>
+                        <div class="form-group">
+                            <label class="col-sm-2 control-label">活动时间</label>
+                            <div class="col-sm-9">
+                                {php echo tpl_select_time_info('time', array('starttime'=>date('Y-m-d H:i:s', $info['start_time']),'endtime'=>date('Y-m-d H:i:s', $info['end_time'])));}
+                            </div>
+                        </div>
+                        <div class="form-group">
+                            <div class="col-sm-2 control-label must">活动状态</div>
+                            <div class="col-sm-9">
+                                <div class="radio radio-success radio-inline">
+                                    <input type="radio" id="inlineRadio1" name="data[state]" value="1" {if $info['state'] == 1}checked{/if}>
+                                    <label for="inlineRadio1" style="padding: 0;"> 开启 </label>
+                                </div>
+                                <div class="radio radio-success radio-inline">
+                                    <input type="radio" id="inlineRadio2" name="data[state]" value="0" {if $info['state'] <> 1}checked{/if}>
+                                    <label for="inlineRadio2" style="padding: 0;"> 关闭 </label>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="form-group">
+                            <div class="col-sm-2 control-label must">助力用户</div>
+                            <div class="col-sm-9">
+                                <div class="radio radio-success radio-inline" onclick="$('#newtime').hide();" >
+                                    <input type="radio" id="inlineRadio4" name="data[qualifications]" value="0" {if $info['qualifications'] <> 1}checked{/if}>
+                                    <label for="inlineRadio4" style="padding: 0;"> 所有用户 </label>
+                                </div>
+                                <div class="radio radio-success radio-inline" onclick="$('#newtime').show();">
+                                    <input type="radio" id="inlineRadio3" name="data[qualifications]" value="1" {if $info['qualifications'] == 1}checked{/if}>
+                                    <label for="inlineRadio3" style="padding: 0;"> 仅新用户 </label>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="form-group" id="newtime" {if $info['qualifications'] <> 1} style="display: none;" {/if} >
+                            <div class="col-sm-2 control-label must">新用户时间</div>
+                            <div class="col-sm-9">
+                                <div class="input-group">
+                                    {php echo tpl_form_field_date('data[new_time]', date('Y-m-d H:i:s', $info['new_time']),true);}
+                                    <span class="help-block">晚于此时间注册的用户即为新用户。</span>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="form-group">
+                            <label class="col-sm-2 control-label must">助力奖品</label>
+                            <div class="col-sm-9">
+                                <select name="data[prize_id]" id="prize_id" class="form-control chosen-select">
+                                    <option value="">请选择活动奖品</option>
+                                    {loop $prizeList $k $v}
+                                    <option value="{$v['id']}" {if $info['prize_id'] == $v['id']}selected{/if}>{$v['title']}</option>
+                                    {/loop}
+                                </select>
+                                <span class="help-block">用户参与助力即可获得奖品。</span>
+                            </div>
+                        </div>
+                        <div class="form-group">
+                            <label class="col-sm-2 control-label must">分享奖品</label>
+                            <div class="col-sm-9">
+                                <div id="datas">
+                                    {if empty($sharegifts)}
+                                    {php include wl_template('call/sharegift');}
+                                    {else}
+                                    {loop $sharegifts $ba}
+                                    {php include wl_template('call/sharegift');}
+                                    {/loop}
+                                    {/if}
+                                </div>
+                                <span class="help-block">帮助助力的人数达到要求，即可领取对应奖励，最多设置五个阶段奖励。</span>
+                            </div>
+                        </div>
+                        <div class="form-group">
+                            <label class="col-sm-2 control-label"></label>
+                            <div class="col-sm-9">
+                                <a class="btn btn-info btn-add-type" id="addtype" href="javascript:;" onclick="addType();">
+                                    <i class="fa fa-plus" title=""></i>增加一段奖励
+                                </a>
+                            </div>
+                        </div>
+                        <div class="form-group">
+			                <label class="col-sm-2 control-label">用户可助力次数</label>
+			                <div class="col-sm-9">
+			                    <input type="number" name="data[helptimes]" class="form-control" value="{$info['helptimes']}" >
+			                    <span class="help-block">在此活动中，一位用户可以为其他用户助力的次数，填0或者不填即不限制。</span>
+			                </div>
+			            </div>
+			            <div class="form-group">
+			                <label class="col-sm-2 control-label">每日可获得助力次数</label>
+			                <div class="col-sm-9">
+			                    <input type="number" name="data[daytimes]" class="form-control" value="{$info['daytimes']}" >
+			                    <span class="help-block">在此活动中，用户发起的活动每天可以获取几次助力，填0或者不填即不限制。</span>
+			                </div>
+			            </div>
+                        <div class="form-group">
+                            <div class="col-sm-2 control-label must ">活动规则</div>
+                            <div class="col-sm-9">
+                                {php echo tpl_diy_editor_create('data[explain]',$info['explain']);}
+                            </div>
+                        </div>
+                    </div>
+                    <div class="tab-pane" id="tab_share">
+                        <div class="form-group">
+                            <label class="col-sm-2 control-label">活动幻灯片</label>
+                            <div class="col-sm-9">
+                                <div id="datas2">
+                                    {loop $advs $kw $adv}
+                                    {php include wl_template('call/advinfo');}
+                                    {/loop}
+                                </div>
+                            </div>
+                        </div>
+                        <div class="form-group">
+                            <label class="col-sm-2 control-label"></label>
+                            <div class="col-sm-9">
+                                <a class="btn btn-info btn-add-type" href="javascript:;" onclick="addadv();">
+                                    <i class="fa fa-plus" title=""></i>增加一张幻灯片
+                                </a>
+                            </div>
+                        </div>
+                        <div class="alert alert-info">
+                            <b>分享信息适用模板变量：[昵称] [时间] [活动名称] [系统名称] </b>
+                        </div>
+                        <div class="form-group">
+                            <label class="col-sm-2 control-label">公众号分享图片</label>
+                            <div class="col-sm-9">
+                                {php echo attachment_select('data[share_image]', $info['share_image']);}
+                                <span class="help-block">大小2M以下，建议尺寸500*500，如果不选择，默认为系统图片</span>
+                            </div>
+                        </div>
+                        {if p('wxapp')}
+                        <div class="form-group">
+                            <label class="col-sm-2 control-label">小程序分享图片</label>
+                            <div class="col-sm-9">
+                                {php echo attachment_select('data[share_wxapp_image]', $info['share_wxapp_image']);}
+                                <span class="help-block">大小2M以下，建议尺寸500*400，如果不选择，默认为系统图片</span>
+                            </div>
+                        </div>
+                        {/if}
+                        <div class="form-group">
+                            <label class="col-sm-2 control-label">分享标题</label>
+                            <div class="col-sm-9">
+                                <input type="text" name="data[share_title]" class="form-control" value="{$info['share_title']}" />
+                                <span class="help-block">如果不填写，默认为活动名称</span>
+                            </div>
+                        </div>
+                        <div class="form-group">
+                            <label class="col-sm-2 control-label">分享描述</label>
+                            <div class="col-sm-9">
+                                <input type="text" name="data[share_desc]" class="form-control" value="{$info['share_desc']}" />
+                                <span class="help-block">如果不填写，默认为系统描述</span>
+                            </div>
+                        </div>
+                    </div>
+
+
+                    <div class="form-group">
+                        <div class="col-sm-2 control-label must "></div>
+                        <div class="col-sm-9">
+                            <input type="hidden" name="token" value="{$_W['token']}" />
+                            <input type="hidden" name="id" value="{$info['id']}" />
+                            <input type="submit" name="submit" value="提交" class="btn btn-primary col-sm-1 min-width" />
+                        </div>
+                    </div>
+                </div>
+            </form>
+        </div>
+    </div>
+</div>
+<script>
+
+    $(function () {
+        window.optionchanged = false;
+        $('#myTab a').click(function (e) {
+            e.preventDefault();//阻止a链接的跳转行为
+            $(this).tab('show');//显示当前选中的链接及关联的content
+        });
+    });
+
+
+    //提交信息进行判断
+    // function formcheck() {
+    //     var name    = $("[name='data[title]']").val();
+    //     var prize   = $("[name='data[prize_id]']").val();
+    //     var explain = $("[name='data[explain]']").val();
+    //     var state   = true;
+    //     if(!name){
+    //         tips("请输入活动名称");
+    //         state = false;
+    //     }else if(!prize){
+    //         tips("请选择助力奖品");
+    //         state = false;
+    //     }else if(!explain){
+    //         tips("请输入活动规则");
+    //         state = false;
+    //     }
+    //     return state;
+    // }
+    // //提示内容
+    // function tips(info) {
+    //     layer.open({
+    //         type: 0,
+    //         title: '提示',
+    //         content:info
+    //     });
+    // }
+
+    var kw = "{$giftnum}";
+    function addType() {
+        $(".btn-add-type").button("loading");
+        $.ajax({
+            url: "{php echo web_url('call/call/sharegift')}&kw="+kw,
+            cache: false
+        }).done(function (html) {
+            $(".btn-add-type").button("reset");
+            $("#datas").append(html);
+        });
+        kw++;
+        if(kw >= 5){
+            $("#addtype").hide();
+        }
+    }
+
+    function removes(asd){
+        $(asd).closest('.data-item').remove();
+        kw--;
+        $("#addtype").show();
+    }
+
+
+    var kw2 = 100;
+    function addadv() {
+        $(".btn-add-type").button("loading");
+        $.ajax({
+            url: "{php echo web_url('call/call/advinfo')}&kw="+kw2,
+            cache: false
+        }).done(function (html) {
+            $(".btn-add-type").button("reset");
+            $("#datas2").append(html);
+        });
+        kw2++;
+    }
+
+    function removesadv(asd2){
+        $(asd2).closest('.removedav').remove();
+    }
+
+</script>
+{php include wl_template('common/footer');}

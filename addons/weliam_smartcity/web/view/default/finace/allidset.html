@@ -1,0 +1,143 @@
+{php include wl_template('common/header');}
+<ul class="nav nav-tabs">
+    <li class="active"><a href="">账户设置</a></li>
+</ul>
+<div class="app-content">
+    <div class="app-form">
+        <form action="" method="post" class="form-horizontal form form-validate">
+            <div class="panel panel-default">
+                <div class="panel-body">
+                    {if p('wxplatform')}
+                    <div class="form-group">
+                        <label class="col-sm-2 control-label">微信公众号端</label>
+                        <div class="col-sm-9">
+                            <select name ='cashset[wxpaysetid]' style="width: 100%;" class="form-control select2">
+                                <option value="0">请设置</option>
+                                {loop $paylist $ee}
+                                <option value="{$ee['id']}" {if $ee['id'] == $cashset['wxpaysetid']}selected{/if} >{$ee['name']}</option>
+                                {/loop}
+                            </select>
+                        </div>
+                    </div>
+<!--                    <div class="panel-heading">微信公众号设置</div>-->
+<!--                    <div class="form-group">-->
+<!--                        <label class="col-sm-2 control-label">代理分账方账户类型</label>-->
+<!--                        <div class="col-sm-9">-->
+<!--                            <select name="cashset[wxsysalltype]" onchange="changewx(this)" class="form-control">-->
+<!--                                <option value="0" > - 请选择账户类型 - </option>-->
+<!--                                <option value="1" {if $cashset['wxsysalltype'] == 1} selected="selected" {/if}>微信商户</option>-->
+<!--                                <option value="2" {if $cashset['wxsysalltype'] == 2} selected="selected" {/if}>个人零钱</option>-->
+<!--                            </select>-->
+<!--                        </div>-->
+<!--                    </div>-->
+<!--                    <div class="form-group wxsysalldiv1" {if $cashset['wxsysalltype'] != 1} style="display: none;" {/if} >-->
+<!--                        <label class="col-sm-2 control-label">微信商户号</label>-->
+<!--                        <div class="col-sm-9">-->
+<!--                            <div class="input-group" style="width:100%">-->
+<!--                                <input type="number" name="cashset[wxmerchantid]" class="form-control" value="{$cashset['wxmerchantid']}" />-->
+<!--                            </div>-->
+<!--                        </div>-->
+<!--                    </div>-->
+<!--                    <div class="form-group wxsysalldiv1" {if $cashset['wxsysalltype'] != 1} style="display: none;" {/if} >-->
+<!--                        <label class="col-sm-2 control-label">微信商户名称</label>-->
+<!--                        <div class="col-sm-9">-->
+<!--                            <div class="input-group" style="width:100%">-->
+<!--                                <input type="text" name="cashset[wxmerchantname]" class="form-control" value="{$cashset['wxmerchantname']}" />-->
+<!--                            </div>-->
+<!--                        </div>-->
+<!--                    </div>-->
+<!--                    <div class="form-group wxsysalldiv2" {if $cashset['wxsysalltype'] != 2} style="display: none;" {/if} >-->
+<!--                        <label class="col-sm-2 control-label">分账微信用户</label>-->
+<!--                        <div class="col-sm-9">-->
+<!--                            {php echo tpl_select_user('cashset[wxallmid]', $cashset['wxallmid']);}-->
+<!--                        </div>-->
+<!--                    </div>-->
+                    {/if}
+                    {if p('wxapp')}
+                    <div class="form-group">
+                        <label class="col-sm-2 control-label">微信小程序端</label>
+                        <div class="col-sm-9">
+                            <select name ='cashset[apppaysetid]' style="width: 100%;" class="form-control select2">
+                                <option value="0">请设置</option>
+                                {loop $paylist $zz}
+                                <option value="{$zz['id']}" {if $zz['id'] == $cashset['apppaysetid']}selected{/if}>{$zz['name']}</option>
+                                {/loop}
+                            </select>
+                        </div>
+                    </div>
+<!--                    <div class="panel-heading">微信小程序设置</div>-->
+<!--                    <div class="form-group">-->
+<!--                        <label class="col-sm-2 control-label">代理分账方账户类型</label>-->
+<!--                        <div class="col-sm-9">-->
+<!--                            <select name="cashset[appsysalltype]" onchange="changeapp(this)" class="form-control">-->
+<!--                                <option value="0" > - 请选择账户类型 - </option>-->
+<!--                                <option value="1" {if $cashset['appsysalltype'] == 1} selected="selected" {/if}>微信商户</option>-->
+<!--                                <option value="2" {if $cashset['appsysalltype'] == 2} selected="selected" {/if}>个人零钱</option>-->
+<!--                            </select>-->
+<!--                        </div>-->
+<!--                    </div>-->
+<!--                    <div class="form-group appsysalldiv1" {if $cashset['appsysalltype'] != 1} style="display: none;" {/if} >-->
+<!--                        <label class="col-sm-2 control-label">微信商户号</label>-->
+<!--                        <div class="col-sm-9">-->
+<!--                            <div class="input-group" style="width:100%">-->
+<!--                                <input type="number" name="cashset[appmerchantid]" class="form-control" value="{$cashset['appmerchantid']}" />-->
+<!--                            </div>-->
+<!--                        </div>-->
+<!--                    </div>-->
+<!--                    <div class="form-group appsysalldiv1" {if $cashset['appsysalltype'] != 1} style="display: none;" {/if} >-->
+<!--                        <label class="col-sm-2 control-label">微信商户名称</label>-->
+<!--                        <div class="col-sm-9">-->
+<!--                            <div class="input-group" style="width:100%">-->
+<!--                                <input type="text" name="cashset[appmerchantname]" class="form-control" value="{$cashset['appmerchantname']}" />-->
+<!--                            </div>-->
+<!--                        </div>-->
+<!--                    </div>-->
+<!--                    <div class="form-group appsysalldiv2" {if $cashset['appsysalltype'] != 2} style="display: none;" {/if} >-->
+<!--                        <label class="col-sm-2 control-label">分账微信用户</label>-->
+<!--                        <div class="col-sm-9">-->
+<!--                            {php echo tpl_select_user('cashset[appallmid]', $cashset['appallmid']);}-->
+<!--                        </div>-->
+<!--                    </div>-->
+                    {/if}
+                    <div class="form-group">
+                        <label class="col-sm-2 control-label"></label>
+                        <div class="col-sm-9">
+                            <input type="submit" name="submit" value="提交" class="btn btn-primary min-width" />
+                            <input type="hidden" name="token" value="{$_W['token']}" />
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </form>
+    </div>
+</div>
+<script>
+    function changewx(asd){
+        var type = $(asd).val();
+        if(type == 1){
+            $('.wxsysalldiv2').hide();
+            $('.wxsysalldiv1').show();
+        }else if(type == 2){
+            $('.wxsysalldiv1').hide();
+            $('.wxsysalldiv2').show();
+        }else{
+            $('.wxsysalldiv1').hide();
+            $('.wxsysalldiv2').hide();
+        }
+    }
+
+    function changeapp(asd){
+        var type = $(asd).val();
+        if(type == 1){
+            $('.appsysalldiv2').hide();
+            $('.appsysalldiv1').show();
+        }else if(type == 2){
+            $('.appsysalldiv1').hide();
+            $('.appsysalldiv2').show();
+        }else{
+            $('.appsysalldiv1').hide();
+            $('.appsysalldiv2').hide();
+        }
+    }
+</script>
+{php include wl_template('common/footer');}

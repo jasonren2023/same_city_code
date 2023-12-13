@@ -1,0 +1,287 @@
+/****************************************** 配送商品组样式 ************************************************************/
+/*公共样式*/
+.citydelivery_style_1{
+    border: 1px solid #EEEEEE;
+    display: inline-block;
+    margin-right: 5px;
+    width: calc((100% - 18px) / 3);
+    margin-top: 5px;
+    border-radius: 10px;
+    overflow: hidden;
+}
+.citydelivery_style_1:nth-child(3n){
+    margin-right: 0;
+}
+.citydelivery_style_1 .img{
+    width: 100%;
+    height: 100vh;
+    zoom: 0.1;
+}
+.citydelivery_style_1 .img img{
+    width: 100%;
+    height: 100%;
+}
+.citydelivery_style_1 .info{
+    padding: 5px;
+}
+.citydelivery_style_1 .info .name{
+    height: 25px;
+    line-height: 25px;
+    white-space: nowrap;
+    overflow: hidden;
+    text-overflow: ellipsis;
+    font-size: 14px;
+    font-weight: 600;
+}
+.citydelivery_style_1 .info .sales{
+    height: 20px;
+    line-height: 20px;
+    font-size: 12px;
+    color: #C5C5C5;
+}
+.citydelivery_style_1 .info .purchase{
+    height: 20px;
+    line-height: 28px;
+}
+.citydelivery_style_1 .info .purchase .price{
+    height: 100%;
+    float: left;
+    width: calc(100% - 20px);
+    color: #FF4444;
+    font-size: 16px;
+    white-space: nowrap;
+    overflow: hidden;
+    text-overflow: ellipsis;
+    font-weight: 700;
+}
+.citydelivery_style_1 .info .purchase .price .price_icon{
+    font-size: 12px;
+}
+.citydelivery_style_1 .info .purchase .gou{
+    float: right;
+    width: 20px;
+    height: 20px;
+    line-height: 21px;
+    text-align: center;
+    background-color: #FF4444;
+    color: #FFF;
+    font-size: 13px;
+    border-radius: 5px;
+}
+.citydelivery_style_top{
+    height: 150px;
+    width: 100%;
+    overflow: hidden;
+    position: absolute;
+    top: 0px;
+}
+.citydelivery_style_top img{
+    width: 100%;
+    height: 100%;
+    position: relative;
+}
+.citydelivery_style_top .more{
+    position: absolute;
+    top: 25px;
+    right: 10px;
+    font-size: 20px;
+    color: #FFF;
+    height: 20px;
+    line-height: 20px;
+}
+.citydelivery_style_top .more i{
+    height: 20px;
+    line-height: 20px;
+    margin-left: 5px;
+    font-size: 20px;
+}
+/*风格一*/
+.goods_citydelivery_1 .top{
+    height: 30px;
+    line-height: 30px;
+    font-size: 20px;
+}
+.goods_citydelivery_1 .top .title{
+    float: left;
+}
+.goods_citydelivery_1 .top .more{
+    float: right;
+    font-size: 15px;
+    height: 30px;
+    line-height: 30px;
+    color: #9E9E9E;
+}
+.goods_citydelivery_1 .top .more i{
+    font-size: 15px;
+    margin-left: 5px;
+    height: 30px;
+    line-height: 30px;
+}
+.goods_citydelivery_1 .goodsList{
+    border: none;
+}
+/*风格二*/
+.goods_citydelivery_2 .goodsContent{
+    justify-content: flex-start;
+    overflow: hidden;
+    width: 100%;
+    position: relative;
+    padding-top: 75px;
+}
+.goods_citydelivery_2 .goodsContent .goodsList{
+    position: relative;
+    white-space: nowrap;
+    padding-left: 10px;
+}
+.goods_citydelivery_2 .goodsContent .goodsList .block{
+    width: calc((100% - 18px) / 3.5);
+    border: none;
+}
+.goods_citydelivery_2 .goodsContent .goodsList .block:nth-child(3n){
+    margin-right: 5px;
+}
+.goods_citydelivery_2 .goodsContent .goodsList .block .info{
+    background-color: #FFF;
+    border-left: 1px solid #EEEEEE;
+    border-bottom: 1px solid #EEEEEE;
+    border-right: 1px solid #EEEEEE;
+    border-bottom-left-radius: 10px;
+    border-bottom-right-radius: 10px;
+}
+.goods_citydelivery_2 .goodsContent .goodsList .block .info .purchase{
+    background-color: #FFF2F2;
+    padding-left: 5px;
+    height: 25px;
+    line-height: 30px;
+    border-top-right-radius: 100px;
+    border-bottom-right-radius: 100px;
+    border-top-left-radius: 60px;
+    border-bottom-left-radius: 60px;
+}
+.goods_citydelivery_2 .goodsContent .goodsList .block .info .price{
+    width: calc(100% - 25px);
+}
+.goods_citydelivery_2 .goodsContent .goodsList .block .info .gou{
+    border-radius: 50%;
+    height: 25px;
+    width: 25px;
+    font-size: 13px;
+    background-color: #FFF;
+    display: -moz-box;
+    -moz-box-pack: center;
+    -moz-box-align: center;
+    display: -webkit-box;
+    -webkit-box-pack: center;
+    -webkit-box-align: center;
+    display: box;
+    box-pack: center;
+    box-align: center;
+}
+.goods_citydelivery_2 .goodsContent .goodsList .block .info .gou span{
+    background-color: #FF4444;
+    color: #FFF;
+    display: block;
+    width: 17px;
+    height: 17px;
+    line-height: 18px;
+    border-radius: 50%;
+    font-size: 12px;
+}
+/*风格三*/
+.goods_citydelivery_3 .goodsContent{
+    overflow: hidden;
+    width: 100%;
+    position: relative;
+    padding-top: 75px;
+}
+.goods_citydelivery_3 .goodsContent .goodsList{
+    position: relative;
+    padding-left: 10px;
+}
+.goods_citydelivery_3 .goodsContent .goodsList .block{
+    padding: 10px;
+    border: 1px solid #EEEEEE;
+    background-color: #FFF;
+    float: left;
+    width: calc(100% - 10px);
+    margin-bottom: 10px;
+    border-radius: 10px;
+}
+.goods_citydelivery_3 .goodsContent .goodsList .block .img{
+    width: 100px;
+    height: 100px;
+    display: inline-block;
+    float: left;
+    border-radius: 10px;
+    overflow: hidden;
+    margin-right: 10px;
+}
+.goods_citydelivery_3 .goodsContent .goodsList .block .img img{
+    width: 100%;
+    height: 100%;
+}
+.goods_citydelivery_3 .goodsContent .goodsList .block .info{
+    width: calc(100% - 155px);
+    display: inline-block;
+    margin: 0;
+    padding: 0;
+    height: 100px;
+}
+.goods_citydelivery_3 .goodsContent .goodsList .block .info .name{
+    height: 40px;
+    line-height: 20px;
+    font-size: 15px;
+    font-weight: 600;
+    text-overflow: ellipsis;
+    display: -webkit-box;
+    -webkit-line-clamp: 2;
+    overflow: hidden;
+    -webkit-box-orient: vertical;
+}
+.goods_citydelivery_3 .goodsContent .goodsList .block .info .sales{
+    font-size: 12px;
+    height: 15px;
+    line-height: 15px;
+    color: #C5C5C5;
+}
+.goods_citydelivery_3 .goodsContent .goodsList .block .info .price{
+    height: 20px;
+    line-height: 20px;
+    font-size: 20px;
+    color: #FF4444;
+}
+.goods_citydelivery_3 .goodsContent .goodsList .block .info .price .price_icon{
+    font-size: 12px;
+}
+.goods_citydelivery_3 .goodsContent .goodsList .block .info .gou{
+    padding: 0 9px;
+    background-color: #FF4444;
+    float: left;
+    border-radius: 6px;
+    height: 25px;
+    line-height: 25px;
+    color: #FFF;
+    font-size: 15px;
+}
+/*风格四*/
+.goods_citydelivery_4{
+    white-space: nowrap;
+}
+.goods_citydelivery_4 .goodsList{
+    width: 100%;
+    overflow: hidden;
+    height: 172px;
+}
+.goods_citydelivery_4 .goodsList .start_logo .img{
+    zoom: 0.18;
+}
+.goods_citydelivery_4 .goodsList .block{
+    margin-top: 0;
+    width: calc(100% / 3.5);
+    max-height: 172px;
+}
+.goods_citydelivery_4 .goodsList .block:nth-child(3n){
+    margin-right: 5px;
+}
+
+

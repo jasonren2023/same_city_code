@@ -1,0 +1,241 @@
+{php include wl_template('common/header');}
+<style type='text/css'>
+    .order-rank img{width:16px; height:16px;}
+    .js-remark,.js-admin-remark{word-break:break-all; overflow:hidden; background: #FDEEEE;color: #ED5050;padding: 5px 10px;}
+    td.goods-info{position:relative; padding-left:60px;}
+    .goods-info .img{position:absolute;top:50%; margin-top:-25px; background: url({IMAGE_LOADING}) center center no-repeat; width:50px;height:50px; }
+    .goods-info span {white-space: nowrap;overflow: hidden;text-overflow: ellipsis;display: block;}
+    .status-text{cursor:pointer;}
+</style>
+<ul class="nav nav-tabs">
+    <li class="active"><a href="javascript:;">二手房列表</a></li>
+</ul>
+<div class="app-content">
+    <div class="app-filter">
+        <div class="filter-action">
+            <a href="{php echo web_url('house/House/oldHouseEdit')}" class="btn btn-primary">添加二手房</a>
+        </div>
+        <div class="filter-list">
+            <form action="" method="get" class="form-horizontal" role="form" id="form1">
+                <input type="hidden" name="c" value="site" />
+                <input type="hidden" name="a" value="entry" />
+                <input type="hidden" name="m" value="{MODULE_NAME}" />
+                <input type="hidden" name="p" value="house" />
+                <input type="hidden" name="ac" value="House" />
+                <input type="hidden" name="do" value="oldHouseList" />
+                <input type="hidden" name="releasetype" value="{$_GPC['releasetype']}" />
+                <input type="hidden" name="status" value="{$_GPC['status']}" />
+                <div class="form-group">
+                    <label class="col-sm-2 control-label">发布方类型</label>
+                    <div class="col-sm-9">
+                        <div class="btn-group">
+                            <a href="{php echo wl_filter_url('releasetype:0');}" class="btn {if $_GPC['releasetype'] == 0}btn-primary{else}btn-default{/if}">不限</a>
+                            <a href="{php echo wl_filter_url('releasetype:2');}" class="btn {if $_GPC['releasetype'] == 2}btn-primary{else}btn-default{/if}">商户发布</a>
+                            <a href="{php echo wl_filter_url('releasetype:1');}" class="btn {if $_GPC['releasetype'] == 1}btn-primary{else}btn-default{/if}">个人发布</a>
+                        </div>
+                    </div>
+                </div>
+                <div class="form-group">
+                    <label class="col-sm-2 control-label">状态</label>
+                    <div class="col-sm-9">
+                        <div class="btn-group">
+                            <a href="{php echo wl_filter_url('status:0');}" class="btn {if $_GPC['status'] == 0}btn-primary{else}btn-default{/if}">全部</a>
+                            <a href="{php echo wl_filter_url('status:1');}" class="btn {if $_GPC['status'] == 1}btn-primary{else}btn-default{/if}">未上架</a>
+                            <a href="{php echo wl_filter_url('status:2');}" class="btn {if $_GPC['status'] == 2}btn-primary{else}btn-default{/if}">销售中</a>
+                            <a href="{php echo wl_filter_url('status:3');}" class="btn {if $_GPC['status'] == 3}btn-primary{else}btn-default{/if}">已售出</a>
+                            <a href="{php echo wl_filter_url('status:4');}" class="btn {if $_GPC['status'] == 4}btn-primary{else}btn-default{/if}">待审核</a>
+                            <a href="{php echo wl_filter_url('status:5');}" class="btn {if $_GPC['status'] == 5}btn-primary{else}btn-default{/if}">未通过</a>
+                            <a href="{php echo wl_filter_url('status:6');}" class="btn {if $_GPC['status'] == 6}btn-primary{else}btn-default{/if}">未支付</a>
+
+                        </div>
+                    </div>
+                </div>
+                <div class="form-group">
+                    <div class="col-sm-2 control-label">标题</div>
+                    <div class="col-sm-9">
+                        <input type="text" class="form-control" name="name" value="{$name}" placeholder="请输入标题">
+                    </div>
+                </div>
+
+
+                <div class="form-group">
+                    <label class="col-sm-2 control-label"></label>
+                    <div class="col-sm-9">
+                        <button class="btn btn-primary" id="search">筛选</button>
+                    </div>
+                </div>
+            </form>
+        </div>
+    </div>
+    <div class="app-table-list">
+        <div class="panel-body table-responsive collapse in order-list" id="order-template-item-4" style="padding: 0;">
+            <table class="table table-hover table-bordered">
+                <thead style="background-color: #FFFFFF;">
+                <tr>
+                    <th width="5%" class="text-center"><input type="checkbox" name="checkall" value="" id="checkall" class="checkboxall" onclick="var ck = this.checked; $(':checkbox').each(function(){this.checked = ck});"/></th>
+                    <th width="15%" style="text-align:center;">二手房信息</th>
+                    <th width="15%" style="text-align:center;">所属小区</th>
+                    <th width="15%" style="text-align:center;">发布方</th>
+                    <th width="10%" style="text-align:center;">楼层</th>
+                    <th width="10%" style="text-align:center;">户型</th>
+                    <th width="5%" style="text-align:center;">售价(万)</th>
+                    <th width="5%" style="text-align:center;">状态</th>
+                    <th width="20%" style="text-align:center;">操作</th>
+                </tr>
+                </thead>
+                <tbody>
+                {loop $list $item}
+                <tr>
+                    <td><center><input type="checkbox" name="items[]" value="{$item['id']}" class="checkbox" /></center></td>
+                    <!--二手房信息-->
+                    <td class="goods-info line-feed">
+                        <div class="img"><img class="scrollLoading" src="{IMAGE_PIXEL}" data-url="{php echo tomedia($item['cover_image'])}" height="50" width="50" onerror="this.src='{IMAGE_NOPIC_SMALL}'" ></div>
+                        <div class="title" style="padding-left: 60px;">
+                            <span>{$item['title']}</span>
+                            <label class="label label-warning">{$item['house_text']}</label>
+                        </div>
+                    </td>
+                    <!--所属小区-->
+                    <td class="goods-info line-feed">
+                        {if empty($item['apartment_id'])}
+                        <label class="label label-danger">暂无小区</label>
+                        {else}
+                        <div class="img"><img class="scrollLoading" src="{IMAGE_PIXEL}" data-url="{php echo tomedia($item['apartment_image'])}" height="50" width="50" onerror="this.src='{IMAGE_NOPIC_SMALL}'" ></div>
+                        <div class="title" style="padding-left: 60px;">
+                            <span>{$item['apartment_name']}</span>
+                        </div>
+                        {/if}
+                    </td>
+                    <!--发布方-->
+                    <td class="goods-info line-feed">
+                        <div class="img"><img class="scrollLoading" src="{IMAGE_PIXEL}" data-url="{php echo tomedia($item['releaselogo'])}" height="50" width="50" onerror="this.src='{IMAGE_NOPIC_SMALL}'" ></div>
+                        <div class="title" style="padding-left: 60px;">
+                            <span>{$item['releasename']}</span>
+                            <span>{$item['releasemobile']}</span>
+                            {if $item['releasetype'] == 1}<label class="label label-success">个人发布 MID:{$item['user_id']}</label>{else}<label class="label label-danger">商户发布 SID:{$item['shop_id']}</label>{/if}
+                        </div>
+                    </td>
+                    <!--楼层-->
+                    <td class="text-center">{$item['current_floor']}层/共{$item['total_floor']}层</td>
+                    <!--户型-->
+                    <td class="text-center">
+                        <span style="display: inline-block">{$item['room']}室{$item['office']}厅{$item['wei']}卫{$item['kitchen']}厨</span>
+                        <label class="label label-default">{$item['orientation_text']}</label>
+                    </td>
+                    <!--售价-->
+                    <td class="text-center">
+                        <label  class="label label-success">{$item['price']}</label>
+                    </td>
+                    <!--状态-->
+                    <td class="text-center">
+                        {if $item['status'] == 1}<label  class="label label-warning">未上架</label>{/if}
+                        {if $item['status'] == 2}<label  class="label label-success"> 出售中</label>{/if}
+                        {if $item['status'] == 3}<label  class="label label-info">已出售</label>{/if}
+                        {if $item['status'] == 4}<label  class="label label-warning">待审核</label>{/if}
+                        {if $item['status'] == 5}<label  class="label label-danger">未通过</label>{/if}
+                        {if $item['status'] == 6}<label  class="label label-default">未支付</label>{/if}
+                    </td>
+                    <!--操作-->
+                    <td class="text-center" style="position: relative;">
+                        {if $item['status'] == 1 || $item['status'] == 5}
+                        <p style="color: #428bca;display: inline-block;"><a href="{php echo web_url('house/House/statusChange', array('id'=>$item['id'],'status' => 2,'type' => 2))}" data-toggle="ajaxRemove" data-confirm="确定上架此二手房信息？">上架</a></p>
+                        {/if}
+                        {if $item['status'] == 2 || $item['status'] == 3}
+                        <p style="color: #428bca;display: inline-block;"><a href="{php echo web_url('house/House/statusChange', array('id'=>$item['id'],'status' => 1,'type' => 2))}" data-toggle="ajaxRemove" data-confirm="确定下架此二手房信息？">下架</a></p>
+                        {/if}
+                        {if $item['status'] == 4}
+                        <p style="color: #428bca;display: inline-block;"><a href="{php echo web_url('house/House/statusChange', array('id'=>$item['id'],'status' => 2,'type' => 2))}" data-toggle="ajaxRemove" data-confirm="确定审核通过此二手房信息？">通过</a></p>
+                        <p style="color: #428bca;display: inline-block;"><a href="{php echo web_url('house/House/applyRefuse', array('id'=>$item['id'],'type' => 2))}" data-toggle="ajaxModal" >驳回</a></p>
+                        {/if}
+                        {if $item['status'] != 4 && $item['status'] != 5}
+                        <p style="color: #428bca;display: inline-block;"><a class="js-clip" data-url="{php echo h5_url('pages/subPages2/houseproperty/secondhanddetails/secondhanddetails?type=2',['house_id'=>$item['id']])}" href="javascript:;">复制链接</a></p>
+                        <p style="color: #428bca;display: inline-block;"><a class="js-clip" data-url="pages/subPages2/houseproperty/secondhanddetails/secondhanddetails?type=2&house_id={$item['id']}" href="javascript:;">复制路径</a></p>
+                        {/if}
+                        <p style="color: #428bca;display: inline-block;"><a href="{php echo web_url('house/House/oldHouseEdit', array('id' => $item['id']))}">编辑</a> </p>
+                        <p style="color: #428bca;display: inline-block;"><a href="{php echo web_url('house/House/oldHouseDel', array('ids'=>($item['id'])))}" data-toggle="ajaxRemove" data-confirm="确定删除此二手房源？">删除</a></p>
+                    </td>
+                </tr>
+                {/loop}
+                </tbody>
+            </table>
+        </div>
+        <div class="app-table-foot clearfix">
+            <div class="pull-left">
+                <button class="btn btn-default btn-sm" type="button" onclick="location.reload();"><i class="fa fa-refresh"></i></button>
+                <!--<div class="btn-group btn-group-sm">-->
+                <!--    <button  class="btn btn-default" disabled="disabled" id="checkYse" onclick="checkOrDelete(1);">批量上架</button>-->
+                <!--    <button  class="btn btn-default" disabled="disabled" id="checkNo" onclick="checkOrDelete(0);">批量下架</button>-->
+                <!--</div>-->
+                <button class="btn btn-default btn-sm" type="button" disabled="disabled" id="delete" onclick="checkOrDelete(4);"><i class="fa fa-trash"></i> 回收站</button>
+            </div>
+            <div class="pull-right">
+                {$pager}
+            </div>
+        </div>
+    </div>
+
+
+</div>
+<script>
+
+    function checkOrDelete(check){
+        var content = '';
+        if(check==1) content = '确认上架选中二手房源？';
+        if(check==0) content = '确认下架选中二手房源？';
+        if(check==4) content = '确认把选中二手房源放入回收站？如果二手房源已在回收站将会被彻底删除。';
+        layer.open({
+            title: [
+                '提示',
+                'background-color:#18A689; color:#fff;'
+            ]
+            ,anim: 'up'
+            ,content: content
+            ,btn: ['确认', '取消']
+            ,yes:function(index){
+                $('.layer-anim').remove();
+                var ids = [];
+                var $checks=$('.checkbox:checkbox:checked');
+                $checks.each(function() {
+                    if (this.checked) {
+                        ids.push(this.value);
+                    };
+                });
+                //处理
+                $.post("{php echo web_url('house/House/oldHouseDel')}", { ids : ids ,status:check}, function(data){
+                    if(!data.errno){
+                        util.tips("操作成功！");
+                        location.reload();
+                    }else{
+                        util.tips(data.message);
+                    };
+                }, 'json');
+            }
+        });
+    }
+
+    $(function(){
+        $('.checkbox,.checkboxall').click(function(){
+            var $checks=$('.checkbox:checkbox:checked');
+            $('#check').attr('disabled','');
+            if($checks.length>0) {
+                $('#checkYse').attr('disabled',false);
+                $('#checkNo').attr('disabled',false);
+                $('#delete').attr('disabled',false);
+            }else{
+                $('#checkYse').attr('disabled',true);
+                $('#checkNo').attr('disabled',true);
+                $('#delete').attr('disabled',true);
+            }
+        });
+
+        //驳回申请理由
+        $('.rejectdis').click(function(){
+            var appid = $(this).attr('appid');
+            $('.js-order-id-post').attr("order-id",appid);
+            popwin = $('#modal-module-gift22').modal();
+        });
+
+
+    });
+</script>
+{php include wl_template('common/footer');}

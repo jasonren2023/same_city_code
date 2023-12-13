@@ -1,0 +1,116 @@
+<!--------------------------  积分组件群  ----------------------------------->
+<!-- 风格一 -->
+<script type="text/html" id="tpl_show_citydelivery_goods">
+    <div class="drag" data-itemid="<%itemid%>"  group_name="<%group_name%>" group_key="<%group_key%>" data-id="<%group_name%>" >
+        <div class="goods_citydelivery_1" style="background-color: <%style.bgColor%>;padding: <%style.padding%>px;margin-bottom: <%style.marginBottom%>px;">
+            <div class="top">
+                <div class="title"><%params.title%></div>
+                <div class="more <%if params.show_more != 1%>hide<%/if%>">更多<i class="icon icon-right"></i></div>
+            </div>
+            <div class="goodsList">
+                <%each data as val index%>
+                    <div class="block citydelivery_style_1">
+                        <div class="img">
+                            <img src="<%imgsrc val.logo%>" onerror="this.src='../addons/{MODULE_NAME}/web/resource/images/default.png';"/>
+                        </div>
+                        <div class="info">
+                            <div class="name"><%val.goods_name%></div>
+                            <div class="sales">销量：<%val.buy_num%></div>
+                            <div class="purchase">
+                                <div class="price"><span class="price_icon">￥</span><%val.price%></div>
+                                <div class="gou">购</div>
+                            </div>
+                        </div>
+                    </div>
+                <%/each%>
+            </div>
+        </div>
+    </div>
+</script>
+<!-- 风格二 -->
+<script type="text/html" id="tpl_show_citydelivery_goods2">
+    <div class="drag" data-itemid="<%itemid%>"  group_name="<%group_name%>" group_key="<%group_key%>" data-id="<%group_name%>" >
+        <div class="goods_citydelivery_2" style="background-color: <%style.bgColor%>;padding: <%style.padding%>px;margin-bottom: <%style.marginBottom%>px;">
+            <div class="goodsContent">
+                <div class="top citydelivery_style_top">
+                    <img src="<%imgsrc style.top_image%>" onerror="this.src='../addons/{MODULE_NAME}/web/resource/images/default.png';"/>
+                    <div class="more <%if !style.link%>hide<%/if%>">更多<i class="icon icon-right"></i></div>
+                </div>
+                <div class="goodsList">
+                    <%each data as val index%>
+                        <div class="block citydelivery_style_1">
+                            <div class="img">
+                                <img src="<%imgsrc val.logo%>" onerror="this.src='../addons/{MODULE_NAME}/web/resource/images/default.png';"/>
+                            </div>
+                            <div class="info">
+                                <div class="name"><%val.goods_name%></div>
+                                <div class="sales">销量：<%val.buy_num%></div>
+                                <div class="purchase">
+                                    <div class="price"><span class="price_icon">￥</span><%val.price%></div>
+                                    <div class="gou"><span>购</span></div>
+                                </div>
+                            </div>
+                        </div>
+                    <%/each%>
+                </div>
+            </div>
+        </div>
+    </div>
+</script>
+<!-- 风格三 -->
+<script type="text/html" id="tpl_show_citydelivery_goods3">
+    <div class="drag" data-itemid="<%itemid%>"  group_name="<%group_name%>" group_key="<%group_key%>" data-id="<%group_name%>" >
+        <div class="goods_citydelivery_3" style="background-color: <%style.bgColor%>;padding: <%style.padding%>px;margin-bottom: <%style.marginBottom%>px;">
+            <div class="goodsContent">
+                <div class="top citydelivery_style_top">
+                    <img src="<%imgsrc style.top_image%>" onerror="this.src='../addons/{MODULE_NAME}/web/resource/images/default.png';"/>
+                    <div class="more <%if !style.link%>hide<%/if%>">更多<i class="icon icon-right"></i></div>
+                </div>
+                <div class="goodsList">
+                    <%each data as val index%>
+                        <div class="block">
+                            <div class="img">
+                                <img src="<%imgsrc val.logo%>" onerror="this.src='../addons/{MODULE_NAME}/web/resource/images/default.png';"/>
+                            </div>
+                            <div class="info">
+                                <div class="name"><%val.goods_name%></div>
+                                <div class="sales">销量：<%val.buy_num%></div>
+                                <div class="price"><span class="price_icon">￥</span><%val.price%></div>
+                                <div class="gou">立即购买</div>
+                            </div>
+                        </div>
+                    <%/each%>
+                </div>
+            </div>
+        </div>
+    </div>
+</script>
+<!-- 风格四 -->
+<script type="text/html" id="tpl_show_citydelivery_goods4">
+    <div class="drag" data-itemid="<%itemid%>"  group_name="<%group_name%>" group_key="<%group_key%>" data-id="<%group_name%>" >
+        <div class="goods_citydelivery_4" style="background-color: <%style.bgColor%>;padding: <%style.padding%>px;margin-bottom: <%style.marginBottom%>px;">
+            <div class="goodsList">
+                <div class="block citydelivery_style_1 start_logo">
+                    <div class="img">
+                        <img src="<%imgsrc style.top_image%>" onerror="this.src='../addons/{MODULE_NAME}/web/resource/images/default.png';"/>
+                    </div>
+                </div>
+                <%each data as val index%>
+                    <div class="block citydelivery_style_1">
+                        <div class="img">
+                            <img src="<%imgsrc val.logo%>" onerror="this.src='../addons/{MODULE_NAME}/web/resource/images/default.png';"/>
+                        </div>
+                        <div class="info">
+                            <div class="name"><%val.goods_name%></div>
+                            <div class="sales">销量：<%val.buy_num%></div>
+                            <div class="purchase">
+                                <div class="price"><span class="price_icon">￥</span><%val.price%></div>
+                                <div class="gou">购</div>
+                            </div>
+                        </div>
+                    </div>
+                <%/each%>
+            </div>
+        </div>
+    </div>
+</script>

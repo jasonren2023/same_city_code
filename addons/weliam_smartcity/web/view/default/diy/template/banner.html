@@ -1,0 +1,55 @@
+<!--------------------------  轮播图组件群  ----------------------------------->
+<!-- 风格一 -->
+<script type="text/html" id="tpl_show_banner">
+    <div class="drag" data-itemid="<%itemid%>" group_name="<%group_name%>" group_key="<%group_key%>" data-id="<%group_name%>" <%if style.side_margin == 1%>style="margin: 0px 15px;"<%/if%>>
+    <div class="diy-banner" style="margin-bottom: <%style.bottom||'1'%>px;">
+        <%each data as item%>
+        <img src="<%imgsrc item.imgurl%>" onerror="this.src='../addons/{MODULE_NAME}/web/resource/images/default.png';"/>
+        <%/each%>
+        <div class="dots <%style.dotalign||'left'%> <%style.dotstyle||'rectangle'%>">
+            <%each data as item%>
+                <span style="background: #FFF;"></span>
+            <%/each%>
+        </div>
+    </div>
+    </div>
+</script>
+<!-- 风格二 -->
+<script type="text/html" id="tpl_show_banner2">
+    <div class="drag" data-itemid="<%itemid%>" group_name="<%group_name%>" group_key="<%group_key%>" data-id="<%group_name%>">
+        <div class="diy-banner2" style="margin-bottom: <%style.marginBottom||'1'%>px;background-color:<%style.bgColor%>;">
+            <div class="haodiantoutiao">
+                <div class="hdtt-t">
+                    <div class="hdtt-t-l">
+                        <div class="h1"><%params.title||'请输入标题内容'%></div>
+                        <div class="p"><%params.text||'请输入副标题内容'%></div>
+                    </div>
+                    <div class="hdtt-t-r">
+                        <div class="span">
+                            <div class="em">1</div>/2
+                        </div>
+                    </div>
+                </div>
+                <div class="hdtt-c">
+                    <%each data as item%>
+                    <div class="goodstop-i">
+                        <div class="goodstop-i-a">
+                            <div class="goodstop-i-t">
+                                <img src="<%imgsrc item.imgurl%>" onerror="this.src='../addons/{MODULE_NAME}/web/resource/images/default.png';">
+                            </div>
+                            <div class="goodstop-i-c">
+                                <%if item.title%>
+                                <div class="h1" style="color: <%style.titlecolor%>;"><%item.title%></div>
+                                <%/if%>
+                                <%if item.text%>
+                                <div class="h2" style="color: <%style.textcolor%>;"><%item.text%></div>
+                                <%/if%>
+                            </div>
+                        </div>
+                    </div>
+                    <%/each%>
+                </div>
+            </div>
+        </div>
+    </div>
+</script>

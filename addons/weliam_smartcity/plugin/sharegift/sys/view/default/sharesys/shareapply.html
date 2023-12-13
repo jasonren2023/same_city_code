@@ -1,0 +1,78 @@
+{php include wl_template('common/header');}
+<ul class="nav nav-tabs">
+	<li class="active"><a href="#">提现列表</a></li>
+</ul>
+<div class="app-content">
+<div class="app-table-list">
+	<div class="table-responsive">
+		<table class="table table-hover" style="min-width: 300px;">
+			<thead class="navbar-inner">
+				<tr>
+					<th class="col-sm-3">申请信息</th>
+					<th class="col-sm-2">申请金额</th>
+					<th class="col-sm-2">系统提成</th>
+					<th class="col-sm-2">实获金额</th>
+					<th class="col-sm-3">提现</th>
+					<th class="col-sm-3">申请时间</th>
+					<th class="col-sm-3">操作时间</th>
+					<th class="col-sm-3">状态</th>
+					<th class="col-sm-5 text-center">操作</th>
+				</tr>
+			</thead>
+			<tbody>
+				{loop $list $merchant}
+				<tr>
+					<td><img src="{$merchant['avatar']}" style="width: 50px;height: 50px;margin-right: 5px;"> {$merchant['nickname']}</td>
+					<td>{$merchant['applymoney']}元</td>
+					<td>{$merchant['agentmoney']}元</td>		
+					<td>{$merchant['money']}元</td>			
+					<td>
+						<label class="label label-default label-danger">分享佣金提现</label>
+						<br><br>{if $merchant['cashstatus']==1}<label class="label label-default label-success">微信零钱{elseif $merchant['cashstatus']==2}<label class="label label-default label-info">手动完成{else}<label class="label label-default">未结算{/if}</label>
+					</td>
+					<td>{php echo date('Y-m-d',$merchant['createtime'])}<br>{php echo date('H:i:s',$merchant['createtime'])}</td>
+					<td>
+						{if $merchant['dotime']}
+						{php echo date('Y-m-d',$merchant['dotime'])}<br>{php echo date('H:i:s',$merchant['dotime'])}
+						{else}
+						<label class="label label-default label-info">未处理</label>
+						{/if}
+					</td>
+					<td>{if $merchant['status']==1}
+						<label class="label label-default label-default">申请中</label>
+						{elseif $merchant['status']==2}
+						<label class="label label-default label-success">已完成</label>
+						{elseif $merchant['status']==3}
+						<label class="label label-default label-danger">已驳回</label>
+						{/if}
+					</td>	
+					<td style="text-align: center;">
+					{if $merchant['status']==1}
+                	 	<a href="{php echo web_url('sharegift/sharebase/settlementing', array('id'=>$merchant['id'],'type'=>'wechat'));}" title="微信打款" class="btn btn-primary btn-sm" data-toggle="ajaxRemove" data-confirm="此操作不可逆，确认通过微信打款给申请人？">微信打款</a>
+                	 	<a href="{php echo web_url('sharegift/sharebase/settlementing', array('id'=>$merchant['id'],'type'=>'f2f'));}" title="设为已处理" class="btn btn-default btn-sm"data-toggle="ajaxRemove" data-confirm="此操作不可逆，确认修改申请状态为已完成？">设为手动处理</a> 
+                	 	<a href="{php echo web_url('sharegift/sharebase/settlementing', array('id'=>$merchant['id'],'type'=>'reject'));}" title="驳回" class="btn btn-danger btn-sm"data-toggle="ajaxRemove" data-confirm="此操作不可逆，确认要驳回该提现申请吗">驳回申请</a> 
+					{else}
+						<label class="label label-default label-danger">无操作</label>
+					{/if}
+					</td>
+				</tr>
+				{/loop}
+			</tbody>
+		</table>
+		{if empty($list)}
+		    <div class="panel-body" style="text-align: center;padding:30px;">
+		        暂时没有任何数据!
+		    </div>
+		{/if}
+	</div>
+	<div class="app-table-foot clearfix">
+			<div class="pull-left">
+				
+			</div>
+			<div class="pull-right">
+				{$pager}
+			</div>
+		</div>
+</div>
+</div>
+{php include wl_template('common/footer');}

@@ -1,0 +1,98 @@
+<!-- 单行文本 -->
+<template id="temp_text">
+    <div class="block phone-text">
+        <div class="title">{{ params.title}}<span class="form-must" v-if="params.is_required == 1">*</span></div>
+        <div class="content">
+            <input type="text" :placeholder="params.placeholder" :maxlength="params.length"/>
+            <span class="tipscss" style="float: left">{{ params.tipdetail}}</span>
+        </div>
+    </div>
+</template>
+<!-- 文本域 -->
+<template id="temp_textarea">
+    <div class="block phone-textarea">
+        <div class="title">{{ params.title}}<span class="form-must" v-if="params.is_required == 1">*</span></div>
+        <div class="content">
+            <textarea :placeholder="params.placeholder" :maxlength="params.length" :style="{height:params.height+'px'}"></textarea>
+            <span class="tipscss" style="float: left">{{ params.tipdetail}}</span>
+        </div>
+    </div>
+</template>
+<!-- 下拉框 -->
+<template id="temp_select">
+    <div class="block phone-select">
+        <div class="title">{{ params.title }}</div>
+        <div class="content">
+            <div class="select-content">
+                <span v-if="params.options">{{ params.options[0] }}</span>
+                <i class="icon iconfont icon-right"></i>
+            </div>
+            <span class="tipscss" style="float: left">{{ params.tipdetail}}</span>
+        </div>
+    </div>
+</template>
+<!-- 多选框 -->
+<template id="temp_checkbox">
+    <div class="block phone-checkbox">
+        <div class="title">{{ params.title }}</div>
+        <div class="content">
+            <div style="display: inline-block;"><div class="checkbox-item" v-for="(checkboxItem,checkboxIndex) in params.options">{{ checkboxItem }}</div></div>
+            <span class="tipscss" style="float: left">{{ params.tipdetail}}</span>
+        </div>
+    </div>
+</template>
+<!-- 图片 -->
+<template id="temp_img">
+    <div class="block phone-img">
+        <div class="title">{{ params.title }}</div>
+        <div class="content">
+            <div class="img-upload">
+                <i class="icon iconfont icon-add"></i>
+            </div>
+            <span class="tipscss" style="float: left">{{ params.tipdetail}}</span>
+        </div>
+    </div>
+</template>
+<!-- 时间 -->
+<template id="temp_time">
+    <div class="block phone-time">
+        <div class="title">{{ params.title }}</div>
+        <div class="content">
+            <div class="time-content">
+                <span v-if="params.datetime_local"> {{ params['datetime_local'].replace('T','  ') }}</span>
+                <i class="icon iconfont icon-right"></i>
+            </div>
+            <span class="tipscss" style="float: left">{{ params.tipdetail}}</span>
+        </div>
+    </div>
+</template>
+<!-- 时间范围 -->
+<template id="temp_datetime">
+    <div class="block phone-datetime">
+        <div class="title">{{ params.title }}</div>
+        <div class="content">
+            <div class="time-content" v-if="params.end_time">{{ params['start_time'].replace('T','  ') }} ~ {{ params['end_time'].replace('T','  ') }}</div>
+            <span class="tipscss" style="float: left">{{ params.tipdetail}}</span>
+        </div>
+    </div>
+</template>
+<!-- 城市 -->
+<template id="temp_city">
+    <div class="block phone-city">
+        <div class="title">{{ params.title }}</div>
+        <div class="content">
+            <div>
+                <span v-if="params.province">省</span>
+                <span v-if="params.city">市</span>
+                <span v-if="params.area">区/县</span>
+                <i class="icon iconfont icon-right"></i>
+            </div>
+            <span class="tipscss" style="float: left">{{ params.tipdetail}}</span>
+        </div>
+    </div>
+</template>
+
+
+
+
+

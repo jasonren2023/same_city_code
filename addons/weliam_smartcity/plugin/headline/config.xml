@@ -1,0 +1,35 @@
+<?xml version="1.0" encoding="utf-8"?>
+<manifest>
+	<application>
+		<name><![CDATA[文章头条]]></name>
+		<identifie><![CDATA[headline]]></identifie>
+		<version><![CDATA[1.0.0]]></version>
+		<type><![CDATA[market]]></type>
+		<description><![CDATA[通过文章的图文形式，来推荐商品，从而提升商品销量。]]></description>
+		<author><![CDATA[微连科技]]></author>
+		<url><![CDATA[http://www.weliam.cn/]]></url>
+	</application>
+	<setting>
+		<agent embed="true" />
+		<system embed="true" />
+		<task embed="false" />
+	</setting>
+	<agentmenu>
+		<menu title="头条" font="fa-inbox">
+			<entry title="头条列表" ac="headline" do="infoList" iscover="true"/>
+			<entry title="头条分类" ac="headline" do="index" />
+		</menu>
+		<menu title="留言管理" font="fa-inbox">
+			<entry title="留言列表" ac="headline" do="commentList"/>
+		</menu>
+	</agentmenu>
+	<systemmenu>
+		<menu title="头条" font="fa-inbox">
+			<entry title="头条列表" ac="headline" do="infoList" iscover="true"/>
+			<entry title="头条分类" ac="headline" do="index" />
+		</menu>
+		<menu title="留言管理" font="fa-inbox">
+			<entry title="留言列表" ac="headline" do="commentList"/>
+		</menu>
+	</systemmenu>
+</manifest>

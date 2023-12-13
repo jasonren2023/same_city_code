@@ -1,0 +1,896 @@
+{php include wl_template('common/header');}
+<ul class="nav nav-tabs" id="myTab">
+	<li class="active"><a href="#tab_basic">基础设置</a></li>
+	<li><a href="#tab_appdis">{if Customized::init('distributionText') > 0}股东{else}分销{/if}资格</a></li>
+	<li><a href="#tab_tixian">提现设置</a></li>
+	<li><a href="#tab_notice">模板通知</a></li>
+	<li><a href="#tab_qrcode">海报二维码</a></li>
+	<li><a href="#tab_share">分享与文本</a></li>
+</ul>
+<div class="app-content">
+	<div class="app-form">
+		<form action="" method="post" class="form-horizontal form form-validate">
+			<div class="panel panel-default">
+				<div class="panel-heading">{if Customized::init('distributionText') > 0}共享股东{else}分销{/if}设置</div>
+				<div class="panel-body">
+					<div class="tab-content">
+						<div class="tab-pane active" id="tab_basic">
+							<div class="form-group">
+								<label class="col-sm-2 control-label">开启{if Customized::init('distributionText') > 0}共享股东{else}分销{/if}</label>
+								<div class="col-sm-9">
+									<label class="radio-inline" >
+										<input type="radio" name="base[switch]" value="1" {if intval($base['switch']) == 1}checked{/if}>开启
+									</label>
+									<label class="radio-inline" >
+										<input type="radio" name="base[switch]" value="0" {if intval($base['switch']) == 0 || empty($base['switch'])}checked{/if}>关闭
+									</label>
+								</div>
+							</div>
+							{if Customized::init('customized336')}
+								<div class="form-group">
+									<label class="col-sm-2 control-label">分销模式</label>
+									<div class="col-sm-9">
+										<label class="radio-inline">
+											<input type="radio" name="base[dis_model]" value="0" {if intval($base['dis_model']) != 1}checked{/if}>默认模式
+										</label>
+										<label class="radio-inline">
+											<input type="radio" name="base[dis_model]" value="1" {if intval($base['dis_model']) == 1}checked{/if}>全民分销
+										</label>
+										<span class="help-block">确定一种分销模式以后请不要随意变更。选择全民分销后所有用户进入平台则自动成为分销商!</span>
+									</div>
+								</div>
+								<div class="form-group">
+									<label class="col-sm-2 control-label">临时下级</label>
+									<div class="col-sm-9">
+										<label class="radio-inline">
+											<input type="radio" name="base[temporary_sub]" value="0" {if intval($base['temporary_sub']) != 1}checked{/if}>关闭
+										</label>
+										<label class="radio-inline">
+											<input type="radio" name="base[temporary_sub]" value="1" {if intval($base['temporary_sub']) == 1}checked{/if}>开启
+										</label>
+										<span class="help-block">开启后：所有下级不在固定绑定某个分销商，会在支付后取消绑定关系。可以通过邀请绑定新的分销关系</span>
+									</div>
+								</div>
+								<div class="form-group">
+									<label class="col-sm-2 control-label">自动提现</label>
+									<div class="col-sm-9">
+										<label class="radio-inline">
+											<input type="radio" name="base[auth_withdraw]" onclick="$('#authWithdrawMoney').addClass('hide');" value="0" {if intval($base['auth_withdraw']) != 1}checked{/if}>关闭
+										</label>
+										<label class="radio-inline">
+											<input type="radio" name="base[auth_withdraw]" onclick="$('#authWithdrawMoney').removeClass('hide');" value="1" {if intval($base['auth_withdraw']) == 1}checked{/if}>开启
+										</label>
+										<span class="help-block">开启后：分销商可提现金额到达指定金额后会自动发起提现申请</span>
+									</div>
+								</div>
+								<div class="form-group {if $base['auth_withdraw'] != 1}hide{/if}" id="authWithdrawMoney">
+									<label class="col-sm-2 control-label">自动提现限制金额</label>
+									<div class="col-sm-9">
+										<div class="input-group">
+											<input type="number" min="1" name="base[auth_withdraw_money]" class="form-control" value="{$base['auth_withdraw_money']}" />
+											<span class="input-group-addon">元</span>
+										</div>
+										<span class="help-block">在到达限制金额后系统会自动发起提现申请。限制金额必须大于1才能生效！</span>
+									</div>
+								</div>
+							{/if}
+<!--							<div class="form-group">-->
+<!--								<label class="col-sm-2 control-label">分销模式</label>-->
+<!--								<div class="col-sm-9">-->
+<!--									<label class="radio-inline" onclick="changemode(0)" >-->
+<!--										<input type="radio" name="base[mode]" value="0" {if intval($base['mode']) == 0 || empty($base['mode'])}checked{/if}>全民分销-->
+<!--									</label>-->
+<!--									<label class="radio-inline" onclick="changemode(1)">-->
+<!--										<input type="radio" name="base[mode]" value="1" {if intval($base['mode']) == 1}checked{/if}>渠道分销-->
+<!--									</label>-->
+<!--									<span class="help-block">确定一种分销模式以后请不要随意变更</span>-->
+<!--								</div>-->
+<!--							</div>-->
+							<div class="form-group">
+								<label class="col-sm-2 control-label">{if Customized::init('distributionText') > 0}共享股东{else}分销{/if}层级</label>
+								<div class="col-sm-9">
+									<label class="radio-inline">
+										<input type="radio" name="base[ranknum]" value="1" {if intval($base['ranknum']) == 1 || empty($base['ranknum']) }checked{/if}>一级分销
+									</label>
+									<label class="radio-inline">
+										<input type="radio" name="base[ranknum]" value="2" {if intval($base['ranknum']) == 2}checked{/if}>二级分销
+									</label>
+									<!--<label class="radio-inline">
+										<input type="radio" id="inlineRadio5" name="base[ranknum]" value="3" {if intval($base['ranknum']) == 3}checked{/if}>
+										<label for="inlineRadio5">三级分销 </label>
+									</div>-->
+								</div>
+							</div>
+							<div class="form-group">
+								<label class="col-sm-2 control-label">{if Customized::init('distributionText') > 0}共享股东{else}分销商{/if}等级显示</label>
+								<div class="col-sm-9">
+									<label class="radio-inline" >
+										<input type="radio" name="base[levelshow]" value="1" {if intval($base['levelshow']) == 1}checked{/if}>显示
+									</label>
+									<label class="radio-inline" >
+										<input type="radio" name="base[levelshow]" value="0" {if intval($base['levelshow']) == 0 || empty($base['levelshow'])}checked{/if}>隐藏
+									</label>
+									{if Customized::init('distributionText') > 0}
+									<span class="help-block">共享股东在股东中心可以看到自己的股东等级</span>
+									{else}
+									<span class="help-block">分销商在分销中心可以看到自己的分销商等级</span>
+									{/if}
+								</div>
+							</div>
+							<div class="form-group">
+								<label class="col-sm-2 control-label">{if Customized::init('distributionText') > 0}共享股东{else}分销商{/if}排行榜</label>
+								<div class="col-sm-9">
+									<label class="radio-inline" >
+										<input type="radio" name="base[rankshow]" value="1" {if intval($base['rankshow']) == 1}checked{/if}>显示
+									</label>
+									<label class="radio-inline" >
+										<input type="radio" name="base[rankshow]" value="0" {if intval($base['rankshow']) == 0 || empty($base['rankshow'])}checked{/if}>隐藏
+									</label>
+								</div>
+							</div>
+							<div class="form-group">
+								<label class="col-sm-2 control-label">{if Customized::init('distributionText') > 0}共享股东{else}分销商{/if}助手</label>
+								<div class="col-sm-9">
+									<label class="radio-inline" >
+										<input type="radio" name="base[dishelp]" value="1" {if intval($base['dishelp']) == 1}checked{/if}>显示
+									</label>
+									<label class="radio-inline" >
+										<input type="radio" name="base[dishelp]" value="0" {if intval($base['dishelp']) == 0 || empty($base['dishelp'])}checked{/if}>隐藏
+									</label>
+									<span class="help-block">商品页面引导用户成为{if Customized::init('distributionText') > 0}共享股东{else}分销商{/if}，并提示商品佣金。</span>
+								</div>
+							</div>
+							<div class="form-group">
+								<label class="col-sm-2 control-label">佣金提示</label>
+								<div class="col-sm-9">
+									<label class="radio-inline" >
+										<input type="radio" name="base[disgoods]" value="0" {if intval($base['disgoods']) == 0 || empty($base['disgoods'])}checked{/if} >显示
+									</label>
+									<label class="radio-inline" >
+										<input type="radio" name="base[disgoods]" value="1" {if intval($base['disgoods']) == 1}checked{/if}>隐藏
+									</label>
+									<span class="help-block">商品详情页提示商品佣金。</span>
+								</div>
+							</div>
+							<div class="form-group">
+								<label class="col-sm-2 control-label">开通{if Customized::init('distributionText') > 0}共享股东{else}分销商{/if}自选上级</label>
+								<div class="col-sm-9">
+									<label class="radio-inline" >
+										<input type="radio" name="base[choselead]" value="1" {if intval($base['choselead']) == 1}checked{/if}>开启
+									</label>
+									<label class="radio-inline" >
+										<input type="radio" name="base[choselead]" value="0" {if intval($base['choselead']) == 0 || empty($base['choselead'])}checked{/if}>关闭
+									</label>
+									<span class="help-block">用户开通{if Customized::init('distributionText') > 0}共享股东{else}分销商{/if}时可以更改自身上级</span>
+								</div>
+							</div>
+							<div class="form-group">
+								<label class="col-sm-2 control-label">过期订单结算方式</label>
+								<div class="col-xs-12 col-sm-9">
+									<label class="radio-inline" >
+										<input type="radio" name="base[overstatus]" value="0" {if intval($base['overstatus']) == 0 || empty($base['overstatus'])}checked{/if}>按核销数结算
+									</label>
+									<label class="radio-inline">
+										<input type="radio" name="base[overstatus]" value="1" {if intval($base['overstatus']) == 1}checked{/if}>全部结算
+									</label>
+									<span class="help-block">按核销数结算:一个订单核销了几份就结算几份的佣金; 全部结算：不管订单核销了多少，佣金满额结算</span>
+								</div>
+							</div>
+							<div class="form-group">
+								<label class="col-sm-2 control-label">默认导师</label>
+								<div class="col-sm-9">
+									<select name="base[communityid]" class="form-control chosen-select">
+										<option value="" {if empty($base['communityid'])}selected="selected"{/if}>请选择默认导师</option>
+										{loop $community $comm}
+										<option value="{$comm['id']}" {if $base['communityid'] == $comm['id']}selected="selected"{/if}>{$comm['communname']}</option>
+										{/loop}
+									</select>
+									<span class="help-block">导师读取平台的社群信息，请选择一个作为默认导师</span>
+								</div>
+							</div>
+							<div class="form-group">
+								<label class="col-sm-2 control-label">申请页滚动提现记录</label>
+								<div class="col-sm-9">
+									<label class="radio-inline" >
+										<input type="radio" name="base[rollstatus]" value="1" {if intval($base['rollstatus']) == 1}checked{/if}>真实数据
+									</label>
+									<label class="radio-inline" >
+										<input type="radio" name="base[rollstatus]" value="2" {if intval($base['rollstatus']) == 2}checked{/if}>虚拟数据
+									</label>
+									<label class="radio-inline" >
+										<input type="radio" name="base[rollstatus]" value="0" {if intval($base['rollstatus']) == 0 || empty($base['rollstatus'])}checked{/if}>关闭
+									</label>
+								</div>
+							</div>
+							<div class="form-group">
+								<label class="col-sm-2 control-label">常见问题QA</label>
+								<div class="col-sm-9">
+									{php echo tpl_diy_editor_create('base[distriqa]', $base['distriqa']);}
+								</div>
+							</div>
+						</div>
+						<div class="tab-pane" id="tab_tixian">
+                            <div class="form-group">
+                                <label class="col-sm-2 control-label">打款方式</label>
+                                <div class="col-sm-9">
+                                    <label class="checkbox-inline">
+                                        <input type="checkbox" name="base[payment_type][alipay]" value="1" {if $base['payment_type']['alipay'] == 1}checked{/if}> 支付宝
+                                    </label>
+                                    <label class="checkbox-inline">
+                                        <input type="checkbox" name="base[payment_type][we_chat]" value="1" {if $base['payment_type']['we_chat'] == 1}checked{/if}> 微信
+                                    </label>
+                                    <label class="checkbox-inline">
+                                        <input type="checkbox" name="base[payment_type][bank_card]" value="1" {if $base['payment_type']['bank_card'] == 1}checked{/if}> 银行卡
+                                    </label>
+                                    <label class="checkbox-inline">
+                                        <input type="checkbox" name="base[payment_type][balance]" value="1" {if $base['payment_type']['balance'] == 1}checked{/if}> 余额
+                                    </label>
+                                </div>
+                            </div>
+							<div class="form-group">
+								<label class="col-sm-2 control-label">提现金额限制</label>
+								<div class="col-sm-9">
+									<div class="input-group">
+										<span class="input-group-addon">最小￥</span>
+										<input type="number" min="0" name="base[lowestmoney]" class="form-control" value="{$base['lowestmoney']}" />
+										<span class="input-group-addon">最大￥</span>
+										<input type="number" min="0" name="base[maxmoney]" class="form-control" value="{$base['maxmoney']}" />
+									</div>
+									<span class="help-block">最小值默认为1元,设置为0则无限制</span>
+								</div>
+							</div>
+							<div class="form-group">
+								<label class="col-sm-2 control-label">提现频率</label>
+								<div class="col-sm-9">
+									<div class="input-group">
+										<input type="number" min="0"  onkeyup="this.value=this.value.replace(/\D/g,'')"   name="base[frequency]" class="form-control" value="{$base['frequency']}" />
+										<span class="input-group-addon">天一次</span>
+									</div>
+									<span class="help-block">不填或填0则默认无限制，填1则为一天一次，只能填入正整数,以此类推。</span>
+								</div>
+							</div>
+							<div class="form-group">
+								<label class="col-sm-2 control-label">提现手续费</label>
+								<div class="col-sm-9">
+									<div class="input-group">
+										<input type="number" min="0" name="base[withdrawcharge]" class="form-control" value="{$base['withdrawcharge']}" />
+										<span class="input-group-addon">%</span>
+									</div>
+									<span class="help-block">提现时给平台的手续费,不填或填0则没有手续费</span>
+								</div>
+							</div>
+						</div>
+						<div class="tab-pane" id="tab_appdis">
+							<div class="form-group">
+								<label class="col-sm-2 control-label">
+									<span class="modeflag" {if $base['mode'] != 1} style="display: none;" {/if}>一级</span><span class="modeflag2" {if $base['mode'] == 1} style="display: none;" {/if}>成为</span>{if Customized::init('distributionText') > 0}共享股东{else}分销商{/if}条件
+								</label>
+								<div class="col-sm-9">
+									<!--<label class="radio-inline" onclick="appdis(1)">
+										<input type="radio" id="appdis1" name="base[appdis]" value="0" {if intval($base['appdis']) == 0 || empty($base['appdis'])}checked{/if}>
+										<label for="appdis1">无条件</label>
+									</div>-->
+									<label class="radio-inline" onclick="appdis(3)">
+										<input type="radio" name="base[appdis]" value="0" {if intval($base['appdis']) == 0 || empty($base['appdis'])}checked{/if}>关闭
+									</label>
+									<label class="radio-inline" onclick="appdis(1)">
+										<input type="radio" name="base[appdis]" value="1" {if intval($base['appdis']) == 1}checked{/if}>申请
+									</label>
+									<label class="radio-inline" onclick="appdis(4)">
+										<input type="radio" name="base[appdis]" value="2" {if intval($base['appdis']) == 2}checked{/if}>开通一卡通
+									</label>
+									<label class="radio-inline" onclick="appdis(2)">
+										<input type="radio" name="base[appdis]" value="3" {if intval($base['appdis']) == 3}checked{/if}>付费
+									</label>
+									{if file_exists(PATH_MODULE . 'jimaiwang.log')}
+									<label class="radio-inline" onclick="appdis(3)">
+										<input type="radio" name="base[appdis]" value="4" {if intval($base['appdis']) == 4}checked{/if}>用户即分销
+									</label>
+									{/if}
+									{if Customized::init('discount858') > 0}
+									<label class="radio-inline" onclick="appdis(5)">
+										<input type="radio" name="base[appdis]" value="5" {if intval($base['appdis']) == 5}checked{/if}>累计消费
+									</label>
+									{/if}
+								</div>
+							</div>
+							<div id="appdisdiv5" {if $base['appdis'] != 5} style="display: none;" {/if} >
+								<div class="form-group">
+									<label class="col-sm-2 control-label">累计消费金额</label>
+									<div class="col-md-3">
+										<div class="input-group">
+											<span class="input-group-addon">￥</span>
+											<input type="number" name="base[totallmoney]" class="form-control" value="{$base['totallmoney']}" />
+										</div>
+									</div>
+								</div>
+							</div>
+							<div id="appdisdiv4" {if $base['appdis'] != 2} style="display: none;" {/if}>
+								<div class="form-group">
+									<label class="col-sm-2 control-label">
+										同步开通{if Customized::init('distributionText') > 0}共享股东{else}分销商{/if}
+									</label>
+									<div class="col-sm-9">
+										<label class="radio-inline">
+											<input type="radio" name="base[together]" value="1" {if intval($base['together']) == 1}checked{/if}>开启
+										</label>
+										<label class="radio-inline">
+											<input type="radio" name="base[together]" value="0" {if intval($base['together']) == 0}checked{/if}>关闭
+										</label>
+										<span class="help-block">开启后，激活一卡通会员的用户会立即成为{if Customized::init('distributionText') > 0}共享股东{else}分销商{/if}</span>
+									</div>
+								</div>
+							</div>
+							
+							<div id="appdisdiv3" {if $base['appdis'] != 3} style="display: none;" {/if}>
+								<div class="form-group">
+									<label class="col-sm-2 control-label">
+										付费金额
+									</label>
+									<div class="col-md-3">
+										<div class="input-group">
+											<span class="input-group-addon">￥</span>
+											<input type="text" name="base[applymoney]" class="form-control" value="{$base['applymoney']}" />
+										</div>
+									</div>
+								</div>
+								<div class="form-group">
+									<label class="col-sm-2 control-label">付费申请金额</label>
+									<div class="col-xs-12 col-sm-9">
+										<label class="radio-inline" >
+											<input type="radio" name="base[seetstatus]" value="0" {if intval($base['seetstatus']) == 0 || empty($base['seetstatus'])}checked{/if}>结算给代理
+										</label>
+										<label class="radio-inline">
+											<input type="radio" name="base[seetstatus]" value="1" {if intval($base['seetstatus']) == 1}checked{/if}>结算给平台
+										</label>
+										<span class="help-block">除开佣金的金额结算方向。</span>
+									</div>
+								</div>
+							</div>
+							<div id="appdisdiv3dis" {if $base['appdis'] != 3} style="display: none;" {/if}>
+								<div class="form-group">
+									<label class="col-sm-3 control-label">一级{if Customized::init('distributionText') > 0}共享股东{else}分销商{/if}获得佣金</label>
+									<div class="col-md-9">
+										<div class="input-group col-sm-2">
+											<span class="input-group-addon">￥</span>
+											<input type="text" name="base[modeonemoney]" class="form-control" value="{$base['modeonemoney']}" />
+										</div>
+									</div>
+								</div>
+					            <div class="form-group">
+									<label class="col-sm-3 control-label">二级{if Customized::init('distributionText') > 0}共享股东{else}分销商{/if}获得佣金</label>
+									<div class="col-md-9">
+										<div class="input-group col-sm-2">
+											<span class="input-group-addon">￥</span>
+											<input type="text" name="base[modetwomoney]" class="form-control" value="{$base['modetwomoney']}" />
+										</div>
+									</div>
+								</div>
+							</div>
+							<div id="examineflag" {if intval($base['appdis']) == 0 || empty($base['appdis'])} style="display: none;" {/if} class="form-group">
+								<label class="col-sm-2 control-label"><span class="modeflag" {if $base['mode'] != 1} style="display: none;" {/if}>一级</span>是否审核</label>
+								<div class="col-xs-2 col-sm-2">
+									<label class="radio-inline">
+										<input type="radio" name="base[examine]" value="1" {if intval($base['examine']) == 1}checked{/if}>需要
+									</label>
+									<label class="radio-inline">
+										<input type="radio" name="base[examine]" value="0" {if intval($base['examine']) == 0 || empty($base['examine'])}checked{/if}>不需要
+									</label>
+								</div>
+							</div>
+
+							<div class="form-group">
+								<label class="col-sm-2 control-label">{if Customized::init('distributionText') > 0}共享股东{else}分销商{/if}必须开通会员</label>
+								<div class="col-sm-9">
+									<label class="radio-inline">
+										<input type="radio" name="base[bindvip]" value="0" {if intval($base['bindvip']) == 0 || empty($base['bindvip'])} checked {/if} > 关闭
+									</label>
+									<label class="radio-inline">
+										<input type="radio" name="base[bindvip]" value="1"  {if intval($base['bindvip']) == 1} checked {/if}> 全体{if Customized::init('distributionText') > 0}共享股东{else}分销商{/if}
+									</label>
+									<label class="radio-inline">
+										<input type="radio" name="base[bindvip]" value="2"  {if intval($base['bindvip']) == 2} checked {/if}> 仅申请的{if Customized::init('distributionText') > 0}共享股东{else}分销商{/if}
+									</label>
+									{if Customized::init('distributionText') > 0}
+									<span class="help-block">开启后，如果共享股东不是一卡通会员或会员过期会关闭共享股东的权限，在共享股东开通或续费会员后会重启共享股东的权限。仅申请的共享股东是指除了后台添加的所有共享股东。</span>
+									{else}
+									<span class="help-block">开启后，如果分销商不是一卡通会员或会员过期会关闭分销商的分销权限，在分销商开通或续费会员后会重启分销商的分销权限。仅申请的分销商是指除了后台添加的所有分销商。</span>
+									{/if}
+								</div>
+							</div>
+
+							<div class="form-group">
+								<label class="col-sm-2 control-label">绑定上下级关系条件</label>
+								<div class="col-sm-9">
+									<label class="radio-inline" onclick="$('#lockstatus').hide();">
+										<input type="radio" name="base[lockstatus]" value="0" {if intval($base['lockstatus']) == 0 || empty($base['lockstatus'])} checked {/if} > 扫码或分享立即绑定
+									</label>
+									<label class="radio-inline" onclick="$('#lockstatus').show();" >
+										<input type="radio" name="base[lockstatus]" value="1"  {if intval($base['lockstatus']) == 1} checked {/if}> 第一次产生佣金订单支付后绑定
+									</label>
+
+									<label class="radio-inline" onclick="$('#lockstatus').hide();" >
+										<input type="radio" name="base[lockstatus]" value="2"  {if intval($base['lockstatus']) == 2} checked {/if}> 动态上级
+									</label>
+
+									{if is_file(PATH_MODULE.'TnSrtWDJ.log')}
+									<label class="radio-inline" onclick="$('#lockstatus').show();" >
+										<input type="radio" name="base[lockstatus]" value="3"  {if intval($base['lockstatus']) == 3} checked {/if}> 在线开通会员卡后绑定
+									</label>
+									{/if}
+									{if Customized::init('distributionText') > 0}
+									<span class="help-block">扫码或分享立即绑定：在客户扫描共享股东二维码或点击共享股东的分享链接时立即绑定；<br/>第一次产生佣金订单支付后绑定：客户在扫描共享股东二维码或点击共享股东的分享链接后下单购买商品并支付以后绑定；<br/>动态上级:不是共享股东的用户不会有锁定的上级，会根据每次分享商品链接的共享股东不同而给对应的共享股东分佣。</span>
+									{else}
+									<span class="help-block">扫码或分享立即绑定：在客户扫描分销商二维码或点击分销商的分享链接时立即绑定；<br/>第一次产生分销订单支付后绑定：客户在扫描分销商二维码或点击分销商的分享链接后下单购买商品并支付以后绑定；<br/>动态上级:不是分销商的用户不会有锁定的上级，会根据每次分享商品链接的分销商不同而给对应的分销商分佣。</span>
+									{/if}
+
+								</div>
+							</div>
+							{if is_file(PATH_MODULE.'TnSrtWDJ.log')}
+							<div class="form-group">
+								<label class="col-sm-2 control-label">二级升一级客户人数</label>
+								<div class="col-sm-9">
+									<div class="input-group">
+										<input type="text" name="base[twoupone]" class="form-control" value="{$base['twoupone']}" />
+										<span class="input-group-addon">人</span>
+									</div>
+									<span class="help-block">二级升一级所需客户人数,不填或填0则不升级</span>
+								</div>
+							</div>
+							{/if}
+							<div class="form-group" id="lockstatus" {if intval($base['lockstatus']) != 1} style="display: none" {/if} >
+								<label class="col-sm-2 control-label">是否显示未锁定下级</label>
+								<div class="col-sm-9">
+									<label class="radio-inline">
+										<input type="radio" name="base[showlock]" value="0" {if intval($base['showlock']) == 0 || empty($base['showlock'])} checked {/if} > 隐藏
+									</label>
+									<label class="radio-inline">
+										<input type="radio" name="base[showlock]" value="1"  {if intval($base['showlock']) == 1} checked {/if}> 显示
+									</label>
+									<span class="help-block">是否在手机端显示还未锁定的下级</span>
+								</div>
+							</div>
+							<div class="form-group">
+								<label class="col-sm-2 control-label">{if Customized::init('distributionText') > 0}共享股东{else}分销商{/if}升级条件</label>
+								<div class="col-sm-9">
+									<div style="background: #f5f7f9;width: 520px;padding: 10px;">
+										<label class="checkbox-inline">
+											<input type="checkbox" name="base[levelupstatus][]" value="0" {if in_array(0,$levelupstatusArray)}checked{/if}>已结算佣金总金额
+										</label><br />
+										<label class="checkbox-inline">
+											<input type="checkbox" name="base[levelupstatus][]" value="1" {if in_array(1,$levelupstatusArray)}checked{/if}>下线总人数
+										</label><br />
+										<label class="checkbox-inline">
+											<input type="checkbox" name="base[levelupstatus][]" value="2" {if in_array(2,$levelupstatusArray)}checked{/if}>一级下线人数
+										</label><br />
+										<label class="checkbox-inline">
+											<input type="checkbox" name="base[levelupstatus][]" value="3" {if in_array(3,$levelupstatusArray)}checked{/if}>下级{if Customized::init('distributionText') > 0}共享股东{else}分销商{/if}总人数
+										</label><br />
+										<label class="checkbox-inline">
+											<input type="checkbox" name="base[levelupstatus][]" value="4" {if in_array(4,$levelupstatusArray)}checked{/if}>一级{if Customized::init('distributionText') > 0}共享股东{else}分销商{/if}人数
+										</label><br />
+										<label class="checkbox-inline">
+											<input type="checkbox" name="base[levelupstatus][]" value="5" {if in_array(5,$levelupstatusArray)}checked{/if}>自购订单金额
+										</label>
+									</div>
+									<span class="help-block">勾选多项条件后，达成一个条件即可升级。</span>
+								</div>
+							</div>
+							<div class="form-group">
+								<label class="col-sm-2 control-label">申请背景色</label>
+								<div class="col-sm-9">
+									<input type="color" class="form-control" value="{php echo $base['apply_bgcolor'] ? : '#FF4444';}" name="base[apply_bgcolor]" />
+									<span class="help-block">{if Customized::init('distributionText') > 0}共享股东{else}分销商{/if}申请页面背景颜色</span>
+								</div>
+							</div>
+							<div class="form-group">
+								<label class="col-sm-2 control-label">申请幻灯片</label>
+								<div class="col-sm-9">
+									{php echo attachment_select_multi('base[apply_adv]',$base['apply_adv']);}
+									<span class="help-block">{if Customized::init('distributionText') > 0}共享股东{else}分销商{/if}申请页面顶部的幻灯片，不设置则使用默认图片,建议大小750X380</span>
+								</div>
+							</div>
+							<div class="form-group">
+								<label class="col-sm-2 control-label">{if Customized::init('distributionText') > 0}共享股东{else}分销商{/if}说明</label>
+								<div class="col-sm-9">
+									{php echo tpl_diy_editor_create('base[appdetail]', $base['appdetail']);}
+								</div>
+							</div>
+						</div>
+						<div class="tab-pane" id="tab_notice">
+							<div class="alert alert-info">
+								<b>注意：</b>
+								<p>需要在模板设置中设置[业务处理结果通知]模板</p>
+							</div>
+							<div class="panel-heading">
+								成为{if Customized::init('distributionText') > 0}共享股东{else}分销商{/if}通知
+							</div>
+							<div class="form-group">
+								<label class="col-sm-2 control-label">标题</label>
+								<div class="col-sm-9">
+									<input type="text" name="base[noticetitle1]"  class="form-control" value="{$base['noticetitle1']}" />
+								</div>
+							</div>
+							<div class="form-group">
+								<label class="col-sm-2 control-label">内容</label>
+								<div class="col-sm-9">
+									<textarea name="base[noticecontent1]" style="width: 100%;height: 70px;" class="form-control">{$base['noticecontent1']}</textarea>
+									<span class="help-block">模板变量:[昵称] [时间]</span>
+								</div>
+							</div>
+							<div class="panel-heading">
+								新增下级通知
+							</div>
+							<div class="form-group">
+								<label class="col-sm-2 control-label">标题</label>
+								<div class="col-sm-9">
+									<input type="text" name="base[noticetitle2]" placeholder="默认：新增下级通知" class="form-control" value="{$base['noticetitle2']}" />
+								</div>
+							</div>
+							<div class="form-group">
+								<label class="col-sm-2 control-label">通知等级</label>
+								<div class="col-sm-9">
+									<label class="radio-inline">
+										<input type="radio" name="base[noticerank2]" value="0" {if intval($base['noticerank2']) == 0 || empty($base['noticerank2'])}checked{/if}>一级(默认)
+									</label>
+									{if $base['ranknum']>1}
+									<label class="radio-inline">
+										<input type="radio" name="base[noticerank2]" value="1" {if intval($base['noticerank2']) == 1}checked{/if}>一级+二级
+									</label>
+									{/if}
+									{if $base['ranknum']>2}
+									<label class="radio-inline">
+										<input type="radio" name="base[noticerank2]" value="2" {if intval($base['noticerank2']) == 2}checked{/if}>一级+二级+三级
+									</label>
+									{/if}
+								</div>
+							</div>
+							<div class="form-group">
+								<label class="col-sm-2 control-label">内容</label>
+								<div class="col-sm-9">
+									<textarea name="base[noticecontent2]" style="width: 100%;height: 70px;" class="form-control">{$base['noticecontent2']}</textarea>
+									<span class="help-block">模板变量:[昵称] [下级昵称] [时间] [下线层级]</span>
+								</div>
+							</div>
+							<div class="panel-heading">
+								下级付款通知
+							</div>
+							<div class="form-group">
+								<label class="col-sm-2 control-label">标题</label>
+								<div class="col-sm-9">
+									<input type="text" name="base[noticetitle3]" placeholder="默认：下级付款通知" class="form-control" value="{$base['noticetitle3']}" />
+								</div>
+							</div>
+							<div class="form-group">
+								<label class="col-sm-2 control-label">通知等级</label>
+								<div class="col-sm-9">
+									<label class="radio-inline">
+										<input type="radio" name="base[noticerank3]" value="0" {if intval($base['noticerank3']) == 0 || empty($base['noticerank3'])}checked{/if}>一级(默认)
+									</label>
+									{if $base['ranknum']>1}
+									<label class="radio-inline">
+										<input type="radio" name="base[noticerank3]" value="1" {if intval($base['noticerank3']) == 1}checked{/if}>一级+二级
+									</label>
+									{/if}
+									{if $base['ranknum']>2}
+									<label class="radio-inline">
+										<input type="radio" name="base[noticerank3]" value="2" {if intval($base['noticerank3']) == 2}checked{/if}>一级+二级+三级
+									</label>
+									{/if}
+								</div>
+							</div>
+							<div class="form-group">
+								<label class="col-sm-2 control-label">内容</label>
+								<div class="col-sm-9">
+									<textarea name="base[noticecontent3]" style="width: 100%;height: 70px;" class="form-control">{$base['noticecontent3']}</textarea>
+									<span class="help-block">模板变量 [昵称] [下级昵称] [订单编号] [订单金额] [订单类型] [商品名称] [佣金金额] [时间] [下线层级]</span>
+									<span class="help-block">注意: 此 [佣金金额] ，不代表上级用户会立即获得，为可能获得的佣金金额</span>
+								</div>
+							</div>
+							<div class="panel-heading">
+								佣金到账通知
+							</div>
+							<div class="form-group">
+								<label class="col-sm-2 control-label">标题</label>
+								<div class="col-sm-9">
+									<input type="text" name="base[noticetitle4]" placeholder="默认：佣金到账通知" class="form-control" value="{$base['noticetitle4']}" />
+								</div>
+							</div>
+							<div class="form-group">
+								<label class="col-sm-2 control-label">内容</label>
+								<div class="col-sm-9">
+									<textarea name="base[noticecontent4]" style="width: 100%;height: 70px;" class="form-control">{$base['noticecontent4']}</textarea>
+									<span class="help-block">模板变量:[昵称] [下级昵称] [订单编号] [订单金额] [订单类型] [商品名称] [佣金金额] [时间] [下线层级] [可提现佣金] [总获得佣金]</span>
+								</div>
+							</div>
+							<div class="panel-heading">
+								提现申请提交通知
+							</div>
+							<div class="form-group">
+								<label class="col-sm-2 control-label">标题</label>
+								<div class="col-sm-9">
+									<input type="text" name="base[noticetitle5]" placeholder="默认：提现申请提交通知" class="form-control" value="{$base['noticetitle5']}" />
+								</div>
+							</div>
+							<div class="form-group">
+								<label class="col-sm-2 control-label">内容</label>
+								<div class="col-sm-9">
+									<textarea name="base[noticecontent5]" style="width: 100%;height: 70px;" class="form-control">{$base['noticecontent5']}</textarea>
+									<span class="help-block">模板变量:[昵称] [金额] [时间]</span>
+								</div>
+							</div>
+							<div class="panel-heading">
+								提现申请审核完成通知
+							</div>
+							<div class="form-group">
+								<label class="col-sm-2 control-label">标题</label>
+								<div class="col-sm-9">
+									<input type="text" name="base[noticetitle6]" placeholder="默认：提现申请审核完成通知" class="form-control" value="{$base['noticetitle6']}" />
+								</div>
+							</div>
+							<div class="form-group">
+								<label class="col-sm-2 control-label">内容</label>
+								<div class="col-sm-9">
+									<textarea name="base[noticecontent6]" style="width: 100%;height: 70px;" class="form-control">{$base['noticecontent6']}</textarea>
+									<span class="help-block">模板变量:[昵称] [金额] [时间]</span>
+								</div>
+							</div>
+							<div class="panel-heading">
+								佣金打款通知
+							</div>
+							<div class="form-group">
+								<label class="col-sm-2 control-label">标题</label>
+								<div class="col-sm-9">
+									<input type="text" name="base[noticetitle7]" placeholder="默认：佣金打款通知" class="form-control" value="{$base['noticetitle7']}" />
+								</div>
+							</div>
+							<div class="form-group">
+								<label class="col-sm-2 control-label">内容</label>
+								<div class="col-sm-9">
+									<textarea name="base[noticecontent7]" style="width: 100%;height: 70px;" class="form-control">{$base['noticecontent7']}</textarea>
+									<span class="help-block">模板变量:[昵称] [打款方式] [金额] [时间]</span>
+								</div>
+							</div>
+							<div class="panel-heading">
+								{if Customized::init('distributionText') > 0}共享股东{else}分销商{/if}等级升级通知
+							</div>
+							<div class="form-group">
+								<label class="col-sm-2 control-label">标题</label>
+								<div class="col-sm-9">
+									<input type="text" name="base[noticetitle8]" placeholder="默认：等级升级通知" class="form-control" value="{$base['noticetitle8']}" />
+								</div>
+							</div>
+							<div class="form-group">
+								<label class="col-sm-2 control-label">内容</label>
+								<div class="col-sm-9">
+									<textarea name="base[noticecontent8]" style="width: 100%;height: 70px;" class="form-control">{$base['noticecontent8']}</textarea>
+									<span class="help-block">模板变量: [昵称] [旧等级] [旧一级分销比例] [旧二级分销比例] [旧三级分销比例] [新等级] [新一级分销比例] [新二级分销比例] [新三级分销比例] [时间]</span>
+								</div>
+							</div>
+						</div>
+						<div class="tab-pane" id="tab_qrcode">
+							{if p('wxplatform')}
+							<div class="form-group">
+								<label class="col-sm-2 control-label">海报二维码</label>
+								<div class="col-sm-9">
+									<label class="radio-inline" >
+										<input type="radio" name="base[posterqr]" value="0" onclick="$('.gzqrcode').hide();" {if intval($base['posterqr']) == 0 || empty($base['rollstatus'])}checked{/if}>普通二维码{if p('wxapp')}（小程序码）{/if}
+									</label>
+									<label class="radio-inline" >
+										<input type="radio" name="base[posterqr]" value="1" onclick="$('.gzqrcode').show();" {if intval($base['posterqr']) == 1}checked{/if}>关注二维码
+									</label>
+									<span class="help-block">关注二维码：扫描海报以后会先关注公众号</span>
+								</div>
+							</div>
+							<div class="gzqrcode" {if intval($base['posterqr']) != 1}style="display: none"{/if}>
+<!--								<div class="form-group">-->
+<!--									<label class="col-sm-2 control-label">二维码类型</label>-->
+<!--									<div class="col-sm-9">-->
+<!--										<label class="radio-inline" >-->
+<!--											<input type="radio" name="base[posterType]" value="0" {if intval($base['posterType']) != 1}checked{/if}>永久二维码-->
+<!--										</label>-->
+<!--										<label class="radio-inline" >-->
+<!--											<input type="radio" name="base[posterType]" value="1" {if intval($base['posterType']) == 1}checked{/if}>普通二维码-->
+<!--										</label>-->
+<!--										<span class="help-block">永久二维码：二维码长期有效，永不过期；普通二维码：有效期30天，过期以后生成新的</span>-->
+<!--									</div>-->
+<!--								</div>-->
+								<div class="form-group">
+									<label class="col-sm-2 control-label">关注回复类型</label>
+									<div class="col-sm-9">
+										<label class="radio-inline" >
+											<input type="radio" name="base[replytype]" value="0" {if intval($base['replytype']) != 1}checked{/if}>微信图文
+										</label>
+										<label class="radio-inline" >
+											<input type="radio" name="base[replytype]" value="1" {if intval($base['replytype']) == 1}checked{/if}>小程序
+										</label>
+										<span class="help-block">默认回复类型为微信图文</span>
+									</div>
+								</div>
+								<div class="form-group">
+									<label class="col-sm-2 control-label">关注回复标题</label>
+									<div class="col-sm-9">
+										<input type="text" name="base[gztitle]" class="form-control" value="{$base['gztitle']}" />
+									</div>
+								</div>
+								<div class="form-group">
+									<label class="col-sm-2 control-label">关注回复描述</label>
+									<div class="col-sm-9">
+										<input type="text" name="base[gzdesc]" class="form-control" value="{$base['gzdesc']}" />
+									</div>
+								</div>
+								<div class="form-group">
+									<label class="col-sm-2 control-label">关注回复图片</label>
+									<div class="col-sm-9">
+										{php echo attachment_select('base[gzthumb]',$base['gzthumb']);}
+										<span class="help-block">图片推荐600像素 * 600像素</span>
+									</div>
+								</div>
+							</div>
+							{/if}
+							<div class="form-group">
+								<label class="col-sm-2 control-label">海报跳转链接</label>
+								<div class="col-sm-9">
+									<label class="radio-inline" onclick="$('#qrcodeurl').hide();" >
+										<input type="radio" name="base[qrcodeurlstatus]" value="0" {if intval($base['qrcodeurlstatus']) == 0 || empty($base['qrcodeurlstatus'])}checked{/if}>{if Customized::init('distributionText') > 0}共享股东{else}分销商{/if}申请页
+									</label>
+									<label class="radio-inline" onclick="$('#qrcodeurl').hide();">
+										<input type="radio" name="base[qrcodeurlstatus]" value="1" {if intval($base['qrcodeurlstatus']) == 1}checked{/if}>平台首页
+									</label>
+								</div>
+							</div>
+						</div>
+						<div class="tab-pane" id="tab_share">
+							<div class="alert alert-info">
+								<b>适用模板变量：[昵称] [时间] [系统名称]</b>
+							</div>
+							<div class="form-group">
+								<label class="col-sm-2 control-label">分享标题</label>
+								<div class="col-sm-9">
+									<input type="text" name="base[share_title]" class="form-control" value="{$base['share_title']}" />
+								</div>
+							</div>
+							<div class="form-group">
+								<label class="col-sm-2 control-label">分享图片</label>
+								<div class="col-sm-9">
+									{php echo attachment_select('base[share_image]', $base['share_image']);}
+								</div>
+							</div>
+							<div class="form-group">
+								<label class="col-sm-2 control-label">分享描述</label>
+								<div class="col-sm-9">
+									<input type="text" name="base[share_desc]" class="form-control" value="{$base['share_desc']}" />
+								</div>
+							</div>
+							<div class="form-group">
+								<label class="col-sm-2 control-label">文本替换</label>
+								<div class="col-sm-9">
+									<div class="input-group">
+										<span class="input-group-addon">导师=</span>
+										<input type="text" name="base[dstext]" class="form-control valid" placeholder="导师" value="{$base['dstext']}" >
+									</div>
+								</div>
+							</div>
+							<div class="form-group">
+								<label class="col-sm-2 control-label">导师信息提示</label>
+								<div class="col-sm-9">
+									<input type="text" name="base[dsinfotext]" class="form-control valid" placeholder="想赚取更多利益，获得更多优惠？快联系你的指导老师拜师学艺吧！" value="{$base['dsinfotext']}" >
+								</div>
+							</div>
+							<div class="form-group">
+								<label class="col-sm-2 control-label">个人信息提示</label>
+								<div class="col-sm-9">
+									<input type="text" name="base[grinfotext]" class="form-control valid" placeholder="为了让你的社群成员能够更方便的找到你，请上传你的微信二维码" value="{$base['grinfotext']}" >
+								</div>
+							</div>
+						</div>
+					</div>
+					<div class="form-group">
+						<label class="col-sm-2 control-label"></label>
+						<div class="col-sm-9">
+							<input type="submit" name="submit" value="提交" class="btn btn-primary min-width" />
+							<input type="hidden" name="token" value="{$_W['token']}" />
+						</div>
+					</div>
+				</div>
+			</div>
+		</form>
+	</div>
+</div>
+<script>
+$(function () {
+	window.optionchanged = false;
+	$('#myTab a').click(function (e) {
+		e.preventDefault();//阻止a链接的跳转行为
+		$(this).tab('show');//显示当前选中的链接及关联的content
+	})
+});
+function rank(r){
+	if(r == 1){
+		$('#tworank').hide();
+		$('#threerank').hide();
+	}else if(r == 2){
+		$('#tworank').show();
+		$('#threerank').hide();
+	}else if(r == 3){
+		$('#tworank').show();
+		$('#threerank').show();
+	}
+}
+
+function changehelp(flag){
+	if(flag>0){
+		$('#helpimg').show();
+	}else{
+		$('#helpimg').hide();
+	}
+}
+
+function appdis(a){
+	if(a == 1){
+		$('#appdisdiv3').hide();
+		$('#appdisdiv3dis').hide();
+		$('#examineflag').show();
+		$('#appdisdiv4').hide();
+        $('#appdisdiv5').hide();
+    }else if(a == 3){
+		$('#appdisdiv3').hide();
+		$('#appdisdiv3dis').hide();
+		$('#examineflag').hide();
+		$('#appdisdiv4').hide();
+        $('#appdisdiv5').hide();
+    }else if(a == 4){
+		$('#appdisdiv3').hide();
+		$('#appdisdiv3dis').hide();
+		$('#examineflag').show();
+		$('#appdisdiv4').show();
+        $('#appdisdiv5').hide();
+    }else if(a == 5){
+        $('#appdisdiv3').hide();
+        $('#appdisdiv3dis').hide();
+        $('#examineflag').show();
+        $('#appdisdiv4').hide();
+        $('#appdisdiv5').show();
+    }else{
+		$('#appdisdiv4').hide();
+		$('#appdisdiv3').show();
+		$('#examineflag').show();
+		$('#appdisdiv3dis').show();
+        $('#appdisdiv5').hide();
+    }
+}
+function twoappdis(a){
+	if(a == 1){
+		$('#twoappdisdiv3').hide();
+		$('#twoexamineflag').show();
+	}else if(a == 3){
+		$('#twoappdisdiv3').hide();
+		$('#twoexamineflag').hide();
+	}else{
+		$('#twoappdisdiv3').show();
+		$('#twoexamineflag').show();
+	}
+}
+
+function changemode(flag){
+	if(flag){
+		$('.modeflag').show();
+		$('.modeflag2').hide();
+		$('#twodis').show();
+		$('#twocommunity').show();
+		$('#appdisdiv3dis').hide();
+	}else{
+		$('.modeflag').hide();
+		$('.modeflag2').show();
+		$('#twodis').hide();
+		$('#twocommunity').hide();
+		if($('input[name="base[appdis]"]:checked').val() == 3){
+			$('#appdisdiv3dis').show();
+		}else{
+			$('#appdisdiv3dis').hide();
+		}
+	}
+}
+
+</script>
+{php include wl_template('common/footer');}

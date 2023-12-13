@@ -1,0 +1,215 @@
+{php include wl_template('common/header');}
+<style>
+    .user{
+        height: 60px;
+        min-width: 180px;
+    }
+    .user .img{
+        width: 60px;
+        height: 60px;
+        float: left;
+        position: relative;
+    }
+    .user .img img{
+        width: 60px;
+        height: 60px;
+        border-radius: 50%;
+    }
+    .user .info{
+        float: left;
+        height: 60px;
+        width: calc(100% - 60px);
+        padding-left: 10px;
+        padding-top: 10px;
+        font-size: 15px;
+        text-align: left;
+        line-height: 20px;
+    }
+</style>
+<ul class="nav nav-tabs" id="myTab">
+    <li class="active"><a href="javascript:;">红娘列表</a></li>
+</ul>
+<div class="app-content">
+    <!--顶部操作-->
+    <div class="app-filter">
+        <div class="filter-action">
+            <a href="{php echo web_url('dating/matchmaker/matchmakerEdit')}" class="btn btn-primary">添加红娘</a>
+        </div>
+        <div class="filter-list">
+            <form action="" method="get" class="form-horizontal" role="form" id="form1">
+                <input type="hidden" name="c" value="site" />
+                <input type="hidden" name="a" value="entry" />
+                <input type="hidden" name="m" value="{MODULE_NAME}" />
+                <input type="hidden" name="p" value="dating" />
+                <input type="hidden" name="ac" value="matchmaker" />
+                <input type="hidden" name="do" value="matchmakerList" />
+                <input type="hidden" name="status" value="{$status}" />
+                <input type="hidden" name="create_source" value="{$createSource}" />
+                <div class="form-group">
+                    <div class="col-sm-2 control-label">昵称</div>
+                    <div class="col-sm-9">
+                        <input type="text" class="form-control" name="nickname" value="{$nickname}" placeholder="请输入用户昵称...">
+                    </div>
+                </div>
+                <div class="form-group">
+                    <label class="col-sm-2 control-label">状态</label>
+                    <div class="col-sm-9">
+                        <div class="btn-group">
+                            <a href="{php echo wl_filter_url('status:0');}" class="btn {if $status == 0}btn-primary{else}btn-default{/if}">全部</a>
+                            <a href="{php echo wl_filter_url('status:1');}" class="btn {if $status == 1}btn-primary{else}btn-default{/if}">待付款</a>
+                            <a href="{php echo wl_filter_url('status:2');}" class="btn {if $status == 2}btn-primary{else}btn-default{/if}">待审核</a>
+                            <a href="{php echo wl_filter_url('status:3');}" class="btn {if $status == 3}btn-primary{else}btn-default{/if}">已通过</a>
+                            <a href="{php echo wl_filter_url('status:4');}" class="btn {if $status == 4}btn-primary{else}btn-default{/if}">未通过</a>
+                        </div>
+                    </div>
+                </div>
+                <div class="form-group">
+                    <label class="col-sm-2 control-label">来源</label>
+                    <div class="col-sm-9">
+                        <div class="btn-group">
+                            <a href="{php echo wl_filter_url('create_source:0');}" class="btn {if $createSource == 0}btn-primary{else}btn-default{/if}">全部</a>
+                            <a href="{php echo wl_filter_url('create_source:1');}" class="btn {if $createSource == 1}btn-primary{else}btn-default{/if}">用户申请</a>
+                            <a href="{php echo wl_filter_url('create_source:2');}" class="btn {if $createSource == 2}btn-primary{else}btn-default{/if}">后台创建</a>
+                        </div>
+                    </div>
+                </div>
+                <div class="form-group">
+                    <div class="col-sm-2 control-label"></div>
+                    <div class="col-sm-9">
+                        <button class="btn btn-primary" type="submit">搜索</button>
+                        <a href="{php echo web_url('dating/matchmaker/matchmakerList')}" class="btn btn-danger">清除</a>
+                    </div>
+                </div>
+            </form>
+        </div>
+    </div>
+    <!--表格信息-->
+    <div class="app-table-list">
+        <!--列表信息-->
+        <div class="table-responsive order-list">
+            <table class="table table-hover">
+                <thead>
+                    <tr>
+                        <th class="text-center"><input type="checkbox" /></th>
+                        <th class="text-left">用户信息</th>
+                        <th class="text-center">描述信息</th>
+                        <th class="text-center">微信号</th>
+                        <th class="text-center">qq号</th>
+                        <th class="text-center">累计佣金<br />余额</th>
+                        <th class="text-center">创建时间</th>
+                        <th class="text-center">来源</th>
+                        <th class="text-center">状态</th>
+                        <th class="text-center">客户(点击查看)</th>
+                        <th class="text-center">操作</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    {loop $list $key $item}
+                        <tr class="text-center">
+                            <td><input type="checkbox" value="{$item['id']}" /></td>
+                            <td>
+                                <div class="user">
+                                    <div class="img">
+                                        <img src="{$item['avatar']}">
+                                    </div>
+                                    <div class="info">
+                                        <div>{$item['nickname']}</div>
+                                        <div>{$item['phone']}</div>
+                                    </div>
+                                </div>
+                            </td>
+                            <td>
+                                <div style="max-height: 80px;overflow: auto;text-align: left;">
+                                    {$item['describe']}
+                                </div>
+                            </td>
+                            <td>
+                                {if $item['wechat_number']}
+                                <label class="label label-primary">{$item['wechat_number']}</label>
+                                {else}
+                                --
+                                {/if}
+                            </td>
+                            <td>
+                                {if $item['qq_unmber']}
+                                <label class="label label-primary">{$item['qq_unmber']}</label>
+                                {else}
+                                --
+                                {/if}
+                            </td>
+                            <td>
+                                <label class="label label-success">￥{$item['total_commission']}</label><br />
+                                <label class="label label-info" style="margin-top: 5px;display: inline-block;">￥{$item['commission']}</label>
+                            </td>
+                            <td>{$item['create_time_text']}</td>
+                            <td>
+                                {if $item['create_source'] == 1}
+                                    <label class="label label-success">用户申请</label>
+                                {else}
+                                    <label class="label label-info">后台创建</label>
+                                {/if}
+                            </td>
+                            <td>
+                                {if $item['status'] == 1}
+                                    <label class="label label-inverse">待付款</label>
+                                {elseif $item['status'] == 2}
+                                    <label class="label label-info">待审核</label>
+                                {elseif $item['status'] == 3}
+                                    <label class="label label-primary">已通过</label>
+                                {elseif $item['status'] == 4}
+                                    <label class="label label-danger">未通过</label>
+                                {/if}
+                            </td>
+                            <td>
+                                <a href="{php echo web_url('dating/matchmaker/matchmakerMember',['id'=>$item['id']])}" class="btn btn-info btn-sm" title="点击查看">{$item['customer']}人</a>
+                            </td>
+                            <td>
+                                {if $item['status'] == 1}
+                                <!--待付款-->
+
+                                {elseif $item['status'] == 2}
+                                <!--待审核-->
+                                <a href="{php echo web_url('dating/matchmaker/matchmakerExamine',['id'=>$item['id'],'status'=>3])}" data-toggle="ajaxPost" class="btn btn-primary btn-sm">通过</a>
+                                <a href="javascript:;" class="btn btn-success btn-sm btn-reject" data-id="{$item['id']}">驳回</a>
+                                {elseif $item['status'] == 3}
+                                <!--已通过-->
+                                <a href="{php echo web_url('dating/matchmaker/matchmakerEdit',['id'=>$item['id']])}" class="btn btn-primary btn-sm">编辑</a>
+                                <a href="{php echo web_url('dating/matchmaker/matchmakerDel',['ids'=>$item['id']])}" class="btn btn-danger btn-sm" data-toggle="ajaxRemove" data-confirm="确定删除当前红娘？">删除</a>
+                                {elseif $item['status'] == 4}
+                                <!--未通过-->
+                                    <a href="{php echo web_url('dating/matchmaker/matchmakerEdit',['id'=>$item['id']])}" class="btn btn-primary btn-sm">编辑</a>
+                                    <a href="{php echo web_url('dating/matchmaker/matchmakerDel',['ids'=>$item['id']])}" class="btn btn-danger btn-sm" data-toggle="ajaxRemove" data-confirm="确定删除当前标签信息？">删除</a>
+                                    <a href="{php echo web_url('dating/matchmaker/matchmakerExamine',['id'=>$item['id'],'status'=>3])}" data-toggle="ajaxPost" class="btn btn-primary btn-sm">通过</a>
+                                {/if}
+                            </td>
+                        </tr>
+                    {/loop}
+                </tbody>
+            </table>
+        </div>
+        <!--操作按钮 分页信息-->
+        <div class="app-table-foot clearfix">
+            <div class="pull-left">
+                <button class="btn btn-default" type="button" data-toggle='batch-remove' data-confirm="确定删除当前选中的所有红娘？" data-href="{php echo web_url('dating/matchmaker/matchmakerDel')}">批量删除</button>
+            </div>
+            <div class="pull-right">{$pager}</div>
+        </div>
+    </div>
+</div>
+<script>
+    //点击驳回
+    $(document).on('click','.btn-reject',function (){
+        let id = $(this).data('id'),
+            url = "{php echo web_url('dating/matchmaker/matchmakerExamine')}";
+        tip.prompt('请输入驳回原因！', {
+            maxlength: 230,
+            callback: function (reason) {
+                $.post(url,{id:id,status:4,reason:reason},function (res){
+                    if(res.status == 0) tip.msgbox.err(res.result.message);
+                    else tip.msgbox.suc(res.result.message,res.result.url);
+                },'json');
+            }
+        });
+    });
+</script>
+{php include wl_template('common/footer');}

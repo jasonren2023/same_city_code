@@ -1,0 +1,146 @@
+{php include wl_template('common/header');}
+<style>
+	.form-group{max-width: 100%!important;}
+</style>
+<ul class="nav nav-tabs">
+	<li class="active"><a href="#">底部菜单</a></li>
+</ul>
+<div class="app-content">
+	<div class="app-form">
+		<form action="" class="form-horizontal form form-validate" method="post">
+			<div class="panel panel-default">
+				<div class="panel-body">
+					<div class="alert alert-warning" role="alert">菜单设置优先读取平台装修菜单设置，装修未设置时读取此处</div>
+					<!--开关设置  0=使用默认；1=使用当前自定义菜单-->
+					<div class="form-group">
+						<label class="col-sm-2 control-label">菜单设置</label>
+						<div class="col-sm-9">
+							<label class="radio radio-success radio-inline" onclick="$('.diymenu').hide()">
+								<input type="radio" name="info[status]" value="0" {if empty($set['status'])}checked="checked"{/if}>默认菜单
+							</label>
+							<label class="radio radio-success radio-inline" onclick="$('.diymenu').show()">
+								<input type="radio" name="info[status]" value="1" {if $set['status'] == 1}checked="checked"{/if}>自定义菜单
+							</label>
+						</div>
+					</div>
+					<!--自定义菜单设置-->
+					<div class="form-group diymenu" {if $set['status'] != 1}style="display: none;"{/if}>
+						<label class="col-sm-2 control-label">自定义菜单</label>
+						<div class="col-sm-9">
+							<div class="app-table-list">
+							<div class="table-responsive">
+								<table class="table table-hover">
+									<thead>
+										<tr>
+											<th class="text-center" width="7%">默认名称</th>
+											<th class="text-center" width="10%">修改名称</th>
+											<th class="text-center" width="20%">默认图片</th>
+											<th class="text-center" width="20%">选中图片</th>
+											<th class="text-center" width="25%">链接</th>
+											<th class="text-center" width="8%">按钮开关</th>
+										</tr>
+									</thead>
+									<tbody id="menuList">
+										{loop $set['list'] $index $item}
+											<tr class="text-center">
+												<td>
+													<input type="text" class="hide" name="info[list][{$index}][default_name]" value="{$item['default_name']}"/>
+													{$item['default_name']}
+												</td>
+												<td>
+													<input class="form-control" type="text" name="info[list][{$index}][diy_name]" value="{$item['diy_name']}" maxlength="4" placeholder="{$item['default_name']}" />
+												</td>
+												<!-- 默认图片 -->
+												<td class="select_img_temp">
+													<div class="input-group img-item">
+														<div class="input-group-addon">
+															<img src="{php echo tomedia($item['default_img'])}" id="pimg-{$index}default_img"  style="height:20px;width:20px"/>
+														</div>
+														<input type="text" readonly="readonly" class="form-control"  id="cimg-{$index}default_img" name="info[list][{$index}][default_img]" value="{$item['default_img']}"/>
+														<div class="input-group-btn">
+															<button type="button" class="btn btn-default"
+																	data-toggle="selectAttachment"
+																	data-input="#cimg-{$index}default_img"
+																	data-img="#pimg-{$index}default_img">选择图片</button>
+															<button type="button" class="btn btn-default clearinput">X</button>
+														</div>
+													</div>
+												</td>
+												<!-- 选中图片 -->
+												<td class="select_img_temp">
+													<div class="input-group img-item">
+														<div class="input-group-addon">
+															<img src="{php echo tomedia($item['selected_img'])}" id="pimg-{$index}selected_img" style="height:20px;width:20px"/>
+														</div>
+														<input type="text" readonly="readonly" class="form-control" id="cimg-{$index}selected_img" name="info[list][{$index}][selected_img]" value="{$item['selected_img']}"/>
+														<div class="input-group-btn">
+															<button type="button" class="btn btn-default"
+																	data-toggle="selectAttachment"
+																	data-input="#cimg-{$index}selected_img"
+																	data-img="#pimg-{$index}selected_img">选择图片</button>
+															<button type="button" class="btn btn-default clearinput">X</button>
+														</div>
+													</div>
+												</td>
+												<td>
+													<div class="input-group form-group" style="margin: 0;display: inline-block;">
+														<input name="info[list][{$index}][link]" value="{$item['link']}" id="advlink{$index}" style="width: 15rem;" class="form-control valid" readonly="readonly" type="text"/>
+														<span class="input-group-btn">
+															<span data-input="#advlink{$index}" data-toggle="selectUrl" class="btn btn-default">选择链接</span>
+															<span class="btn btn-default clearinput">X</span>
+														</span>
+													</div>
+												</td>
+												<td>
+													<!--是否开启：0=关，1=开启-->
+													<input type="checkbox" class="js-switch" name="info[list][{$index}][switch]" value="1" {if $item['switch']}checked="checked" {/if}>
+												</td>
+											</tr>
+										{/loop}
+									</tbody>
+								</table>
+							</div>
+							</div>
+						</div>
+					</div>
+					<div class="form-group">
+						<label class="col-sm-2 control-label"></label>
+						<div class="col-sm-9">
+							<input type="submit" name="submit" value="保存" class="btn btn-primary min-width" />
+							<input type="hidden" name="token" value="{$_W['token']}" />
+						</div>
+					</div>
+				</div>
+			</div>
+		</form>
+	</div>
+</div>
+<script type="text/javascript">
+	$(function(){
+		bindEvents();//引用图片选择触发器
+	});
+	/**
+	 * 触发图片选择
+	 */
+	function bindEvents() {
+		require(['jquery', 'util'], function ($, util) {
+			$('.btn-select-pic').unbind('click').click(function () {
+				var imgitem = $(this).closest('.img-item');
+				util.image('', function (data) {
+					imgitem.find('img').attr('src', data['url']);
+					imgitem.find('input').val(data['attachment']);
+				});
+			});
+		});
+	}
+	/**
+	 * 点击删除图片或者链接
+	 */
+	$("#menuList").on('click','.clearinput',function () {
+		$(this).closest('.input-group-btn').prev('.form-control').val('');
+		let a = $(this).closest('.input-group-btn').siblings('.input-group-addon').contents('img').attr('src','');
+	});
+
+
+</script>
+{php include wl_template('common/footer');}

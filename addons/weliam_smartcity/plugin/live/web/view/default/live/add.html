@@ -1,0 +1,317 @@
+{php include wl_template('common/header');}
+<meta name="referrer" content="never">
+<style>
+    .goodsBlock{
+        width: 300px;
+        height: 120px;
+        float: left;
+        margin-right: 15px;
+        border: 1px solid #CCCCCC;
+        margin-bottom: 15px;
+        padding: 5px;
+    }
+    .goodsBlock .img{
+        width: 120px;
+        height: 100%;
+        float: left;
+        margin-right: 10px;
+        position: relative;
+    }
+    .goodsBlock .img img{
+        width: 100%;
+        height: 100%;
+    }
+    .goodsBlock .img .deleteGoods{
+        position: absolute;
+        top: 0;
+        right: 0;
+        color: red;
+        padding: 2px 6px;
+        font-size: 13px;
+        cursor: pointer;
+    }
+    .goodsBlock .info{
+        float: left;
+        width: calc(100% - 135px);
+        height: 100%;
+        font-size: 13px;
+    }
+    .goodsBlock .info .title{
+        display: -webkit-box;
+        overflow: hidden;
+        -webkit-box-orient: vertical;
+        text-overflow: ellipsis;
+        -webkit-line-clamp: 2;
+        height: 40px;
+        line-height: 20px;
+    }
+</style>
+<ul class="nav nav-tabs">
+    <li><a href="{php echo web_url('live/live/liveList')}">直播间列表</a></li>
+    <li class="active"><a href="javascript:;">添加直播间</a></li>
+</ul>
+<div class="app-content">
+    {if $_W['aid']}
+        <div class="app-filter">
+            <div class="alert alert-warning">
+                请添加商品信息，如果不添加商品信息则当前直播间在同步信息后会自动移动到总后台
+            </div>
+        </div>
+    {/if}
+    <div class="app-form">
+        <div class="panel panel-default">
+            <form class="form-horizontal form-validate" method="post">
+                <!-- 房间名字 -->
+                <div class="form-group">
+                    <div class="col-sm-2 control-label"><span class="form-must">*</span>房间名称</div>
+                    <div class="col-sm-9">
+                        <input class="form-control" type="text" name="data[name]" minlength="3" maxlength="15"/>
+                    </div>
+                </div>
+                <!-- 背景图 -->
+                <div class="form-group">
+                    <label class="col-sm-2 control-label"><span class="form-must">*</span>背景图</label>
+                    <div class="col-sm-9">
+                        {php echo attachment_select('data[coverImg]', '');}
+                        <div class="help-block">建议像素1080*1920，大小不超过1M</div>
+                    </div>
+                </div>
+                <!-- 开始时间 - 结束时间 -->
+                <div class="form-group">
+                    <label class="control-label col-xs-12 col-sm-2"><span class="form-must">*</span>开始时间:</label>
+                    <div class="col-xs-12 col-sm-8">
+                        {php echo tpl_select_time_info('time', ['starttime' => date('Y-m-d H:i',strtotime(' +15 minute')), 'endtime' => date('Y-m-d H:i', strtotime('+1 hour +15 minute'))]);}
+                        <div class="input_tip">开播时间需要在当前时间的10分钟后 并且 开始时间不能在 6 个月后</div>
+                    </div>
+                </div>
+                <!-- 主播昵称 -->
+                <div class="form-group">
+                    <div class="col-sm-2 control-label must "><span class="form-must">*</span>主播昵称</div>
+                    <div class="col-sm-9">
+                        <input class="form-control" type="text" name="data[anchorName]" minlength="3" maxlength="15"/>
+                    </div>
+                </div>
+                <!-- 主播微信号 -->
+                <div class="form-group">
+                    <div class="col-sm-2 control-label must "><span class="form-must">*</span>主播微信</div>
+                    <div class="col-sm-9">
+                        <input class="form-control" type="text" name="data[anchorWechat]"/>
+<!--                        <div class="input_tip">如果未实名认证，需要先前往<a href="https://mp.weixin.qq.com/" target="_blank">小程序直播</a>小程序进行实名验证</div>-->
+                    </div>
+                </div>
+                <!-- 分享图 -->
+                <div class="form-group">
+                    <label class="col-sm-2 control-label"><span class="form-must">*</span>分享图</label>
+                    <div class="col-sm-9">
+                        {php echo attachment_select('data[shareImg]', '');}
+                        <div class="input_tip">建议像素800*640，大小不超过1M</div>
+                    </div>
+                </div>
+                <!-- 直播类型 1=推流;0=手机直播 -->
+                <div class="form-group">
+                    <label class="col-sm-2 control-label">直播类型</label>
+                    <div class="col-sm-9">
+                        <label class="radio-inline">
+                            <input type="radio" name="data[type]" value="0" checked="checked"> 手机直播
+                        </label>
+                        <label class="radio-inline">
+                            <input type="radio" name="data[type]" value="1"> 推流
+                        </label>
+                    </div>
+                </div>
+                <!-- 画面尺寸 1=横屏;0=竖屏-->
+                <div class="form-group hide" id="screenType">
+                    <label class="col-sm-2 control-label">画面尺寸</label>
+                    <div class="col-sm-9">
+                        <label class="radio-inline">
+                            <input type="radio" name="data[screenType]" value="0"> 竖屏
+                        </label>
+                        <label class="radio-inline">
+                            <input type="radio" name="data[screenType]" value="1" checked="checked"> 横屏
+                        </label>
+                        <div class="input_tip">横屏：视频宽高比为16:9、4:3、1.85:1 ；竖屏：视频宽高比为9:16、2:3</div>
+                    </div>
+                </div>
+                <!-- 点赞 1=关闭;0=开启-->
+                <div class="form-group">
+                    <label class="col-sm-2 control-label">点赞</label>
+                    <div class="col-sm-9">
+                        <label class="radio-inline">
+                            <input type="radio" name="data[closeLike]" value="0" checked="checked"> 开启
+                        </label>
+                        <label class="radio-inline">
+                            <input type="radio" name="data[closeLike]" value="1"> 关闭
+                        </label>
+                        <div class="input_tip">若关闭，直播开始后不允许开启</div>
+                    </div>
+                </div>
+                <!-- 货架 1=关闭;0=开启  转为后台判断-->
+                <div class="form-group">
+                    <label class="col-sm-2 control-label">货架</label>
+                    <div class="col-sm-9">
+                        <label class="radio-inline">
+                            <input type="radio" name="data[closeGoods]" value="0" checked="checked"> 开启
+                        </label>
+                        <label class="radio-inline">
+                            <input type="radio" name="data[closeGoods]" value="1"> 关闭
+                        </label>
+                        <div class="input_tip">若关闭，直播开始后不允许开启</div>
+                    </div>
+                </div>
+                <!-- 评论 1=关闭;0=开启-->
+                <div class="form-group">
+                    <label class="col-sm-2 control-label">评论</label>
+                    <div class="col-sm-9">
+                        <label class="radio-inline">
+                            <input type="radio" name="data[closeComment]" value="0" checked="checked"> 开启
+                        </label>
+                        <label class="radio-inline">
+                            <input type="radio" name="data[closeComment]" value="1"> 关闭
+                        </label>
+                        <div class="input_tip">若关闭，直播开始后不允许开启</div>
+                    </div>
+                </div>
+                <!-- 选择商品信息 -->
+                <div class="form-group">
+                    <label class="col-sm-2 control-label">选择商品</label>
+                    <div class="col-sm-9">
+                        <input type="button" value="选择商品" class="btn btn-info col-sm-1 min-width" id="selectLiveGoods"/>
+                    </div>
+                </div>
+                <div class="form-group">
+                    <label class="col-sm-2 control-label"></label>
+                    <div class="col-sm-9" id="selectedLiveGoodsList">
+                        <!--已选中的直播商品列表-->
+                    </div>
+                </div>
+                <!-- 主播认证 -->
+                <div class="form-group hide" id="authentication">
+                    <label class="col-sm-2 control-label">主播认证</label>
+                    <div class="col-sm-9">
+                        <img src=""  width="200" height="200"/>
+                    </div>
+                </div>
+                <!-- 提交按钮 -->
+                <div class="form-group">
+                    <label class="col-sm-2 control-label"></label>
+                    <div class="col-sm-9">
+                        <input type="button" name="submit" value="提交" class="btn btn-primary col-sm-1 min-width" id="submitInfo" />
+                    </div>
+                </div>
+            </form>
+        </div>
+    </div>
+</div>
+<script>
+    /**
+     * 打开直播商品选择模态框
+     */
+    $("#selectLiveGoods").on('click',function () {
+        $.ajax({
+            url: "{php echo web_url('live/goods/selectGoods')}",
+            type: "post",
+            dataType: "html",
+            success:function (res) {
+                //判断是否为json格式数据
+                try {
+                    //如果能够成功转换 则为json格式数据信息
+                    let obj = JSON.parse(res);
+                    if(obj){
+                        tip.alert(obj.message)
+                    }
+                } catch(e) {
+                    //json 转换失败  为html格式数据
+                    $("#selectLiveGoodsInfo").remove();
+                    $("body").append(res);
+                    $("#selectLiveGoodsInfo").modal();
+                }
+            },
+        });
+    });
+    /**
+     * 点击删除商品
+     */
+    $("#selectedLiveGoodsList").on('click','.deleteGoods',function () {
+        $(this).closest(".goodsBlock").remove();
+    });
+    /**
+     * 根据直播类型 显示隐藏画面尺寸
+     */
+    $("[name='data[type]']").on('change',function () {
+        let val = $(this).val();
+        if(parseInt(val) === 0){
+            //手机直播
+            $("#screenType").addClass('hide');
+        }else{
+            //推流
+            $("#screenType").removeClass('hide');
+        }
+    });
+    /**
+     * 选中直播商品后的操作
+     * @param params
+     */
+    function liveGoodsSelected(params) {
+        //价格信息获取  价格类型，1：一口价,2：价格区间,3：显示折扣价
+        let priceHtml = '<label class="label label-success">售价：'+params['price']+'</label>';
+        if(params['price_type'] == 2){
+            priceHtml = '<label class="label label-info">售价：'+params['price']+' ~ '+params['price2']+'</label>';
+        }else if(params['price_type'] == 3){
+            priceHtml = '<label class="label label-primary">原价：'+params['price']+'</label>' +
+                '<label class="label label-danger" style="display: inline-block;margin-top: 5px;">现价：'+params['price2']+'</label>';
+        }
+        //商品信息不存在 生成商品块
+        let goodsBlockId = "livegoods"+params['goods_id'];
+        if($('#'+goodsBlockId).length == 0){
+            //不存在 建立商品块
+            let html =  '<div class="goodsBlock" id="'+goodsBlockId+'">\n' +
+                        '   <div class="img">\n' +
+                        '       <img src="'+params['goods_img']+'">\n' +
+                        '   <span class="deleteGoods">删除</span>\n' +
+                        '   </div>\n' +
+                        '       <div class="info">\n' +
+                        '           <div class="title">'+params['title']+'</div>\n' +priceHtml+
+                        '       <input type="hidden" name="live_goods[]" value="'+params['goods_id']+'">\n' +
+                        '   </div>\n' +
+                        '</div>';
+            $("#selectedLiveGoodsList").append(html);
+        }
+    }
+    /**
+     * 点击提交信息
+     */
+    $("#submitInfo").on('click',function () {
+        $('#page-loading').show();
+        //获取并且处理表单信息
+        let formArr = $("form").serializeArray();
+        let params = {};
+        $.each(formArr,function (k,v) {
+            params[v['name']] = v['value'];
+        });
+        delete params['live_goods[]'];
+        //获取商品信息
+        let goodsList = $("[name='live_goods[]']").serializeArray();
+        $.each(goodsList,function (k,v) {
+            params['live_goods['+k+']'] = v['value'];
+        });
+        //请求后台
+        $.post("{php echo web_url('live/live/addLive');}",params,function (res) {
+            if(res.data['qrcode_url'] && res.errno == 1){
+                //认证操作
+                $("#authentication").removeClass('hide');
+                $("#authentication").find("img").attr('src',res.data['qrcode_url']);
+                tip.alert(res.message);
+            }else if(res.errno == 1){
+                //错误抛出
+                $('#page-loading').hide();
+                tip.alert(res.message);
+            }else{
+                //成功 跳转列表页面
+                tip.alert(res.message,function () {
+                    window.location.href = "{php echo web_url('live/live/liveList')}";
+                });
+            }
+        },'json');
+    });
+</script>
+{php include wl_template('common/footer');}

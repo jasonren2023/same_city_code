@@ -1,0 +1,149 @@
+{php include wl_template('common/header');}
+<ul class="nav nav-tabs" id="myTab">
+    <li class="active"><a href="javascript:;">奖品列表</a></li>
+</ul>
+<!-- 直播间信息列表 -->
+<div class="app-content">
+    <div class="app-filter">
+        <!-- 顶部按钮 -->
+        <div class="filter-action">
+            <a href="{php echo web_url('draw/goods/goodsAdd');}" class="btn btn-primary">添加奖品</a>
+        </div>
+        <!-- 搜索内容 -->
+        <div class="filter-list">
+            <form action="" method="get" class="form-horizontal" role="form" id="form1">
+                <input type="hidden" name="c" value="site" />
+                <input type="hidden" name="a" value="entry" />
+                <input type="hidden" name="m" value="{MODULE_NAME}" />
+                <input type="hidden" name="p" value="draw" />
+                <input type="hidden" name="ac" value="goods" />
+                <input type="hidden" name="do" value="goodsIndex" />
+                <div class="form-group">
+                    <div class="col-sm-2 control-label">奖品名称</div>
+                    <div class="col-sm-9">
+                        <input type="text" class="form-control" name="title" value="{$title}" placeholder="请输入奖品名称...">
+                    </div>
+                </div>
+                <div class="form-group">
+                    <label class="col-sm-2 control-label">奖品类型</label>
+                    <div class="col-sm-9">
+                        <div class="btn-group">
+                            <a href="{php echo web_url('draw/goods/goodsIndex',['type'=>0,'status'=>$status,'title'=>$title])}" class="btn {if $type == 0}btn-primary{else}btn-default{/if}">全部</a>
+                            <a href="{php echo web_url('draw/goods/goodsIndex',['type'=>1,'status'=>$status,'title'=>$title])}" class="btn {if $type == 1}btn-primary{else}btn-default{/if}">现金红包</a>
+                            {if p('redpack') && j('redpack')}
+                                <a href="{php echo web_url('draw/goods/goodsIndex',['type'=>2,'status'=>$status,'title'=>$title])}" class="btn {if $type == 2}btn-primary{else}btn-default{/if}">线上红包</a>
+                            {/if}
+                            <a href="{php echo web_url('draw/goods/goodsIndex',['type'=>3,'status'=>$status,'title'=>$title])}" class="btn {if $type == 3}btn-primary{else}btn-default{/if}">积分</a>
+                            <a href="{php echo web_url('draw/goods/goodsIndex',['type'=>4,'status'=>$status,'title'=>$title])}" class="btn {if $type == 4}btn-primary{else}btn-default{/if}">激活码</a>
+                            <a href="{php echo web_url('draw/goods/goodsIndex',['type'=>5,'status'=>$status,'title'=>$title])}" class="btn {if $type == 5}btn-primary{else}btn-default{/if}">商品</a>
+                        </div>
+                    </div>
+                </div>
+                <div class="form-group">
+                    <label class="col-sm-2 control-label">奖品状态</label>
+                    <div class="col-sm-9">
+                        <div class="btn-group">
+                            <a href="{php echo web_url('draw/goods/goodsIndex',['type'=>$type,'status'=>0,'title'=>$title])}" class="btn {if $status == 0}btn-primary{else}btn-default{/if}">全部</a>
+                            <a href="{php echo web_url('draw/goods/goodsIndex',['type'=>$type,'status'=>1,'title'=>$title])}" class="btn {if $status == 1}btn-primary{else}btn-default{/if}">开启</a>
+                            <a href="{php echo web_url('draw/goods/goodsIndex',['type'=>$type,'status'=>2,'title'=>$title])}" class="btn {if $status == 2}btn-primary{else}btn-default{/if}">关闭</a>
+                        </div>
+                    </div>
+                </div>
+                <div class="form-group">
+                    <div class="col-sm-2 control-label"></div>
+                    <div class="col-sm-9">
+                        <input type="text" class="hide" name="type" value="{$type}">
+                        <input type="text" class="hide" name="status" value="{$status}">
+                        <button class="btn btn-primary" type="submit">搜索</button>
+                        <a href="{php echo web_url('draw/goods/goodsIndex',['type'=>0,'status'=>0,'title'=>''])}" class="btn btn-danger">清除</a>
+                    </div>
+                </div>
+            </form>
+        </div>
+    </div>
+    <!-- 表格内容 -->
+    <div class="app-table-list">
+        <div class="table-responsive order-list">
+            <table class="table table-hover">
+                <thead>
+                    <tr>
+                        <th class="text-center">
+                            <input type="checkbox" name="checkall" value="" id="checkall" class="checkboxall" onclick="var ck = this.checked; $(':checkbox').each(function(){this.checked = ck});"/>
+                        </th>
+                        <th class="text-center">奖品名称</th>
+                        <th class="text-center">奖品类型</th>
+                        <th class="text-center">奖品图片</th>
+                        <th class="text-center">中奖概率</th>
+                        <th class="text-center">奖品状态</th>
+                        <th class="text-center">总库存(已抽中/剩余/总数量)</th>
+                        <th class="text-center">今日(已抽中/剩余/总数量)</th>
+                        <th class="text-center">添加时间</th>
+                        <th class="text-center">操作</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    {loop $list $vo}
+                        <tr class="text-center">
+                            <td><center><input type="checkbox" name="items[]" value="{$vo['id']}" class="checkbox" /></center></td>
+                            <td>{$vo['title']}</td>
+                            <td>
+                                {if $vo['type'] == 1}
+                                    <label class="label label-primary">现金红包</label>
+                                {elseif $vo['type'] == 2}
+                                    <label class="label label-info">线上红包</label>
+                                {elseif $vo['type'] == 3}
+                                    <label class="label label-default">积分</label>
+                                {elseif $vo['type'] == 4}
+                                    <label class="label label-danger">激活码</label>
+                                {else}
+                                    <label class="label label-warning">商品</label>
+                                {/if}
+                            </td>
+                            <td>
+                                <img class="scrollLoading" src="{php echo tomedia($vo['image']);}" data-url="{php echo tomedia($mem['avatar'])}" onerror="this.src='{IMAGE_NOPIC_SMALL}'" height="50" width="50"/>
+                            </td>
+                            <td>{$vo['probability']}%</td>
+                            <td>
+                                {if $vo['status'] == 1}
+                                <label class="label label-primary">上架</label>
+                                {else}
+                                <label class="label label-danger">下架</label>
+                                {/if}
+                            </td>
+                            <td>
+<!--                   sales = 已抽中，surplus = 剩余，number = 总数量; 已抽中/剩余/总数量-->
+                                {$vo['total_sales']}
+                                /
+                                {if $vo['total_number'] > 0} {$vo['total_surplus']} {else} - {/if}
+                                /
+                                {if $vo['total_number'] > 0} {$vo['total_number']} {else} - {/if}
+                            </td>
+                            <td>
+                                {$vo['day_sales']}
+                                /
+                                {if $vo['day_number'] > 0} {$vo['day_surplus']} {else} - {/if}
+                                /
+                                {if $vo['day_number'] > 0} {$vo['day_number']} {else} - {/if}
+                            </td>
+                            <td>{php echo date("Y-m-d H:i:s",$vo['create_time']);}</td>
+                            <td>
+                                <a class="btn btn-sm btn-warning" href="{php echo web_url('draw/goods/goodsEdit',['id'=>$vo['id']]);}">编辑</a>
+                                <a class="btn btn-sm btn-danger" data-toggle="ajaxRemove" href="{php echo web_url('draw/goods/delete',['ids'=>$vo['id']]);}" data-confirm="确认删除此奖品？">删除</a>
+                            </td>
+                        </tr>
+                    {/loop}
+                </tbody>
+            </table>
+        </div>
+        <div class="app-table-foot clearfix">
+            <div class="pull-left">
+                <button class="btn btn-default btn-sm" type="button" onclick="location.reload();"><i class="fa fa-refresh"></i></button>
+                <button class="btn btn-default" type="button" data-toggle='batch-remove'
+                        data-confirm="确定删除当前选择的奖品？"
+                        data-href="{php echo web_url('draw/goods/delete')}">批量删除</button>
+            </div>
+            <div class="pull-right">{$pager}</div>
+        </div>
+    </div>
+</div>
+{php include wl_template('common/footer');}

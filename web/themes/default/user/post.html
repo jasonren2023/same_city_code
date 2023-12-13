@@ -1,0 +1,89 @@
+{template 'common/header'}
+<div class="new-keyword" id="js-user-post" ng-controller="UserCreateCtrl" ng-cloak>
+	<ol class="breadcrumb we7-breadcrumb">
+		<a href="{url 'user/display'}"><i class="wi wi-back-circle"></i> </a>
+		<li><a href="{url 'user/display'}">用户管理</a></li>
+		<li>添加用户</li>
+	</ol>
+
+	<form ng-submit="submit()" class="we7-form user-create" name="UserCreateForm">
+		<!-- 基本信息 start -->
+		<div ng-show="create_step == 1">
+			<!-- 用户名 start -->
+			<div class="form-group">
+				<label for="" class="control-label col-sm-2">用户名</label>
+				<div class="form-controls col-sm-8">
+					<input type="text" name="username" placeholder="请输入用户名，用户名为 3 到 30 个字符组成，包括汉字，大小写字母（不区分大小写）" check_username required id="username" ng-style="{'width': '600px'}" class="form-control" ng-model="user.username" placeholder="" autocomplete="off">
+					{if $is_used != 'used'}
+					<div class="help-block" ng-show="UserCreateForm.username.$dirty && UserCreateForm.username.$invalid">
+						<span ng-show="UserCreateForm.username.$error.unique">用户名已经被注册!</span>
+						<span ng-show="UserCreateForm.username.$error.required">用户名不能为空!</span>
+						<span ng-show="UserCreateForm.username.$error.format">用户名必须为 3 到 30 个字符组成，包括汉字，大小写字母（不区分大小写）</span>
+					</div>
+					{/if}
+
+					{if $is_used == 'used'}
+					<div ng-show="UserCreateForm.username.$dirty"><span style="color:#cf1010;" ng-show="!UserCreateForm.username.$error.unique">不是系统用户</span></div>
+					{/if}
+				</div>
+			</div>
+			<!-- 用户名 end -->
+			{if $is_used != 'used'}
+			<!-- 密码 start -->
+			<div class="form-group">
+				<label for="" class="control-label col-sm-2">密码</label>
+				<div class="form-controls col-sm-8">
+					<input type="text" value="" class="hidden"/>
+					<input type="password" name="password" required ng-minlength="8" id="password" ng-style="{'width': '600px'}" class="form-control" ng-model="user.password" placeholder="" autocomplete="off" ng-focus="changeType($event)">
+					<div class="help-block">请填写密码，最小长度为 8 个字符</div>
+				</div>
+			</div>
+			<!-- 密码 end -->
+
+			<!-- 确认密码 start -->
+			<div class="form-group" ng-class="{error: UserCreateForm.password.$modelValue !== UserCreateForm.repassword.$modelValue}">
+				<label for="" class="control-label col-sm-2">确认密码</label>
+				<div class="form-controls col-sm-8">
+					<input type="password" name="repassword" required ng-minlength="8" id="repassword" ng-style="{'width': '600px'}" class="form-control" ng-model="user.repassword" placeholder="" autocomplete="off" ng-focus="changeType($event)">
+					<div class="help-block">重复输入密码，确认正确输入</div>
+				</div>
+			</div>
+			<!-- 确认密码 end -->
+			{/if}
+
+			<!-- 备注 start -->
+			<div class="form-group">
+				<label for="" class="control-label col-sm-2">备注</label>
+				<div class="form-controls col-sm-8">
+					<textarea ng-model="user.remark" rows="6" class="form-control" ng-style="{'width': '600px'}" ng-bind="user.remark" placeholder="方便注明此用户的身份"></textarea>
+				</div>
+			</div>
+			<!-- 备注 end -->
+		</div>
+		<!-- 基本信息 end -->
+
+		<div class="col-sm-offset-2">
+			<input type="submit" name="submit" ng-disabled="submitDisabled" value="提交" class="btn btn-primary" ng-click="checkSubmit($event)" ng-style="{'padding': '6px 50px'}"/>
+		</div>
+	</form>
+</div>
+
+<script type="text/javascript">
+	angular.module('userManageApp').value('config', {
+		groups: 'null',
+		user_type: "{$user_type}",
+		is_used: "{$is_used}",
+		user_modules: 'null',
+		modules_group_list: 'null',
+		account_group_lists: 'null',
+		create_account: {php echo json_encode($create_account)},
+		user_save_url : "{php echo url('user/create/save')}",
+		get_user_group_detail_url : "",
+		check_vice_founder_exists_url : "",
+		check_user_info_url : "{php echo url('user/create/check_user_info')}",
+		check_vice_founder_permission_limit_url : "",
+	});
+	angular.bootstrap($('#js-user-post'), ['userManageApp']);
+</script>
+{template 'common/footer'}
+

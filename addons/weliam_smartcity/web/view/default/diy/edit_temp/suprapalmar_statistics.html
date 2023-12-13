@@ -1,0 +1,113 @@
+<!--------------------------  统计(掌上信息)配置群  ----------------------------------->
+<!-- 风格一 -->
+<script type="text/html" id="tpl_edit_suprapalmar_statistics">
+ <div class="form-group">
+        <div class="col-sm-2 control-label">背景颜色</div>
+        <div class="col-sm-9">
+            <div class="input-group input-group-sm">
+                <input class="form-control diy-bind color" data-bind-child="style" data-bind="bgColor" value="<%style.bgColor||'#FFFFFF'%>" type="color" />
+                <span class="input-group-addon btn btn-default" onclick="$(this).prev().val('#FFFFFF').trigger('propertychange')">清除</span>
+            </div>
+        </div>
+    </div>
+	<div class="form-group">
+	    <div class="col-sm-2 control-label">外边距</div>
+	    <div class="col-sm-9">
+	        <div class="form-group">
+	            <div class="slider col-sm-8" data-value="<%style.mardding||'0'%>" data-min="0" data-max="30"></div>
+	            <div class="col-sm-9 control-labe count"><span><%style.mardding||'0'%></span>px(像素)</div>
+	            <input class="diy-bind input" data-bind-child="style" data-bind="mardding" value="<%style.mardding%>" type="hidden" />
+	        </div>
+	    </div>
+	</div>
+    <div class="form-group">
+        <div class="col-sm-2 control-label">内边距</div>
+        <div class="col-sm-9">
+            <div class="form-group">
+                <div class="slider col-sm-8" data-value="<%style.padding||'0'%>" data-min="0" data-max="30"></div>
+                <div class="col-sm-9 control-labe count"><span><%style.padding||'0'%></span>px(像素)</div>
+                <input class="diy-bind input" data-bind-child="style" data-bind="padding" value="<%style.padding%>" type="hidden" />
+            </div>
+        </div>
+    </div>
+    <div class="form-group">
+        <div class="col-sm-2 control-label">下边距</div>
+        <div class="col-sm-9">
+            <div class="form-group">
+                <div class="slider col-sm-8" data-value="<%style.marginBottom%>" data-min="0" data-max="30"></div>
+                <div class="col-sm-9 control-labe count"><span><%style.marginBottom%></span>px(像素)</div>
+                <input class="diy-bind input" data-bind-child="style" data-bind="marginBottom" value="<%style.marginBottom%>" type="hidden" />
+            </div>
+        </div>
+    </div>
+	<div class="form-group">
+	       <div class="col-sm-2 control-label">数量颜色</div>
+	       <div class="col-sm-9">
+	           <div class="input-group input-group-sm">
+	               <input class="form-control diy-bind color" data-bind-parent="style" data-bind-child="style" data-bind="fontSizColor" value="<%style.fontSizColor%>" type="color" style="width: 59px" />
+				   <span class="input-group-addon btn btn-default" onclick="$(this).prev().val('#ff4444').trigger('propertychange')">重置</span>
+	           </div>
+	       </div>
+	   </div>
+</script>
+<!-- 风格二 -->
+<script type="text/html" id="tpl_edit_suprapalmar_statistics2">
+	<div class="form-group">
+	       <div class="col-sm-2 control-label">背景颜色</div>
+	       <div class="col-sm-9">
+	           <div class="input-group input-group-sm">
+	               <input class="form-control diy-bind color" data-bind-child="style" data-bind="bgColor" value="<%style.bgColor||'#FFFFFF'%>" type="color" />
+	               <span class="input-group-addon btn btn-default" onclick="$(this).prev().val('#FFFFFF').trigger('propertychange')">清除</span>
+	           </div>
+	       </div>
+	   </div>
+	   <div class="form-group">
+	       <div class="col-sm-2 control-label">外边距</div>
+	       <div class="col-sm-9">
+	           <div class="form-group">
+	               <div class="slider col-sm-8" data-value="<%style.mardding||'0'%>" data-min="0" data-max="30"></div>
+	               <div class="col-sm-9 control-labe count"><span><%style.mardding||'0'%></span>px(像素)</div>
+	               <input class="diy-bind input" data-bind-child="style" data-bind="mardding" value="<%style.mardding%>" type="hidden" />
+	           </div>
+	       </div>
+	   </div>
+	   <div class="form-group">
+	       <div class="col-sm-2 control-label">内边距</div>
+	       <div class="col-sm-9">
+	           <div class="form-group">
+	               <div class="slider col-sm-8" data-value="<%style.padding||'0'%>" data-min="0" data-max="30"></div>
+	               <div class="col-sm-9 control-labe count"><span><%style.padding||'0'%></span>px(像素)</div>
+	               <input class="diy-bind input" data-bind-child="style" data-bind="padding" value="<%style.padding%>" type="hidden" />
+	           </div>
+	       </div>
+	   </div>
+	   <div class="form-group">
+	       <div class="col-sm-2 control-label">下边距</div>
+	       <div class="col-sm-9">
+	           <div class="form-group">
+	               <div class="slider col-sm-8" data-value="<%style.marginBottom%>" data-min="0" data-max="30"></div>
+	               <div class="col-sm-9 control-labe count"><span><%style.marginBottom%></span>px(像素)</div>
+	               <input class="diy-bind input" data-bind-child="style" data-bind="marginBottom" value="<%style.marginBottom%>" type="hidden" />
+	           </div>
+	       </div>
+	   </div>
+	<!--   <div class="form-group">
+	          <div class="col-sm-2 control-label">标题颜色</div>
+	          <div class="col-sm-9">
+	              <div class="input-group input-group-sm">
+	                  <input class="form-control diy-bind color" data-bind-parent="style" data-bind-child="style" data-bind="titleColor" value="<%style.titleColor%>" type="color" style="width: 59px" />
+					  <span class="input-group-addon btn btn-default" onclick="$(this).prev().val('#999999').trigger('propertychange')">重置</span>
+	              </div>
+	          </div>
+	   </div> -->
+		<div class="form-group">
+		       <div class="col-sm-2 control-label">数量颜色</div>
+		       <div class="col-sm-9">
+		           <div class="input-group input-group-sm">
+		               <input class="form-control diy-bind color" data-bind-parent="style" data-bind-child="style" data-bind="fontSizColor" value="<%style.fontSizColor%>" type="color" style="width: 59px" />
+					   <span class="input-group-addon btn btn-default" onclick="$(this).prev().val('#333333').trigger('propertychange')">重置</span>
+		           </div>
+		       </div>
+		</div>
+
+</script>

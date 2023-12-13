@@ -1,0 +1,84 @@
+{php include wl_template('common/header');}
+<ul class="nav nav-tabs">
+	<li class="active"><a href="javascript:;">红包设置</a></li>
+</ul>
+<div class="app-content">
+	<div class="app-form">
+	<div class="panel panel-default">
+		<form  action="" method="post" class="form-horizontal form form-validate">
+			  <div class="panel panel-default" >
+				<div class="panel-heading">红包信息</div>
+				<div class="panel-body">
+					<div class="form-group">
+						<label class="col-sm-2 control-label">红包活动标题<span class="must-fill">*</span></label>
+						<div class="col-sm-9">
+							<input type="text" name="redpack[title]" maxlength="8" required autocomplete="off" class="form-control" value="{$redpack['title']}">
+						</div>
+					</div>
+					<div class="form-group">
+						<label class="col-sm-2 control-label">红包页面</label>
+						<div class="col-sm-9">
+							<select name="redpack[diypageid]" class="form-control chosen-select">
+								<option value="" {if empty($redpack['diypageid'])}selected="selected"{/if}>请选择红包页面</option>
+								{loop $diypagelist $page}
+								<option value="{$page['id']}" {if $redpack['diypageid'] == $page['id']}selected="selected"{/if}>{$page['name']}</option>
+								{/loop}
+							</select>
+						</div>
+					</div>
+					<div class="form-group">
+						<label class="col-sm-2 control-label">红包海报</label>
+						<div class="col-sm-9">
+							<select name="redpack[posterid]" class="form-control chosen-select">
+								<option value="" {if empty($redpack['posterid'])}selected="selected"{/if}>请选择红包海报</option>
+								{loop $diyposterlist $poster}
+								<option value="{$poster['id']}" {if $redpack['posterid'] == $poster['id']}selected="selected"{/if}>{$poster['title']}</option>
+								{/loop}
+							</select>
+						</div>
+					</div>
+					<div class="form-group" >
+						<label class="col-sm-2 control-label">红包金额</label>
+						<div class="col-sm-9">
+							<div class="input-group">
+								<span class="input-group-addon">填表领取金额￥</span>
+								<input type="number" name="redpack[onemoney]" class="form-control" value="{$redpack['onemoney']}" />
+								<span class="input-group-addon">任务完成奖励金额￥</span>
+								<input type="number" name="redpack[fishmoney]" class="form-control" value="{$redpack['fishmoney']}" />
+							</div>
+							<div class="help-block">红包金额填入正数，填0或者不填即没有对应红包奖励，最多保留两位小数。</div>
+						</div>
+					</div>
+					<div class="form-group" >
+						<label class="col-sm-2 control-label">邀请任务人数</label>
+						<div class="col-sm-9">
+							<div class="input-group">
+								<input type="number" name="redpack[fishnum]" class="form-control" value="{$redpack['fishnum']}" />
+								<span class="input-group-addon">人</span>
+							</div>
+							<div class="help-block">完成任务需要邀请的人数，填0或不填则不需要邀请。</div>
+						</div>
+					</div>
+		            <div class="form-group">
+		                <label class="col-sm-2 control-label">活动状态 </label>
+		                <div class="col-sm-9">
+		                    <label class="radio-inline"><input type="radio" name="redpack[status]" value="1" {if $redpack['status']==1}checked="checked"{/if}> 开启</label>
+		                    <label class="radio-inline"><input type="radio" name="redpack[status]" value="0" {if $redpack['status']!=1}checked="checked"{/if}> 关闭</label>
+		                </div>
+		            </div>
+		            <div class="form-group">
+		                <label class="col-sm-2 control-label"></label>
+		                <div class="col-sm-9">
+		                    <input type="submit" value="提交" class="btn btn-primary min-width">
+		                    <input type="hidden" name="token" value="{$_W['token']}">
+		                    <input type="hidden" name="id" value="{$_GPC['id']}">
+		                    <input type="button" name="back" onclick="history.back()" value="返回列表" class="btn btn-default min-width">
+		                </div>
+		            </div>
+	            </div>
+		    </div>
+		</form>
+	</div>
+	</div>
+</div>
+{php include wl_template('common/footer');}

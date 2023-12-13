@@ -1,0 +1,147 @@
+<!--------------------------  头条配置群  ----------------------------------->
+<!-- 风格一 -->
+<script type="text/html" id="tpl_edit_headline">
+    <div class="form-group">
+        <div class="col-sm-2 control-label">背景颜色</div>
+        <div class="col-sm-9">
+            <div class="input-group">
+                <input class="form-control diy-bind color" data-bind-child="style" data-bind="bgColor" value="<%style.bgColor%>" type="color" />
+                <span class="input-group-addon btn btn-default" onclick="$(this).prev().val('#ffffff').trigger('propertychange')">清除</span>
+            </div>
+        </div>
+    </div>
+    <div class="form-group">
+        <div class="col-sm-2 control-label">内容下边距</div>
+        <div class="col-sm-9">
+            <div class="form-group">
+                <div class="slider col-sm-8" data-value="<%style.marginBottom%>" data-min="0" data-max="30"></div>
+                <div class="col-sm-9 control-labe count"><span><%style.marginBottom%></span>px(像素)</div>
+                <input class="diy-bind input" data-bind-child="style" data-bind="marginBottom" value="<%style.marginBottom%>" type="hidden" />
+            </div>
+        </div>
+    </div>
+    <div class="form-group">
+        <div class="col-sm-2 control-label">加载方式</div>
+        <div class="col-sm-10">
+            <label class="radio-inline"><input type="radio" name="type" value="1" class="diy-bind" data-bind-child="style" data-bind="type" <%if style.type == 1%>checked<%/if%>>手动选择</label>
+            <label class="radio-inline"><input type="radio" name="type" value="2" class="diy-bind" data-bind-child="style" data-bind="type" <%if style.type == 2%>checked<%/if%>>自动加载</label>
+        </div>
+    </div>
+    <%if style.type == 1%>
+    <div class="form-items indent" data-min="1">
+        <div class="inner">
+            <%each data as child itemid %>
+            <div class="item" data-id="<%itemid%>">
+                <span class="btn-del" title="删除"></span>
+                <div class="item-image">
+                    <img src="<%imgsrc child.display_img%>" onerror="this.src='../addons/{MODULE_NAME}/web/resource/images/nopic.jpg';" />
+                    <span class="select_headline selectButton" data-id="<%itemid%>">选择头条</span>
+                </div>
+                <div class="item-form">
+                    <div class="input-group" style="margin-bottom:0px; ">
+                        <span class="input-group-addon btn btn-default">作者</span>
+                        <input type="text" class="form-control" disabled value="<%child.author%>" />
+                    </div>
+                    <div class="input-group" style="margin-top:10px;margin-bottom:0px; ">
+                        <span class="input-group-addon btn btn-default">浏览量</span>
+                        <input type="text" class="form-control diy-bind" disabled value="<%child.browse%>" />
+                    </div>
+                </div>
+            </div>
+            <%/each%>
+        </div>
+        <div class="btn btn-w-m btn-block btn-default btn-outline" id="addChild"><i class="fa fa-plus"></i> 添加一个</div>
+    </div>
+    <%/if%>
+    <%if style.type == 2%>
+    <div class="form-group">
+        <div class="col-sm-2 control-label">加载数量</div>
+        <div class="col-sm-9">
+            <div class="form-group">
+                <div class="slider col-sm-8" data-value="<%style.show_num%>" data-min="1" data-max="100"></div>
+                <div class="col-sm-9 control-labe count"><span><%style.show_num%></span></div>
+                <input class="diy-bind input" data-bind-child="style" data-bind="show_num" value="<%style.show_num%>" type="hidden" />
+            </div>
+        </div>
+    </div>
+    <%/if%>
+</script>
+<!-- 风格二 -->
+<script type="text/html" id="tpl_edit_headline2">
+    <div class="form-group">
+        <div class="col-sm-2 control-label">榜单标题</div>
+        <div class="col-sm-9">
+            <input class="form-control diy-bind" data-bind-child="params" data-bind="title" placeholder="请输入榜单标题" value="<%params.title%>" />
+        </div>
+    </div>
+    <div class="form-group">
+        <div class="col-sm-2 control-label">榜单详细</div>
+        <div class="col-sm-9">
+            <input class="form-control diy-bind" data-bind-child="params" data-bind="detailed" placeholder="请输入榜单详细" value="<%params.detailed%>" />
+        </div>
+    </div>
+    <div class="form-group">
+        <div class="col-sm-2 control-label">背景颜色</div>
+        <div class="col-sm-9">
+            <div class="input-group">
+                <input class="form-control diy-bind color" data-bind-child="style" data-bind="bgColor" value="<%style.bgColor%>" type="color" />
+                <span class="input-group-addon btn btn-default" onclick="$(this).prev().val('#ffffff').trigger('propertychange')">清除</span>
+            </div>
+        </div>
+    </div>
+    <div class="form-group">
+        <div class="col-sm-2 control-label">内容下边距</div>
+        <div class="col-sm-9">
+            <div class="form-group">
+                <div class="slider col-sm-8" data-value="<%style.marginBottom%>" data-min="0" data-max="30"></div>
+                <div class="col-sm-9 control-labe count"><span><%style.marginBottom%></span>px(像素)</div>
+                <input class="diy-bind input" data-bind-child="style" data-bind="marginBottom" value="<%style.marginBottom%>" type="hidden" />
+            </div>
+        </div>
+    </div>
+    <div class="form-group">
+        <div class="col-sm-2 control-label">加载方式</div>
+        <div class="col-sm-10">
+            <label class="radio-inline"><input type="radio" name="type" value="1" class="diy-bind" data-bind-child="style" data-bind="type" <%if style.type == 1%>checked<%/if%>>手动选择</label>
+            <label class="radio-inline"><input type="radio" name="type" value="2" class="diy-bind" data-bind-child="style" data-bind="type" <%if style.type == 2%>checked<%/if%>>自动加载</label>
+        </div>
+    </div>
+    <%if style.type == 1%>
+    <div class="form-items indent" data-min="1">
+        <div class="inner">
+            <%each data as val itemid%>
+            <div class="item" data-id="<%itemid%>">
+                <span class="btn-del" title="删除"></span>
+                <div class="item-image">
+                    <img src="<%val.display_img%>" onerror="this.src='../addons/{MODULE_NAME}/web/resource/images/nopic.jpg';"/>
+                    <span class="select_headline selectButton" data-id="<%itemid%>">选择头条</span>
+                </div>
+                <div class="item-form">
+                    <div class="input-group" style="margin-bottom:0px; ">
+                        <span class="input-group-addon btn btn-default">作者</span>
+                        <input type="text" class="form-control" disabled value="<%val.author%>" />
+                    </div>
+                    <div class="input-group" style="margin-top:10px;margin-bottom:0px; ">
+                        <span class="input-group-addon btn btn-default">浏览量</span>
+                        <input type="text" class="form-control diy-bind" disabled value="<%val.browse%>" />
+                    </div>
+                </div>
+            </div>
+            <%/each%>
+        </div>
+        <div class="btn btn-w-m btn-block btn-default btn-outline" id="addChild"><i class="fa fa-plus"></i> 添加一个</div>
+    </div>
+    <%/if%>
+    <%if style.type == 2%>
+    <div class="form-group">
+        <div class="col-sm-2 control-label">加载数量</div>
+        <div class="col-sm-9">
+            <div class="form-group">
+                <div class="slider col-sm-8" data-value="<%style.show_num%>" data-min="1" data-max="100"></div>
+                <div class="col-sm-9 control-labe count"><span><%style.show_num%></span></div>
+                <input class="diy-bind input" data-bind-child="style" data-bind="show_num" value="<%style.show_num%>" type="hidden" />
+            </div>
+        </div>
+    </div>
+    <%/if%>
+</script>

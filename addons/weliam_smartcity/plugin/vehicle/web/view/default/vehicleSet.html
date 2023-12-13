@@ -1,0 +1,192 @@
+{php include wl_template('common/header');}
+<ul class="nav nav-tabs" id="myTab">
+	<li class="active"><a href="#setBase">基本设置</a></li>
+<!--	<li><a href="#setTop">置顶设置</a></li>-->
+	<li><a href="#setShare">分享设置</a></li>
+</ul>
+<div class="app-content">
+	<div class="app-form">
+		<form action="" method="post" class="form-horizontal form-validate" id="setting-form">
+			<div class="panel panel-default">
+				<div class="panel-body">
+					<div class="tab-content">
+						<!-- 基本设置 -->
+						<div class="tab-pane active" id="setBase">
+							<div class="panel-heading">基本设置</div>
+							<div class="form-group">
+								<label class="col-sm-2 control-label">路线审核</label>
+								<div class="col-sm-9">
+									<label class="radio-inline">
+										<input type="radio" name="data[is_examine]" value="1" {if $info['is_examine'] != 2}checked="checked"{/if}> 需要审核
+									</label>
+									<label class="radio-inline">
+										<input type="radio" name="data[is_examine]" value="2" {if $info['is_examine'] == 2}checked="checked"{/if}> 免审核
+									</label>
+								</div>
+							</div>
+							<div class="form-group">
+								<label class="col-sm-2 control-label">乘客发布</label>
+								<div class="col-sm-9">
+									<label class="radio-inline">
+										<input type="radio" onclick="$('#passengerMoney').addClass('hide')" name="data[passenger]" value="1" {if $info['passenger'] != 2}checked="checked"{/if}> 免费发布
+									</label>
+									<label class="radio-inline">
+										<input type="radio" onclick="$('#passengerMoney').removeClass('hide')"  name="data[passenger]" value="2" {if $info['passenger'] == 2}checked="checked"{/if}> 付费发布
+									</label>
+								</div>
+							</div>
+							<div class="form-group {if $info['passenger'] != 2}hide{/if}" id="passengerMoney">
+								<label class="col-sm-2 control-label">金额</label>
+								<div class="col-sm-9">
+									<div class="input-group">
+										<input type="text" name="data[passenger_money]" class="form-control" value="{$info['passenger_money']}">
+										<span class="input-group-addon">元</span>
+									</div>
+								</div>
+							</div>
+							<div class="form-group">
+								<label class="col-sm-2 control-label">车主发布</label>
+								<div class="col-sm-9">
+									<label class="radio-inline">
+										<input type="radio" onclick="$('#ownerMoney').addClass('hide')" name="data[owner]" value="1" {if $info['owner'] != 2}checked="checked"{/if}> 免费发布
+									</label>
+									<label class="radio-inline">
+										<input type="radio" onclick="$('#ownerMoney').removeClass('hide')"  name="data[owner]" value="2" {if $info['owner'] == 2}checked="checked"{/if}> 付费发布
+									</label>
+								</div>
+							</div>
+							<div class="form-group {if $info['owner'] != 2}hide{/if}" id="ownerMoney">
+								<label class="col-sm-2 control-label">金额</label>
+								<div class="col-sm-9">
+									<div class="input-group">
+										<input type="text" name="data[owner_money]" class="form-control" value="{$info['owner_money']}">
+										<span class="input-group-addon">元</span>
+									</div>
+								</div>
+							</div>
+<!--							<div class="form-group">-->
+<!--								<label class="col-sm-2 control-label">免责声明(发布)</label>-->
+<!--								<div class="col-sm-9">-->
+<!--									<textarea name="data[disclaimers]" class="form-control" rows="10" style="resize: none;font-size: 15px;">{$info['disclaimers']}</textarea>-->
+<!--									<div class="help-block">发布页面显示的免责声明，发布方可见</div>-->
+<!--								</div>-->
+<!--							</div>-->
+							<div class="form-group">
+								<label class="col-sm-2 control-label">免责声明</label>
+								<div class="col-sm-9">
+									<textarea name="data[desc_disclaimers]" class="form-control" rows="10" style="resize: none;font-size: 15px;">{$info['desc_disclaimers']}</textarea>
+									<div class="help-block">详情页显示的免责声明，对普通用户可见</div>
+								</div>
+							</div>
+						</div>
+						<!-- 置顶设置 -->
+						<!--<div class="tab-pane" id="setTop">
+							<div class="panel-heading">置顶设置</div>
+							<div class="form-group">
+								<label class="col-sm-2 control-label">置顶数量</label>
+								<div class="col-sm-9">
+									<div class="input-group">
+										<input type="number" min="0" name="data[top_number]" class="form-control" value="{php echo $info['top_number'] ? : 0;}">
+										<span class="input-group-addon">条</span>
+									</div>
+									<span class="help-block">置顶招聘信息的数量，不填或填0则无限制。</span>
+								</div>
+							</div>
+							<div class="form-group">
+								<label class="col-sm-2 control-label">置顶价格</label>
+								<div class="col-sm-9 priceList">
+									&lt;!&ndash; 置顶价格信息列表 &ndash;&gt;
+									{loop $info['top_rule'] $key $item}
+										<div class="input-group" style="margin-bottom: 10px;">
+											<span class="input-group-addon">置顶时间(天)</span>
+											<input type="text" name="data[top_rule][{$key}][day]" digits="true" class="form-control day" value="{$item['day']}" required="required" min="1">
+											<span class="input-group-addon">￥</span>
+											<input type="text" name="data[top_rule][{$key}][price]" class="form-control price" value="{$item['price']}" required="required" min="0.01">
+											<span class="input-group-addon btn btn-default deletePriceButton">
+												<i class="fa fa-remove"></i> 删除
+											</span>
+										</div>
+									{/loop}
+									&lt;!&ndash; 提示信息 &ndash;&gt;
+									<span class="help-block">时间请填入整数，价格保留两位小数。</span>
+								</div>
+							</div>
+							<div class="form-group">
+								<label class="col-sm-2 control-label"></label>
+								<div class="col-sm-9">
+									<a class="btn btn-info addPriceButton" href="javascript:;">
+										<i class="fa fa-plus"></i>增加一种置顶规则
+									</a>
+								</div>
+							</div>
+						</div>-->
+						<!-- 分享设置 -->
+						<div class="tab-pane" id="setShare">
+							<div class="panel-heading">分享设置</div>
+							<div class="alert alert-info">
+								<b>适用模板变量：[昵称] [时间] [系统名称]</b>
+							</div>
+							<div class="form-group">
+								<label class="col-sm-2 control-label">分享标题</label>
+								<div class="col-sm-9">
+									<input type="text" name="data[share_title]" class="form-control" value="{$info['share_title']}" />
+								</div>
+							</div>
+							<div class="form-group">
+								<label class="col-sm-2 control-label">分享图片</label>
+								<div class="col-sm-9">
+									{php echo attachment_select('data[share_image]', $info['share_image']);}
+									<span class="help-block">推荐图片尺寸500X500</span>
+								</div>
+							</div>
+							<div class="form-group">
+								<label class="col-sm-2 control-label">分享描述</label>
+								<div class="col-sm-9">
+									<input type="text" name="data[share_desc]" class="form-control" value="{$info['share_desc']}" />
+								</div>
+							</div>
+						</div>
+					</div>
+				</div>
+			</div>
+			<div class="form-group">
+				<label class="col-sm-2 control-label"></label>
+				<div class="col-sm-9">
+					<input type="submit" name="submit" value="提交" class="btn btn-primary min-width" />
+					<input type="hidden" name="token" value="{$_W['token']}" />
+				</div>
+			</div>
+		</form>
+	</div>
+</div>
+<script>
+	//点击添加一条规则信息
+	$(".addPriceButton").on('click',function () {
+		let html = '<div class="input-group" style="margin-bottom: 10px;">\n' +
+				'\t\t\t\t\t\t\t\t\t\t<span class="input-group-addon">置顶时间(天)</span>\n' +
+				'\t\t\t\t\t\t\t\t\t\t<input type="text" name="data[top_rule][0][day]" digits="true" class="form-control day" value="" required="required" min="1">\n' +
+				'\t\t\t\t\t\t\t\t\t\t<span class="input-group-addon">￥</span>\n' +
+				'\t\t\t\t\t\t\t\t\t\t<input type="text" name="data[top_rule][0][price]" class="form-control price" value="" required="required" min="0.01">\n' +
+				'\t\t\t\t\t\t\t\t\t\t<span class="input-group-addon btn btn-default deletePriceButton">\n' +
+				'\t\t\t\t\t\t\t\t\t\t\t<i class="fa fa-remove"></i> 删除\n' +
+				'\t\t\t\t\t\t\t\t\t\t</span>\n' +
+				'\t\t\t\t\t\t\t\t\t</div>';
+		$(".priceList").find('.help-block').before(html);
+		priceNameInit();
+	});
+	//点击删除当前规则信息
+	$(".priceList").on('click','.deletePriceButton',function () {
+		$(this).parent('.input-group').remove();
+		priceNameInit();
+	});
+	//价格规则信息name格式化
+	function priceNameInit(){
+		$(".priceList .input-group").each(function (k,v) {
+			//修改天的name
+			$(this).find('.day').attr('name',"data[top_rule]["+k+"][day]");
+			//修改价格的name
+			$(this).find('.price').attr('name',"data[top_rule]["+k+"][price]");
+		});
+	}
+</script>
+{php include wl_template('common/footer');}

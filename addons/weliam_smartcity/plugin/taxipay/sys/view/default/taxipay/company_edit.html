@@ -1,0 +1,89 @@
+{php include wl_template('common/header');}
+<ul class="nav nav-tabs">
+    <li class="active"><a href="{php echo web_url('taxipay/taxipay/company_edit', array('id' => $item['id']))}">编辑公司</a></li>
+</ul>
+<div class="app-content">
+    <div class="app-form">
+        <form action="" method="post" class="form-horizontal form form-validate">
+            <div class="form-group-title">公司信息</div>
+            <div class="form-group">
+                <label class="col-sm-2 control-label"><span class="form-must">*</span>公司名称</label>
+                <div class="col-sm-9">
+                    <input type="text" name="item[name]" class="form-control" value="{$item['name']}" placeholder="请输入公司名称" required>
+                </div>
+            </div>
+            <div class="form-group">
+                <label class="col-sm-2 control-label"><span class="form-must">*</span>所在区域</label>
+                <div class="col-sm-9">
+                    <div class="row row-fix js-address-selector">
+                        <div class="col-md-4">
+                            <select name="item[province]" class="form-control tpl-province" required data-value="{$item['province']}"></select>
+                        </div>
+                        <div class="col-md-4">
+                            <select name="item[city]" class="form-control tpl-city" required data-value="{$item['city']}"></select>
+                        </div>
+                        <div class="col-md-4">
+                            <select name="item[district]" class="form-control tpl-district" required data-value="{$item['district']}"></select>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <div class="form-group">
+                <label class="col-sm-2 control-label"><span class="form-must">*</span>地址</label>
+                <div class="col-sm-9">
+                    <input type="text" name="item[address]" class="form-control" value="{$item['address']}" placeholder="请输入公司地址" required>
+                </div>
+            </div>
+            <div class="form-group">
+                <label class="col-sm-2 control-label"><span class="form-must">*</span>电话</label>
+                <div class="col-sm-9">
+                    <input type="text" name="item[tel]" class="form-control" value="{$item['tel']}" placeholder="请输入公司电话" required>
+                </div>
+            </div>
+            <div class="form-group">
+                <label class="col-sm-2 control-label"><span class="form-must">*</span>广告抽佣比例</label>
+                <div class="col-sm-9">
+                    <div class="input-group">
+                        <input type="number" class="form-control" name="item[scale]" value="{$item['scale']}" placeholder="请输入广告抽佣比例" number="true" required>
+                        <span class="input-group-addon">%</span>
+                    </div>
+                    <div class="help-block">司机收款时，所属公司抽取的广告利润比例，如广告费1元，设置抽取10%，公司得0.1元，司机得0.9元</div>
+                </div>
+            </div>
+            <div class="form-group">
+                <label class="col-sm-2 control-label">司机数量</label>
+                <div class="col-sm-9">
+                    <div class="input-group">
+                        <input type="number" class="form-control" name="item[master]" value="{$item['master']}" placeholder="请输入司机数量" number="true">
+                        <span class="input-group-addon">人</span>
+                    </div>
+                    <div class="help-block">公司现有车辆信息</div>
+                </div>
+            </div>
+            <div class="form-group">
+                <label class="col-sm-2 control-label"></label>
+                <div class="col-sm-9">
+                    <input type="submit" name="submit" value="提交" class="btn btn-primary min-width" />
+                    <input type="hidden" name="token" value="{$_W['token']}" />
+                    <input type="hidden" name="id" value="{$item['id']}" />
+                </div>
+            </div>
+        </form>
+    </div>
+</div>
+<script type="text/javascript">
+    require(["jquery", "{$_W['siteroot']}addons/{MODULE_NAME}/web/resource/js/district.min.js"], function($, dis){
+        $(".js-address-selector").each(function(){
+            var elements = {};
+            elements.province = $(this).find(".tpl-province")[0];
+            elements.city = $(this).find(".tpl-city")[0];
+            elements.district = $(this).find(".tpl-district")[0];
+            var values = {};
+            values.province = $(elements.province).data("value");
+            values.city = $(elements.city).data("value");
+            values.district = $(elements.district).data("value");
+            dis.render(elements, values, {withTitle: true, code : true});
+        });
+    });
+</script>
+{php include wl_template('common/footer');}

@@ -1,0 +1,25 @@
+<svg xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink" width="72" height="46" viewBox="0 0 72 46">
+  <defs>
+    <style>
+      .cls-1 {
+        fill: url(#linear-gradient);
+      }
+
+      .cls-2 {
+        fill: #fff;
+        font-size: 24px;
+        font-family: PingFang SC Regular, PingFang SC;
+      }
+    </style>
+    <linearGradient id="linear-gradient" y1="0.5" x2="1" y2="0.5" gradientUnits="objectBoundingBox">
+      <stop offset="0" stop-color="#ff8f85"/>
+      <stop offset="1" stop-color="#fdad27"/>
+    </linearGradient>
+  </defs>
+  <g id="组_42" data-name="组 42" transform="translate(-45 -960)">
+    <path id="路径_82" data-name="路径 82" class="cls-1" d="M0,0H72V38.49A7.545,7.545,0,0,1,64.421,46s-14.177-6.571-28.388-6.571S7.579,46,7.579,46A7.545,7.545,0,0,1,0,38.49Z" transform="translate(45 960)"/>
+    <g id="组_41" data-name="组 41" transform="translate(0 -7.028)">
+      <text id="置顶" class="cls-2" transform="translate(57 996.028)"><tspan x="0" y="0">置顶</tspan></text>
+    </g>
+  </g>
+</svg>

@@ -1,0 +1,92 @@
+<form action="{php echo web_url('redpack/redpack/pack_send', array('id' => $id))}" method="post" class="form-horizontal form-validate" enctype="multipart/form-data">
+    <div class="modal-dialog">
+        <div class="modal-content">
+            <div class="modal-header">
+                <button data-dismiss="modal" class="close" type="button">×</button>
+                <h4 class="modal-title">发放红包</h4>
+            </div>
+            <div class="modal-body">
+                <div class="form-group">
+                    <label class="col-sm-2 control-label mustl">发放用户</label>
+                    <div class="col-sm-9">
+                        <select name="mids[]" class="form-control chosen-select" multiple style="width: 100%;">
+                        </select>
+                        <span class="help-block">请选择发放用户，支持搜索和多选</span>
+                    </div>
+                </div>
+                <div class="form-group">
+                    <label class="col-sm-2 control-label mustl">导入发放</label>
+                    <div class="col-sm-9">
+                        <button class="btn btn-warning min-width" onclick="$('#excelUpload').click();return false;"><i class="fa fa-upload"></i>  导入用户列表</button>
+                        <input type="file" id="excelUpload" class="hide"/>
+                    </div>
+                </div>
+            </div>
+            <div class="modal-footer">
+                <button class="btn btn-primary btn-submit" type="submit">确认</button>
+                <button data-dismiss="modal" class="btn btn-default" type="button">取消</button>
+            </div>
+        </div>
+    </div>
+</form>
+<script>
+    myrequire(['select2'], function() {
+        $('.chosen-select').select2({
+            ajax: {
+                url: "{php echo web_url('utility/member/mc_select')}",
+                dataType: 'json',
+                data: function (params) {
+                    var query = { //请求的参数, 关键字和搜索条件之类的
+                        search: params.term //select搜索框里面的value
+                    }
+                    // Query paramters will be ?search=[term]&page=[page]
+                    return query;
+                },
+                processResults: function (data) {
+                    return {
+                        results: data  //必须赋值给results并且必须返回一个obj
+                    };
+                }
+            }
+        });
+    });
+
+
+    $("#excelUpload").on('change',function () {
+        var val = $("#excelUpload").get(0).files[0];//文件内容
+        var type = val['name'].split(".");//文件名称+文件后缀
+        type = $.trim(type[type.length - 1]);//文件后缀
+        $("#excelUpload").val('');
+        if(type == 'csv'){
+            var fd = new FormData();
+            fd.append("file",val);//上传的文件file
+            tip.confirm("内容处理中，请不要刷新页面/离开页面!<br />确定后开始处理",function () {
+                $.ajax({
+                    url:"{php echo web_url('order/wlOrder/bulkShipment')}",
+                    type:"post",
+                    data:fd,
+                    dataType:"json",
+                    cache: false,
+                    processData: false,
+                    contentType: false,
+                    async:false,
+                    success:function(data){
+                        tip.alert(data.message,function () {
+                            if(data.errno == 1){
+                                var url = "{php echo web_url('redpack/redpack/pack_send_csv')}"+"name="+data.data+"&redpackid={$id}";
+                                window.location.href = url;
+                            }
+                        });
+                    },
+                    error:function(){
+                        tip.alert("网络错误，请重试！！");
+                    }
+                });
+            });
+        }else{
+            tip.alert("只能上传csv类型的表格文件");
+        }
+    });
+
+
+</script>

@@ -1,0 +1,52 @@
+<!--------------------------  菜单组件群  ----------------------------------->
+<!-- 风格一 -->
+<script type="text/html" id="tpl_show_menu">
+    <div class="drag" data-itemid="<%itemid%>" group_name="<%group_name%>" group_key="<%group_key%>" data-id="<%group_name%>">
+        <div class="menu-style menu-style1 col-<%style.rownum%> <%style.navstyle%>" style="background: <%style.background||'#ffffff'%>;margin-bottom: <%style.marginbottom%>px;padding: 0 <%style.leftRight||'0'%>px;">
+            <%each data as item%>
+                <div class="menu-list">
+                    <div class="icon">
+                        <img src="<%imgsrc item.imgurl%>" onerror="this.src='../addons/{MODULE_NAME}/web/resource/images/default.png';">
+                    </div>
+                    <div class="text" style="color: <%item.color%>"><%item.text%></div>
+                </div>
+            <%/each%>
+            <%if style.showtype==1%>
+            <div class="menu-spot <%style.dotalign||'center'%> <%style.dotstyle||'round'%>">
+                <a class="active"></a>
+                <a></a>
+            </div>
+            <%/if%>
+        </div>
+    </div>
+</script>
+<!-- 风格二 -->
+<script type="text/html" id="tpl_show_menu2">
+    <div class="drag" data-itemid="<%itemid%>" group_name="<%group_name%>" group_key="<%group_key%>" data-id="<%group_name%>">
+        <div class="menu-style menu-style2 col-<%style.rownum%> <%style.navstyle%>" style="background: <%style.background||'#ffffff'%>;margin-bottom: <%style.marginbottom%>px;padding: 0 <%style.leftRight||'0'%>px;">
+            <%each data as item%>
+                <div class="menu-list">
+                    <div class="menu-block" style="background-color:<%item.bgColor||'#FDAD28'%>;color:<%item.color||'#FFFFFF'%>">
+                        <%if item.imgurl%>
+                            <div class="icon">
+                                <img src="<%imgsrc item.imgurl%>" onerror="this.src='../addons/{MODULE_NAME}/web/resource/images/default.png';">
+                            </div>
+                        <%/if%>
+                        <%item.text%>
+                    </div>
+                </div>
+            <%/each%>
+            <%if style.showtype==1%>
+            <div class="menu-spot <%style.dotalign||'center'%> <%style.dotstyle||'round'%>">
+                <a class="active"></a>
+                <a></a>
+            </div>
+            <%/if%>
+        </div>
+    </div>
+</script>
+
+
+
+
+

@@ -1,0 +1,30 @@
+<div class="form-group">
+    <label class="col-sm-2 control-label">新房</label>
+    <div class="col-sm-9">
+        {loop $newHouse $children}
+        <label class="checkbox-inline">
+            <input type="checkbox" value="{$children['id']}" name="info[newHouse_ids][]" /> {$children['title']}
+        </label>
+        {/loop}
+    </div>
+</div>
+<div class="form-group">
+    <label class="col-sm-2 control-label">二手房</label>
+    <div class="col-sm-9">
+        {loop $oldHouse $children}
+        <label class="checkbox-inline">
+            <input type="checkbox" value="{$children['id']}" name="info[oldHouse_ids][]" /> {$children['title']}
+        </label>
+        {/loop}
+    </div>
+</div>
+<div class="form-group">
+    <label class="col-sm-2 control-label">出租房</label>
+    <div class="col-sm-9">
+        {loop $renting $children}
+        <label class="checkbox-inline">
+            <input type="checkbox" value="{$children['id']}" name="info[renting_ids][]" /> {$children['title']}
+        </label>
+        {/loop}
+    </div>
+</div>

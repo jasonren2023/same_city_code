@@ -1,0 +1,25 @@
+<?xml version="1.0" encoding="utf-8"?>
+<manifest>
+	<application>
+		<name><![CDATA[帮助中心]]></name>
+		<identifie><![CDATA[helper]]></identifie>
+		<version><![CDATA[1.0.0]]></version>
+		<type><![CDATA[help]]></type>
+		<description><![CDATA[帮助中心,解决常见问题和模块使用指南，方便用户。]]></description>
+		<author><![CDATA[微连科技]]></author>
+		<url><![CDATA[http://www.weliam.cn/]]></url>
+	</application>
+	<setting>
+		<system embed="true" />
+		<task embed="false" />
+	</setting>
+	<agentmenu>
+	</agentmenu>
+	<systemmenu>
+		<menu title="帮助中心" font="fa-inbox">
+			<entry title="问题管理" ac="helperquestion" do="lists" actions='["ac","helperquestion"]' iscover="true"/>
+			<entry title="分类列表" ac="helpertype" do="lists" actions='["ac","helpertype"]'/>
+			<entry title="幻灯片" do="lists" ac="helperslide" actions='["ac","helperslide"]'/>
+		</menu>
+	</systemmenu>
+</manifest>

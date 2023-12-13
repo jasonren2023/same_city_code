@@ -1,0 +1,104 @@
+{php include wl_template('common/header');}
+<ul class="nav nav-tabs">
+    <li class="active"><a href="#">社群列表</a></li>
+</ul>
+<div class="app-content">
+    <div class="app-filter">
+        <div class="filter-action">
+            <a href="{php echo web_url('agentset/agentSetCommunity/communityAdd')}" class="btn btn-primary">添加社群</a>
+        </div>
+        <div class="filter-list">
+            <form action="" method="get" class="form-horizontal" role="form">
+                <input type="hidden" name="c" value="site" />
+                <input type="hidden" name="a" value="entry" />
+                <input type="hidden" name="m" value="{MODULE_NAME}" />
+                <input type="hidden" name="p" value="agentset" />
+                <input type="hidden" name="ac" value="userset" />
+                <input type="hidden" name="do" value="communityList" />
+                <div class="form-group">
+                    <label class="col-sm-2 control-label">社群名称</label>
+                    <div class="col-sm-9">
+                        <input type="text" name="keyword" class="form-control" value="{$_GPC['keyword']}" placeholder="输入社群名称"  />
+                    </div>
+                </div>
+                <div class="form-group">
+                    <label class="col-sm-2 control-label"></label>
+                    <div class="col-sm-9">
+                        <button class="btn btn-primary">筛选</button>
+                    </div>
+                </div>
+            </form>
+        </div>
+    </div>
+    <div class="app-table-list">
+        <div class="table-responsive">
+            <table class="table table-hover">
+                <thead>
+                <tr>
+                    <th style="width:100px;text-align:center;">社群图标</th>
+                    <th style="width:100px;text-align:center;">社群名称</th>
+                    <th style="width:100px; text-align:center;">社群描述</th>
+                    <th style="width:150px; text-align:center;">客服电话</th>
+                    <th style="width:60px; text-align:center">创建时间</th>
+                    <th style="width:200px; text-align:center">操作</th>
+                </tr>
+                </thead>
+                <tbody>
+                {loop $communitylist $comm}
+                <tr>
+                    <td class="text-center">
+                        <img src="{php echo tomedia($comm['communimg'])}" style="width: 5rem;height: 5rem;">
+                    </td>
+                    <td class="text-center">
+                        {$comm['communname']}
+                    </td>
+                    <td class="text-center">
+                        {$comm['commundesc']}
+                    </td>
+                    <td class="text-center">
+                       {if !empty($comm['systel'])}{$comm['systel']}{else}暂无{/if}
+                    </td>
+                    <td class="text-center">
+                       {php echo date('Y-m-d H:i:s',$comm['createtime'])}
+                    </td>
+                    <td class="text-center" style="text-align: center;">
+                        <a class="btn btn-default btn-sm" href="{php echo web_url('agentset/agentSetCommunity/communityAdd',['id' => $comm['id']])}" title="编辑">编辑</a>
+                        <a class="btn btn-danger btn-sm" href="{php echo web_url('agentset/agentSetCommunity/deletecommunity',['id' => $comm['id']])}" data-toggle="ajaxRemove" data-confirm="确认删除此社群？" title="删除">删除</a>
+                        {if $commset['id'] != $comm['id']}
+                            <a class="btn btn-info btn-sm set_home" data-id="{$comm['id']}">首页社群</a>
+                        {/if}
+                    </td>
+                </tr>
+                {/loop}
+                </tbody>
+            </table>
+        </div>
+        <div class="app-table-foot clearfix">
+            <div class="pull-left">
+
+            </div>
+            <div class="pull-right">
+                {$pager}
+            </div>
+        </div>
+    </div>
+</div>
+<script>
+    /**
+     * 设置首页默认社群
+     */
+    $(".set_home").on('click',function () {
+        let id = $(this).data('id');
+        if(id > 0){
+            tip.confirm('确认设置当前社群为首页默认社群？',function () {
+                $.post("{php echo web_url('agentset/agentSetCommunity/changecomm')}", { id : id }, function(data){
+                    history.go(0);
+                }, 'json');
+
+            })
+        }
+    });
+</script>
+
+
+{php include wl_template('common/footer');}

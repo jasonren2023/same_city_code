@@ -1,0 +1,27 @@
+{loop $info['list'] $vo}
+    <div class="block">
+        <div class="block-video" data-link="{$vo['media_url']}" >
+            <video src="{$vo['media_url']}" controls="controls" loop="loop" onerror="notSupper(this);">
+                您的浏览器不支持 video 标签。请更新或者更换浏览器
+            </video>
+        </div>
+        <div class="block-time">
+            生成时间:{$vo['create_time']}<br />
+            失效时间:{$vo['expire_time']}
+        </div>
+    </div>
+{/loop}
+<script>
+    //处理不能加载视频的兼容操作
+    function notSupper(_this) {
+        $(_this).parent('.block-video').addClass('openVideo');
+        $(_this).parent('.block-video').css("cursor","pointer");
+        let html = "暂不支持该格式视频播放!<br />点击下载或查看视频";
+        $(_this).parent('.block-video').html(html);
+    }
+    //点击不能加载的视频  在新的页面打开|下载 视频
+    $(document).on('click','.openVideo',function () {
+        let link = $(this).data('link');
+        window.open(link);
+    });
+</script>

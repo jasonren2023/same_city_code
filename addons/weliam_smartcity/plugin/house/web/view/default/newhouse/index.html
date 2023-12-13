@@ -1,0 +1,230 @@
+{php include wl_template('common/header');}
+<style type='text/css'>
+    .order-rank img{width:16px; height:16px;}
+    .js-remark,.js-admin-remark{word-break:break-all; overflow:hidden; background: #FDEEEE;color: #ED5050;padding: 5px 10px;}
+    td.goods-info{position:relative; padding-left:60px;height: 60px;}
+    .goods-info .img{position:absolute;top:50%; margin-top:-25px; background: url({IMAGE_LOADING}) center center no-repeat; width:50px;height:50px; }
+    .goods-info span {white-space: nowrap;overflow: hidden;text-overflow: ellipsis;display: block;}
+    .status-text{cursor:pointer;}
+</style>
+<ul class="nav nav-tabs">
+    <li class="active"><a href="javascript:;">新房列表</a></li>
+</ul>
+<div class="app-content">
+    <div class="app-filter">
+        <div class="filter-action">
+            <a href="{php echo web_url('house/House/newHouseEdit')}" class="btn btn-primary">添加新房</a>
+        </div>
+        <div class="filter-list">
+            <form action="" method="get" class="form-horizontal" role="form" id="form1">
+                <input type="hidden" name="c" value="site" />
+                <input type="hidden" name="a" value="entry" />
+                <input type="hidden" name="m" value="{MODULE_NAME}" />
+                <input type="hidden" name="p" value="house" />
+                <input type="hidden" name="ac" value="House" />
+                <input type="hidden" name="do" value="newHouseList" />
+                <input type="hidden" name="status" value="{$_GPC['status']}" />
+                <div class="form-group">
+                    <label class="col-sm-2 control-label">状态</label>
+                    <div class="col-sm-9">
+                        <div class="btn-group">
+                            <a href="{php echo wl_filter_url('status:0');}" class="btn {if $_GPC['status'] == 0}btn-primary{else}btn-default{/if}">全部</a>
+                            <a href="{php echo wl_filter_url('status:1');}" class="btn {if $_GPC['status'] == 1}btn-primary{else}btn-default{/if}">销售中</a>
+                            <a href="{php echo wl_filter_url('status:2');}" class="btn {if $_GPC['status'] == 2}btn-primary{else}btn-default{/if}">已下架</a>
+                            <a href="{php echo wl_filter_url('status:4');}" class="btn {if $_GPC['status'] == 4}btn-primary{else}btn-default{/if}">待审核</a>
+                            <a href="{php echo wl_filter_url('status:5');}" class="btn {if $_GPC['status'] == 5}btn-primary{else}btn-default{/if}">未通过</a>
+                        </div>
+                    </div>
+                </div>
+                <div class="form-group">
+                    <div class="col-sm-2 control-label">新房标题</div>
+                    <div class="col-sm-9">
+                        <input type="text" class="form-control" name="name" value="{$name}" placeholder="请输入新房标题">
+                    </div>
+                </div>
+
+                <div class="form-group">
+                    <label class="col-sm-2 control-label"></label>
+                    <div class="col-sm-9">
+                        <button class="btn btn-primary" id="search">筛选</button>
+                    </div>
+                </div>
+            </form>
+        </div>
+    </div>
+    <div class="app-table-list">
+        <div class="panel-body table-responsive collapse in order-list" id="order-template-item-4" style="padding: 0;">
+            <table class="table table-hover table-bordered">
+                <thead style="background-color: #FFFFFF;">
+                <tr>
+                    <th width="5%" class="text-center"><input type="checkbox" name="checkall" value="" id="checkall" class="checkboxall" onclick="var ck = this.checked; $(':checkbox').each(function(){this.checked = ck});"/></th>
+                    <!--<th width="5%" style="text-align:center;">ID</th>-->
+                    <th width="15%" style="text-align:center;">楼盘信息</th>
+                    <th width="15%" style="text-align:center;">所属小区</th>
+                    <th width="15%" style="text-align:center;">关联商家</th>
+                    <th width="5%" style="text-align:center;">状态</th>
+                    <th width="5%" style="text-align:center;">均价(元/㎡)</th>
+                    <th width="10%" style="text-align:center;">开盘时间</th>
+                    <th width="10%" style="text-align:center;">交付时间</th>
+                    <th width="20%" style="text-align:center;">操作</th>
+                </tr>
+                </thead>
+                <tbody>
+                {loop $list $item}
+                <tr>
+                    <td><center><input type="checkbox" name="items[]" value="{$item['id']}" class="checkbox" /></center></td>
+                    <!--<td class="text-center">{$item['id']}</td>-->
+                    <!--楼盘信息-->
+                    <td class="goods-info line-feed">
+                        <div class="img"><img class="scrollLoading" src="{IMAGE_PIXEL}" data-url="{php echo tomedia($item['cover_image'])}" height="50" width="50" onerror="this.src='{IMAGE_NOPIC_SMALL}'" ></div>
+                        <div class="title" style="padding-left: 60px;">
+                            <span>{$item['title']}</span>
+                        </div>
+                    </td>
+                    <!--所属小区-->
+                    <td class="goods-info line-feed">
+                        {if empty($item['apartment_name'])}
+                        <label class="label label-danger">暂无小区</label>
+                        {else}
+                        <div class="img"><img class="scrollLoading" src="{IMAGE_PIXEL}" data-url="{php echo tomedia($item['apartment_image'])}" height="50" width="50" onerror="this.src='{IMAGE_NOPIC_SMALL}'" ></div>
+                        <div class="title" style="padding-left: 60px;">
+                            <span>{$item['apartment_name']}</span>
+                        </div>
+                        {/if}
+                    </td>
+                    <!--关联商户-->
+                    <td class="goods-info line-feed">
+                        {if empty($item['storename'])}
+                        <label class="label label-warning">未关联商户</label>
+                        {else}
+                        <div class="img"><img class="scrollLoading" src="{IMAGE_PIXEL}" data-url="{php echo tomedia($item['logo'])}" height="50" width="50" onerror="this.src='{IMAGE_NOPIC_SMALL}'" ></div>
+                        <div class="title" style="padding-left: 60px;">
+                            <span>{$item['storename']}</span>
+                        </div>
+                        {/if}
+                    </td>
+                    <!--状态-->
+                    <td class="text-center">
+                        {if $item['status'] == 1}
+                        <label class="label label-success">销售中</label>
+                        {elseif $item['status'] == 2}
+                        <label class="label label-primary">已下架</label>
+                        {elseif $item['status'] == 4}
+                        <label class="label label-warning">待审核</label>
+                        {elseif $item['status'] == 5}
+                        <label class="label label-danger">未通过</label>
+                        {/if}
+                    </td>
+                    <!--均价-->
+                    <td class="text-center">
+                        <label class="label label-success">{$item['average_price']}</label>
+                    </td>
+                    <!--开盘时间-->
+                    <td class="text-center">{$item['start_time']}</td>
+                    <!--交付时间-->
+                    <td class="text-center">{$item['delivery_time']}</td>
+                    <!--操作-->
+                    <td class="text-center" style="position: relative;">
+
+                        {if $item['status'] == 2 || $item['status'] == 5}
+                        <p style="color: #428bca;display: inline-block;"><a href="{php echo web_url('house/House/statusChange', array('id'=>$item['id'],'status' => 1,'type' => 1))}" data-toggle="ajaxRemove" data-confirm="确定上架此新房信息？">上架</a></p>
+                        {/if}
+                        {if $item['status'] == 1 }
+                        <p style="color: #428bca;display: inline-block;"><a href="{php echo web_url('house/House/statusChange', array('id'=>$item['id'],'status' => 2,'type' => 1))}" data-toggle="ajaxRemove" data-confirm="确定下架此新房信息？">下架</a></p>
+                        {/if}
+                        {if $item['status'] == 4}
+                        <p style="color: #428bca;display: inline-block;"><a href="{php echo web_url('house/House/statusChange', array('id'=>$item['id'],'status' => 1,'type' => 1))}" data-toggle="ajaxRemove" data-confirm="确定审核通过此新房信息？">通过</a></p>
+                        <p style="color: #428bca;display: inline-block;"><a href="{php echo web_url('house/House/applyRefuse', array('id'=>$item['id'],'type' => 1))}" data-toggle="ajaxModal" >驳回</a></p>
+                        {/if}
+                        {if $item['status'] == 1}
+                        <p style="color: #428bca;display: inline-block;"><a class="js-clip" data-url="{php echo h5_url('pages/subPages2/houseproperty/realestatedetails/realestatedetails?type=1',['house_id'=>$item['id']])}" href="javascript:;">复制链接</a></p>
+                        <p style="color: #428bca;display: inline-block;"><a class="js-clip" data-url="pages/subPages2/houseproperty/realestatedetails/realestatedetails?type=1&house_id={$item['id']}" href="javascript:;">复制路径</a></p>
+                        {/if}
+                        <p style="color: #428bca;display: inline-block;"><a href="{php echo web_url('house/House/newHouseEdit', array('id' => $item['id']))}">编辑</a> </p>
+                        <p style="color: #428bca;display: inline-block;"><a href="{php echo web_url('house/House/newHouseDel', array('ids'=>($item['id'])))}" data-toggle="ajaxRemove" data-confirm="确定删除此新房信息？">删除</a></p>
+                    </td>
+                </tr>
+                {/loop}
+                </tbody>
+            </table>
+        </div>
+        <div class="app-table-foot clearfix">
+            <div class="pull-left">
+                <button class="btn btn-default btn-sm" type="button" onclick="location.reload();"><i class="fa fa-refresh"></i></button>
+                <!--<div class="btn-group btn-group-sm">-->
+                <!--    <button  class="btn btn-default" disabled="disabled" id="checkYse" onclick="checkOrDelete(1);">批量上架</button>-->
+                <!--    <button  class="btn btn-default" disabled="disabled" id="checkNo" onclick="checkOrDelete(0);">批量下架</button>-->
+                <!--</div>-->
+                <button class="btn btn-default btn-sm" type="button" disabled="disabled" id="delete" onclick="checkOrDelete(4);"><i class="fa fa-trash"></i> 回收站</button>
+            </div>
+            <div class="pull-right">
+                {$pager}
+            </div>
+        </div>
+    </div>
+
+
+</div>
+<script>
+
+    function checkOrDelete(check){
+        var content = '';
+        if(check==1) content = '确认上架选中新房信息？';
+        if(check==0) content = '确认下架选中新房信息？';
+        if(check==4) content = '确认把选中的新房数据删除？';
+        layer.open({
+            title: [
+                '提示',
+                'background-color:#18A689; color:#fff;'
+            ]
+            ,anim: 'up'
+            ,content: content
+            ,btn: ['确认', '取消']
+            ,yes:function(index){
+                $('.layer-anim').remove();
+                var ids = [];
+                var $checks=$('.checkbox:checkbox:checked');
+                $checks.each(function() {
+                    if (this.checked) {
+                        ids.push(this.value);
+                    };
+                });
+                //处理
+                $.post("{php echo web_url('house/House/newHouseDel')}", { ids : ids ,status:check}, function(data){
+                    if(!data.errno){
+                        util.tips("操作成功！");
+                        location.reload();
+                    }else{
+                        util.tips(data.message);
+                    };
+                }, 'json');
+            }
+        });
+    }
+
+    $(function(){
+        $('.checkbox,.checkboxall').click(function(){
+            var $checks=$('.checkbox:checkbox:checked');
+            $('#check').attr('disabled','');
+            if($checks.length>0) {
+                $('#checkYse').attr('disabled',false);
+                $('#checkNo').attr('disabled',false);
+                $('#delete').attr('disabled',false);
+            }else{
+                $('#checkYse').attr('disabled',true);
+                $('#checkNo').attr('disabled',true);
+                $('#delete').attr('disabled',true);
+            }
+        });
+
+        //驳回申请理由
+        $('.rejectdis').click(function(){
+            var appid = $(this).attr('appid');
+            $('.js-order-id-post').attr("order-id",appid);
+            popwin = $('#modal-module-gift22').modal();
+        });
+
+
+    });
+</script>
+{php include wl_template('common/footer');}

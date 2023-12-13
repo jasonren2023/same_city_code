@@ -1,0 +1,261 @@
+{php include wl_template('common/header');}
+<style type='text/css'>
+	.order-rank img{width:16px; height:16px;}
+	.js-remark,.js-admin-remark{word-break:break-all; overflow:hidden; background: #FDEEEE;color: #ED5050;padding: 5px 10px;}
+	td.goods-info{position:relative; padding-left:60px;}
+	.goods-info .img{position:absolute;top:50%; margin-top:-25px; background: url({IMAGE_LOADING}) center center no-repeat; width:50px;height:50px; }
+	.goods-info span {white-space: nowrap;overflow: hidden;text-overflow: ellipsis;display: block;}
+	.status-text{cursor:pointer;}
+</style>
+<ul class="nav nav-tabs">
+	<li {if empty($_GPC['status'])}class="active"{/if}><a href="{php echo wl_filter_url('status:0');}">全部砍价{if $status0}<span class="label label-warning pull-right" style="margin-left: 10px;">{$status0}</span>{/if}</a></li>
+	<li {if $_GPC['status']==1}class="active"{/if}><a href="{php echo wl_filter_url('status:1');}">待开始{if $status1}<span class="label label-warning pull-right" style="margin-left: 10px;">{$status1}</span>{/if}</a></li>
+	<li {if $_GPC['status']==2}class="active"{/if}><a href="{php echo wl_filter_url('status:2');}">进行中{if $status2}<span class="label label-warning pull-right" style="margin-left: 10px;">{$status2}</span>{/if}</a></li>
+	<li {if $_GPC['status']==3}class="active"{/if}><a href="{php echo wl_filter_url('status:3');}">已结束{if $status3}<span class="label label-warning pull-right" style="margin-left: 10px;">{$status3}</span>{/if}</a></li>
+	<li {if $_GPC['status']==4}class="active"{/if}><a href="{php echo wl_filter_url('status:4');}">下架中{if $status4}<span class="label label-warning pull-right" style="margin-left: 10px;">{$status4}</span>{/if}</a></li>
+	<li {if $_GPC['status']==5}class="active"{/if}><a href="{php echo wl_filter_url('status:5');}">待审核{if $status5}<span class="label label-warning pull-right" style="margin-left: 10px;">{$status5}</span>{/if}</a></li>
+	<li {if $_GPC['status']==6}class="active"{/if}><a href="{php echo wl_filter_url('status:6');}">被驳回{if $status6}<span class="label label-warning pull-right" style="margin-left: 10px;">{$status6}</span>{/if}</a></li>
+	<li {if $_GPC['status']==8}class="active"{/if}><a href="{php echo wl_filter_url('status:8');}">回收站{if $status8}<span class="label label-warning pull-right" style="margin-left: 10px;">{$status8}</span>{/if}</a></li>
+</ul>
+<div class="app-content">
+	<div class="app-filter">
+		<div class="filter-action">
+			<a href="{php echo web_url('goodshouse/goodshouse/createactive',array('plugin'=>'bargain'))}" class="btn btn-primary">添加砍价</a>
+		</div>
+		<div class="filter-list">
+			<form action="" method="get" class="form-horizontal" role="form" id="form1">
+				<input type="hidden" name="c" value="site" />
+				<input type="hidden" name="a" value="entry" />
+				<input type="hidden" name="m" value="weliam_smartcity" />
+				<input type="hidden" name="p" value="bargain" />
+				<input type="hidden" name="ac" value="bargain_web" />
+				<input type="hidden" name="do" value="activitylist" />
+				<input type="hidden" name="status" value="{$_GPC['status']}" />
+				<div class="form-group">
+					<label class="col-sm-2 control-label">关键字</label>
+					<div class="col-md-3">
+						<select name="keywordtype" class="form-control">
+							<option value="">关键字类型</option>
+							<option value="1" {if $_GPC['keywordtype']==1}selected="selected"{/if}>活动商品名称</option>
+							<option value="2" {if $_GPC['keywordtype']==2}selected="selected"{/if}>活动商品ID</option>
+							{if !is_store()}
+							<option value="3" {if $_GPC['keywordtype']==3}selected="selected"{/if}>商家名称</option>
+							{/if}
+						</select>
+                    </div>
+                    <div class="col-md-4">
+                        <input type="text" name="keyword" class="form-control" value="{$_GPC['keyword']}"  placeholder="请输入关键字"/>
+                    </div>
+				</div>
+				<div class="form-group">
+					<label class="col-sm-2 control-label"></label>
+					<div class="col-sm-9">
+						<button class="btn btn-primary" id="search">筛选</button>
+					</div>
+				</div>
+			</form>
+		</div>
+	</div>
+	<div class="app-table-list">
+		<div class="panel-body table-responsive collapse in order-list" id="order-template-item-4" style="padding: 0;">
+			<table class="table table-hover table-bordered">
+				<thead style="background-color: #FFFFFF;">
+				<tr>
+					<th class="text-center" width="30px"><input type="checkbox" name="checkall" value="" id="checkall" class="checkboxall" onclick="var ck = this.checked; $(':checkbox').each(function(){this.checked = ck});"/></th>
+					<th style="width:30px;text-align:center;">ID</th>
+					<th style="width:120px;">商品</th>
+					<th style="width:100px; text-align:center;">活动时间</th>
+					<th style="width:60px; text-align:center;">活动状态</th>
+					<th style="width:60px; text-align:center;">属性</th>
+					<th style="width:70px; text-align:center;">库存/下单</th>
+					<th style="width:70px; text-align:center;">数据统计</th>
+					<!--<th style="width:120px; text-align:center;">核销截止时间</th>-->
+					<th style="width:120px; text-align:center;">操作</th>
+				</tr>
+				</thead>
+				<tbody>
+				{loop $activity $item}
+				<tr>
+					<td><center><input type="checkbox" name="items[]" value="{$item['id']}" class="checkbox" /></center></td>
+					<td class="text-center">{$item['id']}</td>
+					<td class="goods-info line-feed">
+						<div class="img"><img class="scrollLoading" src="{IMAGE_PIXEL}" data-url="{php echo tomedia($item['thumb'])}" height="50" width="50" onerror="this.src='{IMAGE_NOPIC_SMALL}'" ></div>
+						<div class="title" style="padding-left: 60px;">
+							<span>{$item['name']}</span>
+							<span>商家:{$item['storename']}</span>
+						</div>
+					</td>
+					<td class="line-feed" style="width:150px;padding-left: 5px;">
+						<div class="title" style="text-align: center;">
+							<span>从：{php echo date('m-d H:i',$item['starttime'])}</span><br />
+							<span>到：{php echo date('m-d H:i',$item['endtime'])}</span>
+						</div>
+					</td>
+					<td class="text-center" style="width:60px;">
+						{if $item['status'] == 1 }<span class="label label-info">未开始</span>{/if}
+						{if $item['status'] == 2 }<span class="label label-success">进行中</span>{/if}
+						{if $item['status'] == 4 || $item['status'] == 0}<span class="label label-warning">下架中</span>{/if}
+						{if $item['status'] == 5 }<span class="label label-warning">审核中</span>{/if}
+						{if $item['status'] == 6 }<span class="label label-danger">被驳回</span>{/if}
+						{if $item['status'] == 3 }<span class="label label-danger">已结束</span>{/if}
+						{if $item['status'] == 8 }<span class="label label-default">回收站</span>{/if}
+					</td>
+					<td class="text-center" style="width:60px;">
+						{if is_store()}
+						<p>人气：{$item['pv']}</p>
+						<p>排序：{$item['sort']}</p>
+						{else}
+						<p>人气：<a style="color: #428bca;" data-href="{php echo web_url('bargain/bargain_web/changepv',array('id' => $item['id'],'type'=>1))}" href="javascript:;" title="修改人气" data-toggle="ajaxEdit" >{$item['pv']}</a></p>
+						<p>排序：<a style="color: #428bca;" data-href="{php echo web_url('bargain/bargain_web/changepv',array('id' => $item['id'],'type'=>2))}" href="javascript:;" title="修改排序" data-toggle="ajaxEdit" >{$item['sort']}</a></p>
+						{/if}
+					</td>
+					<td class="text-center" style="width:70px;">
+						<p>提供：{$item['stock']}</p>
+						<p style="color: #428bca;"><a href="{php echo web_url('bargain/bargain_web/userlist',array('keywordtype' => 1,'keyword'=> $item['id'],'status'=>1 ))}">砍价中：{$item['bargaining']}</a></p>
+					</td>
+					<td class="text-center" style="width:70px;">
+						<p style="color: #428bca;"><a href="{php echo web_url('order/wlOrder/checkcodeList',array('plugin' => 'bargain','status'=>2,'id'=>$item['id']))}">已支付：{$item['alreadypay']}</a></p>
+						<p style="color: #428bca;"><a href="{php echo web_url('order/wlOrder/checkcodeList',array('plugin' => 'bargain','status'=>3,'id'=>$item['id']))}">已完成：{$item['alreadyuse']}</a></p>
+					</td>
+					<td class="text-center" style="position: relative;">
+						{if p('wxplatform')}
+						<a href="javascript:;" data-url="{php echo h5_url('pages/subPages/goods/index',['type'=>7,'id'=>$item['id']])}" class="js-clip">复制链接</a>
+						{/if}
+						{if p('wxapp')}
+						<a href="javascript:;" data-url="pages/subPages/goods/index?type=7&goodsType=7&id={$item['id']}" class="js-clip">复制路径</a>
+						{/if}
+						<p style="color: #428bca;display: inline-block;"><a href="{php echo web_url('goodshouse/goodshouse/createactive',array('plugin' => 'bargain','id' => $item['id'],'page'=>$pindex))}">编辑</a> </p>
+						<br />
+						<p style="color: #428bca;display: inline-block;"><a href="javascript:;" class="js-copy" order-id="{$item['id']}">复制商品</a></p>
+						{if ($item['status'] == 1 || $item['status'] == 2 || $item['status'] == 3)}
+						<p style="color: #428bca;display: inline-block;"><a href="javascript:;" class="js-remove" order-id="{$item['id']}" order-status="{$item['status']}">下架</a></p>
+						{/if}
+						{if $item['status'] == 4 ||  $item['status'] == 8 ||  $item['status'] == 0}
+						<p style="color: #428bca;display: inline-block;"><a href="javascript:;" class="js-remove" order-id="{$item['id']}" order-status="{$item['status']}">上架</a></p>
+						{/if}
+						{if $item['status']==5 && !is_store()}
+						<p style="color: #428bca;display: inline-block;"><a href="{php echo web_url('bargain/bargain_web/pass', array('id'=>$item['id'],'flag'=>1))}" data-toggle="ajaxRemove" data-confirm="确定通过活动审核？">通过</a> </p>
+						<p style="color: #428bca;display: inline-block;"><a href="{php echo web_url('bargain/bargain_web/pass', array('id'=>$item['id'],'flag'=>0))}" data-toggle="ajaxRemove" data-confirm="确定驳回活动审核？">不通过</a></p>
+						{/if}
+						{if $item['status']==6 && !is_store()}
+						<p style="color: #428bca;display: inline-block;"><a href="{php echo web_url('bargain/bargain_web/pass', array('id'=>$item['id'],'flag'=>1))}" data-toggle="ajaxRemove" data-confirm="确定通过活动审核？">通过</a> </p>
+						{/if}
+						{if $item['status']==8}
+						<p style="color: #428bca;display: inline-block;"><a href="{php echo web_url('bargain/bargain_web/delall', array('id'=>$item['id']))}" data-toggle="ajaxRemove" data-confirm="此操作会删除团购及其对应的订单，确定要删除吗？">删除</a></p>
+						{else}
+						<p style="color: #428bca;display: inline-block;"><a href="{php echo web_url('bargain/bargain_web/cutoff', array('id'=>$item['id']))}" data-toggle="ajaxRemove" data-confirm="确定把商品放入回收站吗？">删除</a></p>
+						{/if}
+						{if Customized::init('pft147') > 0}
+						<p style="color: #428bca;display: inline-block;"><a href="{php echo web_url('goodshouse/goodshouse/checklist', array('id' => $item['id'],'plugin'=>'bargain'))}">核销码</a> </p>
+						{/if}
+					</td>
+				</tr>
+				{/loop}
+				</tbody>
+			</table>
+		</div>
+		<div class="app-table-foot clearfix">
+			<div class="pull-left">
+				<button class="btn btn-default btn-sm" type="button" onclick="location.reload();"><i class="fa fa-refresh"></i></button>
+				<div class="btn-group btn-group-sm">
+					<button  class="btn btn-default" disabled="disabled" id="checkYse" onclick="checkOrDelete(1);">批量上架</button>
+					<button  class="btn btn-default" disabled="disabled" id="checkNo" onclick="checkOrDelete(4);">批量下架</button>
+				</div>
+				<button class="btn btn-default btn-sm" type="button" disabled="disabled" id="delete" onclick="checkOrDelete(8);"><i class="fa fa-trash"></i> 回收站</button>
+			</div>
+			<div class="pull-right">
+				{$pager}
+			</div>
+		</div>
+	</div>
+</div>
+<script type="text/javascript">
+	$("#search").click(function(){
+		$('#form1')[0].submit();
+	});
+</script>
+<script>
+
+	function checkOrDelete(check){
+		var content = '';
+		if(check==1) content = '确认上架选中商品？';
+		if(check==4) content = '确认下架选中商品？';
+		if(check==8) content = '确认把选中商品放入回收站？如果商品已在回收站将会被彻底删除。';
+		layer.open({
+			title: [
+				'提示',
+				'background-color:#23c6c8; color:#fff;'
+			]
+			,anim: 'up'
+			,content: content
+			,btn: ['确认', '取消']
+			,yes:function(index){
+				$('.layer-anim').remove();
+				var ids = [];
+				var $checks=$('.checkbox:checkbox:checked');
+				$checks.each(function() {
+					if (this.checked) {
+						ids.push(this.value);
+					};
+				});
+				//处理
+				$.post("{php echo web_url('bargain/bargain_web/checkchangestatus')}", { ids : ids ,type:check}, function(data){
+					if(!data.errno){
+						util.tips("操作成功！");
+						location.reload();
+					}else{
+						util.tips(data.message);
+					};
+				}, 'json');
+			}
+		});
+	}
+
+	$('.order-list').delegate('.js-remove', 'click', function(e){
+		e.stopPropagation();
+		var $this = $(this);
+		var id = $this.attr('order-id');
+		var status = $this.attr('order-status');
+		var statushtml = (status == 4 || status == 0) ? "上架" : "下架";
+		util.nailConfirm(this, function(state) {
+			if(!state) return;
+			$.post("{php echo web_url('bargain/bargain_web/changestatus')}", {id:id,status:status}, function(data){
+				if(!data.errno){
+					util.tips(statushtml+"成功！");
+					location.reload();
+				};
+			}, 'json');
+		}, {html: '确认'+statushtml+"？"});
+	});
+	
+	$('.order-list').delegate('.js-copy', 'click', function(e){
+		e.stopPropagation();
+		var $this = $(this);
+		var id = $this.attr('order-id');
+		util.nailConfirm(this, function(state) {
+			if(!state) return;
+			$.post("{php echo web_url('bargain/bargain_web/copygood')}", {id:id}, function(data){
+				if(!data.errno){
+					util.tips("复制成功！");
+					location.reload();
+				};
+			}, 'json');
+		}, {html: '确认复制该活动？被复制的活动会在已下架中显示'});
+	});
+
+	$('.checkbox,.checkboxall').click(function(){
+		var $checks=$('.checkbox:checkbox:checked');
+		$('#check').attr('disabled','');
+		if($checks.length>0) {
+			$('#checkYse').attr('disabled',false);
+			$('#checkNo').attr('disabled',false);
+			$('#delete').attr('disabled',false);
+		}else{
+			$('#checkYse').attr('disabled',true);
+			$('#checkNo').attr('disabled',true);
+			$('#delete').attr('disabled',true);
+		}
+	});
+
+</script>
+{php include wl_template('common/footer');}

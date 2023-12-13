@@ -1,0 +1,136 @@
+{php include wl_template('common/header');}
+<ul class="nav nav-tabs" id="myTab">
+    <li class="active">
+        <a href="#">编辑分类</a>
+    </li>
+</ul>
+<div class="app-content">
+    <div class="app-form">
+        <form action="" method="post" class="form-horizontal form form-validate" id="form">
+            <div class="form-group-title">编辑分类</div>
+            <div class="form-group {if $parentId <= 0}hide{/if}">
+                <label class="col-sm-2 control-label">上级分类</label>
+                <div class="col-sm-9">
+                    <input type="text" class="form-control" value="{$parentTitle}" disabled/>
+                </div>
+            </div>
+            <div class="form-group">
+                <label class="col-sm-2 control-label">排序</label>
+                <div class="col-sm-9">
+                    <input type="number" name="data[sort]" id="sort" class="form-control" value="{$data['sort']}" />
+                    <span class="help-block">提示：填写整数,数字越大越靠前</span>
+                </div>
+            </div>
+            <div class="form-group">
+                <label class="col-sm-2 control-label">分类名称</label>
+                <div class="col-sm-7">
+                    <input type="text" name="data[title]" id="title" class="form-control" value="{$data['title']}" />
+                </div>
+                <div class="col-sm-2">
+                    <input type="color" name="data[color]"  class="form-control" value="{$data['color']}" >
+                </div>
+            </div>
+            <div class="form-group {if $parentId > 0}hide{/if}" ">
+                <label class="col-sm-2 control-label">缩略图</label>
+                <div class="col-sm-9">
+                    {php echo attachment_select('data[img]', $data['img']);}
+                    <span class="help-block">图片建议为40X40</span>
+                </div>
+            </div>
+            <!-- 修改分类&添加子分类时隐藏种类标签 -->
+            <div class="form-group {if $_GPC['id'] > 0 || $parentId > 0}hide{/if}">
+                <label class="col-sm-2 control-label">标签种类</label>
+                <div class="col-sm-9">
+                    <div class="radio radio-success radio-inline">
+                        <input onclick="show(0)" type="radio" id="inlineRadio3" name="data[type]" value="0" {if intval($data['type'])==0 }checked="checked" {/if}>
+                        <label onclick="show(0)" for="inlineRadio3" style="padding-left:0px;"> 普通分类 </label>
+                    </div>
+                    <div class="radio radio-success radio-inline">
+                        <input onclick="show(1)" type="radio" id="inlineRadio2" name="data[type]" value="1" {if intval($data['type'])==1 }checked="checked" {/if}>
+                        <label onclick="show(1)" for="inlineRadio2" style="padding-left:0px;"> 导航标签 </label>
+                    </div>
+                    <span class="help-block">提示：导航标签不会被视作分类，只在首页做导航使用,子分类只能作为普通分类。</span>
+                </div>
+            </div>
+            <!-- 普通分类 END -->
+            <!-- 导航标签 START -->
+            <div id="urll" class="form-group {if intval($data['type'])==0 }hide{/if}">
+                <label class="col-sm-2 control-label">导航链接</label>
+                <div class="col-sm-9">
+                    <input type="text" name="data[url]" class="form-control" value="{$data['url']}" />
+                </div>
+            </div>
+            <!-- 导航标签 END -->
+            <div class="form-group">
+                <label class="col-sm-2 control-label">是否显示</label>
+                <div class="col-sm-9">
+                    <div class="radio radio-success radio-inline">
+                        <input type="radio" id="status1" name="data[status]" value="1" {if intval($data[ 'status'])==1 }checked="checked" {/if}>
+                        <label for="status1" style="padding-left:0px;"> 是 </label>
+                    </div>
+                    <div class="radio radio-success radio-inline">
+                        <input type="radio" id="status2" name="data[status]" value="0" {if intval($data[ 'status'])==0 }checked="checked" {/if}>
+                        <label for="status2" style="padding-left:0px;"> 否 </label>
+                    </div>
+                    <span class="help-block">提示：分类不显示，其子分类也不显示</span>
+                </div>
+            </div>
+            <div class="form-group">
+                <label class="col-sm-2 control-label"></label>
+                <div class="col-sm-9">
+                    <input type="hidden" name="data[id]" value="{$data['id']}" />
+                    <input type="hidden" name="data[onelevelid]" value="{$parentId}" />
+                    <input type="submit" name="submit" value="提交" class="btn btn-primary min-width" />
+                    <input type="hidden" name="token" value="{$_W['token']}" />
+                </div>
+            </div>
+    </from>
+</div>
+</div>
+<script>
+    //根据标签种类 显示隐藏相关设置
+    function show(flag){
+        if(flag){
+            $('#urll').removeClass('hide');
+            $('#tag').addClass('hide');
+        }else{
+            $('#urll').addClass('hide');
+            $('#tag').removeClass('hide');
+        }
+    }
+    //根据付费发帖金额  显示隐藏分销设置
+    function showdis(asd){
+        if($(asd).val()>0){
+            $('#disdiv').removeClass('hide');
+        }else{
+            $('#disdiv').addClass('hide');
+        }
+    }
+    //根据是否参与分销 显示隐藏分销佣金=
+    function distri(flag){
+        if (flag == 1) {
+            $('#distridiv').removeClass('hide');
+        } else{
+            $('#distridiv').addClass('hide');
+        }
+    }
+
+
+
+    $('body').on('click','.addshux',function(){
+        var valueinput = $(this).parent().find('input');
+        var value = valueinput.val();
+        if(value == ''){
+            util.tips('请在编辑框输入内容');return false;
+        }
+        var valueelemt = $(this).parents('.data-data').find('.rule_pro');
+        valueelemt.append(value+',');
+        var nowvalue = valueelemt.next().val();
+        valueelemt.next().val(nowvalue+value+',');
+        valueinput.val('').focus();
+    });
+    $('body').on('click','.chongzhi',function(){
+        $(this).parents('.data-data').find('.rule_pro').text('').next().val('');
+    });
+</script>
+{php include wl_template('common/footer');}

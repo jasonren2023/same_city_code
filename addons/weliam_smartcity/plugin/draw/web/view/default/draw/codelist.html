@@ -1,0 +1,249 @@
+{php include wl_template('common/header');}
+<ul class="nav nav-tabs" id="myTab">
+    <li><a href="javascript:;">抽奖码管理</a></li>
+</ul>
+<div class="app-content">
+    <div class="app-filter">
+        <div class="filter-action">
+            <a href="{php echo web_url('draw/draw/createCode',['id'=>$id])}" class="btn btn-primary" data-toggle='ajaxModal'><i class="fa fa-plus"></i> 添加抽奖码</a>
+        </div>
+        <div class="filter-list">
+            <form action="" method="get" class="form-horizontal" role="form" id="form1">
+                <input type="hidden" name="c" value="site" />
+                <input type="hidden" name="a" value="entry" />
+                <input type="hidden" name="m" value="{MODULE_NAME}" />
+                <input type="hidden" name="p" value="draw" />
+                <input type="hidden" name="ac" value="draw" />
+                <input type="hidden" name="do" value="codelist" />
+                <input type="hidden" name="id" value="{$id}" />
+                <input type="hidden" name="status" value="{$status}" />
+                <div class="form-group">
+                    <label class="col-sm-2 control-label">抽奖活动信息</label>
+                    <div class="col-sm-9">
+                       {$draw['title']}(ID:{$id})
+                    </div>
+                </div>
+                <div class="form-group">
+                    <label class="col-sm-2 control-label">状态</label>
+                    <div class="col-sm-9">
+                        <div class="btn-group">
+                            <a href="{php echo wl_filter_url('status:0');}" class="btn {if $status == 0}btn-primary{else}btn-default{/if}">全部</a>
+                            <a href="{php echo wl_filter_url('status:1');}" class="btn {if $status == 1}btn-primary{else}btn-default{/if}">未使用</a>
+                            <a href="{php echo wl_filter_url('status:2');}" class="btn {if $status == 2}btn-primary{else}btn-default{/if}">已使用</a>
+                        </div>
+                    </div>
+                </div>
+                <div class="form-group">
+                    <label class="col-sm-2 control-label">时间筛选</label>
+                    <div class="col-md-3">
+                        <select name="timetype" class="form-control">
+                            <option value="">请选择时间类型</option>
+                            <option value="1" {if $_GPC['timetype']==1}selected="selected"{/if}>创建时间</option>
+                            <option value="2" {if $_GPC['timetype']==2}selected="selected"{/if}>使用时间</option>
+                        </select>
+                    </div>
+                    <div class="col-md-2">
+                        {php echo tpl_select_time_info('time_limit', array('starttime' => date('Y-m-d H:i',$starttime), 'endtime' => date('Y-m-d H:i', $endtime)));}
+                    </div>
+                </div>
+                <div class="form-group">
+                    <div class="col-sm-2 control-label">抽奖码或备注</div>
+                    <div class="col-sm-9">
+                        <input type="text" class="form-control" name="remark" value="{$remake}" placeholder="请输入抽奖码信息或备注">
+                    </div>
+                </div>
+                <div class="form-group">
+                    <label class="col-sm-2 control-label"></label>
+                    <div class="col-sm-9">
+                        <!--<button class="btn btn-success min-width" onclick="$('#excelUpload').click();return false;"><i class="fa fa-upload"></i> 导入核销码</button>-->
+                        <!--<input type="file" id="excelUpload" class="hide"/>-->
+                        <!--<a class="btn btn-default min-width" href="{URL_MODULE}web/resource/download/checkcodelist.csv" target="_blank"><i class="fa fa-download"></i> 下载模板</a>-->
+                        <!--<a class="btn btn-danger min-width" href="javascript:;" id="emptyCheckCode" ><i class="fa fa-close"></i> 清除核销码</a>-->
+                        <button class="btn btn-primary" id="search">筛选</button>
+                        <button class="btn btn-default min-width" name="export" type="submit" value="export"><i class="fa fa-download"></i>  导出记录</button>
+                    </div>
+                </div>
+                <div class="form-group">
+                    <label class="col-sm-2 control-label"></label>
+                    <div class="col-sm-9">
+                        <div>共计抽奖码<span style="color:red;">{$tatal}</span>个</div>
+                    </div>
+                </div>
+            </form>
+        </div>
+    </div>
+    <div class="app-table-list">
+        {if !empty($list) || $status > 0}
+        <div class="table-responsive">
+            <table class="table table-hover">
+                <thead class="navbar-inner">
+                <tr>
+                    <th class="text-center" style="width:5%;"><input type="checkbox" name="checkall" value="" id="checkall" class="checkboxall" onclick="var ck = this.checked; $(':checkbox').each(function(){this.checked = ck});"/></th>
+                    <th class="text-center" style="width:15%;">抽奖码</th>
+                    <th class="text-center" style="width:20%;">用户信息</th>
+                    <th class="text-center" style="width:15%;">抽奖码备注</th>
+                    <th class="text-center" style="width:25%;">时间(生成/使用)</th>
+                    <th class="text-center" style="width:20%;">操作</th>
+                </tr>
+                </thead>
+                <tbody>
+                {loop $list $de}
+                <tr>
+                    <td><center><input type="checkbox" name="items[]" value="{$de['id']}" class="checkbox" /></center></td>
+                    <td class="text-center">{$de['code']}</td>
+                    <td class="text-center">
+                        {if $de['mid'] > 0}
+                        <img src="{$de['avatar']}" style="width: 30px;height: 30px;"> {$de['nickname']}(MID:{$de['mid']})
+                        {else}
+                        <span class="label label-success">未使用</span>
+                        {/if}
+                    </td>
+                    <td class="text-center">{$de['remark']}</td>
+                    <td class="text-center">
+                        {$de['createtime']} <br/>
+                        {if $de['mid'] > 0}
+                        {$de['usetime']}
+                        {else}
+                        <span class="label label-success">未使用</span>
+                        {/if}
+                    </td>
+                    <td class="text-center">
+                        {if $de['mid'] > 0 && $de['drawres'] > 0}
+                        <a href="{php echo web_url('draw/prize/prizeIndex',['recodeid' => $de['recodeid'] ])}">查看中奖记录</a>
+                        {else if $de['mid'] > 0 && $de['drawres'] == 0}
+                        <span class="label label-danger">未中奖</span>
+                        {else}
+                         - 无 -
+                        {/if}
+                    </td>
+                </tr>
+                {/loop}
+                </tbody>
+            </table>
+        </div>
+        <div class="app-table-foot clearfix">
+            <div class="pull-left">
+                <button class="btn btn-default btn-sm" type="button" onclick="location.reload();"><i class="fa fa-refresh"></i></button>
+                <div class="btn-group btn-group-sm">
+                    <button  class="btn btn-default" disabled="disabled" id="checkYse" onclick="checkOrDelete();">批量删除</button>
+                </div>
+            </div>
+            <div class="pull-right">
+                {$pager}
+            </div>
+        </div>
+        {else}
+        <div class="no-result">
+            <p>此抽奖活动暂无抽奖码信息。</p>
+        </div>
+        {/if}
+    </div>
+</div>
+
+<script>
+    $("#excelUpload").on('change',function () {
+        var val = $("#excelUpload").get(0).files[0];//文件内容
+        var gid = "{$id}";
+        var plugin = "{$plugin}";
+        var type = val['name'].split(".");//文件名称+文件后缀
+        type = $.trim(type[type.length - 1]);//文件后缀
+        $("#excelUpload").val('');
+        if(type == 'csv'){
+            var fd = new FormData();
+            fd.append("file",val);//上传的文件file
+            tip.confirm("内容处理中，请不要刷新页面/离开页面!<br />确定后开始处理",function () {
+                $.ajax({
+                    url:"{php echo web_url('goodshouse/goodshouse/importCode')}"+"gid="+gid+"&plugin="+plugin,
+                    type:"post",
+                    data:fd,
+                    dataType:"json",
+                    cache: false,
+                    processData: false,
+                    contentType: false,
+                    async:false,
+                    success:function(data){
+                        tip.alert(data.message,function () {
+                            window.location.reload();
+                        });
+                    },
+                    error:function(){
+                        tip.alert("网络错误，请重试！！");
+                    }
+                });
+            });
+        }else{
+            tip.alert("只能上传csv类型的表格文件");
+        }
+    });
+
+    $('.checkbox,.checkboxall').click(function(){
+        var $checks=$('.checkbox:checkbox:checked');
+        $('#check').attr('disabled','');
+        if($checks.length>0) {
+            $('#checkYse').attr('disabled',false);
+        }else{
+            $('#checkYse').attr('disabled',true);
+        }
+    });
+
+    function checkOrDelete(){
+        var content = '确认删除这些抽奖码?';
+        layer.open({
+            title: [
+                '提示',
+                'background-color:#23c6c8; color:#fff;'
+            ]
+            ,anim: 'up'
+            ,content: content
+            ,btn: ['确认', '取消']
+            ,yes:function(index){
+                $('.layer-anim').remove();
+                var ids = [];
+                var $checks=$('.checkbox:checkbox:checked');
+                $checks.each(function() {
+                    if (this.checked) {
+                        ids.push(this.value);
+                    };
+                });
+                //处理
+                $.post("{php echo web_url('draw/draw/deleteCode')}", { ids : ids}, function(data){
+                    if(!data.errno){
+                        util.tips("操作成功！");
+                        window.location.reload();
+                    }else{
+                        util.tips(data.message);
+                    };
+                }, 'json');
+            }
+        });
+    }
+
+    $('#emptyCheckCode').click(function(){
+        var content = '确认清空该商品核销码?';
+        layer.open({
+            title: [
+                '提示',
+                'background-color:#23c6c8; color:#fff;'
+            ]
+            ,anim: 'up'
+            ,content: content
+            ,btn: ['确认', '取消']
+            ,yes:function(index){
+                $('.layer-anim').remove();
+                var gid = "{$id}";
+                var plugin = "{$plugin}";
+                //处理
+                $.post("{php echo web_url('goodshouse/goodshouse/emptycheckcode')}", { gid : gid,plugin:plugin}, function(data){
+                    if(!data.errno){
+                        util.tips("操作成功！");
+                        window.location.reload();
+                    }else{
+                        util.tips(data.message);
+                    };
+                }, 'json');
+            }
+        });
+    });
+
+</script>
+{php include wl_template('common/footer');}

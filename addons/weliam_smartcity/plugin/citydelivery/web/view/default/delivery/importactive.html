@@ -1,0 +1,50 @@
+{php include wl_template('common/header');}
+<ul class="nav nav-tabs" id="myTab">
+    <li class="active">
+        <a href="#tab_basic" class="active">导入商品</a>
+    </li>
+</ul>
+<div class="app-content">
+    <div class="app-form">
+        <div class="tab-content">
+            <div class="tab-pane active">
+                <form action="{php echo web_url('citydelivery/active/csv_add')}" enctype="multipart/form-data" method="post" class="form-horizontal form">
+                    <div class="panel panel-default">
+                        <div class="panel-heading">基本信息</div>
+                        <div class="panel-body">
+                            <div class="alert alert-info">
+                                1. 请输入正确的<span style="color: orangered;">商户名</span>和<span style="color: orangered;">分类名</span>，否则无法匹配正确的商户与分类。<br/>
+                                2. 缩略图与图集请直接填入图片地址，图集栏不同的图片之间用英文逗号分隔:"<span style="color: orangered;"> , </span>"。<br/>
+                                3. 商品价格，原价，额外配送费，会员减免金额最多保留两位小数。<br/>
+                                4. 商品会员特权请直接填入0,1,2三种参数，0代表无会员特权，1代表会员减免，2代表会员特供。<br/>
+                                5. 商品状态请直接填入2,4两种参数，2代表上架，4代表下架。<br/>
+                                6. 多规格商品无法直接导入多规格项目，只能在后台编辑多规格项。<br/>
+                                <span style="color: orangered;">重要：导入结束后会生成结果表，请查验商品导入结果。</span>
+                            </div>
+                            <div class="form-group uploade">
+                                <label class="col-sm-2 control-label">上传文件：</label>
+                                <div class="col-sm-9">
+                                    <input class="form-control"  name="csv_file" type="file" value="">
+                                    <span class="help-block">请<a href="{URL_MODULE}web/resource/download/deliveryActivity.csv" target="_blank">点此下载模板文件</a></span>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="form-group">
+                        <label class="col-sm-2 control-label"></label>
+                        <div class="col-sm-9">
+                            <input name="submit" type="submit" class="btn btn-primary min-width"  value="上传">
+                        </div>
+                    </div>
+                </form>
+            </div>
+        </div>
+    </div>
+</div>
+
+
+
+
+
+
+{php include wl_template('common/footer');}

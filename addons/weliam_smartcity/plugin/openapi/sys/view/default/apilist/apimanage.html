@@ -1,0 +1,190 @@
+{php include wl_template('common/header');}
+<ul class="nav nav-tabs" id="myTab">
+	<li class="active"><a href="#tab_basic">分销接口</a></li>
+</ul>
+<div class="app-content">
+	<div class="openapi-list clearfix">
+		<div class="col-sm-2">
+			<ul class="nav nav-pills nav-stacked">
+				{loop $disapis $k $val}
+			  	<li {if $k == 0}class="active"{/if}><a href="#{$k}" data-toggle="tab">{$val['name']}</a></li>
+			  	{/loop}
+			</ul>
+		</div>
+		<div class="col-sm-9">
+			<div class="tab-content">
+				{loop $disapis $kk $value}
+		        <div class="tab-pane {if $kk == 0}active{/if}" id="{$kk}">
+		            <div class="detail-item">
+					    <div class="detail-title">请求地址</div>
+					    <div class="detail-content">
+					        <div class="request-url">{$value['url']}</div>
+					    </div>
+					    <div class="detail-title">请求参数</div>
+					    <div class="detail-content">
+					        <div class="zent-table-container">
+					            <div class="zent-loading-container zent-loading-container-static " style="height: initial;">
+					                <div class="zent-table table-api-group">
+					                    <div class="thead">
+					                        <div class="stickrow tr">
+					                            <div class="cell" style="width: 25%; flex: 0 1 auto;">
+					                                <div class="cell__child-container">名称</div>
+					                            </div>
+					                            <div class="cell" style="width: 25%; flex: 0 1 auto;">
+					                                <div class="cell__child-container">类型</div>
+					                            </div>
+					                            <div class="cell" style="width: 20%; flex: 0 1 auto;">
+					                                <div class="cell__child-container">是否必须</div>
+					                            </div>
+					                            <div class="cell" style="width: 30%; flex: 0 1 auto;">
+					                                <div class="cell__child-container">描述</div>
+					                            </div>
+					                        </div>
+					                    </div>
+					                    <div class="tbody">
+					                    	{if !empty($value['request_data'])}
+					                    	{loop $value['request_data'] $rk $rval}
+					                    	{php $relist = explode("|", $rval);}
+					                        <div class="row-{$rk} tr">
+					                            <div class="cell" style="width: 25%; flex: 0 1 auto;">
+					                                <div class="cell__child-container">{$relist[0]}</div>
+					                            </div>
+					                            <div class="cell" style="width: 25%; flex: 0 1 auto;">
+					                                <div class="cell__child-container">
+					                                    <div>{$relist[1]}</div>
+					                                </div>
+					                            </div>
+					                            <div class="cell" style="width: 20%; flex: 0 1 auto;">
+					                                <div class="cell__child-container">{$relist[2]}</div>
+					                            </div>
+					                            <div class="cell" style="width: 30%; flex: 0 1 auto;">
+					                                <div class="cell__child-container">{$relist[3]}</div>
+					                            </div>
+					                        </div>
+					                        {/loop}
+					                        {else}
+					                        <div class="tr"><div class="cell empty-data">该接口无需请求参数</div></div>
+					                        {/if}
+					                    </div>
+					                </div>
+					            </div>
+					        </div>
+					    </div>
+					    <div class="detail-title">响应参数</div>
+					    <div class="detail-content">
+					        <div class="zent-table-container">
+					            <div class="zent-loading-container zent-loading-container-static " style="height: initial;">
+					                <div class="zent-table table-api-group">
+					                    <div class="thead">
+					                        <div class="stickrow tr">
+					                            <div class="cell" style="width: 25%; flex: 0 1 auto;">
+					                                <div class="cell__child-container">名称</div>
+					                            </div>
+					                            <div class="cell" style="width: 25%; flex: 0 1 auto;">
+					                                <div class="cell__child-container">类型</div>
+					                            </div>
+					                            <div class="cell" style="width: 20%; flex: 0 1 auto;">
+					                                <div class="cell__child-container">是否必须</div>
+					                            </div>
+					                            <div class="cell" style="width: 30%; flex: 0 1 auto;">
+					                                <div class="cell__child-container">描述</div>
+					                            </div>
+					                        </div>
+					                    </div>
+					                    <div class="tbody">
+					                    	{if !empty($value['response_data'])}
+					                    	{loop $value['response_data'] $rdk $rdval}
+					                    	{php $rdlist = explode("|", $rdval);}
+					                        <div class="row-{$rdk} tr">
+					                            <div class="cell" style="width: 25%; flex: 0 1 auto;">
+					                                <div class="cell__child-container">{$rdlist[0]}</div>
+					                            </div>
+					                            <div class="cell" style="width: 25%; flex: 0 1 auto;">
+					                                <div class="cell__child-container">
+					                                    <div>{$rdlist[1]}</div>
+					                                </div>
+					                            </div>
+					                            <div class="cell" style="width: 20%; flex: 0 1 auto;">
+					                                <div class="cell__child-container">{$rdlist[2]}</div>
+					                            </div>
+					                            <div class="cell" style="width: 30%; flex: 0 1 auto;">
+					                                <div class="cell__child-container">{$rdlist[3]}</div>
+					                            </div>
+					                        </div>
+					                        {/loop}
+					                        {else}
+					                        <div class="tr"><div class="cell empty-data">该接口无响应参数</div></div>
+					                        {/if}
+					                    </div>
+					                </div>
+					            </div>
+					        </div>
+					    </div>
+					    <div class="detail-title">响应示例</div>
+					    <div class="detail-content">
+					        <pre class="responseDemo">{php echo json_encode($value['response'], JSON_UNESCAPED_UNICODE|JSON_PRETTY_PRINT)}</pre>
+					    </div>
+					    <div class="detail-title">异常示例</div>
+					    <div class="detail-content">
+					        <pre class="errorResponseDemo">{php echo json_encode($value['error_response'], JSON_UNESCAPED_UNICODE|JSON_PRETTY_PRINT)}</pre>
+					    </div>
+					</div>
+		        </div>
+		        {/loop}
+		    </div>
+	    </div>
+	</div>
+</div>
+<style>
+	.openapi-list{margin-top: 15px;}
+	.openapi-list .detail-item .detail-title{font-size:16px;font-weight:700;color:#333}
+	.openapi-list .detail-item .detail-content{font-size:14px;color:#333;margin-top:10px;width:100%;margin-bottom: 30px;}
+	.openapi-list .detail-item .detail-content hr{border-bottom:1px solid #e5e5e5;border-top:0;border-left:0;border-right:0;margin:1px 0 10px}
+	.openapi-list .detail-item .detail-content .link-faq{margin-left:20px}
+	.openapi-list .detail-item .detail-content .link-faq,.openapi-list .detail-item .detail-content .link-sdk-download{width:90px;height:32px;line-height:32px;font-size:14px;text-align:center;border-radius:2px;display:inline-block;background-color:#38f;color:#fff}
+	.zent-table-container{margin-bottom:20px}
+	.zent-table{-webkit-box-sizing:border-box;-moz-box-sizing:border-box;box-sizing:border-box;width:100%}
+	.zent-table a{color:#38f;cursor:pointer}
+	.zent-table a:hover{cursor:pointer;text-decoration:none}
+	.zent-table .tr{display:-webkit-box;display:-ms-flexbox;display:-webkit-flex;display:-moz-box;display:flex;border-bottom:1px solid #e5e5e5}
+	.zent-table .expanded-item{width:70px;text-align:center;position:relative}
+	.zent-table .expanded-item i{height:100%}
+	.zent-table .expanded-item i:before{position:absolute;top:50%;-webkit-transform:translateY(-50%);-moz-transform:translateY(-50%);-ms-transform:translateY(-50%);transform:translateY(-50%)}
+	.zent-table .thead .tr{border-top:none;border-bottom:1px solid #e5e5e5;background:#f2f2f2}
+	.zent-table .tbody .tr:hover{background:#f8f8f8}
+	.zent-table .tbody .tr:hover .empty-data{background:transparent}
+	.zent-table .tbody .tr--expanded{background-color:#f8f8f8}
+	.zent-table .tbody .tr .td{padding:16px 0 8px}
+	.zent-table .tbody .tr .td .expandable-btn{position:absolute;top:50%;-webkit-transform:translateY(-50%);-moz-transform:translateY(-50%);-ms-transform:translateY(-50%);transform:translateY(-50%);display:inline-block;-webkit-box-sizing:border-box;-moz-box-sizing:border-box;box-sizing:border-box;cursor:pointer;width:17px;height:17px;text-align:center;background:#fff;line-height:10px;border:1px solid #e5e5e5}
+	.zent-table .tbody .tr .td .expandable-btn.expand-btn:after{content:"+";-webkit-box-sizing:border-box;-moz-box-sizing:border-box;box-sizing:border-box}
+	.zent-table .tbody .tr .td .expandable-btn.collapse-btn:after{content:"-";-webkit-box-sizing:border-box;-moz-box-sizing:border-box;box-sizing:border-box}
+	.zent-table .tbody .cell{min-height:30px}
+	.zent-table .tfoot{margin-top:10px;-webkit-box-sizing:border-box;-moz-box-sizing:border-box;box-sizing:border-box}
+	.zent-table .tfoot__batchcomponents{float:left;padding:5px;padding-left:10px}
+	.zent-table .tfoot__batchcomponents--has-children{border:1px solid #e5e5e5;background:#fff}
+	.zent-table .tfoot__batchcomponents--fixed{position:fixed;bottom:0}
+	.zent-table .tfoot__page{float:right}
+	.zent-table .cell{position:relative;display:-webkit-box;display:-ms-flexbox;display:-webkit-flex;display:-moz-box;display:flex;-webkit-box-flex:1;-ms-flex:auto;-webkit-flex:auto;-moz-box-flex:1;flex:auto;-ms-flex-preferred-size:0;-webkit-flex-basis:0;flex-basis:0;padding:10px;padding-left:0;min-height:20px;-webkit-box-align:center;-ms-flex-align:center;-webkit-align-items:center;-moz-box-align:center;align-items:center;text-align:left;font-size:14px}
+	.zent-table .cell__child-container{overflow:hidden;width:100%;text-overflow:ellipsis}
+	.zent-table .cell:first-child{padding-left:10px}
+	.zent-table .cell:last-child{-webkit-box-pack:end;-ms-flex-pack:end;-webkit-justify-content:flex-end;-moz-box-pack:end;justify-content:flex-end}
+	.zent-table .cell:last-child .cell__child-container{text-align:right}
+	.zent-table .cell.empty-data{line-height:20px;height:40px;-webkit-box-pack:center;-ms-flex-pack:center;-webkit-justify-content:center;-moz-box-pack:center;justify-content:center}
+	.zent-table .cell.cell--selection{padding-left:34px}
+	.zent-table .cell.cell--money,.zent-table .cell.cell--right{-webkit-box-pack:end;-ms-flex-pack:end;-webkit-justify-content:end;-moz-box-pack:end;justify-content:end}
+	.zent-table .cell.cell--money .cell__child-container,.zent-table .cell.cell--right .cell__child-container{text-align:right}
+	.zent-table .cell.cell--start{-webkit-box-pack:start;-ms-flex-pack:start;-webkit-justify-content:start;-moz-box-pack:start;justify-content:start}
+	.zent-table .cell.cell--start .cell__child-container{text-align:left}
+	.zent-table .cell.cell--center{-webkit-box-pack:center;-ms-flex-pack:center;-webkit-justify-content:center;-moz-box-pack:center;justify-content:center}
+	.zent-table .cell.cell--center .cell__child-container{text-align:center}
+	.zent-table .cell .asc,.zent-table .cell .desc{margin-left:3px}
+	.zent-table .cell .desc:after{position:absolute;content:"\2193"}
+	.zent-table .cell .asc:after{position:absolute;content:"\2191"}
+	.zent-table .cell .select-check{position:absolute;left:10px;top:50%;-webkit-transform:translateY(-50%);-moz-transform:translateY(-50%);-ms-transform:translateY(-50%);transform:translateY(-50%);margin-top:0}
+	.zent-table .card__thumb{float:left;margin-right:5px;height:50px}
+	.zent-table .card__title{display:block;height:32px;line-height:1.4;overflow:hidden;text-overflow:ellipsis;font-size:14px;color:#38f}
+	.zent-table .card__title:hover{text-decoration:none}
+	.zent-table .card__info{font-size:14px;color:#f66}
+	.zent-table .clearfix:after{content:"";display:table;clear:both}
+</style>
+{php include wl_template('common/footer');}

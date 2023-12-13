@@ -1,0 +1,152 @@
+{php include wl_template('common/header');}
+<style>
+    .user{
+        height: 60px;
+        min-width: 180px;
+    }
+    .user .img{
+        width: 60px;
+        height: 60px;
+        float: left;
+        position: relative;
+    }
+    .user .img img{
+        width: 60px;
+        height: 60px;
+        border-radius: 50%;
+    }
+    .user .img i{
+        position: absolute;
+        top: 0;
+        right: 0px;
+        color: #FFF;
+        opacity: .7;
+        font-size: 13px;
+        border-radius: 50%;
+        width: 20px;
+        height: 20px;
+        line-height: 20px;
+        text-align: center;
+    }
+    .user .img i.icon-male{
+        background: #0d8ddb;
+    }
+    .user .img i.icon-female{
+        background: #ed5565;
+        transform: rotate(  30deg) skew(  0deg);
+    }
+    .user .info{
+        float: left;
+        height: 60px;
+        width: calc(100% - 60px);
+        padding-left: 10px;
+        padding-top: 10px;
+        font-size: 15px;
+        text-align: left;
+        line-height: 20px;
+    }
+</style>
+<ul class="nav nav-tabs">
+    <li><a href="{php echo web_url('dating/matchmaker/matchmakerList')}">红娘列表</a></li>
+    <li class="active"><a href="javascript:;">客户列表</a></li>
+</ul>
+<div class="app-content">
+    <!--顶部操作-->
+    <div class="app-filter">
+        <div class="filter-list">
+            <form action="" method="get" class="form-horizontal" role="form" id="form1">
+                <input type="hidden" name="c" value="site" />
+                <input type="hidden" name="a" value="entry" />
+                <input type="hidden" name="m" value="{MODULE_NAME}" />
+                <input type="hidden" name="p" value="dating" />
+                <input type="hidden" name="ac" value="matchmaker" />
+                <input type="hidden" name="do" value="matchmakerMember" />
+                <input type="hidden" name="id" value="{$id}" />
+                <div class="form-group">
+                    <div class="col-sm-2 control-label">会员昵称</div>
+                    <div class="col-sm-9">
+                        <input type="text" class="form-control" name="nickname" value="{$nickname}" placeholder="请输入会员昵称...">
+                    </div>
+                </div>
+                <div class="form-group">
+                    <div class="col-sm-2 control-label"></div>
+                    <div class="col-sm-9">
+                        <button class="btn btn-primary" type="submit">搜索</button>
+                        <a href="{php echo web_url('dating/matchmaker/matchmakerMember',['id'=>$id])}" class="btn btn-danger">清除</a>
+                    </div>
+                </div>
+            </form>
+        </div>
+    </div>
+    <!--表格信息-->
+    <div class="app-table-list">
+        <!--列表信息-->
+        <div class="table-responsive order-list">
+            <table class="table table-hover">
+                <thead>
+                    <tr>
+                        <th class="text-center"><input type="checkbox" /></th>
+                        <th class="text-left">用户信息</th>
+                        <th class="text-center">年龄</th>
+                        <th class="text-center">身高(cm)/体重(kg)</th>
+                        <th class="text-center">婚姻情况</th>
+                        <th class="text-center">学历</th>
+                        <th class="text-center">所在城市</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    {loop $list $key $item}
+                        <tr class="text-center">
+                            <td><input type="checkbox" value="{$item['id']}" /></td>
+                            <td>
+                                <div class="user">
+                                    <div class="img">
+                                        <img src="{$item['avatar']}">
+                                        {if $item['gneder'] == 1}
+                                            <i class="icon icon-male"></i>
+                                        {else}
+                                            <i class="icon icon-female"></i>
+                                        {/if}
+                                    </div>
+                                    <div class="info">
+                                        <div>{$item['nickname']}</div>
+                                        <div>{$item['birth']}</div>
+                                    </div>
+                                </div>
+                            </td>
+                            <td>{$item['age']}</td>
+                            <td>{$item['height']}cm/{$item['weight']}kg</td>
+                            <td>{$item['marital_status_text']}</td>
+                            <td>{$item['education_text']}</td>
+                            <td>{$item['current_address']}</td>
+                        </tr>
+                    {/loop}
+                </tbody>
+            </table>
+        </div>
+        <!--操作按钮 分页信息-->
+        <div class="app-table-foot clearfix">
+            <div class="pull-left">
+                <button class="btn btn-default" type="button" data-toggle='batch-remove' data-confirm="确定删除当前选中的所有标签信息？" data-href="{php echo web_url('dating/member/memberDel')}">批量删除</button>
+            </div>
+            <div class="pull-right">{$pager}</div>
+        </div>
+    </div>
+</div>
+<script>
+    //点击驳回
+    $(document).on('click','.btn-reject',function (){
+        let id = $(this).data('id'),
+            url = "{php echo web_url('dating/member/memberExamine')}";
+        tip.prompt('请输入驳回原因！', {
+            maxlength: 230,
+            callback: function (reason) {
+                $.post(url,{id:id,status:2,reason:reason},function (res){
+                    if(res.status == 0) tip.msgbox.err(res.result.message);
+                    else tip.msgbox.suc(res.result.message,res.result.url);
+                },'json');
+            }
+        });
+    });
+</script>
+{php include wl_template('common/footer');}

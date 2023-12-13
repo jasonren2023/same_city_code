@@ -1,0 +1,31 @@
+<?xml version="1.0" encoding="utf-8"?>
+<manifest>
+	<application>
+		<name><![CDATA[出租车买单]]></name>
+		<identifie><![CDATA[taxipay]]></identifie>
+		<version><![CDATA[1.0.0]]></version>
+		<type><![CDATA[expand]]></type>
+		<description><![CDATA[出租车买单，享受分佣]]></description>
+		<author><![CDATA[微连科技]]></author>
+		<url><![CDATA[http://www.weliam.cn/]]></url>
+	</application>
+	<setting>
+		<agent embed="false" />
+		<system embed="true" />
+		<task embed="false" />
+	</setting>
+	<agentmenu>
+	</agentmenu>
+	<systemmenu>
+		<menu title="出租车" font="fa-inbox">
+			<entry title="师傅管理" ac="taxipay" do="master_lists" actions='["do",["master_lists","master_edit"]]' iscover="true"/>
+			<entry title="公司管理" ac="taxipay" do="company_lists" actions='["do",["company_lists","company_edit"]]' />
+		</menu>
+		<menu title="广告" font="fa-inbox">
+			<entry title="广告管理" ac="taxipay" do="adv_lists" actions='["do",["adv_lists","adv_edit","adv_log"]]' />
+		</menu>
+		<menu title="设置" font="fa-inbox">
+			<entry title="基础设置" ac="taxipay" do="setting" />
+		</menu>
+	</systemmenu>
+</manifest>

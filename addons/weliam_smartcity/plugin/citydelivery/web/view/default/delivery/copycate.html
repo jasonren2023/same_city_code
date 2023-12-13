@@ -1,0 +1,57 @@
+{php include wl_template('common/header');}
+<ul class="nav nav-tabs" id="myTab">
+    <li class="active"><a href="#tab_basic">分类复制</a></li>
+</ul>
+<div class="app-content">
+    <div class="app-form">
+        <form action="" method="post" class="form-horizontal form form-validate" id="setting-form">
+            <div class="panel panel-default">
+                <div class="panel-heading">分类复制</div>
+                <div class="panel-body">
+                    <div class="tab-content">
+                        <div class="form-group">
+                            <label class="col-sm-2 control-label">模板商户</label>
+                            <div class="col-sm-9">
+                                <select name ='expressid' class="form-control select2">
+                                    {loop $stores $ee}
+                                    <option value="{$ee['id']}">{$ee['storename']}</option>
+                                    {/loop}
+                                </select>
+                            </div>
+                        </div>
+                        <div class="form-group">
+                            <label class="col-sm-2 control-label">目标商户</label>
+                            <div class="col-sm-9">
+                                <select name ='passiveid[]' class="form-control select2" multiple="multiple">
+                                    {loop $stores $pp}
+                                    <option value="{$pp['id']}">{$pp['storename']}</option>
+                                    {/loop}
+                                </select>
+                                <span class="help-block" style="color: red;">不选择目标商户将会同步到其他所有商户，商户过多时可能导致服务器超时，请谨慎使用。</span>
+                            </div>
+                        </div>
+                        <div class="form-group">
+                            <label class="col-sm-2 control-label">同步方式</label>
+                            <div class="col-sm-9">
+                                <label class="radio-inline">
+                                    <input type="radio" value="0" name="copystatus" checked="checked" > 添加
+                                </label>
+                                <label class="radio-inline">
+                                    <input type="radio" value="1" name="copystatus"> 覆盖
+                                </label>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <div class="form-group">
+                <label class="col-sm-2 control-label"></label>
+                <div class="col-sm-9">
+                    <input type="submit" name="submit" value="提交" class="btn btn-primary min-width" />
+                    <input type="hidden" name="token" value="{$_W['token']}" />
+                </div>
+            </div>
+        </form>
+    </div>
+</div>
+{php include wl_template('common/footer');}

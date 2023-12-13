@@ -1,0 +1,57 @@
+<?xml version="1.0" encoding="utf-8"?>
+<manifest>
+	<application>
+		<name><![CDATA[求职招聘]]></name>
+		<identifie><![CDATA[recruit]]></identifie>
+		<version><![CDATA[1.0.0]]></version>
+		<type><![CDATA[expand]]></type>
+		<description><![CDATA[求职招聘]]></description>
+		<author><![CDATA[微连科技]]></author>
+		<url><![CDATA[http://www.weliam.cn/]]></url>
+	</application>
+	<setting>
+		<agent embed="true" />
+		<store embed="true" />
+		<system embed="true" />
+		<task embed="true" />
+	</setting>
+	<storemenu>
+		<menu title="活动" font="fa-inbox">
+			<entry title="招聘管理" ac="recruitment" do="recruitList" actions='["do",["recruitList","recruitEdit"]]' iscover="true" />
+		</menu>
+	</storemenu>
+	<agentmenu>
+		<menu title="行业职位" font="fa-inbox">
+			<entry title="行业管理" ac="industryPosition" do="industryList" actions='["do",["industryList","industryEdit"]]' iscover="true" />
+			<entry title="职位管理" ac="industryPosition" do="positionList" actions='["do",["positionList","positionEdit"]]'/>
+		</menu>
+		<menu title="求职招聘" font="fa-inbox">
+			<entry title="标签管理" ac="recruitment" do="labelList" actions='["do",["labelList","labelEdit"]]'/>
+			<entry title="招聘管理" ac="recruitment" do="recruitList" actions='["do",["recruitList","recruitEdit"]]'/>
+			<entry title="简历管理" ac="recruitment" do="resumeList" actions='["do",["resumeList","resumeSee"]]'/>
+		</menu>
+		<menu title="订单" font="fa-inbox">
+			<entry title="订单管理" ac="recruitOrder" do="index" actions='["do",["index"]]'/>
+		</menu>
+		<menu title="设置" font="fa-inbox">
+			<entry title="基本设置" ac="recruitment" do="setEdit" actions='["do",["setEdit"]]'/>
+		</menu>
+	</agentmenu>
+	<systemmenu>
+		<menu title="行业职位" font="fa-inbox">
+			<entry title="行业管理" ac="industryPosition" do="industryList" actions='["do",["industryList","industryEdit"]]' iscover="true" />
+			<entry title="职位管理" ac="industryPosition" do="positionList" actions='["do",["positionList","positionEdit"]]'/>
+		</menu>
+		<menu title="求职招聘" font="fa-inbox">
+			<entry title="标签管理" ac="recruitment" do="labelList" actions='["do",["labelList","labelEdit"]]'/>
+			<entry title="招聘管理" ac="recruitment" do="recruitList" actions='["do",["recruitList","recruitEdit"]]'/>
+			<entry title="简历管理" ac="recruitment" do="resumeList" actions='["do",["resumeList","resumeSee"]]'/>
+		</menu>
+		<menu title="订单" font="fa-inbox">
+			<entry title="订单管理" ac="recruitOrder" do="index" actions='["do",["index"]]'/>
+		</menu>
+		<menu title="设置" font="fa-inbox">
+			<entry title="基本设置" ac="recruitment" do="setEdit" actions='["do",["setEdit"]]'/>
+		</menu>
+	</systemmenu>
+</manifest>

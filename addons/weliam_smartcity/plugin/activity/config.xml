@@ -1,0 +1,47 @@
+<?xml version="1.0" encoding="utf-8"?>
+<manifest>
+	<application>
+		<name><![CDATA[同城活动]]></name>
+		<identifie><![CDATA[activity]]></identifie>
+		<version><![CDATA[1.0.0]]></version>
+		<type><![CDATA[market]]></type>
+		<description><![CDATA[同城活动助力本地公益活动,商家活动,优惠促销,团购活动,户外运动]]></description>
+		<author><![CDATA[微连科技]]></author>
+		<url><![CDATA[http://www.weliam.cn/]]></url>
+	</application>
+	<setting>
+		<agent embed="true" />
+		<store embed="true" />
+		<system embed="true" />
+		<task embed="true" />
+	</setting>
+	<agentmenu>
+		<menu title="活动管理" font="fa-inbox">
+			<entry title="活动列表" ac="activity_web" do="activitylist" iscover="true" />
+			<entry title="添加活动" ac="activity_web" do="createactivity" actions='["ac","activity_web","do","createactivity"]' />
+		</menu>
+		<menu title="分类管理" font="fa-inbox">
+			<entry title="分类列表" ac="activity_web" do="categorylist"/>
+		</menu>
+		<menu title="设置" font="fa-inbox">
+			<entry title="基础设置" ac="activity_web" do="baseset"/>
+		</menu>
+	</agentmenu>
+	<storemenu>
+		<menu title="活动管理" font="fa-inbox">
+			<entry title="活动列表" ac="activity_web" do="activitylist" actions='["do",["activity_web","activitylist"]]' iscover="true" />
+		</menu>
+	</storemenu>
+	<systemmenu>
+		<menu title="活动管理" font="fa-inbox">
+			<entry title="活动列表" ac="activity_web" do="activitylist" iscover="true" />
+			<entry title="添加活动" ac="activity_web" do="createactivity" actions='["ac","activity_web","do","createactivity"]' />
+		</menu>
+		<menu title="分类管理" font="fa-inbox">
+			<entry title="分类列表" ac="activity_web" do="categorylist"/>
+		</menu>
+		<menu title="设置" font="fa-inbox">
+			<entry title="基础设置" ac="activity_web" do="baseset"/>
+		</menu>
+	</systemmenu>
+</manifest>

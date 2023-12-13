@@ -1,0 +1,253 @@
+{php include wl_template('common/header');}
+<script type="text/javascript" src="{URL_WEB_JS}diyarea.js"></script>
+<style>
+    #memberInfo .form-group{
+        margin-bottom: 10px!important;
+    }
+    #memberInfo .img-photo{
+        max-width: 150px;
+        max-height: 150px;
+        float:left;
+        margin:2px;
+    }
+    #memberInfo video{
+        height: 300px!important;
+        width: auto!important;
+        border: 1px solid #ddd;
+        padding: 5px;
+    }
+    .margin-r-5{
+        margin-right: 5px;
+    }
+</style>
+<ul class="nav nav-tabs" id="myTab">
+    <li class="active"><a href="#tab_basic">基础信息</a></li>
+    <!--<li><a href="#tab_contact">联系方式</a></li>-->
+    <!--<li><a href="#tab_requirement">择偶要求</a></li>-->
+    <!--<li><a href="#tab_personality">个性信息</a></li>-->
+    <!--<li><a href="#tab_other">其他信息</a></li>-->
+</ul>
+<div class="app-content">
+    <div class="app-form" id="memberInfo">
+        <form class="form-horizontal form form-validate" method="post">
+            <div class="tab-content">
+                <!-- 基本信息 -->
+                <div class="tab-pane active" id="tab_basic">
+                    <div class="panel panel-default">
+                        <div class="panel-heading">基本信息</div>
+                        <div class="panel-body">
+                            <div class="form-group">
+                                <label class="col-sm-2 control-label">选择用户<span class="form-must">*</span></label>
+                                <div class="col-sm-9">
+                                    <input type='hidden' name='uid' value="{$info['user_id']}" />
+                                    {php echo tpl_select_user('info[user_id]', $info['user_id']);}
+                                </div>
+                            </div>
+
+
+                            <div class="form-group">
+                                <label class="col-sm-2 control-label">排序</label>
+                                <div class="col-sm-9">
+                                    <input class="form-control"  type="number" min="0"  name="info[weigh]" value="{$info['weigh']}"  />
+                                </div>
+                            </div>
+
+                            <div class="form-group">
+                                <label class="col-sm-2 control-label">联系方式<span class="form-must">*</span></label>
+                                <div class="col-sm-9">
+                                    <input class="form-control" required type="text" name="info[phone]" value="{$info['phone']}"  />
+                                </div>
+                            </div>
+                            {if !is_store()}
+                            <div class="form-group" id="shop_div" >
+                                <label class="col-sm-2 control-label">所属商户</label>
+                                <div class="col-sm-9">
+                                    <div class='input-group'>
+                                        <div class="input-group ">
+                                            <input type="text" class="form-control col-sm-9" id="namemerchant" name="" value="{$shop['storename']}" style="width: 460px;" disabled>
+                                            <span class="input-group-btn">
+                                            <button class="btn btn-default" type="button" onclick="popwin = $('#modal-module-merchant').modal();">选择商家</button></span>
+                                        </div>
+                                        <div class="input-group " style="margin-top:.5em;">
+                                            <input type="hidden" value="{$info['shop_id']}" name="info[shop_id]" id="sidmerchant" >
+                                            <img src="{if empty($shop['logo'])}../web/resource/images/nopic.jpg{else}{php echo tomedia($shop['logo'])}{/if}" class="img-responsive img-thumbnail" width="150" id="imgmerchant" />
+                                            <em class="close" style="position:absolute; top: 0px; right: -14px;" title="删除" onclick="remove_merchant(this)">×</em>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                            {/if}
+                            <div class="form-group">
+                                <label class="col-sm-2 control-label">qq</label>
+                                <div class="col-sm-9">
+                                    <input class="form-control" type="text" name="info[qq]" value="{$info['qq']}"  />
+                                </div>
+                            </div>
+
+                            <div class="form-group">
+                                <label class="col-sm-2 control-label">qq二维码</label>
+                                <div class="col-sm-9">
+                                    {php echo attachment_select('info[qq_qrcode_image]', $info['qq_qrcode_image'])}
+                                    <div class="help-block">图片比例：300*300</div>
+                                </div>
+                            </div>
+
+                            <div class="form-group">
+                                <label class="col-sm-2 control-label">微信号</label>
+                                <div class="col-sm-9">
+                                    <input class="form-control" type="text" name="info[wechat]" value="{$info['wechat']}"  />
+                                </div>
+                            </div>
+
+                            <div class="form-group">
+                                <label class="col-sm-2 control-label">微信二维码</label>
+                                <div class="col-sm-9">
+                                    {php echo attachment_select('info[wechat_qrcode_image]', $info['wechat_qrcode_image'])}
+                                    <div class="help-block">图片比例：300*300</div>
+                                </div>
+                            </div>
+
+
+                            <div class="form-group">
+                                <label class="col-sm-2 control-label">顾问标签</label>
+                                <div class="col-sm-9">
+                                    {loop $adviser $children}
+                                    <label class="checkbox-inline">
+                                        <input type="checkbox" value="{$children['id']}" name="info[adviser_ids][]"  {if in_array($children['id'],explode(',',$info['adviser_ids']))}checked="checked"{/if} /> {$children['title']}
+                                    </label>
+                                    {/loop}
+                                </div>
+                            </div>
+                            <div id="havedata">
+                                <div class="form-group">
+                                    <label class="col-sm-2 control-label">新房</label>
+                                    <div class="col-sm-9">
+                                        {loop $newHouse $children}
+                                        <label class="checkbox-inline">
+                                            <input type="checkbox" value="{$children['id']}" name="info[newHouse_ids][]"  {if in_array($children['id'],$newHouse_ids)}checked="checked"{/if} /> {$children['title']}
+                                        </label>
+                                        {/loop}
+                                    </div>
+                                </div>
+                                <div class="form-group">
+                                    <label class="col-sm-2 control-label">二手房</label>
+                                    <div class="col-sm-9">
+                                        {loop $oldHouse $children}
+                                        <label class="checkbox-inline">
+                                            <input type="checkbox" value="{$children['id']}" name="info[oldHouse_ids][]"  {if in_array($children['id'],$oldHouse_ids)}checked="checked"{/if} /> {$children['title']}
+                                        </label>
+                                        {/loop}
+                                    </div>
+                                </div>
+                                <div class="form-group">
+                                    <label class="col-sm-2 control-label">出租房</label>
+                                    <div class="col-sm-9">
+                                        {loop $renting $children}
+                                        <label class="checkbox-inline">
+                                            <input type="checkbox" value="{$children['id']}" name="info[renting_ids][]"  {if in_array($children['id'],$renting_ids)}checked="checked"{/if} /> {$children['title']}
+                                        </label>
+                                        {/loop}
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="form-group">
+                                <label class="col-sm-2 control-label">状态</label>
+                                <div class="col-sm-9">
+                                    <label class="radio-inline">
+                                        <input type="radio" name="info[status]" value="1" {if $info['status']==1 || !$info['status']}checked{/if}> 启用
+                                    </label>
+                                    <label class="radio-inline">
+                                        <input type="radio" name="info[status]" value="2" {if $info['status']==2}checked{/if}> 禁用
+                                    </label>
+                                </div>
+                            </div>
+
+
+                            <div class="form-group">
+                                <label class="col-sm-2 control-label">描述</label>
+                                <div class="col-sm-9">
+                                    {php echo tpl_diy_editor_create('info[describe]', $info['describe']);}
+                                </div>
+                            </div>
+
+
+
+
+
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <div class="form-group">
+                <label class="col-sm-2 control-label"></label>
+                <div class="col-sm-9">
+                    <input type="submit" name="submit" value="提交" class="btn btn-primary min-width" />
+                    <input type="hidden" name="token" value="{$_W['token']}" />
+                    <input type="hidden" name="id" value="{$_GPC['id']}" />
+
+                    <a href="{php echo web_url('house/Adviser/adviserList')}" class="btn btn-danger min-width margin-r-5">返回</a>
+                </div>
+            </div>
+            <div id="modal-module-merchant" class="modal fade" tabindex="-1">
+                <div class="modal-dialog" style='width: 920px;'>
+                    <div class="modal-content">
+                        <div class="modal-header">
+                            <button aria-hidden="true" data-dismiss="modal" class="close" type="button">×</button>
+                            <h3>选取</h3></div>
+                        <div class="modal-body">
+                            <div class="row">
+                                <div class="input-group">
+                                    <input type="text" class="form-control" name="keyword" value="" id="search-kwd-merchant" placeholder="请输入商家名称，不输入任何内容搜索结果为所有商家。" />
+                                    <span class='input-group-btn'><button type="button" class="btn btn-default" onclick="search_merchant();">搜索</button></span>
+                                </div>
+                            </div>
+                            <div id="module-merchant" style="padding-top:5px;"></div>
+                        </div>
+                        <div class="modal-footer"><a href="#" class="btn btn-default" data-dismiss="modal" aria-hidden="true">关闭</a></div>
+                    </div>
+                </div>
+            </div>
+        </form>
+    </div>
+</div>
+<script>
+
+   function search_merchant() {
+       $("#module-merchant").html("正在搜索....")
+       $.get("{php echo web_url('house/House/selectMerchant')}", {
+           keyword: $.trim($('#search-kwd-merchant').val())
+       }, function(dat){
+           $('#module-merchant').html(dat);
+       });
+   }
+   function remove_merchant(obj){
+       $('#goodsidmerchant').val('');
+       $('#namemerchant').val('');
+       $('#imgmerchant').attr("src",'');
+       $('#sidmerchant').val('');
+   }
+   function select_merchant(o) {
+       var lastid = $('#sidmerchant').val();
+       if (lastid != o.id) {
+           $('#sidmerchant').val(o.id);
+           $('#namemerchant').val(o.storename);
+           $('#imgmerchant').attr("src",o.logo);
+           $('#modal-module-merchant').modal('hide');
+           inspect();
+       }else{
+           $('#modal-module-merchant').modal('hide');
+       }
+   }
+   function inspect(){
+       var sid = $('#sidmerchant').val();
+       $('#havedata').html('');
+       $.ajax({
+           url: "{php echo web_url('house/Adviser/storehouseinfo')}&storeid="+sid,
+           cache: false
+       }).done(function (html) {
+           $("#havedata").append(html);
+       });
+   }
+
+</script>
+{php include wl_template('common/footer');}

@@ -1,0 +1,78 @@
+<form action="{php echo web_url('store/merchant/editclerk')}" method="post" class="form-horizontal form form-validate">
+    <div class="modal-dialog" style="z-index: 50;">
+        <div class="modal-content" style="max-height: 1000px;">
+            <div class="modal-header">
+                <button data-dismiss="modal" class="close" type="button">×</button>
+                <h4 class="modal-title">编辑店员</h4>
+            </div>
+            <div class="modal-body">
+                <div class="form-group">
+                    <label class="col-sm-2 control-label"><span style='color:red'>*</span>选择用户</label>
+                    <div class="col-sm-9">
+                        {php echo tpl_select_user('memberid', $clerk['mid']);}
+                    </div>
+                </div>
+                <div class="form-group">
+                    <label class="col-sm-2 control-label">店员名称</label>
+                    <div class="col-sm-9">
+                        <input type="text" name="name"  class="form-control" value="{$clerk['name']}"/>
+                    </div>
+                </div>
+                <div class="form-group">
+                    <label class="col-sm-2 control-label">联系方式</label>
+                    <div class="col-sm-9">
+                        <input type="text" name="mobile"  class="form-control" value="{$clerk['mobile']}"/>
+                    </div>
+                </div>
+                <div class="form-group">
+                    <label class="col-sm-2 control-label">店员类型</label>
+                    <div class="col-sm-9">
+                        <select name="ismain" class="form-control select2 col-sm-7 col-xs-6" style="width: 100%;">
+                            <option value="2" {if $clerk['ismain'] == 2 || empty($clerk['ismain']) } selected="selected" {/if}>核销员</option>
+                            <option value="3" {if $clerk['ismain'] == 3 } selected="selected" {/if}>管理员</option>
+                        </select>
+                    </div>
+                </div>
+                <div class="form-group">
+                    <label class="col-sm-2 control-label">状态</label>
+                    <div class="col-sm-9">
+                        <label class="radio-inline">
+                            <input type="radio" name="enabled" value="1" {if $clerk['enabled']} checked {/if}/>启用
+                        </label>
+                        <label class="radio-inline">
+                            <input type="radio" name="enabled" value="0" {if empty($clerk['enabled'])} checked {/if} />禁用
+                        </label>
+                    </div>
+                </div>
+<!--                <div class="form-group">-->
+<!--                    <label class="col-sm-2 control-label">订单核销权限</label>-->
+<!--                    <div class="col-sm-9">-->
+<!--                        <label class="radio-inline">-->
+<!--                            <input type="radio" name="orderwrite" value="1" {if $clerk['orderwrite']} checked {/if}/>有-->
+<!--                        </label>-->
+<!--                        <label class="radio-inline">-->
+<!--                            <input type="radio" name="orderwrite" value="0" {if empty($clerk['orderwrite'])} checked {/if} />无-->
+<!--                        </label>-->
+<!--                    </div>-->
+<!--                </div>-->
+<!--                <div class="form-group">-->
+<!--                    <label class="col-sm-2 control-label">查看财务权限</label>-->
+<!--                    <div class="col-sm-9">-->
+<!--                        <label class="radio-inline">-->
+<!--                            <input type="radio" name="viewdata" value="1" {if $clerk['viewdata']} checked {/if}/>有-->
+<!--                        </label>-->
+<!--                        <label class="radio-inline">-->
+<!--                            <input type="radio" name="viewdata" value="0" {if empty($clerk['viewdata'])} checked {/if} />无-->
+<!--                        </label>-->
+<!--                    </div>-->
+<!--                </div>-->
+            </div>
+            <div class="modal-footer">
+                <input type="hidden" name="id" id="id" value="{$clerk['id']}" />
+                <input type="hidden" name="storeid" value="{$storeid}" />
+                <button type="button" class="btn btn-default" data-dismiss="modal">关闭</button>
+                <button type="submit" class="btn btn-primary">提交更改</button>
+            </div>
+        </div>
+    </div>
+</form>

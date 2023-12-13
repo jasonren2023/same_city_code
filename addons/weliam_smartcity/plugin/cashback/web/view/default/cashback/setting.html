@@ -1,0 +1,35 @@
+{php include wl_template('common/header');}
+<ul class="nav nav-tabs" id="myTab">
+    <li class="active"><a href="#tab_basic">基本设置</a></li>
+</ul>
+<div class="app-content">
+    <div class="app-form">
+        <form action="" method="post" class="form-horizontal form form-validate">
+            <div class="tab-content">
+                <div class="form-group-title">基本设置</div>
+                <div class="form-group">
+                    <label class="col-sm-2 control-label">是否需要审核</label>
+                    <div class="col-xs-12 col-sm-8">
+                        <div class="radio radio-success radio-inline">
+                            <input type="radio" id="examine1" name="set[to_examine]" value="0" {if $set['to_examine'] != 1}checked="checked"{/if}>
+                            <label for="examine1">开启</label>
+                        </div>
+                        <div class="radio radio-success radio-inline">
+                            <input type="radio" id="examine2" name="set[to_examine]" value="1" {if $set['to_examine'] == 1}checked="checked"{/if}>
+                            <label for="examine2">关闭</label>
+                        </div>
+                        <span class="help-block">关闭后，所有的返现会在支付后自动返现给用户</span>
+                    </div>
+                </div>
+            </div>
+            <div class="form-group">
+                <label class="col-sm-2 control-label"></label>
+                <div class="col-sm-9">
+                    <input type="submit" name="submit" value="提交" class="btn btn-primary min-width" />
+                    <input type="hidden" name="token" value="{$_W['token']}" />
+                </div>
+            </div>
+        </form>
+    </div>
+</div>
+{php include wl_template('common/footer');}

@@ -1,0 +1,1980 @@
+{php include wl_template('common/header');}
+<ul class="nav nav-tabs" id="myTab">
+	<li class="active"><a href="#tab_basic">基础信息</a></li>
+	{if !is_store() || $_W['storeismain'] == 1}
+	<li><a href="#tab_admin">店长信息</a></li>
+	{/if}
+	<li><a href="#tab_other">其他信息</a></li>
+	{if !is_store()}
+	<li><a href="#tab_settlement">结算信息</a></li>
+	{/if}
+    <li><a href="#tab_voice">云喇叭设置</a></li>
+	<li><a href="#tab_print">打印推送</a></li>
+	{if store_p('recruit',$id) || empty($id)}
+		<li><a href="#tab_recruit">求职招聘</a></li>
+	{/if}
+	{if store_p('housekeep',$id) || empty($id)}
+	<li><a href="#tab_housekeep">家政服务</a></li>
+	{/if}
+	{if store_p('house',$id) || empty($id)}
+	<li><a href="#tab_house">房产租售</a></li>
+	{/if}
+	{if store_p('hotel',$id) || empty($id)}
+	<li><a href="#tab_hotel">酒店设置</a></li>
+	{/if}
+</ul>
+<div class="app-content">
+{if $_GPC['do']=='edit'}
+	<div class="app-form">
+		<form action="" method="post" class="form-horizontal form form-validate">
+			<div class="tab-content">
+				<div class="tab-pane active" id="tab_basic">
+					<div class="panel panel-default">
+						<div class="panel-heading">店铺信息</div>
+						<div class="panel-body">
+							{if !is_store()}
+								<div class="form-group" >
+									<label class="col-sm-2 control-label">所属代理</label>
+									<div class="col-sm-9">
+										<select name="register[aid]" class="form-control select2" required style="width: 100%;">
+											{loop $agentList $item}
+											<option value="{$item['id']}" {if $item['id'] == $register['aid']}selected{/if}>{$item['agentname']}</option>
+											{/loop}
+										</select>
+									</div>
+								</div>
+							{/if}
+							<div class="form-group">
+								<label class="col-sm-2 control-label">店铺名称<span class="must-fill">*</span></label>
+								<div class="col-sm-9">
+									<input type="text" name="register[storename]" required class="form-control" value="{$register['storename']}">
+								</div>
+							</div>
+							<div class="form-group">
+								<label class="col-sm-2 control-label">店铺描述<span class="must-fill">*</span></label>
+								<div class="col-sm-9">
+									<input type="text" name="register[describe]" maxlength="30" class="form-control" value="{$register['describe']}">
+									<div class="help-block">分享当前商户时显示的描述信息(max:30)</div>
+								</div>
+							</div>
+							{if !is_store()}
+							<div class="form-group">
+								<label class="col-sm-2 control-label">店铺排序</label>
+								<div class="col-sm-9">
+									<input type="number" min="0" name="register[listorder]"  class="form-control" value="{$register['listorder']}">
+									<div class="help-block">数字越大排序越靠前。</div>
+								</div>
+							</div>
+							<div class="form-group">
+								<label class="col-sm-2 control-label">店铺人气</label>
+								<div class="col-sm-9">
+									<input type="number" min="0" name="register[pv]"  class="form-control" value="{$register['pv']}">
+									<div class="help-block">当前店铺访问次数</div>
+								</div>
+							</div>
+							<div class="form-group">
+								<label class="col-sm-2 control-label">虚拟销量</label>
+								<div class="col-sm-9">
+									<input type="number" min="0" name="register[virtual_sales]"  class="form-control" value="{$register['virtual_sales']}">
+								</div>
+							</div>
+							<div class="form-group" id="noleveldiv">
+							  <label class="col-sm-2 control-label">评分等级</label>
+								<div class="col-sm-9">
+									<div class="star-rating rating-xs rating-active">
+										<input type="hidden" name="register[score]" id="star" value="{$register['score']}" />
+										<div class="rating-container rating-gly-star">
+											{loop $on_array $a}
+											<img src="../addons/{MODULE_NAME}/web/resource/images/star-on-big.png" alt="{$a}"   class="star">
+											{/loop}
+											{loop $off_array $b}
+											<img src="../addons/{MODULE_NAME}/web/resource/images/star-off-big.png" alt="{$b}"   class="star">
+											{/loop}
+										</div>
+										<div class="caption">{$html}</div>
+										<script type="text/javascript">
+											$('.star').click(function(){
+												var _t = $(this);
+												var star = _t.attr('alt');
+												$('#star').val(star);
+												$('.caption').html('');
+												if(star==1){
+													$('.caption').html('<span class="label label-default">非常差</span>');
+												}else if(star==2){
+													$('.caption').html('<span class="label label-warning">不太好</span>');
+												}else if(star==3){
+													$('.caption').html('<span class="label label-info">一般</span>');
+												}else if(star==4){
+													$('.caption').html('<span class="label label-success">很好!</span>');
+												}else if(star==5){
+													$('.caption').html('<span class="label label-danger">非常棒!!</span>');
+												}
+												$(".star").each(function(){
+													$(".rating-container").find('img').each(function(){
+														var _this = $(this);
+														if(_this.attr('alt') <= star){
+															_this.attr('src','../addons/{MODULE_NAME}/web/resource/images/star-on-big.png');
+														}else{
+															_this.attr('src','../addons/{MODULE_NAME}/web/resource/images/star-off-big.png');
+														}
+													}
+													);
+												});
+
+											});
+										</script>
+									</div>
+									<span class="help-block text-danger" id="nolevel" style="display:none">请选择评分等级</span>
+								</div>
+							</div>
+							{/if}
+							<div class="form-group">
+								<label class="col-sm-2 control-label">店铺电话<span class="must-fill">*</span></label>
+								<div class="col-sm-9">
+									<input type="text" name="register[mobile]"  class="form-control" value="{$register['mobile']}">
+								</div>
+							</div>
+							<div class="form-group">
+								<label class="col-sm-2 control-label">营业时间<span class="must-fill">*</span></label>
+								<div class="col-sm-9">
+									<div id="datas">
+										{if empty($storehours)}
+										{php include wl_template('store/storehours');}
+										{else}
+										{loop $storehours $hour}
+										{php include wl_template('store/storehours');}
+										{/loop}
+										{/if}
+									</div>
+								</div>
+							</div>
+							<div class="form-group">
+								<label class="col-sm-2 control-label"></label>
+								<div class="col-sm-9">
+									<a class="btn btn-info btn-add-type" href="javascript:;" onclick="addHours();">
+										<i class="fa fa-plus" title=""></i>增加一个营业时间段
+									</a>
+								</div>
+							</div>
+							<div class="form-group">
+								<label class="col-sm-2 control-label">店铺分类<span class="must-fill">*</span></label>
+								<div class="col-sm-9">
+									<select name="category[]" class="form-control select2" multiple>
+										{loop $categoryes $parent}
+										<optgroup label="{$parent['name']}">
+											{loop $parent['list'] $children}
+											<option value="{$children['id']}" {if in_array($children['id'], $cateids)}selected{/if}>{$children['name']}</option>
+											{/loop}
+										</optgroup>
+										{/loop}
+									</select>
+								</div>
+							</div>
+							<div class="form-group">
+								<label class="col-sm-2 control-label">商铺logo<span class="must-fill">*</span></label>
+								<div class="col-sm-9">
+									{php echo attachment_select('register[logo]', $register['logo'])}
+									<span class="help-block">店铺logo，建议使用正方形图片</span>
+								</div>
+							</div>
+							{if p('wxapp')}
+							<div class="form-group">
+								<label class="col-sm-2 control-label">小程序分享图</label>
+								<div class="col-sm-9">
+									{php echo attachment_select('register[wxapp_shareimg]', $register['wxapp_shareimg'])}
+									<span class="help-block">分享小程序时使用，建议比例500*400</span>
+								</div>
+							</div>
+							{/if}
+							<div class="form-group">
+								<label class="col-sm-2 control-label">商户幻灯片</label>
+								<div class="col-sm-9">
+									{php echo attachment_select_multi('register[adv]',$register['adv']);}
+									<span class="help-block">店铺幻灯片,建议大小750X560</span>
+								</div>
+							</div>
+							<div class="form-group">
+								<label class="col-sm-2 control-label">幻灯片大小比例</label>
+								<div class="col-sm-9">
+									<div class="input-group">
+										<span class="input-group-addon">宽</span>
+										<input type="number" name="proportion[shopwidth]" min="0" class="form-control" value="{$proportion['shopwidth']}" />
+										<span class="input-group-addon">px，高</span>
+										<input type="number" name="proportion[shopheight]" min="0"  class="form-control" value="{$proportion['shopheight']}" />
+										<span class="input-group-addon">px</span>
+									</div>
+									<span class="help-block">设置的宽高不为实机演示的宽高，图片实机宽度为实机屏幕宽度，高度则以设置比例计算，不填即为默认的750X560。</span>
+								</div>
+							</div>
+							<div class="form-group">
+								<label class="col-sm-2 control-label">商户相册</label>
+								<div class="col-sm-9">
+									{php echo attachment_select_multi('register[album]',$register['album']);}
+									<span class="help-block">店铺相册,用于展示店内情况</span>
+								</div>
+							</div>
+							<div class="form-group">
+								<label class="col-sm-2 control-label">店铺详情</label>
+								<div class="col-sm-9">
+									{php echo tpl_diy_editor_create('register[introduction]', $register['introduction']);}
+								</div>
+							</div>
+							<div class="form-group">
+								<label class="col-sm-2 control-label">所在区域<span class="must-fill">*</span></label>
+								<div class="col-sm-9">
+									<div class="row row-fix js-address-selector">
+										<div class="col-md-4">
+											<select name="register[provinceid]" class="form-control tpl-province" required data-value="{$register['provinceid']}"></select>
+										</div>
+										<div class="col-md-4">
+											<select name="register[areaid]" class="form-control tpl-city" required data-value="{$register['areaid']}"></select>
+										</div>
+										<div class="col-md-4">
+											<select name="register[distid]" data-value="{$register['distid']}" class="form-control tpl-district"></select>
+										</div>
+									</div>
+								</div>
+							</div>
+							<div class="form-group">
+								<label class="col-sm-2 control-label">地理位置<span class="must-fill">*</span></label>
+								<div class="col-sm-9">
+									{php echo tpl_select_address('register[address]','register[location][lng]','register[location][lat]',$register['address'],$register['location']['lng'],$register['location']['lat'])}
+								</div>
+							</div>
+							{if !is_store()}
+							<div class="form-group">
+								<label class="col-sm-2 control-label">商户套餐<span class="must-fill">*</span></label>
+								<div class="col-sm-9">
+									<select name="register[groupid]" class="form-control">
+										{loop $allgroup $groups}
+										<option value="{$groups['id']}" {if $register['groupid'] == $groups['id']}selected{/if}>{$groups['name']}</option>
+										{/loop}
+									</select>
+								</div>
+							</div>
+							<div class="form-group">
+								<label class="col-sm-2 control-label">到期时间<span class="must-fill">*</span></label>
+								<div class="col-sm-9">
+									{php echo tpl_form_field_date('register[endtime]',$register['endtime'])}
+								</div>
+							</div>
+							{if $_GPC['checkflag'] != 1}
+								<div class="form-group">
+									<label class="col-sm-2 control-label">商户状态</label>
+									<div class="col-sm-9">
+										<label class="radio-inline">
+											<input type="radio" name="register[enabled]" value="0" {if $register['enabled']==0}checked{/if}> 待入驻
+										</label>
+										<label class="radio-inline">
+											<input type="radio" name="register[enabled]" value="1" {if $register['enabled']==1}checked{/if}> 入驻中
+										</label>
+										<label class="radio-inline">
+											<input type="radio" name="register[enabled]" value="2" {if $register['enabled']==2}checked{/if}> 暂停中
+										</label>
+										{if $register['enabled']==4}
+										<label class="radio-inline">
+											<input type="radio" name="register[enabled]" value="4" checked> 已删除
+										</label>
+										{/if}
+									</div>
+								</div>
+							{/if}
+							{/if}
+						</div>
+					</div>
+				</div>
+				<div class="tab-pane" id="tab_admin">
+					<div class="panel panel-default">
+						<div class="panel-heading">账号管理</div>
+						<div class="panel-body">
+							<div class="form-group">
+								<label class="col-sm-2 control-label">店长姓名</label>
+								<div class="col-sm-9">
+									<input type="text" name="register[realname]" class="form-control" value="{$register['realname']}">
+								</div>
+							</div>
+							<div class="form-group">
+								<label class="col-sm-2 control-label">店长电话</label>
+								<div class="col-sm-9">
+									<input type="text" name="register[tel]" class="form-control" value="{$register['tel']}">
+								</div>
+							</div>
+							<div class="form-group">
+								<label class="col-sm-2 control-label">店长微信</label>
+								<div class="col-sm-9">
+									<input type='hidden' name='uid' value="{$register['member']['id']}" />
+									{php echo tpl_select_user('storemid', $member['id']);}
+								</div>
+							</div>
+							<div class="form-group">
+								<label class="col-sm-2 control-label">核销密码</label>
+								<div class="col-sm-9">
+								  <input type="text" onKeyUp="value=value.replace(/[^\w\.\/]/ig,'')" name="register[verkey]" autocomplete="off"  value="{$register['verkey']}" class="form-control">
+								</div>
+							</div>
+							{if array_key_exists('bm_payms', $moduels)}
+								<div class="form-group">
+									<label class="col-sm-2 control-label">商户回复规则ID(Rid)</label>
+									<div class="col-sm-9">
+										<input type="text" name="register[bankrid]" class="form-control" value="{$register['bankrid']}">
+									</div>
+								</div>
+							{/if}
+						</div>
+					</div>
+				</div>
+				<div class="tab-pane" id="tab_other">
+					<div class="panel panel-default">
+						{if !empty($citydefl)}
+						<div class="panel-heading">同城配送</div>
+						<div class="form-group">
+							<label class="col-sm-2 control-label">配送服务</label>
+							<div class="col-sm-9">
+								<label class="radio-inline" onclick="$('#deliverydiv').show();">
+									<input type="radio" name="register[deliverystatus]" value="1" {if $register['deliverystatus']==1}checked{/if}> 开启
+								</label>
+								<label class="radio-inline" onclick="$('#deliverydiv').hide();">
+									<input type="radio" name="register[deliverystatus]" value="0" {if $register['deliverystatus']==0 || !$register['deliverystatus']}checked{/if}> 关闭
+								</label>
+								<div class="help-block">开启后会在显示商户外卖功能。</div>
+							</div>
+						</div>
+						<div id="deliverydiv" {if $register['deliverystatus']==0 || !$register['deliverystatus']} style="display: none" {/if}>
+						<div class="form-group">
+							<label class="col-sm-2 control-label">同城配送幻灯片</label>
+							<div class="col-sm-9">
+								{php echo attachment_select_multi('register[delivery_adv]',$register['delivery_adv']);}
+								<span class="help-block">外卖页面的幻灯片,建议大小750X560</span>
+							</div>
+						</div>
+						<div class="form-group">
+							<label class="col-sm-2 control-label">幻灯片大小比例</label>
+							<div class="col-sm-9">
+								<div class="input-group">
+									<span class="input-group-addon">宽</span>
+									<input type="number" name="proportion[deliverywidth]" min="0" class="form-control" value="{$proportion['deliverywidth']}" />
+									<span class="input-group-addon">px，高</span>
+									<input type="number" name="proportion[deliveryheight]" min="0"  class="form-control" value="{$proportion['deliveryheight']}" />
+									<span class="input-group-addon">px</span>
+								</div>
+								<span class="help-block">设置的宽高不为实机演示的宽高，图片实机宽度为实机屏幕宽度，高度则以设置比例计算，不填即为默认的750X560。</span>
+							</div>
+						</div>
+						{if !is_store()}
+						<div class="form-group">
+							<label class="col-sm-2 control-label" >配送订单结算比例</label>
+							<div class="col-sm-9">
+								<div class="input-group">
+									<input type="number" name="register[deliveryrate]" class="form-control" value="{$register['deliveryrate']}" />
+									<span class="input-group-addon">%</span>
+								</div>
+								<div class="help-block">同城配送订单结算给商户的比例,最多保留两位小数</div>
+							</div>
+						</div>
+						{/if}
+						<div class="form-group">
+							<label class="col-sm-2 control-label">接单方式</label>
+							<div class="col-sm-9">
+								<label class="radio-inline">
+									<input type="radio" name="register[acceptstatus]" value="0" {if $register['acceptstatus']==0 || !$register['acceptstatus']}checked{/if}> 自动接单
+								</label>
+								<label class="radio-inline">
+									<input type="radio" name="register[acceptstatus]" value="1" {if $register['acceptstatus']==1}checked{/if}> 手动接单
+								</label>
+								<div class="help-block">自动接单会在用户下单时直接将订单推送给骑手，手动接单需要商家点击接单后才会推送订单给骑手。</div>
+							</div>
+						</div>
+						<div class="form-group">
+							<label class="col-sm-2 control-label">配送方式</label>
+							<div class="col-sm-9">
+								<label class="checkbox-inline">
+									<input type="checkbox" onclick="storecheckstatus(this)" name="register[deliverytype][]" value="store" {if @in_array('store',$deliverytype)} checked="checked" {/if}>商户配送
+								</label>
+								<label class="checkbox-inline">
+									<input type="checkbox" onclick="makecheckstatus(this)" name="register[deliverytype][]" value="make" {if @in_array('make',$deliverytype)} checked="checked" {/if}>平台配送
+								</label>
+								<label class="checkbox-inline">
+									<input type="checkbox" name="register[deliverytype][]" value="own" {if @in_array('own',$deliverytype)} checked="checked" {/if}>到店自提
+								</label>
+							</div>
+						</div>
+						<div id="storediv"  {if !in_array('store',$deliverytype) && $register['expresspricestatus'] != 1} style="display: none" {/if}>
+							<div class="form-group">
+								<label class="col-sm-2 control-label" >订单配送费用</label>
+								<div class="col-sm-9">
+									<div class="input-group">
+										<span class="input-group-addon">￥</span>
+										<input type="number" name="register[deliverymoney]" class="form-control" value="{$register['deliverymoney']}" />
+									</div>
+									<div class="help-block">商户配送时每笔订单的配送费用,最多保留两位小数</div>
+								</div>
+							</div>
+							<div class="form-group">
+								<label class="col-sm-2 control-label" >商户配送距离</label>
+								<div class="col-sm-9">
+									<div class="input-group">
+										<input type="number" name="register[deliverydistance]" class="form-control" value="{$register['deliverydistance']}" />
+										<span class="input-group-addon">km</span>
+									</div>
+									<div class="help-block">商户配送的距离范围,单位千米，只有在距离内才能选择配送，填0或不填则不限制范围，最多保留两位小数。</div>
+								</div>
+							</div>
+							<div class="form-group">
+								<label class="col-sm-2 control-label" >商户配送设置</label>
+								<div class="col-sm-9">
+									<div class="input-group">
+										<span class="input-group-addon">起送价￥</span>
+										<input type="number" name="register[lowdeliverymoney]" class="form-control" value="{$register['lowdeliverymoney']}" />
+										<span class="input-group-addon">免配送费金额￥</span>
+										<input type="number" name="register[exemptmoney]" class="form-control" value="{$register['exemptmoney']}" />
+									</div>
+									<div class="help-block">商户配送的起送价格:只有订单金额大于起送价才能选择配送,填0或不填则不限制;免配送费金额，订单支付金额大于此设置即不会收取配送费；最多保留两位小数。</div>
+								</div>
+							</div>
+						</div>
+						<div id="makediv" {if !in_array('make',$deliverytype)} style="display: none" {/if} >
+							{if empty($apiset['type'])}
+							{if !is_store()}
+							<div class="form-group">
+								<label class="col-sm-2 control-label">平台配送计费方式</label>
+								<div class="col-sm-9">
+									<label class="radio-inline">
+										<input type="radio" name="register[expresspricestatus]" onclick="$('#storediv').show();" value="1" {if $register['expresspricestatus']==1}checked{/if}> 以商家配送费为准
+									</label>
+									<label class="radio-inline">
+										<input type="radio" name="register[expresspricestatus]" value="0" {if $register['expresspricestatus']==0 || !$register['expresspricestatus']}checked{/if}> 以平台设置为准
+									</label>
+									<div class="help-block">订单配送费计算方式。</div>
+								</div>
+							</div>
+							<div class="form-group">
+								<label class="col-sm-2 control-label">跑腿大客户</label>
+								<div class="col-sm-9">
+									<label class="radio-inline">
+										<input type="radio" name="register[makebiguser]" value="1" {if $register['makebiguser']==1}checked{/if}> 是
+									</label>
+									<label class="radio-inline">
+										<input type="radio" name="register[makebiguser]" value="0" {if $register['makebiguser']==0 || !$register['makebiguser']}checked{/if}> 否
+									</label>
+									<div class="help-block">商户是否已经添加为跑腿平台大客户。</div>
+								</div>
+							</div>
+							{/if}
+							{else if $apiset['type'] == 1}
+							<div class="form-group">
+								<label class="col-sm-2 control-label" >达达门店编号</label>
+								<div class="col-sm-9">
+									<div class="input-group" style="width:100%;">
+										<input type="text" name="register[third_shop_no]" class="form-control" value="{$register['third_shop_no']}" />
+									</div>
+									<div class="help-block">达达平台所属门店编号。</div>
+								</div>
+							</div>
+							<div class="form-group">
+								<label class="col-sm-2 control-label" >门店所属城市</label>
+								<div class="col-sm-9">
+									<select style="width:100%;" name="third_city_info" class="form-control select2">
+										<option value="0">请选择门店所在城市</option>
+										{loop $city_code_list $city_code}
+										<option value="{$city_code['cityCode']},{$city_code['cityName']}" {if $city_code['cityName'] === $register['third_city_name']}selected{/if}>{$city_code['cityName']}</option>
+										{/loop}
+									</select>
+									<span class="help-block">达达平台所属门店所在城市</span>
+								</div>
+							</div>
+							{else if $apiset['type'] == 2}
+							<div class="form-group">
+								<label class="col-sm-2 control-label" >商户所属城市</label>
+								<div class="col-sm-9">
+									<select style="width:100%;" name="third_city_name" class="form-control select2">
+										<option value="0">请选择门店所在城市</option>
+										{loop $city_code_list $city_code}
+										<option value="{$city_code['CityName']}" {if $city_code['CityName'] === $register['third_city_name']}selected{/if}>{$city_code['CityName']}</option>
+										{/loop}
+									</select>
+									<span class="help-block">商户所在城市</span>
+								</div>
+							</div>
+							{/if}
+						</div>
+						<div class="form-group">
+							<label class="col-sm-2 control-label" >包装费文本替换</label>
+							<div class="col-sm-9">
+								<div class="input-group">
+									<span class="input-group-addon">包装费=</span>
+									<input type="text" name="register[bzftext]" class="form-control" value="{$register['bzftext']}" />
+								</div>
+								<div class="help-block">下单时，商品设置的包装费显示文本</div>
+							</div>
+						</div>
+
+						{if !is_store()}
+						<!--{if p('distribution')}-->
+						<!--<div class="form-group">-->
+							<!--<label class="col-sm-2 control-label">配送商品分销</label>-->
+							<!--<div class="col-sm-9">-->
+								<!--<label class="radio-inline" onclick="$('#disdiv').show();">-->
+									<!--<input type="radio" name="register[deliverydisstatus]" value="1" {if $register['deliverydisstatus']==1}checked{/if}> 开启-->
+								<!--</label>-->
+								<!--<label class="radio-inline" onclick="$('#disdiv').hide();">-->
+									<!--<input type="radio" name="register[deliverydisstatus]" value="0" {if $register['deliverydisstatus']==0 || !$register['deliverydisstatus']}checked{/if}> 关闭-->
+								<!--</label>-->
+								<!--<div class="help-block">开启后店铺同城配送商品会参与分销。</div>-->
+							<!--</div>-->
+						<!--</div>-->
+						<!--<div class="form-group" id="disdiv" {if $register['deliverydisstatus']==0 || !$register['deliverydisstatus']} style="display: none" {/if}>-->
+							<!--<label class="col-sm-2 control-label" >分销佣金比例</label>-->
+							<!--<div class="col-sm-9">-->
+								<!--<div class="input-group">-->
+									<!--<span class="input-group-addon">一级佣金比例</span>-->
+									<!--<input type="number" name="register[onescale]" class="form-control" value="{$register['onescale']}" />-->
+									<!--<span class="input-group-addon">%,二级佣金比例</span>-->
+									<!--<input type="number" name="register[twoscale]" class="form-control" value="{$register['twoscale']}" />-->
+									<!--<span class="input-group-addon">%</span>-->
+								<!--</div>-->
+								<!--<div class="help-block">佣金比例最多保留两位小数,佣金比例不填或者填0时,分销佣金会按照分销商所在等级的分佣比例计算。</div>-->
+							<!--</div>-->
+						<!--</div>-->
+						<!--{/if}-->
+						{if !empty($fullreducelist)}
+						<div class="form-group">
+							<label class="col-sm-2 control-label">配送满减活动</label>
+							<div class="col-sm-9">
+								<select name="register[deliveryfullid]" class="form-control chosen-select">
+									<option value="" {if empty($register['deliveryfullid'])}selected="selected"{/if}>请选择满减活动</option>
+									{loop $fullreducelist $full}
+									<option value="{$full['id']}" {if $register['deliveryfullid'] == $full['id']}selected="selected"{/if}>{$full['title']}</option>
+									{/loop}
+								</select>
+							</div>
+						</div>
+						{/if}
+						{if !empty($paidlist)}
+						<div class="form-group">
+							<label class="col-sm-2 control-label">配送支付有礼</label>
+							<div class="col-sm-9">
+								<select name="register[deliverypaidid]" class="form-control chosen-select">
+									<option value="" {if empty($register['deliverypaidid'])}selected="selected"{/if}>请选择支付有礼</option>
+									{loop $paidlist $pai1}
+									<option value="{$pai1['id']}" {if $register['deliverypaidid'] == $pai1['id']}selected="selected"{/if}>{$pai1['title']}</option>
+									{/loop}
+								</select>
+							</div>
+						</div>
+						{/if}
+
+						{if !empty($drawlist)}
+						<div class="form-group">
+							<label class="col-sm-2 control-label">配送锦鲤抽奖</label>
+							<div class="col-sm-9">
+								<select name="register[city_drawid]" class="form-control chosen-select" onchange="drawdiv(this)">
+									<option value="" {if empty($register['city_drawid'])}selected="selected"{/if}>请选择锦鲤抽奖</option>
+									{loop $drawlist $citydraw}
+									<option value="{$citydraw['id']}" {if $register['city_drawid'] == $citydraw['id']}selected="selected"{/if}>{$citydraw['title']}</option>
+									{/loop}
+								</select>
+							</div>
+						</div>
+						<div class="form-group" id = "drawdiv" {if empty($register['city_drawid'])} style="display: none" {/if} >
+							<label class="col-sm-2 control-label">赠送抽奖码金额</label>
+							<div class="col-sm-9">
+								<div class="input-group data-item">
+									<span class="input-group-addon">订单金额大于</span>
+									<input type="number" min="0" name="register[city_draw_money]" class="form-control" value="{$register['city_draw_money']}">
+									<span class="input-group-addon">元</span>
+								</div>
+								<span class="help-block">只有订单金额大于设置金额时才会赠送抽奖码。</span>
+							</div>
+						</div>
+						{/if}
+
+
+						{if Customized::init('yuecashback') > 0}
+						<div class="form-group">
+							<label class="col-sm-2 control-label">配送余额返现</label>
+							<div class="col-sm-9">
+								<div class="input-group data-item">
+									<span class="input-group-addon">普通用户</span>
+									<input type="number" min="0" name="register[yuecashback]" class="form-control" value="{$register['yuecashback']}">
+									<span class="input-group-addon">%,会员</span>
+									<input type="number" min="0" name="register[vipyuecashback]" class="form-control" value="{$register['vipyuecashback']}">
+									<span class="input-group-addon">%</span>
+								</div>
+								<span class="help-block">用户购买商品后,确认收货可以使买家按订单支付金额的一定比例获得余额返现,填0或不填则不返现,小数点最多保留两位。</span>
+							</div>
+						</div>
+						<div class="form-group">
+							<label class="col-sm-2 control-label">配送支付立减</label>
+							<div class="col-sm-9">
+								<div class="input-group data-item">
+									<input type="text"  name="register[delive_goods_tag]" class="form-control" value="{$register['delive_goods_tag']}">
+								</div>
+								<span class="help-block">填入微信商户设置的订单优惠标记,即可支付立减。</span>
+							</div>
+						</div>
+						{/if}
+						{/if}
+						</div>
+						{/if}
+						<div class="panel-heading">其他信息</div>
+						<div class="panel-body">
+							{if !is_store()}
+							<div class="form-group">
+								<label class="col-sm-2 control-label">店铺标签</label>
+								<div class="col-sm-9">
+									{loop $presettags $tag}
+										<label class="checkbox-inline">
+											<input type="checkbox" name="register[tag][]" value="{$tag['id']}" {if @in_array($tag['id'],$tags)} checked="checked" {/if}>{$tag['title']}
+										</label>
+									{/loop}
+								</div>
+							</div>
+							{/if}
+							<div class="form-group">
+								<label class="col-sm-2 control-label">店铺全景链接</label>
+								<div class="col-sm-9">
+									<input type="text" name="register[panorama]"  class="form-control" value="{$register['panorama']}">
+								</div>
+							</div>
+							<div class="form-group">
+								<label class="col-sm-2 control-label">店铺视频链接</label>
+								<div class="col-sm-9">
+									<div class="input-group">
+										<input type="text" value="{$register['videourl']}" name="register[videourl]" class="form-control" autocomplete="off" id="cimg-videourl">
+										<span class="input-group-btn">
+											<button class="btn btn-default" type="button" data-toggle="selectVideo" data-input="#cimg-videourl" data-img="#pimg-videourl" >选择媒体文件</button>
+										</span>
+									</div>
+								</div>
+							</div>
+							<!--<div class="form-group">
+								<label class="col-sm-2 control-label">视频封面图</label>
+								<div class="col-sm-9">
+									{php echo tpl_form_field_image('register[mp4thumb]',$register['mp4thumb'])}
+									<div class="help-block">在视频连接末尾为mp4的时候调用</div>
+								</div>
+							</div>
+							<div class="form-group">
+								<label class="col-sm-2 control-label">背景音乐</label>
+								<div class="col-sm-9">
+									{php echo attachment_select_audio('register[bgmusic]',$register['bgmusic']);}
+								</div>
+							</div>-->
+							{if !is_store()}
+							<div class="form-group">
+								<label class="col-sm-2 control-label">是否在列表显示</label>
+								<div class="col-sm-9">
+									<label class="radio-inline">
+										<input type="radio" name="register[listshow]" value="0" {if $register['listshow']==0 || !$register['listshow']}checked{/if}> 显示
+									</label>
+									<label class="radio-inline">
+										<input type="radio" name="register[listshow]" value="1" {if $register['listshow']==1}checked{/if}> 隐藏
+									</label>
+									<div class="help-block">隐藏后在首页列表和好店列表均不显示，只能通过搜索获取。</div>
+								</div>
+							</div>
+							<div class="form-group">
+								<label class="col-sm-2 control-label">在线买单</label>
+								<div class="col-sm-9">
+									<label class="radio-inline">
+										<input type="radio" value="1" onclick="$('#onlinediv').show();$('#panoramaDiscount').removeClass('hide')" name="register[payonline]" {if $register['payonline'] == 1} checked {/if} /> 开启
+									</label>
+									<label class="radio-inline">
+										<input type="radio" value="0" onclick="$('#onlinediv').hide();$('#panoramaDiscount').addClass('hide')" name="register[payonline]" {if $register['payonline'] == 0 || empty($register['payonline'])} checked {/if} /> 禁用
+									</label>
+									<div class="help-block">开启后，买家可以在线向商户支付订单。</div>
+								</div>
+							</div>
+							{if Customized::init('customized336')}
+								<div class="form-group {if $register['payonline'] != 1}hide{/if}" id="panoramaDiscount">
+									<label class="col-sm-2 control-label">买单折扣</label>
+									<div class="col-sm-9">
+										<input type="number" min="0" max="10" name="register[panorama_discount]"  class="form-control" value="{$register['panorama_discount']}">
+									</div>
+								</div>
+							{/if}
+							{if !is_store()}
+							<div id="onlinediv" {if $register['payonline']==0 || !$register['payonline']} style="display: none" {/if} >
+								<div class="form-group">
+									<label class="col-sm-2 control-label">买单结算方式</label>
+									<div class="col-sm-9">
+										<label class="radio-inline">
+											<input type="radio" value="0" name="register[payolsetstatus]" {if $register['payolsetstatus'] == 0 || empty($register['payolsetstatus'])} checked {/if} /> 按支付金额结算
+										</label>
+										<label class="radio-inline">
+											<input type="radio" value="1" name="register[payolsetstatus]" {if $register['payolsetstatus'] == 1} checked {/if} /> 按会员折后金额结算
+										</label>
+										<label class="radio-inline">
+											<input type="radio" value="2" name="register[payolsetstatus]" {if $register['payolsetstatus'] == 2} checked {/if} /> 按订单金额结算
+										</label>
+										<div class="help-block">按支付金额结算:使用计算积分抵扣，在线红包，满减优惠之后的实际支付金额结算；按会员折后金额结算:根据订单只计算会员优惠后的金额结算；按订单金额结算:按订单金额原价结算。</div>
+									</div>
+								</div>
+								<div class="form-group" >
+									<label class="col-sm-2 control-label">订单抵扣比例</label>
+									<div class="col-sm-9">
+										<div class="input-group">
+											<span class="input-group-addon">每笔订单可以抵扣</span>
+											<input type="number" name="register[payinrate]" class="form-control" value="{$register['payinrate']}" />
+											<span class="input-group-addon">%</span>
+										</div>
+										<div class="help-block">每笔订单可以用积分抵扣的金额比例，不填或填0即关闭买单积分抵扣，内容保留两位小数，最大100%。</div>
+									</div>
+								</div>
+								<div class="form-group" >
+									<label class="col-sm-2 control-label">积分抵扣比例</label>
+									<div class="col-sm-9">
+										<div class="input-group">
+											<span class="input-group-addon">每</span>
+											<input type="number" name="register[payintegral]" class="form-control" value="{$register['payintegral']}" />
+											<span class="input-group-addon">积分可以抵扣1元</span>
+										</div>
+										<div class="help-block">积分抵扣比例，填0或不填会根据后台积分设置的比例抵扣，最多保留两位小数。</div>
+									</div>
+								</div>
+								<div class="form-group" >
+									<label class="col-sm-2 control-label">在线买单分销</label>
+									<div class="col-sm-9">
+										<label class="radio-inline" onclick="$('#paydisdiv').show();">
+											<input type="radio" name="register[payonlinedisstatus]" value="1" {if $register['payonlinedisstatus']==1}checked{/if}> 开启
+										</label>
+										<label class="radio-inline" onclick="$('#paydisdiv').hide();">
+											<input type="radio" name="register[payonlinedisstatus]" value="0" {if $register['payonlinedisstatus']==0 || !$register['payonlinedisstatus']}checked{/if}> 关闭
+										</label>
+										<div class="help-block">开启后在线买单订单会参与分销。</div>
+									</div>
+								</div>
+								<div id="paydisdiv" {if $register['payonlinedisstatus']==0 || !$register['payonlinedisstatus']} style="display: none" {/if}>
+									<div class="form-group" >
+										<label class="col-sm-2 control-label" >买单分销佣金比例</label>
+										<div class="col-sm-9">
+											<div class="input-group">
+												<span class="input-group-addon">一级佣金比例</span>
+												<input type="number" name="register[onepayonlinescale]" class="form-control" value="{$register['onepayonlinescale']}" />
+												<span class="input-group-addon">%,二级佣金比例</span>
+												<input type="number" name="register[twopayonlinescale]" class="form-control" value="{$register['twopayonlinescale']}" />
+												<span class="input-group-addon">%</span>
+											</div>
+											<div class="help-block">佣金比例最多保留两位小数,佣金比例不填或者填0时,分销佣金会按照分销商所在等级的分佣比例计算。</div>
+										</div>
+									</div>
+									{if agent_p('disgroup')}
+									<div class="form-group">
+										<label class="col-sm-2 control-label">团长分红</label>
+										<div class="col-sm-9">
+											<label class="radio-inline" onclick="$('#groupdiv').show();">
+												<input type="radio" value="1" name="register[disgroup]" {if $register['disgroup'] == 1} checked {/if}>开启
+											</label>
+											<label class="radio-inline" onclick="$('#groupdiv').hide();">
+												<input type="radio" value="0" name="register[disgroup]" {if $register['disgroup'] != 1} checked {/if}>关闭
+											</label>
+										</div>
+									</div>
+									<div id="groupdiv"  {if $register['disgroup'] != 1} style="display: none;" {/if}>
+										<div class="form-group">
+											<label class="col-sm-2 control-label">团长分红详情</label>
+											<div class="col-sm-9">
+												{loop $grouplevel $grouplpr}
+												<div class="bigdata" style="margin-top: 10px;">
+													<div class="input-group data-item">
+														<span class="input-group-addon">[{$grouplpr['name']}]直属</span>
+														<input type="hidden" name="groupleid[]" class="form-control" value="{$grouplpr['id']}">
+														<input type="number" min="0" name="onegroupmoney[]" class="form-control" value="{$grouparray[$grouplpr['id']]['onegroupmoney']}">
+														<span class="input-group-addon"><span class="disgrouptext">%</span>,子团队</span>
+														<input type="number" min="0" name="twogroupmoney[]" class="form-control" value="{$grouparray[$grouplpr['id']]['twogroupmoney']}">
+														<span class="input-group-addon"><span class="disgrouptext">%</span></span>
+													</div>
+												</div>
+												{/loop}
+												<span class="help-block">一级填0或不填则按分销商等级默认比例计算,填写一级佣金后二级佣金填0或不填则此商品没有二级分佣,最多保留两位小数</span>
+											</div>
+										</div>
+										<div class="form-group">
+											<label class="col-sm-2 control-label">股东分红</label>
+											<div class="col-sm-9">
+												<div class="input-group">
+													<input type="number" min="0" name="register[shareholdermoney]" class="form-control" value="{$register['shareholdermoney']}" />
+													<span class="input-group-addon"><span class="disgrouptext">%</span></span>
+												</div>
+												<span class="help-block">商品股东分红，不填或填0即为没有股东分红。</span>
+											</div>
+										</div>
+									</div>
+								{/if}
+								</div>
+								{if !empty($fullreducelist)}
+								<div class="form-group">
+									<label class="col-sm-2 control-label">买单满减活动</label>
+									<div class="col-sm-9">
+										<select name="register[payfullid]" class="form-control chosen-select">
+											<option value="" {if empty($register['payfullid'])}selected="selected"{/if}>请选择满减活动</option>
+											{loop $fullreducelist $full2}
+											<option value="{$full2['id']}" {if $register['payfullid'] == $full2['id']}selected="selected"{/if}>{$full2['title']}</option>
+											{/loop}
+										</select>
+									</div>
+								</div>
+								{/if}
+								{if !empty($paidlist)}
+								<div class="form-group">
+									<label class="col-sm-2 control-label">买单支付有礼</label>
+									<div class="col-sm-9">
+										<select name="register[paypaidid]" class="form-control chosen-select">
+											<option value="" {if empty($register['paypaidid'])}selected="selected"{/if}>请选择支付有礼</option>
+											{loop $paidlist $pai2}
+											<option value="{$pai2['id']}" {if $register['paypaidid'] == $pai2['id']}selected="selected"{/if}>{$pai2['title']}</option>
+											{/loop}
+										</select>
+									</div>
+								</div>
+								{/if}
+
+								{if !empty($drawlist)}
+								<div class="form-group">
+									<label class="col-sm-2 control-label">买单锦鲤抽奖</label>
+									<div class="col-sm-9">
+										<select name="register[pay_drawid]" class="form-control chosen-select" onchange="ppdrawdiv(this)">
+											<option value="" {if empty($register['pay_drawid'])}selected="selected"{/if}>请选择锦鲤抽奖</option>
+											{loop $drawlist $citydraw}
+											<option value="{$citydraw['id']}" {if $register['pay_drawid'] == $citydraw['id']}selected="selected"{/if}>{$citydraw['title']}</option>
+											{/loop}
+										</select>
+									</div>
+								</div>
+								<div class="form-group"  id = "ppdrawdiv"  {if empty($register['pay_drawid'])} style="display: none;" {/if} >
+									<label class="col-sm-2 control-label">赠送抽奖码金额</label>
+									<div class="col-sm-9">
+										<div class="input-group data-item">
+											<span class="input-group-addon">订单金额大于</span>
+											<input type="number" min="0" name="register[pay_draw_money]" class="form-control" value="{$register['pay_draw_money']}">
+											<span class="input-group-addon">元</span>
+										</div>
+										<span class="help-block">只有订单金额大于设置金额时才会赠送抽奖码。</span>
+									</div>
+								</div>
+								{/if}
+								{if Customized::init('yuecashback') > 0}
+								<div class="form-group">
+									<label class="col-sm-2 control-label">买单余额返现</label>
+									<div class="col-sm-9">
+										<div class="input-group data-item">
+											<span class="input-group-addon">普通用户</span>
+											<input type="number" min="0" name="register[online_yuecashback]" class="form-control" value="{$register['online_yuecashback']}">
+											<span class="input-group-addon">%,会员</span>
+											<input type="number" min="0" name="register[online_vipyuecashback]" class="form-control" value="{$register['online_vipyuecashback']}">
+											<span class="input-group-addon">%</span>
+										</div>
+										<span class="help-block">用户在线买单可以使买家按订单支付金额的一定比例获得余额返现,填0或不填则不返现,小数点最多保留两位。</span>
+									</div>
+								</div>
+								<div class="form-group">
+									<label class="col-sm-2 control-label">买单支付立减</label>
+									<div class="col-sm-9">
+										<div class="input-group data-item">
+											<input type="text"  name="register[online_goods_tag]" class="form-control" value="{$register['online_goods_tag']}">
+										</div>
+										<span class="help-block">填入微信商户设置的订单优惠标记,即可支付立减。</span>
+									</div>
+								</div>
+								{/if}
+								<div class="form-group">
+									<label class="col-sm-2 control-label">用户标签</label>
+									<div class="col-sm-9">
+										<div class="input-group">
+											{loop $userlabels $label}
+											<label class="checkbox-inline">
+												<input type="checkbox" value="{$label['id']}" {if in_array($label['id'],$storeuserlabels)} checked="checked" {/if} name="userlabel[]">{$label['name']}
+											</label>
+											{/loop}
+										</div>
+									</div>
+								</div>
+
+							</div>
+							{/if}
+							<div class="form-group">
+								<label class="col-sm-2 control-label">自动打款</label>
+								<div class="col-sm-9">
+									<label class="radio-inline">
+										<input type="radio" value="1" name="register[autocash]" {if $register['autocash'] == 1} checked {/if} /> 开启
+									</label>
+									<label class="radio-inline">
+										<input type="radio" value="0" name="register[autocash]" {if $register['autocash'] == 0 || empty($register['autocash'])} checked {/if} /> 禁用
+									</label>
+									<div class="help-block">开启后，已通过审核的结算申请会自动打款。</div>
+								</div>
+							</div>
+							<div class="form-group">
+								<label class="col-sm-2 control-label">免审核</label>
+								<div class="col-sm-9">
+									<label class="radio-inline">
+										<input type="radio" value="1" name="register[audits]" {if $register['audits'] == 1} checked {/if} /> 开启
+									</label>
+									<label class="radio-inline">
+										<input type="radio" value="0" name="register[audits]" {if $register['audits'] == 0 || empty($register['audits'])} checked {/if} /> 禁用
+									</label>
+									<div class="help-block">开启后，该商户上架编辑商品/发布动态信息不需要审核。</div>
+								</div>
+							</div>
+							{/if}
+							{if $_W['wlsetting']['wxappset']['storeqrcode']}
+							<div class="form-group">
+								<label class="col-sm-2 control-label">商户小程序码</label>
+								<div class="col-sm-9">
+									<label class="radio-inline">
+										<input type="radio" value="0" name="wxappswitch" {if $register['wxappswitch'] == 0 || empty($register['wxappswitch'])} checked {/if} /> 开启
+									</label>
+									<label class="radio-inline">
+										<input type="radio" value="1" name="wxappswitch" {if $register['wxappswitch'] == 1} checked {/if} /> 关闭
+									</label>
+									<div class="help-block">开启以后小程序码在商户详情展示</div>
+								</div>
+							</div>
+							{/if}
+							{if !empty($posters)}
+							<div class="form-group">
+								<label class="col-sm-2 control-label">商户海报</label>
+								<div class="col-sm-9">
+									<select name="register[posterid]" class="form-control chosen-select">
+										<option value="" {if empty($register['posterid'])}selected="selected"{/if}>请选择商户海报</option>
+										{loop $posters $post}
+										<option value="{$post['id']}" {if $register['posterid'] == $post['id']}selected="selected"{/if}>{$post['title']}</option>
+										{/loop}
+									</select>
+									<div class="help-block">不选择会使用自定义海报中设置的默认商户海报.</div>
+								</div>
+							</div>
+							{/if}
+							{if !empty($community)}
+							<div class="form-group">
+								<label class="col-sm-2 control-label">商户社群</label>
+								<div class="col-sm-9">
+									<select name="register[communityid]" class="form-control chosen-select">
+										<option value="" {if empty($register['communityid'])}selected="selected"{/if}>请选择商户社群</option>
+										{loop $community $comm}
+										<option value="{$comm['id']}" {if $register['communityid'] == $comm['id']}selected="selected"{/if}>{$comm['communname']}</option>
+										{/loop}
+									</select>
+									<div class="help-block">设置后会在商户详情页显示社群信息。</div>
+								</div>
+							</div>
+							{/if}
+						</div>
+					</div>
+				</div>
+				<div class="tab-pane" id="tab_settlement">
+					<div class="panel panel-default">
+						<div class="panel-heading">默认结算比</div>
+						<div class="panel-body">
+							<div class="form-group">
+								<label class="col-sm-2 control-label">买单</label>
+								<div class="col-sm-9">
+									<div class="input-group">
+										<span class="input-group-addon">普通价结算</span>
+										<input type="text" name="sett[paysett]" class="form-control" value="{$sett['paysett']}" number />
+										<span class="input-group-addon">%,会员价结算</span>
+										<input type="text" name="sett[payvip]" class="form-control" value="{$sett['payvip']}" />
+										<span class="input-group-addon">%</span>
+									</div>
+								</div>
+							</div>
+							<div class="form-group">
+								<label class="col-sm-2 control-label" >抢购</label>
+								<div class="col-sm-9">
+								<div class="input-group">
+									<span class="input-group-addon">普通价结算</span>
+									<input type="text" name="sett[rushsett]" class="form-control" value="{$sett['rushsett']}" />
+									<span class="input-group-addon">%,会员价结算</span>
+									<input type="text" name="sett[rushvip]" class="form-control" value="{$sett['rushvip']}" />
+									<span class="input-group-addon">%</span>
+								</div>
+								</div>
+							</div>
+							{if p('groupon')}
+							<div class="form-group">
+								<label class="col-sm-2 control-label" >团购</label>
+								<div class="col-sm-9">
+								<div class="input-group">
+									<span class="input-group-addon">普通价结算</span>
+									<input type="text" name="sett[grouponsett]" class="form-control" value="{$sett['grouponsett']}" />
+									<span class="input-group-addon">%,会员价结算</span>
+									<input type="text" name="sett[grouponvip]" class="form-control" value="{$sett['grouponvip']}" />
+									<span class="input-group-addon">%</span>
+								</div>
+								</div>
+							</div>
+							{/if}
+							{if p('wlfightgroup')}
+							<div class="form-group">
+								<label class="col-sm-2 control-label" >拼团</label>
+								<div class="col-sm-9">
+								<div class="input-group">
+									<span class="input-group-addon">普通价结算</span>
+									<input type="text" name="sett[fightsett]" class="form-control" value="{$sett['fightsett']}" />
+									<span class="input-group-addon">%,会员价结算</span>
+									<input type="text" name="sett[fightvip]" class="form-control" value="{$sett['fightvip']}" />
+									<span class="input-group-addon">%</span>
+								</div>
+								</div>
+							</div>
+							{/if}
+							{if p('wlcoupon')}
+							<div class="form-group">
+								<label class="col-sm-2 control-label" >卡券</label>
+								<div class="col-sm-9">
+								<div class="input-group">
+									<span class="input-group-addon">普通价结算</span>
+									<input type="text" name="sett[couponsett]" class="form-control" value="{$sett['couponsett']}" />
+									<span class="input-group-addon">%,会员价结算</span>
+									<input type="text" name="sett[couponvip]" class="form-control" value="{$sett['couponvip']}" />
+									<span class="input-group-addon">%</span>
+								</div>
+								</div>
+							</div>
+							{/if}
+							{if p('bargain')}
+							<div class="form-group">
+								<label class="col-sm-2 control-label">砍价</label>
+								<div class="col-sm-9">
+								<div class="input-group">
+									<span class="input-group-addon">普通价结算</span>
+									<input type="text" name="sett[bargainsett]" class="form-control" value="{$sett['bargainsett']}" />
+									<span class="input-group-addon">%,会员价结算</span>
+									<input type="text" name="sett[bargainvip]" class="form-control" value="{$sett['bargainvip']}" />
+									<span class="input-group-addon">%</span>
+								</div>
+								</div>
+							</div>
+							{/if}
+							{if p('activity')}
+							<div class="form-group">
+								<label class="col-sm-2 control-label">活动</label>
+								<div class="col-sm-9">
+									<div class="input-group">
+										<span class="input-group-addon">普通价结算</span>
+										<input type="text" name="sett[activitysett]" class="form-control" value="{$sett['activitysett']}" />
+										<span class="input-group-addon">%,会员价结算</span>
+										<input type="text" name="sett[activityvip]" class="form-control" value="{$sett['activityvip']}" />
+										<span class="input-group-addon">%</span>
+									</div>
+								</div>
+							</div>
+							{/if}
+							{if store_p('housekeep',$id) || empty($id)}
+							<div class="form-group">
+								<label class="col-sm-2 control-label">家政</label>
+								<div class="col-sm-9">
+									<div class="input-group">
+										<span class="input-group-addon">预约金结算</span>
+										<input type="text" name="sett[appsettpro]" class="form-control" value="{$sett['appsettpro']}" />
+										<span class="input-group-addon">%,实价结算</span>
+										<input type="text" name="sett[truesettpro]" class="form-control" value="{$sett['truesettpro']}" />
+										<span class="input-group-addon">%</span>
+									</div>
+								</div>
+							</div>
+							{/if}
+							{if store_p('hotel',$id) || empty($id)}
+							<div class="form-group">
+								<label class="col-sm-2 control-label">酒店</label>
+								<div class="col-sm-9">
+									<div class="input-group">
+										<span class="input-group-addon">普通价结算</span>
+										<input type="text" name="sett[hotelsett]" class="form-control" value="{$sett['hotelsett']}" />
+										<span class="input-group-addon">%,会员价结算</span>
+										<input type="text" name="sett[hotelvip]" class="form-control" value="{$sett['hotelvip']}" />
+										<span class="input-group-addon">%</span>
+									</div>
+								</div>
+							</div>
+							{/if}
+							<div class="form-group">
+								<label class="col-sm-2 control-label"></label>
+								<div class="col-sm-9">
+									<div class="help-block">在商品没有设置结算金额时会按此比例结算，保留两位小数，保留两位小数；如填入70，商品按普通价格售出时，会将70%的金额结算给商户。最大为100。</div>
+								</div>
+							</div>
+						</div>
+					</div>
+					<div class="panel-heading">营销方式</div>
+					<div class="panel-body">
+						<div class="form-group">
+							<label class="col-sm-2 control-label">营销设置</label>
+							<div class="col-sm-9">
+								<label class="radio-inline">
+									<input type="radio" value="0" name="register[marketstatus]" {if $register['marketstatus'] == 0 || empty($register['marketstatus'])} checked {/if} /> 代理设置
+								</label>
+								<label class="radio-inline">
+									<input type="radio" value="1" name="register[marketstatus]" {if $register['marketstatus'] == 1} checked {/if} /> 商户自负
+								</label>
+								<div class="help-block">商品营销产生的优惠金额承担方：代理设置时由代理承担，商户自负时由商户承担；包括会员优惠、分销商佣金、业务员提成、积分抵扣、满减优惠和在线红包。</div>
+							</div>
+						</div>
+					</div>
+					<div class="panel-heading">预留金额</div>
+					<div class="panel-body">
+						<div class="form-group">
+							<label class="col-sm-2 control-label">预留金额设置</label>
+							<div class="col-sm-9">
+								<label class="radio-inline">
+									<input type="radio" value="0" onclick="$('#reserve').hide();" name="register[reservestatus]" {if $register['reservestatus'] == 0 || empty($register['reservestatus'])} checked {/if} /> 以平台设置为准
+								</label>
+								<label class="radio-inline">
+									<input type="radio" value="1" onclick="$('#reserve').show();" name="register[reservestatus]" {if $register['reservestatus'] == 1} checked {/if} /> 商户单独设置
+								</label>
+							</div>
+						</div>
+						<div class="form-group" id="reserve" {if $register['reservestatus'] == 0 || empty($register['reservestatus'])} style="display: none" {/if}>
+							<label class="col-sm-2 control-label">商户预留金额</label>
+							<div class="col-sm-9">
+								<div class="input-group">
+									<span class="input-group-addon">￥</span>
+									<input type="text" name="register[reservemoney]" class="form-control" value="{$register['reservemoney']}" />
+								</div>
+								<div class="help-block">提现后，商户账户余额必须大于预留金额。</div>
+							</div>
+						</div>
+					</div>
+					{if !empty($_W['wlsetting']['cashset']['allocationtype'])}
+					<div class="panel-heading">支付账户设置</div>
+					{if p('wxplatform')}
+					<div class="form-group">
+						<label class="col-sm-2 control-label">微信公众号端</label>
+						<div class="col-sm-9">
+							<select name ='register[wxallid]' style="width: 100%;" class="form-control select2">
+								<option value="0">请设置</option>
+								{loop $paylist $ee}
+								<option value="{$ee['id']}" {if $ee['id'] == $register['wxallid']}selected{/if} >{$ee['name']}</option>
+								{/loop}
+							</select>
+						</div>
+					</div>
+					{/if}
+					{if p('wxapp')}
+					<div class="form-group">
+						<label class="col-sm-2 control-label">微信小程序端</label>
+						<div class="col-sm-9">
+							<select name ='register[appallid]' style="width: 100%;" class="form-control select2">
+								<option value="0">请设置</option>
+								{loop $paylist $zz}
+								<option value="{$zz['id']}" {if $zz['id'] == $register['appallid']}selected{/if}>{$zz['name']}</option>
+								{/loop}
+							</select>
+						</div>
+					</div>
+					{/if}
+					{/if}
+					{if p('payback')}
+					<div class="panel-heading">支付返现</div>
+					<div class="panel-body">
+						<div class="form-group">
+							<label class="col-sm-2 control-label">支付返现功能</label>
+							<div class="col-sm-9">
+								<label class="radio-inline">
+									<input type="radio" value="1" onclick="$('#payback').show();" name="register[paybackstatus]" {if $register['paybackstatus'] == 1} checked {/if} /> 开启
+								</label>
+								<label class="radio-inline">
+									<input type="radio" value="0" onclick="$('#payback').hide();" name="register[paybackstatus]" {if $register['paybackstatus'] == 0 || empty($register['paybackstatus'])} checked {/if} /> 关闭
+								</label>
+								<div class="help-block">开启后,可以设置客户用非余额支付方式支付时返回余额。</div>
+							</div>
+						</div>
+						<div class="form-group" id="payback" {if $register['paybackstatus'] == 0 || empty($register['paybackstatus'])} style="display: none"  {/if}  >
+							<label class="col-sm-2 control-label" >返现比例</label>
+							<div class="col-sm-9">
+								<div class="input-group">
+									<span class="input-group-addon">线上商品</span>
+									<input type="text" name="payback[register]" class="form-control" value="{$payback['register']}" />
+									<span class="input-group-addon">%,在线买单</span>
+									<input type="text" name="payback[online]" class="form-control" value="{$payback['online']}" />
+									<span class="input-group-addon">%</span>
+								</div>
+								<div class="help-block">输入订单返现的百分比，最多保留两位小数。</div>
+							</div>
+						</div>
+					</div>
+					{/if}
+					
+					{if !empty($storeRedList)}
+					<div class="panel-heading">商户红包活动</div>
+					<div class="form-group">
+						<label class="col-sm-2 control-label">商户红包</label>
+						<div class="col-sm-9">
+							<select name="register[storeRedpackId]" class="form-control chosen-select">
+								<option value="" {if empty($register['storeRedpackId'])}selected="selected"{/if}>请选择商户红包</option>
+								{loop $storeRedList $red}
+								<option value="{$red['id']}" {if $register['storeRedpackId'] == $red['id']}selected="selected"{/if}>{$red['title']}</option>
+								{/loop}
+							</select>
+							<div class="help-block">设置后会在商户详情页显示红包活动。</div>
+						</div>
+					</div>
+					{/if}
+					
+					
+				</div>
+                <div class="tab-pane" id="tab_voice">
+                    <div class="panel panel-default">
+                        <div class="panel-heading">云喇叭设置</div>
+                        <div class="panel-body">
+							<!-- 是否开启 0=关闭，1=开启 -->
+							<div class="form-group">
+								<label class="col-sm-2 control-label">喇叭状态</label>
+								<div class="col-sm-9">
+									<label class="radio-inline">
+										<input type="radio" name="cloudspeaker[state]" value="0" {if $cloudspeaker['state'] != 1}checked{/if}>关闭
+									</label>
+									<label class="radio-inline">
+										<input type="radio" name="cloudspeaker[state]" value="1" {if $cloudspeaker['state'] == 1}checked{/if}>开启
+									</label>
+								</div>
+							</div>
+							<!-- 云喇叭类型 1=智联博众,2=零度 -->
+							<div class="form-group voice_block voice_voice {if $cloudspeaker['state'] != 1}hide{/if}">
+								<label class="col-sm-2 control-label">喇叭型号</label>
+								<div class="col-sm-9">
+									<label class="radio-inline">
+										<input type="radio" name="cloudspeaker[voice]" value="1" {if $cloudspeaker['voice'] != 2}checked{/if}>智联博众
+									</label>
+									<label class="radio-inline">
+										<input type="radio" name="cloudspeaker[voice]" value="2" {if $cloudspeaker['voice'] == 2}checked{/if}>零度
+									</label>
+								</div>
+							</div>
+							<!-- 智联博众 -->
+							<div id="voice-zlbz" class="voice_block {if $cloudspeaker['state'] != 1 || $cloudspeaker['voice'] == 2}hide{/if}">
+								<!-- 云喇叭的id -->
+								<div class="form-group">
+									<label class="col-sm-2 control-label">云喇叭id<span class="must-fill">*</span></label>
+									<div class="col-sm-9">
+										<input type="text" name="cloudspeaker[id]" placeholder="请输入云喇叭id" class="form-control voiceRequired" {if $cloudspeaker['state'] == 1 && $cloudspeaker['voice'] == 1}required="required"{/if} value="{$cloudspeaker['id']}" autocomplete="off">
+									</div>
+								</div>
+								<!-- 用户id -->
+								<div class="form-group">
+									<label class="col-sm-2 control-label">账号信息<span class="must-fill">*</span></label>
+									<div class="col-sm-9">
+										<input type="text" name="cloudspeaker[account]" placeholder="请输入账号信息" class="form-control voiceRequired" {if $cloudspeaker['state'] == 1 && $cloudspeaker['voice'] == 1}required="required"{/if} value="{$cloudspeaker['account']}" autocomplete="off">
+									</div>
+								</div>
+								<!-- 用户密码 -->
+								<div class="form-group">
+									<label class="col-sm-2 control-label">账号密码<span class="must-fill">*</span></label>
+									<div class="col-sm-9">
+										<input type="text" name="cloudspeaker[password]" placeholder="请输入账号密码" class="form-control voiceRequired" {if $cloudspeaker['state'] == 1 && $cloudspeaker['voice'] == 1}required="required"{/if} value="{$cloudspeaker['password']}" autocomplete="off">
+									</div>
+								</div>
+								<!-- 音量设置 -->
+								<div class="form-group">
+									<label class="col-sm-2 control-label">音量设置</label>
+									<div class="col-sm-9">
+										<input type="number" name="cloudspeaker[volume]" placeholder="音量在1-100之间，默认50" class="form-control" value="{$cloudspeaker['volume']}" autocomplete="off">
+									</div>
+								</div>
+							</div>
+							<!-- 零度 -->
+							<div id="voice-ld" class="voice_block {if $cloudspeaker['state'] != 1 || $cloudspeaker['voice'] != 2}hide{/if}">
+								<!-- 云喇叭的id -->
+								<div class="form-group">
+									<label class="col-sm-2 control-label">喇叭id<span class="must-fill">*</span></label>
+									<div class="col-sm-9">
+										<input type="text" name="cloudspeaker[ld_id]" placeholder="请输入喇叭id" class="form-control voiceRequired" value="{$cloudspeaker['ld_id']}" autocomplete="off" {if $cloudspeaker['state'] == 1 && $cloudspeaker['voice'] == 2}required="required"{/if}>
+									</div>
+								</div>
+								<div class="form-group">
+									<label class="col-sm-2 control-label">喇叭模板<span class="must-fill">*</span></label>
+									<div class="col-sm-9">
+										<input type="text" name="cloudspeaker[ld_temp]" placeholder="请输入模板" class="form-control" value="{$cloudspeaker['ld_temp']}" autocomplete="off">
+										<div class="help-block">语音播报模板，不填则使用默认模板；模板变量: [金额] [支付方式]</div>
+									</div>
+								</div>
+								<!-- 版本号 -->
+								<div class="form-group">
+									<label class="col-sm-2 control-label">接口版本<span class="must-fill">*</span></label>
+									<div class="col-sm-9">
+										<input type="number" name="cloudspeaker[version]" placeholder="默认为1" class="form-control" value="{$cloudspeaker['version']}" autocomplete="off">
+										<div class="help-block">语音播报接口版本号,可选为版本1至9，默认为1</div>
+									</div>
+								</div>
+								<!-- 语速 -->
+								<div class="form-group">
+									<label class="col-sm-2 control-label">播报语速</label>
+									<div class="col-sm-9">
+										<input type="number" name="cloudspeaker[speed]" placeholder="默认为50" class="form-control" value="{$cloudspeaker['speed']}" autocomplete="off">
+										<div class="help-block">语音播报语速,速度范围为0-100，默认为50</div>
+									</div>
+								</div>
+							</div>
+						</div>
+                    </div>
+                </div>
+				<div class="tab-pane" id="tab_print">
+					<div class="panel panel-default">
+						<div class="panel-heading">打印推送设置</div>
+						<div class="panel-body">
+							<div class="form-group">
+								<label class="col-sm-2 control-label">小票打印机类型</label>
+								<div class="col-sm-9">
+									<label class="radio-inline">
+										<input type="radio" value="1" onclick="changeprintdiv(1)" name="printing[type]" {if $printing['type'] == 1} checked {/if} /> 365小票打印云
+									</label>
+									{if $isAuth}
+									<label class="radio-inline">
+										<input type="radio" value="4" onclick="changeprintdiv(4)" name="printing[type]" {if $printing['type'] == 4} checked {/if} /> 乌卡拉刷脸支付立牌
+									</label>
+									{/if}
+									<label class="radio-inline">
+										<input type="radio" value="3" onclick="changeprintdiv(3)" name="printing[type]" {if $printing['type'] == 3} checked {/if} /> 飞鹅打印机
+									</label>
+								</div>
+							</div>
+
+							<div id="365div"  {if $printing['type'] !=1 } style="display: none" {/if}>
+								<div class="form-group">
+									<label class="col-sm-2 control-label">打印机编号<span class="must-fill">*</span></label>
+									<div class="col-sm-9">
+										<input type="text" name="printing[device_no]" class="form-control" value="{$printing['device_no']}" autocomplete="off">
+									</div>
+								</div>
+								<div class="form-group">
+									<label class="col-sm-2 control-label">密钥(key)<span class="must-fill">*</span></label>
+									<div class="col-sm-9">
+										<input type="text" name="printing[key]" class="form-control" value="{$printing['key']}" autocomplete="off">
+									</div>
+								</div>
+								<div class="form-group">
+									<label class="col-sm-2 control-label">打印次数</label>
+									<div class="col-sm-9">
+										<input type="number" name="printing[times]" class="form-control" value="{$printing['times']}" autocomplete="off">
+										<div class="help-block">请填入正整数，默认为一次。</div>
+									</div>
+								</div>
+							</div>
+							<div id="ylydiv"  {if $printing['type'] !=2} style="display: none" {/if}>
+								<h1>开发中</h1>
+							</div>
+							<div id="fediv"  {if $printing['type'] !=3 } style="display: none" {/if}>
+								<div class="form-group">
+									<label class="col-sm-2 control-label">飞鹅用户账号<span class="must-fill">*</span></label>
+									<div class="col-sm-9">
+										<input type="text" name="printing[feie_user]" class="form-control" value="{$printing['feie_user']}" autocomplete="off">
+									</div>
+								</div>
+								<div class="form-group">
+									<label class="col-sm-2 control-label">飞鹅用户key<span class="must-fill">*</span></label>
+									<div class="col-sm-9">
+										<input type="text" name="printing[feie_key]" class="form-control" value="{$printing['feie_key']}" autocomplete="off">
+									</div>
+								</div>
+								<div class="form-group">
+									<label class="col-sm-2 control-label">飞鹅打印机编号<span class="must-fill">*</span></label>
+									<div class="col-sm-9">
+										<input type="text" name="printing[feie_no]" class="form-control" value="{$printing['feie_no']}" autocomplete="off">
+									</div>
+								</div>
+								<div class="form-group">
+									<label class="col-sm-2 control-label">打印次数</label>
+									<div class="col-sm-9">
+										<input type="number" name="printing[times2]" class="form-control" value="{$printing['times2']}" autocomplete="off">
+										<div class="help-block">请填入正整数，默认为一次。</div>
+									</div>
+								</div>
+							</div>
+							<div id="qkddiv"  {if $printing['type'] !=4 } style="display: none" {/if}>
+								<div class="form-group">
+									<label class="col-sm-2 control-label">状态</label>
+									<div class="col-sm-9">
+										<label class="radio-inline">
+											<input type="radio" name="printing[state]" value="0" {if $printing['state'] != 1}checked{/if}>关闭
+										</label>
+										<label class="radio-inline">
+											<input type="radio" name="printing[state]" value="1" {if $printing['state'] == 1}checked{/if}>开启
+										</label>
+									</div>
+								</div>
+								<div class="form-group">
+									<label class="col-sm-2 control-label">小票抬头</label>
+									<div class="col-sm-9">
+										{php echo attachment_select('printing[header]', $printing['header'])}
+									</div>
+								</div>
+								<div class="form-group">
+									<label class="col-sm-2 control-label">Openid<span class="must-fill">*</span></label>
+									<div class="col-sm-9">
+										<input type="text" name="printing[openid]" class="form-control" value="{$printing['openid']}" autocomplete="off">
+									</div>
+								</div>
+								<div class="form-group">
+									<label class="col-sm-2 control-label">Secret<span class="must-fill">*</span></label>
+									<div class="col-sm-9">
+										<input type="text" name="printing[secret]" class="form-control" value="{$printing['secret']}" autocomplete="off">
+									</div>
+								</div>
+								<div class="form-group">
+									<label class="col-sm-2 control-label">操作员工号<span class="must-fill">*</span></label>
+									<div class="col-sm-9">
+										<input type="text" name="printing[userAccount]" class="form-control" value="{$printing['userAccount']}" autocomplete="off">
+									</div>
+								</div>
+							</div>
+						</div>
+					</div>
+				</div>
+				<!-- 求职招聘 —— 企业信息填写 -->
+				{if store_p('recruit',$id) || empty($id)}
+					<div class="tab-pane" id="tab_recruit">
+						<div class="panel panel-default">
+							<div class="panel-heading">求职招聘</div>
+							<div class="panel-body">
+								<div class="form-group">
+									<label class="col-sm-2 control-label">是否开启求职招聘</label>
+									<div class="col-sm-9">
+										<label class="radio-inline">
+											<input type="radio" onclick="$('#recruit_info').addClass('hide')" name="register[recruit_switch]" value="0" {if $register['recruit_switch'] != 1}checked="checked"{/if}> 关闭
+										</label>
+										<label class="radio-inline">
+											<input type="radio" onclick="$('#recruit_info').removeClass('hide')" name="register[recruit_switch]" value="1" {if $register['recruit_switch'] == 1}checked="checked"{/if}> 开启
+										</label>
+										<div class="help-block">开启后当前店铺会以企业的形式显示在求职招聘模块的企业列表中</div>
+									</div>
+								</div>
+								<div id="recruit_info" class="{if $register['recruit_switch'] != 1}hide{/if}">
+									<div class="form-group">
+										<label class="col-sm-2 control-label">企业相册</label>
+										<div class="col-sm-9">
+											{php echo attachment_select_multi('register[recruit_adv]',$register['recruit_adv']);}
+											<span class="help-block">企业幻灯片,建议大小750X560</span>
+										</div>
+									</div>
+									<div class="form-group">
+										<label class="col-sm-2 control-label">企业性质</label>
+										<div class="col-sm-9">
+											<select name="register[recruit_nature_id]" class="form-control">
+												{loop $nature $natureItem}
+													<option value="{$natureItem['id']}" {if $register['recruit_nature_id'] == $natureItem['id']}selected="selected"{/if}>{$natureItem['title']}</option>
+												{/loop}
+											</select>
+										</div>
+									</div>
+									<div class="form-group">
+										<label class="col-sm-2 control-label">企业规模</label>
+										<div class="col-sm-9">
+											<select name="register[recruit_scale_id]" class="form-control">
+												{loop $scale $scaleItem}
+													<option value="{$scaleItem['id']}" {if $register['recruit_scale_id'] == $scaleItem['id']}selected="selected"{/if}>{$scaleItem['title']}</option>
+												{/loop}
+											</select>
+										</div>
+									</div>
+									<div class="form-group">
+										<label class="col-sm-2 control-label">企业行业</label>
+										<div class="col-sm-9">
+											<select name="register[recruit_industry_id]" class="form-control">
+												{loop $industry $industryItem}
+												<option value="{$industryItem['id']}" {if $register['recruit_industry_id'] == $industryItem['id']}selected="selected"{/if}>{$industryItem['title']}</option>
+												{/loop}
+											</select>
+										</div>
+									</div>
+								</div>
+							</div>
+						</div>
+					</div>
+				{/if}
+				<!--家政服务-->
+				{if store_p('housekeep',$id) || empty($id)}
+				<div class="tab-pane" id="tab_housekeep">
+					<div class="panel-heading">家政服务</div>
+					<div class="panel-body">
+						<div class="form-group">
+							<label class="col-sm-2 control-label">商户是否提供家政服务</label>
+							<div class="col-sm-9">
+								<label class="radio-inline">
+									<input type="radio" onclick="$('#housekeepdiv').show();" name="register[housekeepstatus]" value="1" {if $register['housekeepstatus'] == 1}checked="checked"{/if}> 开启
+								</label>
+								<label class="radio-inline">
+									<input type="radio" onclick="$('#housekeepdiv').hide();" name="register[housekeepstatus]" value="0" {if $register['housekeepstatus'] != 1}checked="checked"{/if}> 关闭
+								</label>
+								<div class="help-block">开启后当前店铺可以在家政服务模块中发布家政服务项目。</div>
+							</div>
+						</div>
+						<div id="housekeepdiv" {if $register['housekeepstatus'] != 1} style="display:none;" {/if}>
+							<div class="form-group">
+								<label class="col-sm-2 control-label"><span class="form-must">*</span>服务类目</label>
+								<div class="col-sm-9">
+									<select name="housekeepcate[]" style="width: 100%;" class="form-control select2" multiple>
+										{loop $housekeepcate $keepcate}
+										<optgroup label="{$keepcate['title']}">
+											{loop $keepcate['list'] $keepchildren}
+											<option value="{$keepchildren['id']}" {if in_array($keepchildren['id'], $keepcateids)}selected{/if}>{$keepchildren['title']}</option>
+											{/loop}
+										</optgroup>
+										{/loop}
+									</select>
+								</div>
+							</div>
+						</div>
+					</div>
+				</div>
+				{/if}
+				<!--房产-->
+				{if store_p('house',$id) || empty($id)}
+				<div class="tab-pane" id="tab_house">
+					<div class="panel-heading">房产租售</div>
+					<div class="panel-body">
+						<div class="form-group">
+							<label class="col-sm-2 control-label">商户是否提供房产租售</label>
+							<div class="col-sm-9">
+								<label class="radio-inline">
+									<input type="radio"  name="register[housestatus]" value="1" {if $register['housestatus'] == 1}checked="checked"{/if}> 开启
+								</label>
+								<label class="radio-inline">
+									<input type="radio"  name="register[housestatus]" value="0" {if $register['housestatus'] != 1}checked="checked"{/if}> 关闭
+								</label>
+								<div class="help-block">开启后当前店铺可以在房产租售模块中绑定顾问。</div>
+							</div>
+						</div>
+					</div>
+				</div>
+				{/if}
+				{if store_p('hotel',$id) || empty($id)}
+				<div class="tab-pane" id="tab_hotel">
+					<div class="panel-heading">酒店设置</div>
+					<div class="panel-body">
+						<div class="form-group">
+							<label class="col-sm-2 control-label">酒店功能</label>
+							<div class="col-sm-9">
+								<label class="radio-inline">
+									<input type="radio"  name="register[hotelstatus]" value="1" {if $register['hotelstatus'] == 1}checked="checked"{/if}> 开启
+								</label>
+								<label class="radio-inline">
+									<input type="radio"  name="register[hotelstatus]" value="0" {if $register['hotelstatus'] != 1}checked="checked"{/if}> 关闭
+								</label>
+								<div class="help-block">开启后当前店铺详情页会调用酒店专用页面。</div>
+							</div>
+						</div>
+						<div class="form-group">
+							<label class="col-sm-2 control-label">酒店标签</label>
+							<div class="col-sm-9">
+								{loop $hotellabel $hotel}
+								<label class="checkbox-inline">
+									<input type="checkbox" name="register[hotellabel][]" value="{$hotel['id']}" {if @in_array($hotel['id'],$sthotellabel)} checked="checked" {/if}>{$hotel['title']}
+								</label>
+								{/loop}
+							</div>
+						</div>
+						<div class="form-group">
+							<label class="col-sm-2 control-label">首页推荐</label>
+							<div class="col-sm-9">
+								<label class="radio-inline">
+									<input type="radio"  name="register[hotelindex]" value="1" {if $register['hotelindex'] == 1}checked="checked"{/if}> 是
+								</label>
+								<label class="radio-inline">
+									<input type="radio"  name="register[hotelindex]" value="0" {if $register['hotelindex'] != 1}checked="checked"{/if}> 否
+								</label>
+								<div class="help-block">开启后当前商户会显示在酒店预约首页推荐栏目中。</div>
+							</div>
+						</div>
+					</div>
+				</div>
+				{/if}
+
+
+			</div>
+			{if empty($_GPC['checkflag'])}
+			<div class="form-group">
+				<label class="col-sm-2 control-label"></label>
+				<div class="col-sm-9">
+					<input type="submit" name="submit" value="提交" class="btn btn-primary min-width" />
+					<input type="hidden" name="token" value="{$_W['token']}" />
+				</div>
+			</div>
+			{else}
+			<div class="form-group">
+				<label class="col-sm-2 control-label"></label>
+				<div class="col-sm-9">
+					<a class="btn btn-primary min-width" href="{php echo web_url('store/storeApply/index')}">返回</a>
+				</div>
+			</div>
+			{/if}
+		</form>
+	</div>
+	<script type="text/javascript">
+		require(["jquery", "{$_W['siteroot']}addons/{MODULE_NAME}/web/resource/js/district.min.js"], function($, dis){
+			$(".js-address-selector").each(function(){
+				var elements = {};
+				elements.province = $(this).find(".tpl-province")[0];
+				elements.city = $(this).find(".tpl-city")[0];
+				elements.district = $(this).find(".tpl-district")[0];
+				var values = {};
+				values.province = $(elements.province).data("value");
+				values.city = $(elements.city).data("value");
+				values.district = $(elements.district).data("value");
+				dis.render(elements, values, {withTitle: true, code : true}, {$allArea});
+			});
+		});
+	</script>
+{/if}
+{if $_GPC['do']=='keeper'}
+	<div class="app-table-list">
+	<input type="submit" name="submit" value="添加管理员" class="btn btn-primary col-lg-1" style="margin-bottom: 5px;" onclick="popwin = $('#modal-module-addKeeper').modal();"/>
+		<div class="col-sm-12" style="padding-left: 0px;padding-right: 0px;">
+			<div class="ibox">
+				<div class="ibox-content">
+					<div class="project-list">
+						<table class="table table-hover">
+							<tbody>
+								{loop $keeper $item}
+								<tr>
+									<td class="project-status">
+										{if $item['ismain'] == 1}
+										<span class="label label-success">系统管理员
+										{else if $item['ismain'] == 2} <span class="label label-default">核销员
+										{/if}
+									</span>
+									</td>
+									<td class="project-title">
+										<a href="project_detail.html">{$item['name']}</a>
+										<br>
+										<small>创建于 {php echo date('Y.m.d',$item['createtime'])}</small>
+									</td>
+									<td class="project-completion">
+											<small>微信昵称：</small>{$item['member']['nickname']}
+									</td>
+									<td class="project-people">
+										<a href="projects.html"><img alt="image" class="img-circle scrollLoading" src="{php echo tomedia($item['member']['avatar'])}"></a>
+									</td>
+									<td class="project-actions">
+										<a href="projects.html#" class="btn btn-white btn-sm"><i class="fa fa-pencil"></i> 编辑 </a>
+									</td>
+								</tr>
+								{/loop}
+								</tbody>
+							</table>
+						</div>
+				   </div>
+			</div>
+		</div>
+	</div>
+	<div id="modal-module-addKeeper" class="modal fade" tabindex="-1">
+		<div class="modal-dialog" style='width: 920px;'>
+			<div class="modal-content">
+				<div class="modal-header">
+					<button aria-hidden="true" data-dismiss="modal" class="close" type="button">×</button>
+					<h3>管理员</h3></div>
+				<div class="modal-body">
+			<style>
+				.table{margin-bottom: 0}
+				.table td, .table th{text-align: center;}
+			</style>
+			<form class="table-responsive" method="post" action="">
+				<input type="hidden" name="uid" value="">
+
+				<table class="table table-hover table-bordered">
+					<tbody>
+
+						<tr>
+							<th>输入微信昵称</th>
+							<td colspan="3">
+								<div class="form-group">
+									<label class="col-sm-2 control-label"></label>
+									<div class="col-xs-12 col-sm-9 col-md-8 ">
+										<input type='hidden' id='mid' name='storemid' value="{$member['id']}" />
+										<input type='hidden' name='uid' value="{$register['member']['id']}" />
+										 <div class="modal-body" >
+											<div class="row">
+												<div class="input-group">
+													<input type="text" class="form-control" name="keyword" value="" id="search-kwd" placeholder="输入微信昵称或openid或mid" />
+													<span class='input-group-btn'><button type="button" class="btn btn-default" onclick="search_members();">搜索</button></span>
+												</div>
+											</div>
+											<div id="module-menus" style="padding-top:5px;">
+											</div>
+										</div>
+									</div>
+								</div>
+							</td>
+						</tr>
+						<!--<tr>
+							<th>设置VIP</th>
+							<td colspan="3">
+								<label class="radio-inline"><input type="radio" name="level" value="1"> 系统管理员</label>
+								<label class="radio-inline"><input type="radio" name="level" value="2"> VIP2</label>
+								<label class="radio-inline"><input type="radio" name="level" value="3"> VIP3</label>
+							</td>
+						</tr>
+						<tr>
+							<th>系统管理员</th>
+							<td colspan="3">具备店铺所有管理的权限</td>
+						</tr>-->
+						<tr>
+							<th>核销员</th>
+							<td colspan="3">可以通过手机客户端进行扫码核销<br>可以通过手机客户端查看自己的扫码核销记录</td>
+						</tr>
+					</tbody>
+				</table>
+			</form>
+			<div class="modal-footer">
+				<span name="submit" id="submit" class="pull-right btn btn-primary" uid="" data-dismiss="modal" aria-hidden="true">保存</span>
+				<input type="hidden" name="token" value="{$_W['token']}" />
+			</div>
+		</div>
+			</div>
+
+		</div>
+	</div>
+{/if}
+{if $_GPC['do']=='urlindex'}
+	<div class="app-table-list">
+		<div class="panel panel-default">
+			<div class="table-responsive">
+				<table class="table table-hover">
+					<thead class="navbar-inner">
+						<tr>
+							<th class="text-center" width="10%">图片</th>
+							<th class="text-center" width="10%">显示顺序</th>
+							<th class="text-center" width="15%">标题</th>
+							<th class="text-center" width="45%">连接</th>
+							<th class="text-center" width="10%">状态</th>
+							<th class="text-center" width="10%">操作</th>
+						</tr>
+					</thead>
+					<tbody>
+						{loop $navs $nav}
+						<tr class="text-center">
+							<td><img class="scrollLoading" src="{php echo tomedia($nav['thumb'])}" data-url="{php echo tomedia($nav['thumb'])}" onerror="this.src='{php echo tomedia($nav['thumb'])}'" height="50" width="50"/></td>
+							<td>{$nav['displayorder']}</td>
+							<td><span {if $nav['color']} style="color: {$nav['color']};" {/if}>{$nav['name']}</span></td>
+							<td>{$nav['link']}</td>
+							<td>{if $nav['enabled'] == 0}<span class="label label-default">隐藏</span>{/if}
+								{if $nav['enabled'] == 1}<span class="label label-success">显示</span>{/if}</td>
+							<td>
+								<a href="{php echo web_url('store/merchant/addurl',array('id'=>$nav['merchantid'],'navid'=>$nav['id']))}" class="btn btn-default btn-sm" data-toggle="tooltip" data-placement="top" title="修改"><i class="fa fa-edit"></i></a>
+								<a href="{php echo web_url('dashboard/nav/delete',array('id'=>$nav['id'],'merchantid'=>$nav['merchantid']))}"class="btn btn-default btn-sm" data-toggle="tooltip" data-placement="top" title="删除"><i class="fa fa-times"></i></a>
+							</td>
+						</tr>
+						{/loop}
+					</tbody>
+				</table>
+			</div>
+		</div>
+		<div class="app-table-foot clearfix">
+			<div class="pull-left">
+
+			</div>
+			<div class="pull-right">
+				{$pager}
+			</div>
+		</div>
+	</div>
+{/if}
+{if $_GPC['do']=='addurl'}
+	<div class="app-form">
+		<form action="" method="post" class="form-horizontal form" enctype="multipart/form-data" >
+			<input type="hidden" name="id" value="{$nav['id']}" />
+			<div class="panel panel-default">
+				<div class="panel-heading">添加自定义链接</div>
+				<div class="panel-body">
+					<div class="form-group">
+						<label class="col-sm-2 control-label">排序</label>
+						<div class="col-sm-9">
+							<input type="text" name="nav[displayorder]"   placeholder="默认排序为0" class="form-control" value="{$nav['displayorder']}" >
+							<input type="hidden" name="nav[merchantid]"   value="{$id}" >
+						</div>
+					</div>
+					<div class="form-group">
+						<label class="col-sm-2 control-label">导航栏标题<span class="must-fill">*</span></label>
+						<div class="col-sm-9">
+							<input type="text" name="nav[name]" required  class="form-control" value="{$nav['name']}" >
+						</div>
+					</div>
+					<div class="form-group">
+						<label class="col-sm-2 control-label">标题颜色</label>
+						<div class="col-sm-9">
+							<input type="color" name="nav[color]" required  class="form-control" value="{$nav['color']}" >
+						</div>
+					</div>
+					<div class="form-group">
+						<label class="col-sm-2 control-label">导航栏图片<span class="must-fill">*</span></label>
+						<div class="col-sm-9">
+							{php echo attachment_select('nav[thumb]', $nav['thumb'])}
+							<span class="help-block">建议图片大小80*80</span>
+						</div>
+					</div>
+					<div class="form-group">
+						<label class="col-sm-2 control-label">导航栏连接</label>
+						<div class="col-sm-9">
+							<input type="text" name="nav[link]" class="form-control" value="{$nav['link']}" >
+						</div>
+					</div>
+					<div class="form-group">
+						<label class="col-sm-2 control-label">是否显示</label>
+						<div class="col-sm-9">
+							<div class="radio-inline">
+								<input type="radio" name='enabled' value='1' {if $nav['enabled']==1}checked{/if}>是
+							</div>
+							<div class="radio-inline">
+								<input type="radio" name='enabled' value='0' {if $nav['enabled']==0}checked{/if}>否
+							</div>
+						</div>
+					</div>
+				</div>
+			</div>
+			<div class="form-group">
+				<label class="col-sm-2 control-label"></label>
+				<div class="col-sm-9">
+					<input type="submit" name="submit" value="提交" class="btn btn-primary min-width" />
+					<input type="hidden" name="token" value="{$_W['token']}" />
+				</div>
+			</div>
+		</form>
+	</div>
+{/if}
+</div>
+<script language='javascript'>
+    function search_members() {
+       	if( $.trim($('#search-kwd').val())==''){
+            Tip.focus('#search-kwd','请输入关键词');
+            return;
+        }
+
+		$("#module-menus").html("正在搜索....")
+		$.get('{php echo web_url('store/register/add',array('op'=>'selectnickname'))}', {
+			keyword: $.trim($('#search-kwd').val())
+		}, function(dat){
+			$('#module-menus').html(dat);
+		});
+	}
+    function select_member(o) {
+		$("#mid").val(o.id);
+		$("#saler").val(o.nickname);
+		$('#search-kwd').val(o.nickname)
+		$("#avatar").attr('src', o.avatar);
+		$('#module-menus').html('');
+		$("#modal-module-menus").modal("hide");
+	}
+	$(function () {
+		window.optionchanged = false;
+		$('#myTab a').click(function (e) {
+			e.preventDefault();//阻止a链接的跳转行为
+			$(this).tab('show');//显示当前选中的链接及关联的content
+		});
+	});
+	//判断是否显示配送div
+	function storecheckstatus(asd){
+		if($(asd).is(":checked")){
+			$('#storediv').show();
+		}else{
+			$('#storediv').hide();
+		}
+	}
+	function makecheckstatus(asd){
+		if($(asd).is(":checked")){
+			$('#makediv').show();
+		}else{
+			$('#makediv').hide();
+		}
+	}
+
+	function drawdiv(draw){
+		if($(draw).val() > 0){
+			$('#drawdiv').show();
+		}else{
+			$('#drawdiv').hide();
+		}
+	}
+
+	function ppdrawdiv(draw){
+		if($(draw).val() > 0){
+			$('#ppdrawdiv').show();
+		}else{
+			$('#ppdrawdiv').hide();
+		}
+	}
+
+	/**
+	 * 监听云喇叭是否开启
+	 */
+	$("[name='cloudspeaker[state]']").change(function () {
+		voiceSwitch();
+	});
+	/**
+	 * 监听云喇叭类型改变
+	 */
+	$("[name='cloudspeaker[voice]']").change(function () {
+		voiceSwitch();
+	});
+	/**
+	 * 根据云喇叭状态，类型 修改显示内容
+	 */
+	function voiceSwitch() {
+		let state = $("input[name='cloudspeaker[state]']:checked").val(),//总开关状态  0=关闭，1=开启
+				voice = $("input[name='cloudspeaker[voice]']:checked").val();//喇叭型号  1=智联博众，2=零度
+		//判断总开关
+		if(state == 0){
+			//关闭云喇叭使用
+			$(".voice_block").addClass("hide");
+			$(".voiceRequired").attr("required",false);
+		}else {
+			//开启云喇叭使用
+			$(".voice_voice").removeClass("hide");//开启型号选择
+			if(voice == 2){
+				//选择为零度  显示零度
+				$("#voice-zlbz").addClass("hide");
+				$("#voice-zlbz .voiceRequired").attr("required",false);
+				$("#voice-ld").removeClass("hide");
+				$("#voice-ld .voiceRequired").attr("required",true);
+			}else{
+				//选择为智联博众  显示智联博众
+				$("#voice-zlbz").removeClass("hide");
+				$("#voice-zlbz .voiceRequired").attr("required",true);
+				$("#voice-ld").addClass("hide");
+				$("#voice-ld .voiceRequired").attr("required",false);
+			}
+		}
+	}
+
+	function changeprintdiv(flag) {
+		if(flag == 1){
+			$('#365div').show();
+			$('#ylydiv').hide();
+			$('#fediv').hide();
+			$('#qkddiv').hide();
+		}else if(flag == 2){
+			$('#365div').hide();
+			$('#ylydiv').show();
+			$('#fediv').hide();
+			$('#qkddiv').hide();
+		}else if(flag == 3){
+			$('#365div').hide();
+			$('#ylydiv').hide();
+			$('#fediv').show();
+			$('#qkddiv').hide();
+		}else if(flag == 4){
+			$('#365div').hide();
+			$('#ylydiv').hide();
+			$('#fediv').hide();
+			$('#qkddiv').show();
+		}
+	}
+	//增加和删除营业时间段
+	var nums = 1;
+	function addHours() {
+		$(".btn-add-type").attr("disabled",true);
+		$(".btn-add-type").html("loading");
+		$.ajax({
+			url: "{php echo web_url('store/merchant/storehours')}&kw="+nums,
+			cache: false
+		}).done(function (html) {
+			$(".btn-add-type").html("<i class=\"fa fa-plus\" title=\"\"></i>增加一个营业时间段");
+			$(".btn-add-type").attr("disabled",false);
+			$("#datas").append(html);
+		});
+		nums++;
+	}
+	function removes(asd){
+		$(asd).closest('.data-item').remove();
+	}
+
+</script>
+{php include wl_template('common/footer');}

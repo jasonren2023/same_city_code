@@ -1,0 +1,14 @@
+<div class="form-group sms-template-1 data-item">
+    <label class="col-sm-2 control-label">签到幻灯片</label>
+    <div class="col-sm-9">
+        <div class="col-sm-6" style="margin: 0px;padding-left: 0;">
+            {php echo attachment_select('data_img[]',$data['data_img'],$key);}
+ 		</div>
+        <div class="input-group form-group col-sm-6" style="margin: 0px;padding-right: 0;">
+            <input type="text" value="{$data['data_url']}" readonly="readonly" class="form-control valid" name="data_url[]" placeholder="" id="advlink_{$key}">
+            <span data-input="#advlink_{$key}" data-toggle="selectUrl" class="input-group-addon btn btn-default">选择链接</span>
+            <span class="input-group-addon btn btn-default data-item-delete"><i class="fa fa-remove"></i> 删除</span>
+        </div>
+        <div class="help-block">几张图片组合成一套幻灯片，一套幻灯片有几张图就创建几张图。图片大小推荐为 650X200 像素。</div>
+    </div>
+</div>

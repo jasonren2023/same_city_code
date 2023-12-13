@@ -1,0 +1,25 @@
+<?xml version="1.0" encoding="utf-8"?>
+<manifest>
+	<application>
+		<name><![CDATA[倡议关注海报]]></name>
+		<identifie><![CDATA[subposter]]></identifie>
+		<version><![CDATA[1.0.0]]></version>
+		<type><![CDATA[interact]]></type>
+		<description><![CDATA[倡议关注海报，吸粉能力强。]]></description>
+		<author><![CDATA[微连科技]]></author>
+		<url><![CDATA[http://www.weliam.cn/]]></url>
+	</application>
+	<setting>
+		<agent embed="false" />
+		<system embed="true" />
+		<task embed="false" />
+	</setting>
+	<agentmenu>
+	</agentmenu>
+	<systemmenu>
+		<menu title="海报" font="fa-inbox">
+			<entry title="海报设置" ac="subposter" do="setting" iscover="true" />
+			<entry title="参与记录" ac="subposter" do="records" />
+		</menu>
+	</systemmenu>
+</manifest>

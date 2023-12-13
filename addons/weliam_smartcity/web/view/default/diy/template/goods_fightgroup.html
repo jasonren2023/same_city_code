@@ -1,0 +1,160 @@
+<!--------------------------  拼团商品组件群  ----------------------------------->
+<!-- 拼团商品组  风格一 -->
+<script type="text/html" id="tpl_show_fightgroup_goods">
+    <div class="drag" data-itemid="<%itemid%>"  group_name="<%group_name%>" group_key="<%group_key%>" data-id="<%group_name%>" >
+        <div class="goods_fight_1 goods_style_1" style="margin-bottom: <%style.marginBottom%>px;padding: <%style.margin||'10'%>px;background-color:<%style.bgColor||'#ffffff'%>">
+            <%each data as item index%>
+            <div class="block" style="padding:<%style.padding||'10'%>px;">
+                <div class="images">
+                    <img src="<%imgsrc item.logo%>" onerror="this.src='../addons/{MODULE_NAME}/web/resource/images/default.png';"/>
+                    <%if params.marker_set == 1%>
+                        <div class="marker" style="background: <%style.marker_bg||'#FF4444'%>;color: <%style.marker_color||'#FFFFFF'%>;">拼团</div>
+                    <%/if%>
+                </div>
+                <div class="describe">
+                    <div class="title"><%item.goods_name%></div>
+                    <div class="fight_info">
+                        <div class="buy_num">已拼<%item.buy_num%>件</div>
+                        <div class="fight_num"><%item.peoplenum%>人团</div>
+                    </div>
+                    <div class="footer_info">
+                        <div class="sale_info">
+                            <div class="price_info">
+                                <div class="price">¥<%item.price%></div>
+                            </div>
+                            <div class="old_price">原价：¥<%item.oldprice%></div>
+                        </div>
+                        <div class="button">去拼团</div>
+                    </div>
+                </div>
+            </div>
+            <%/each%>
+        </div>
+    </div>
+</script>
+<!-- 拼团商品组  风格二 -->
+<script type="text/html" id="tpl_show_fightgroup_goods2">
+    <style>
+        #s<%itemid%> .block_item{margin-right: <%style.padding||'0'%>px;}
+        #s<%itemid%> .block_item:nth-child(2n){margin-right: 0px;}
+    </style>
+    <div class="drag" data-itemid="<%itemid%>"  group_name="<%group_name%>" group_key="<%group_key%>" data-id="<%group_name%>">
+        <div class="goods_fight_2 goods_style_2" style="margin-bottom: <%style.marginBottom%>px;padding: <%style.margin||'0'%>px;background-color:<%style.bgColor||'#ffffff'%>;">
+            <div id="s<%itemid%>" class="block" style="padding:<%style.padding||'0'%>px">
+                <%each data as val index%>
+                <div class="block_item" style="width: calc((100% - <%style.padding||'0'%>px) / 2);">
+                    <div class="images">
+                        <img src="<%imgsrc val.logo%>" onerror="this.src='../addons/{MODULE_NAME}/web/resource/images/default.png';"/>
+                        <%if params.marker_set == 1%>
+                        <div class="marker" style="background: <%style.marker_bg||'#FF4444'%>;color: <%style.marker_color||'#FFFFFF'%>;">拼团</div>
+                        <%/if%>
+                    </div>
+                    <div class="describe">
+                        <div class="name"><%val.goods_name%></div>
+                        <div class="fight_info">
+                            <div class="buy_num">已拼<%val.buy_num%>件</div>
+                            <div class="fight_num"><%val.peoplenum%>人团</div>
+                        </div>
+                        <div class="price_info">
+                            <div class="priec">¥<%val.price%></div>
+                            <div class="unit_Price">单购价¥<%val.oldprice%></div>
+                        </div>
+                    </div>
+                </div>
+                <%/each%>
+            </div>
+        </div>
+    </div>
+</script>
+<!-- 拼团商品组  风格三 -->
+<script type="text/html" id="tpl_show_fightgroup_goods3">
+    <div class="drag" data-itemid="<%itemid%>"  group_name="<%group_name%>" group_key="<%group_key%>" data-id="<%group_name%>">
+        <div class="goods_fight_4 goods_style_4" style="margin-bottom: <%style.marginBottom||'1'%>px;padding: <%style.margin||'0'%>px;background-color:<%style.bgColor||'#ffffff'%>;">
+            <div class="transverse" style="padding: <%style.padding||'0'%>px;">
+                <div class="transverse_list">
+                    <div class="goods_father">
+                        <%each data as item%>
+                        <div class="goods_item"  style="padding-right: <%style.padding||'0'%>px;">
+                            <div class="goods_img">
+                                <img class="image" src="<%imgsrc item.logo%>" onerror="this.src='../addons/{MODULE_NAME}/web/resource/images/default.png';"/>
+                            </div>
+                            <div class="goods_tit"><%item.goods_name%></div>
+                            <div class="goods_price">
+                                <div class="present_price">
+                                    <div class="span">￥<%item.price%></div>
+                                </div>
+                                <%if item.oldprice%>
+                                <div class="original_price">￥<%item.oldprice%></div>
+                                <%/if%>
+                            </div>
+                        </div>
+                        <%/each%>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</script>
+<!-- 拼团商品组  风格四 -->
+<script type="text/html" id="tpl_show_fightgroup_goods4">
+    <div class="drag" data-itemid="<%itemid%>"  group_name="<%group_name%>" group_key="<%group_key%>" data-id="<%group_name%>">
+        <div class="goods_fight_3 goods_style_3" style="margin-bottom: <%style.marginBottom%>px;padding: <%style.margin||'0'%>px;background-color:<%style.bgColor||'#ffffff'%>;">
+            <%each data as item index%>
+            <div class="goodslist" style="padding: <%style.padding||'15'%>px;">
+                <div class="goodslist-i" v-for="(item, key) in goodsList" :key="key">
+                    <div class="a">
+                        <div class="goodslist-i-t">
+                            <img src="<%imgsrc item.long_logo%>" onerror="this.src='../addons/{MODULE_NAME}/web/resource/images/default.png';"/>
+                            <%if params.sort_icon == 1%>
+                            <div class="top_top">TOP <%index.substring(index.length-2)%></div>
+                            <%/if%>
+                            <%if params.buy_user == 1%>
+                            <div class="qglist-i-t-bar">
+                                <div class="qglist-i-t-bar-d">
+                                    <div class="qglist-i-t-bar-l">
+                                        <div class="i icon iconfont icon-hotfill"></div>喜欢<div class="em"><%item.user_num%></div>
+                                    </div>
+                                    <div class="qglist-i-t-bar-r">
+                                        <%each item['user_list'] as val%>
+                                        <div class="i"><img src="<%val%>" onerror="this.src='../addons/{MODULE_NAME}/web/resource/images/default.png';"/></div>
+                                        <%/each%>
+                                    </div>
+                                </div>
+                            </div>
+                            <%/if%>
+                        </div>
+                    </div>
+                    <div class="goodslist-i-c">
+                        <div class="goodslist-i-c-t">
+                            <div class="goodslist-i-c-t-l"><%item.storename%></div>
+                            <div class="shop_address"><span><%item.address%></span><i>&nbsp;|&nbsp;999m</i></div>
+                        </div>
+                        <div class="goodslist-i-c-c">
+                            <div class="a">
+                                <div class="i"><%params.goodsLabel||'拼团'%></div>
+                                <%item.goods_name%>
+                            </div>
+                        </div>
+                        <div class="goodslist-i-c-c2">
+                            <div class="h1"><%item.price%><div class="i inline">元</div>
+                                <%if item.vipstatus == 1%>
+                                <div class="span"><div class="i">会员</div>优惠<%item.discount_price%>元</div>
+                                <%/if%>
+                            </div>
+                            <div class="h2">
+                                <div class="a">购买</div>
+                            </div>
+                        </div>
+                        <div class="goodslist-i-c-b">
+                            <div class="p">
+                                <div class="span">原价<%item.oldprice%></div>
+                                <div class="em"><%item.buy_num%>人喜欢</div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <%/each%>
+        </div>
+    </div>
+</script>

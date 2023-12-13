@@ -1,0 +1,150 @@
+{php include wl_template('common/header');}
+<ul class="nav nav-tabs">
+    <li class="active"><a href="javascript:;">类目列表</a></li>
+</ul>
+<div class="app-content">
+    <div class="app-filter">
+        <div class="alert alert-warning">
+            注意：不需要资质的类目可以不获取授权直接上传商品。<br />
+        </div>
+    </div>
+    <!--头部信息-->
+    <div class="app-filter">
+        <div class="filter-action">
+            <a href="javascript:;" class="btn btn-success pass">导入类目</a>
+            <a href="javascript:;" class="btn btn-info authority">校验已授权类目</a>
+        </div>
+        <div class="filter-list">
+            <form class="form-horizontal" action="" method="get">
+                <input type="hidden" name="c" value="site" />
+                <input type="hidden" name="a" value="entry" />
+                <input type="hidden" name="m" value="{MODULE_NAME}" />
+                <input type="hidden" name="p" value="wxchannels" />
+                <input type="hidden" name="ac" value="channelweb" />
+                <input type="hidden" name="do" value="category" />
+                <input type="hidden" name="authority" value="{$_GPC['authority']}" />
+                <div class="form-group">
+                    <label class="col-sm-2 control-label">授权状态</label>
+                    <div class="col-sm-9">
+                        <div class="btn-group">
+                            <a href="{php echo wl_filter_url('authority:0');}" class="btn {if intval($_GPC['authority']) == 0}btn-primary{else}btn-default{/if}">不限</a>
+                            <a href="{php echo wl_filter_url('authority:1');}" class="btn {if $_GPC['authority'] == 1}btn-primary{else}btn-default{/if}">已授权</a>
+                            <a href="{php echo wl_filter_url('authority:2');}" class="btn {if $_GPC['authority'] == 2}btn-primary{else}btn-default{/if}">未授权</a>
+                        </div>
+                    </div>
+                </div>
+                <div class="form-group">
+                    <div class="col-sm-2 control-label">类目名称</div>
+                    <div class="col-sm-9">
+                        <input type="text" class="form-control" name="name" value="{$name}" placeholder="请输入类目名称">
+                    </div>
+                </div>
+                <div class="form-group">
+                    <div class="col-sm-2 control-label"></div>
+                    <div class="col-sm-6">
+                        <div class="input-group">
+                            <button class="btn btn-primary" type="submit" >搜索</button>
+                        </div>
+                    </div>
+                </div>
+            </form>
+        </div>
+    </div>
+    <div class="app-table-list">
+        <div id="list" class="panel tab-pane panel-default">
+            <div class="table-responsive">
+                <table class="table table-hover table-bordered">
+                    <thead>
+                    <tr>
+                        <th class="text-center" width="10%">一级/二级/三级类目id</th>
+                        <th class="text-center" width="10%">一级/二级/三级类目名称</th>
+                        <th class="text-center" width="7%">类目资质类型</th>
+                        <th class="text-center" width="20%">类目资质说明</th>
+                        <th class="text-center" width="7">商品资质类型</th>
+                        <th class="text-center" width="20%">商品资质说明</th>
+                        <th class="text-center" width="7%">授权</th>
+                        <th class="text-center" width="19%">操作</th>
+                    </tr>
+                    </thead>
+                    <tbody>
+                    {loop $list $k $v}
+                    <tr class="text-center">
+                        <td>{$v['first_cat_id']}/{$v['second_cat_id']}/{$v['third_cat_id']}</td>
+                        <td>{$v['first_cat_name']}/{$v['second_cat_name']}/{$v['third_cat_name']}</td>
+                        <td>
+                            {if $v['qualification_type'] == 0 }<span class="label label-success">不需要</span>{/if}
+                            {if $v['qualification_type'] == 1 }<span class="label label-dangger">必填</span>{/if}
+                            {if $v['qualification_type'] == 2 }<span class="label label-info">选填</span>{/if}
+                        </td>
+                        <td> {if empty($v['qualification'])} - 无 -  {else}{$v['qualification']}{/if}</td>
+                        <td>
+                            {if $v['product_qualification_type'] == 0 }<span class="label label-success">不需要</span>{/if}
+                            {if $v['product_qualification_type'] == 1 }<span class="label label-dangger">必填</span>{/if}
+                            {if $v['product_qualification_type'] == 2 }<span class="label label-info">选填</span>{/if}
+                        </td>
+                        <td> {if empty($v['product_qualification'])} - 无 -  {else}{$v['product_qualification']}{/if}</td>
+                        <td>
+                            {if $v['authority'] == 0 }<span class="label label-default">未授权</span>{/if}
+                            {if $v['authority'] == 1 }<span class="label label-success">已授权</span>{/if}
+                        </td>
+                        <td>
+                            {if $v['qualification_type'] > 0}
+                            <p style="color: #428bca;display: inline-block;"><a href="{php echo web_url('wxchannels/channelweb/upQualification', array('id'=>$v['third_cat_id'],'page' => $_GPC['page']))}" >上传资质</a></p>
+                            {/if}
+                            {if !empty($v['audit_id'])}
+                            <p style="color: #428bca;display: inline-block;"><a href="{php echo web_url('wxchannels/channelweb/auditResult', array('audit_id'=>$v['audit_id']))}" data-toggle="ajaxRemove" data-confirm="查询资质审核情况？">查询审核情况</a></p>
+                            {/if}
+                        </td>
+                    </tr>
+                    {/loop}
+                    </tbody>
+                </table>
+            </div>
+            <div class="app-table-foot clearfix">
+                <div class="pull-left">
+                </div>
+                <div class="pull-right">
+                    {$pager}
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+<script>
+    $('.pass').click(function(e) {
+        e.stopPropagation();
+        util.nailConfirm(this, function(state) {
+            if (!state) return;
+            $("#page-loading").show();
+            $.post("{php echo web_url('wxchannels/channelweb/getcategory')}", {}, function(data) {
+                $("#page-loading").hide();
+                if(!data.status){
+                    util.tips('导入成功');
+                    location.reload();
+                }else{
+                    util.tips(data.msg);
+                };
+            }, 'json');
+        }, {html:'是否导入微信交易商品类目?请勿在短时间内重复导入，导入过程可能持续一分钟左右，请耐心等待。', placement:'right'});
+    });
+
+    $('.authority').click(function(e) {
+        e.stopPropagation();
+        util.nailConfirm(this, function(state) {
+            if (!state) return;
+            $("#page-loading").show();
+            $.post("{php echo web_url('wxchannels/channelweb/getauthority')}", {}, function(data) {
+                $("#page-loading").hide();
+                if(!data.status){
+                    util.tips('校验成功');
+                    location.reload();
+                }else{
+                    util.tips(data.msg);
+                };
+            }, 'json');
+        }, {html:'校验过程可能持续一分钟左右，请耐心等待。', placement:'right'});
+    });
+
+</script>
+{php include wl_template('common/footer');}

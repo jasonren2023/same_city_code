@@ -1,0 +1,24 @@
+{template 'common/header'}
+<script>
+    window.we7Info = {'url': "{$_W['siteroot']}"};
+    if(window.sysinfo.highest_role === 'clerk' && !window.localStorage.getItem('we7StarRoute')) {
+        window.localStorage.setItem('we7StarRoute', '/modules')
+    }
+</script>
+<div>
+    <link href="./resource/home/css/star.css" rel="stylesheet">
+    <style>
+        .skin-2__container{width: 1000px;}
+        .star-flex .star-content{padding: 0px!important;}
+        .star-flex .star-menu{display: none!important;}
+        .star-flex .account-num{display: none!important;}
+        /*.star-list .star-item__desc{display: none!important;}*/
+        .star-list .star-item__right{display: none!important;}
+        .star-list .star-item__footer{display: none!important;}
+    </style>
+    <div class="we7-page-title" style="display: block">我的平台</div>
+    <div id=app></div>
+    <script src="./resource/home/js/chunk-vendors.star.js?v=1"> </script>
+    <script src="./resource/home/js/star.star.js?v=1"> </script>
+</div>
+{template 'common/footer'}

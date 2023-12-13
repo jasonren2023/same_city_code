@@ -1,0 +1,45 @@
+<?xml version="1.0" encoding="utf-8"?>
+<manifest>
+	<application>
+		<name><![CDATA[同城名片]]></name>
+		<identifie><![CDATA[citycard]]></identifie>
+		<version><![CDATA[1.0.0]]></version>
+		<type><![CDATA[interact]]></type>
+		<description><![CDATA[用户可以添加自己的名片，也可以收藏别人的名片。]]></description>
+		<author><![CDATA[微连科技]]></author>
+		<url><![CDATA[http://www.weliam.cn/]]></url>
+	</application>
+	<setting>
+		<agent embed="true" />
+		<system embed="true" />
+		<task embed="true" />
+	</setting>
+	<agentmenu>
+		<menu title="名片" font="fa-inbox">
+			<entry title="名片管理" ac="citycard" do="card_lists" actions='["do",["card_lists","card_edit"]]' iscover="true"/>
+			<entry title="名片分类" ac="citycard" do="cate_lists" actions='["do",["cate_lists","cate_edit"]]' />
+		</menu>
+		<menu title="付费" font="fa-inbox">
+			<entry title="套餐管理" ac="citycard" do="meal_lists" actions='["do",["meal_lists","meal_edit"]]' />
+			<entry title="置顶管理" ac="citycard" do="top_lists" actions='["do",["top_lists","top_edit"]]' />
+			<entry title="付费记录" ac="citycard" do="order_lists" actions='["do",["order_lists"]]' />
+		</menu>
+		<menu title="设置" font="fa-inbox">
+			<entry title="名片设置" ac="citycard" do="setting" />
+		</menu>
+	</agentmenu>
+	<systemmenu>
+		<menu title="名片" font="fa-inbox">
+			<entry title="名片管理" ac="citycard" do="card_lists" actions='["do",["card_lists","card_edit"]]' iscover="true"/>
+			<entry title="名片分类" ac="citycard" do="cate_lists" actions='["do",["cate_lists","cate_edit"]]' />
+		</menu>
+		<menu title="付费" font="fa-inbox">
+			<entry title="套餐管理" ac="citycard" do="meal_lists" actions='["do",["meal_lists","meal_edit"]]' />
+			<entry title="置顶管理" ac="citycard" do="top_lists" actions='["do",["top_lists","top_edit"]]' />
+			<entry title="付费记录" ac="citycard" do="order_lists" actions='["do",["order_lists"]]' />
+		</menu>
+		<menu title="设置" font="fa-inbox">
+			<entry title="名片设置" ac="citycard" do="setting" />
+		</menu>
+	</systemmenu>
+</manifest>

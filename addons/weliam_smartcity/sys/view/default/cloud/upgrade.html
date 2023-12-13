@@ -1,0 +1,107 @@
+{php include wl_template('common/header');}
+{if empty($_GPC['lct'])}
+<ul class="nav nav-tabs">
+	<li class="active"><a href="{php echo web_url('cloud/auth/upgrade');}">系统升级</a></li>
+</ul>
+{/if}
+<div class="app-content">
+	<div class="app-form">
+		<div class="system-upgrade">
+			<div class="upgrade-body flex-col flex-align-c">
+				{if WELIAM_VERSION == $log['version'] && !empty($log)}
+				<img src="{URL_WEB_RESOURCE}images/chenggong.png" height="180" width="230" alt="">
+				<p class="main-title">恭喜您，当前系统版本是最新版本！</p>
+				{else}
+				<img src="{URL_WEB_RESOURCE}images/gengxin.png" height="180" width="230" alt="">
+				<p class="main-title">有新的系统版本更新，是否更新？</p>
+				{/if}
+				<div><span>当前版本：</span>
+					<el-tag>{WELIAM_VERSION}</el-tag><span style="margin-left:20px;">最近更新时间：{php echo date('Y-m-d H:i:s', filectime(VERSION_PATH));}</span>
+				</div>
+				<button type="primary" class="btn btn-primary" style="margin:30px 0;" onclick="upgrade_check();">{if WELIAM_VERSION == $log['version'] && !empty($log)}立即检查新版本{else}立即更新{/if}</button>
+				{if !empty($log)}
+				<div class="new-text">
+					<p class="title"><span class="f-600">最新版本：</span><span class="orders-blue">{$log['version']}</span><span class="f-600" style="margin-left:20px;">发布时间：{php echo date('Y-m-d H:i:s', $log['updated_at']);}</span></p>
+					{php echo htmlspecialchars_decode($log['content']);}
+				</div>
+				{/if}
+			</div>
+		</div>
+		<div class="upgrade-modal-page">
+			<div class="upgrade-modal-mask">
+				<div class="upgrade-modal">
+					<div>
+						<img src="{URL_WEB_RESOURCE}images/upgrade.png"/>
+					</div>
+					<div class="progress">
+						<div class="progress-bar" role="progressbar" aria-valuenow="0" aria-valuemin="0" aria-valuemax="100">0%</div>
+					</div>
+					<div class="upgrade-modal-tip">
+						系统正在为您更新文件，请耐心等待~~~
+					</div>
+				</div>
+			</div>
+		</div>
+	</div>
+</div>
+<script>
+	{if $_GPC['up'] == 'now'}
+	window.onload = function () {
+		upgrade_check();
+	}
+	{/if}
+
+	function upgrade_check() {
+        layer.load(2, {
+            shade: [0.1,'#383838']
+        });
+		$.post("{php echo web_url('cloud/auth/upgrade');}", function (file) {
+            layer.closeAll('loading');
+            if (file.errno == 0) {
+				$('.upgrade-modal-page').show();
+				upgrade_download();
+			} else {
+				tip.alert(file.message);
+			}
+		},'json');
+	};
+
+	function upgrade_download() {
+		var download = function() {
+			$.post("{php echo web_url('cloud/auth/upgrade_download');}", function (data) {
+				if(data.errno == 0 || data.errno == 1){
+					upgrade_pragress(data.data.success/data.data.total*100);
+					download();
+				} else if (data.errno == 2) {
+					$('.upgrade-modal-tip').html('系统正在为您更新数据库，请耐心等待~~~');
+					upgrade_db();
+				}
+			},'json');
+		};
+		download();
+	}
+	
+	function upgrade_db() {
+		var db = function() {
+			$.post("{php echo web_url('cloud/auth/upgrade_db');}", function (data) {
+				if(data.errno == 0){
+					upgrade_pragress(data.data.success/data.data.total*100);
+					db();
+				} else if (data.errno == 1) {
+                    $('.upgrade-modal-page').hide();
+                    tip.alert('恭喜您，系统更新成功', function () {
+                        //location.href = "{php echo web_url('cloud/auth/upgrade');}";
+						location.reload();
+                    });
+				}
+			},'json');
+		};
+		db();
+	}
+
+	function upgrade_pragress(pragress) {
+		$('.progress-bar').css('width', pragress + '%');
+		$('.progress-bar').html(pragress.toFixed(2) + '%');
+	}
+</script>
+{php include wl_template('common/footer');}

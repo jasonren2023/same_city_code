@@ -1,0 +1,27 @@
+<?xml version="1.0" encoding="utf-8"?>
+<manifest>
+	<application>
+		<name><![CDATA[满减活动]]></name>
+		<identifie><![CDATA[fullreduce]]></identifie>
+		<version><![CDATA[1.0.0]]></version>
+		<type><![CDATA[interact]]></type>
+		<description><![CDATA[满额减免活动，适用于抢购，团购，拼团，砍价，卡券，同城配送，在线买单]]></description>
+		<author><![CDATA[微连科技]]></author>
+		<url><![CDATA[http://www.weliam.cn/]]></url>
+	</application>
+	<setting>
+		<agent embed="true" />
+		<system embed="true" />
+		<task embed="false" />
+	</setting>
+	<agentmenu>
+		<menu title="活动" font="fa-inbox">
+			<entry title="活动列表" ac="fullreduce" do="activelist" actions='["do",["activelist","createactive"]]' iscover="true" />
+		</menu>
+	</agentmenu>
+	<systemmenu>
+		<menu title="活动" font="fa-inbox">
+			<entry title="活动列表" ac="fullreduce" do="activelist" actions='["do",["activelist","createactive"]]' iscover="true" />
+		</menu>
+	</systemmenu>
+</manifest>

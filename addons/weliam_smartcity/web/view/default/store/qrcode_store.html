@@ -1,0 +1,193 @@
+<style>
+    .qrcode-tab .wx-qrcode{}
+    .qrcode-tab .wx-qrcode .qrcode-img{border: 1px solid #eee; padding: 5px;max-width:200px;max-height:200px;margin: auto;}
+    .qrcode-tab .wx-qrcode .qrcode-title{line-height: 40px;text-align: center;}
+    .qrcode-tab .wx-qrcode .qrcode-btn{display: block;text-align: center;line-height: 160px;}
+    #wxplatformANDwxapp .linkDiv{
+        height: 20px;
+        line-height: 20px;
+        text-align: center;
+    }
+    #wxplatformANDwxapp .linkSpan{
+        display: inline-block;
+        float: left;
+    }
+    #wxplatformANDwxapp .linkA{
+        overflow: hidden;
+        text-overflow: ellipsis;
+        white-space: nowrap;
+        width: calc(100% - 80px)!important;
+        display: inline-block;
+        float: left;
+        text-align: left;
+    }
+    canvas{
+        width: 100%!important;
+    }
+    .qrcode-img img {
+        width: 100%!important;
+    }
+</style>
+<div class="modal-dialog">
+    <div class="modal-content">
+        <div class="modal-header">
+            <button data-dismiss="modal" class="close" type="button">×</button>
+            <h4 class="modal-title">商户二维码</h4>
+        </div>
+        <div class="modal-body" style="height: 450px;">
+            <div class="tabs-container qrcode-tab">
+                <div class="tabs">
+                    <ul class="nav nav-tabs">
+                        {if p('wxplatform')}
+                            <li><a class="qrcodeButton" data-toggle="tab" href="#tab-1" aria-expanded="true">公众号二维码</a></li>
+                        {/if}
+                        {if p('wxapp')}
+                            <li><a class="qrcodeButton"  data-toggle="tab" href="#tab-2" aria-expanded="false">小程序码</a></li>
+                        {/if}
+                    </ul>
+                    <div class="tab-content" id="wxplatformANDwxapp">
+                        <!--    公众号二维码信息    -->
+                        {if p('wxplatform')}
+                            <div id="tab-1" class="tab-pane">
+                                <div class="alert alert-warning">
+                                    <div class="linkDiv">
+                                        <span class="linkSpan">商户链接：</span>
+                                        <a class="linkA weChatShopLink js-clip" data-url="{$shopLink}">{$shopLink}</a>
+                                    </div>
+                                    <div class="linkDiv">
+                                        <span class="linkSpan">买单链接：</span>
+                                        <a class="linkA weChatBuyLink js-clip" data-url="{$buyLink}">{$buyLink}</a>
+                                    </div>
+                                    {if p('citydelivery')}
+                                        <div class="linkDiv">
+                                            <span class="linkSpan">同城配送：</span>
+                                            <a class="linkA weChatDistributionLink js-clip" data-url="{$distributionLink}">{$distributionLink}</a>
+                                        </div>
+                                    {/if}
+                                </div>
+                                <div class="row">
+                                    <div class="col-md-{if  p('citydelivery')}3{else}4{/if}">
+                                        <div class="wx-qrcode">
+                                            <div class="qrcode-img weChatShopQrCode"></div>
+                                            <div class="qrcode-title">普通二维码</div>
+                                        </div>
+                                    </div>
+                                    <div class="col-md-{if  p('citydelivery')}3{else}4{/if}">
+                                        <div class="wx-qrcode">
+                                            <div class="qrcode-img">
+                                                <img src="{$followLink}">
+                                            </div>
+                                            <div class="qrcode-title">微信二维码</div>
+                                        </div>
+                                    </div>
+                                    <div class="col-md-{if  p('citydelivery')}3{else}4{/if}">
+                                        <div class="wx-qrcode">
+                                            <div class="qrcode-img weChatBuyQrCode"></div>
+                                            <div class="qrcode-title">买单二维码</div>
+                                        </div>
+                                    </div>
+                                    {if p('citydelivery')}
+                                        <div class="col-md-3">
+                                            <div class="wx-qrcode">
+                                                <div class="qrcode-img weChatDistributionQrCode"></div>
+                                                <div class="qrcode-title">同城配送二维码</div>
+                                            </div>
+                                        </div>
+                                    {/if}
+                                </div>
+                            </div>
+                        {/if}
+                        <!--    小程序码信息  -->
+                        {if p('wxapp')}
+                            <div id="tab-2" class="tab-pane">
+                                <div class="alert alert-warning">
+                                    <div class="linkDiv">
+                                        <span class="linkSpan">商户链接：</span>
+                                        <a class="linkA js-clip" data-url="{php echo str_replace('i='. $_W['uniacid'].'&','',explode('#/',$shopLink)[1])}">
+                                            {php echo str_replace('i='. $_W['uniacid'].'&','',explode('#/',$shopLink)[1])}
+                                        </a>
+                                    </div>
+                                    <div class="linkDiv">
+                                        <span class="linkSpan">买单链接：</span>
+                                        <a class="linkA js-clip" data-url="{php echo str_replace('i='. $_W['uniacid'].'&','',explode('#/',$buyLink)[1])}">
+                                            {php echo str_replace('i='. $_W['uniacid'].'&','',explode('#/',$buyLink)[1])}
+                                        </a>
+                                    </div>
+                                    {if p('citydelivery')}
+                                        <div class="linkDiv">
+                                            <span class="linkSpan">同城配送：</span>
+                                            <a class="linkA js-clip" data-url="{php echo str_replace('i='. $_W['uniacid'].'&','',explode('#/',$distributionLink)[1])}">
+                                                {php echo str_replace('i='. $_W['uniacid'].'&','',explode('#/',$distributionLink)[1])}
+                                            </a>
+                                        </div>
+                                    {/if}
+                                </div>
+                                <div class="row">
+                                    <div class="col-md-{if  p('citydelivery')}4{else}6{/if}">
+                                        <div class="wx-qrcode">
+                                            <div class="qrcode-img">
+                                                {if $wxappShopLink['error'] == 0 && is_array($wxappBuyLink)}
+                                                    <div>{$wxappShopLink['message']}</div>
+                                                {else}
+                                                    <img src="{$wxappShopLink}" >
+                                                {/if}
+                                            </div>
+                                            <div class="qrcode-title">店铺小程序码</div>
+                                        </div>
+                                    </div>
+                                    <div class="col-md-{if  p('citydelivery')}4{else}6{/if}">
+                                        <div class="wx-qrcode">
+                                            <div class="qrcode-img">
+                                                {if $wxappBuyLink['error'] == 0 && is_array($wxappBuyLink)}
+                                                    <div>{$wxappBuyLink['message']}</div>
+                                                {else}
+                                                    <img src="{$wxappBuyLink}" >
+                                                {/if}
+                                            </div>
+                                            <div class="qrcode-title">买单小程序码</div>
+                                        </div>
+                                    </div>
+                                    {if p('citydelivery')}
+                                        <div class="col-md-4">
+                                            <div class="wx-qrcode">
+                                                <div class="qrcode-img">
+                                                    {if $wxappBuyLink['error'] == 0 && is_array($wxappDistributionLink)}
+                                                        <div>{$wxappDistributionLink['message']}</div>
+                                                    {else}
+                                                        <img src="{$wxappDistributionLink}" >
+                                                    {/if}
+                                                </div>
+                                                <div class="qrcode-title">同城配送小程序码</div>
+                                            </div>
+                                        </div>
+                                    {/if}
+                                </div>
+                            </div>
+                        {/if}
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+<script>
+    $(function () {
+        common.copyLink();
+        //选中并且点击第一个按钮
+        $('.qrcodeButton:eq(0)').addClass('active').click();
+        require(['jquery.qrcode'], function(){
+            //生成公众号商户二维码
+            $(".weChatShopQrCode").qrcode($(".weChatShopLink").data('url'));
+            //生成公众号买单二维码
+            $(".weChatBuyQrCode").qrcode($(".weChatBuyLink").data('url'));
+            //生成公众号同城配送
+            if($(".weChatDistributionQrCode").length > 0){
+                $(".weChatDistributionQrCode").qrcode($(".weChatDistributionLink").data('url'));
+            }
+        });
+    });
+</script>
+
+
+
+

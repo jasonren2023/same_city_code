@@ -1,0 +1,263 @@
+<!--------------------------  商家组件群  ----------------------------------->
+<!-- 风格一 -->
+<script type="text/html" id="tpl_show_shop">
+    <div class="drag" data-itemid="<%itemid%>" group_name="<%group_name%>" group_key="<%group_key%>" data-id="<%group_name%>">
+        <div class="diy-public_goods" style="margin-bottom: <%style.marginBottom||'1'%>px;">
+            <%each data as item%>
+            <div class="shangjia">
+                <div class="shangjia-i">
+                    <div class="shangjia-i-t">
+                        <div class="shangjia-i-l">
+                            <img src="<%item.logo%>">
+                        </div>
+                        <div class="shangjia-i-r">
+                            <div class="shangjia-i-r-d">
+                                <div class="shangjia-i-r-t1 over-omit"><%item.storename%></div>
+                                <span class="shopPosition"><i class=""></i>未定位</span>
+                                <div class="shangjia-i-r-t2 over-omit">
+                                    <div class="star star-dark">
+                                        <i class="icon iconfont icon-shoucangxiao"></i>
+                                        <i class="icon iconfont icon-shoucangxiao"></i>
+                                        <i class="icon iconfont icon-shoucangxiao"></i>
+                                        <i class="icon iconfont icon-shoucangxiao"></i>
+                                        <i class="icon iconfont icon-shoucangxiao"></i>
+                                    </div>
+                                    <div class="star star-light">
+                                        <div class="star-width" style="width:<%item.score * 20%>%;">
+                                            <i class="icon iconfont icon-shoucangxiao"></i>
+                                            <i class="icon iconfont icon-shoucangxiao"></i>
+                                            <i class="icon iconfont icon-shoucangxiao"></i>
+                                            <i class="icon iconfont icon-shoucangxiao"></i>
+                                            <i class="icon iconfont icon-shoucangxiao"></i>
+                                        </div>
+                                    </div>
+                                </div>
+                                <div class="shangjia-i-r-t3 over-omit"><%item.storehours%></div>
+                                <div class="shangjia-i-r-t4 over-omit">
+                                    <span>标签一</span>
+                                    <span>标签二</span>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="shangjia-i-b">
+                        <%if item.goods['halfcard']%>
+                        <div class="shangjia-i-b-t1">
+                            <i class="icon iconfont icon-unfold"></i>
+                            <div class="shangjia-i-b-i">
+                                <em class="ka">卡</em><span><%item.goods['halfcard']['name']%></span>
+                            </div>
+                        </div>
+                        <%/if%>
+                        <%if item.goods['active']%>
+                        <div class="shangjia-i-b-t1">
+                            <i class="icon iconfont icon-unfold"></i>
+                            <div class="shangjia-i-b-i">
+                                <em class="qiang">抢</em><span><%item.goods['active']['name']%></span>
+                            </div>
+                        </div>
+                        <%/if%>
+                        <%if item.goods['coupon']%>
+                        <div class="shangjia-i-b-t1">
+                            <i class="icon iconfont icon-unfold"></i>
+                            <div class="shangjia-i-b-i">
+                                <em class="hui">券</em><span><%item.goods['coupon']['name']%></span>
+                            </div>
+                        </div>
+                        <%/if%>
+                        <%if item.goods['fightgroup']%>
+                        <div class="shangjia-i-b-t1">
+                            <i class="icon iconfont icon-unfold"></i>
+                            <div class="shangjia-i-b-i">
+                                <em class="pin">拼</em><span><%item.goods['fightgroup']['name']%></span>
+                            </div>
+                        </div>
+                        <%/if%>
+                        <%if item.goods['packages']%>
+                        <div class="shangjia-i-b-t1">
+                            <i class="icon iconfont icon-unfold"></i>
+                            <div class="shangjia-i-b-i">
+                                <em class="li">礼</em><span><%item.goods['packages']['name']%></span>
+                            </div>
+                        </div>
+                        <%/if%>
+                        <%if item.goods['groupon']%>
+                        <div class="shangjia-i-b-t1">
+                            <i class="icon iconfont icon-unfold"></i>
+                            <div class="shangjia-i-b-i">
+                                <em class="tuan">团</em><span><%item.goods['groupon']['name']%></span>
+                            </div>
+                        </div>
+                        <%/if%>
+                    </div>
+                </div>
+            </div>
+            <%/each%>
+        </div>
+    </div>
+</script>
+<!-- 风格二 -->
+<script type="text/html" id="tpl_show_shop2">
+    <div class="drag" data-itemid="<%itemid%>" group_name="<%group_name%>" group_key="<%group_key%>" data-id="<%group_name%>">
+        <div class="diy-public_goods" style="margin-bottom: <%style.marginBottom||'1'%>px;">
+            <%each data as item%>
+            <div class="shangjia">
+                <div class="shangjia-i">
+                    <div class="shangjia-i-t">
+                        <div class="shangjia-i-l">
+                            <img src="<%item.logo%>">
+                        </div>
+                        <div class="shangjia-i-r">
+                            <div class="shangjia-i-r-d">
+                                <div class="shop-i-r-t1 over-omit"><span class="shopName"><%item.storename%></span></div>
+                                <span class="shopPosition"><i class=""></i>未定位</span>
+                                <div class="shangjia-i-r-t2 over-omit">
+                                    <div class="star star-light">
+                                        <div class="star-width">
+                                            <i class="icon iconfont icon-shoucangxiao"></i>
+                                            <span class="score"><%item.score%></span>
+                                        </div>
+                                    </div>
+                                    <div class="star monthSalenNum">月售:<%item.salesVolume%></div>
+                                </div>
+                                <div class="shangjia-i-r-t3 over-omit"><%item.storehours%></div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <%/each%>
+        </div>
+    </div>
+</script>
+<!-- 风格三 -->
+<script type="text/html" id="tpl_show_shop3">
+    <div class="drag" data-itemid="<%itemid%>" group_name="<%group_name%>" group_key="<%group_key%>" data-id="<%group_name%>">
+        <div class="model-shop model-shop3" style="margin-bottom: <%style.marginBottom||'0'%>px;">
+            <div class="shop-list">
+                <%each data as item%>
+                    <div class="shop-block">
+                        <div class="shop-logo">
+                            <img src="<%imgsrc item.logo%>" />
+                            <div class="shop-distance">
+                                <i class="icon icon-locationfill"></i>500km
+                            </div>
+                        </div>
+                        <div class="shop-info">
+                            <div class="shop-title"><%item.storename%></div>
+                            <div class="shop-sales"><%item.score%>分 | 月售<%item.salesVolume%></div>
+                            <div class="shop-tag">
+                                <%each item.tag as tabItem%>
+                                    <label class="shop-tag-label"><%tabItem%></label>
+                                <%/each%>
+                            </div>
+                        </div>
+                    </div>
+                <%/each%>
+            </div>
+        </div>
+    </div>
+</script>
+<!-- 风格四 -->
+<script type="text/html" id="tpl_show_shop4">
+    <div class="drag" data-itemid="<%itemid%>" group_name="<%group_name%>" group_key="<%group_key%>" data-id="<%group_name%>">
+        <div class="model-shop model-shop4" style="margin-bottom: <%style.marginBottom||'0'%>px;">
+            <div class="shop-list">
+                <%each data as item%>
+                    <div class="shop-block">
+                        <div class="shop-logo">
+                            <img src="<%imgsrc item.logo%>" />
+                            <div class="shop-business-hours"><%item.storehours%></div>
+                        </div>
+                        <div class="shop-info">
+                            <div class="shop-title"><%item.storename%></div>
+                            <div class="shop-sales"><%item.score%>分 | 月售<%item.salesVolume%></div>
+                            <div class="shop-address">
+                                <div class="shop-address-city">
+                                    <i class="icon icon-locationfill"></i>
+                                    <%item.address%>
+                                </div>
+                                <div class="shop-address-distance">500km</div>
+                            </div>
+                            <div class="shop-tag">
+                                <%each item.tag as tabItem%>
+                                <label class="shop-tag-label"><%tabItem%></label>
+                                <%/each%>
+                            </div>
+                        </div>
+                    </div>
+                <%/each%>
+            </div>
+        </div>
+    </div>
+</script>
+<!-- 风格五 -->
+<script type="text/html" id="tpl_show_shop5">
+    <div class="drag" data-itemid="<%itemid%>" group_name="<%group_name%>" group_key="<%group_key%>" data-id="<%group_name%>">
+        <div class="model-shop model-shop5" style="margin-bottom: <%style.marginBottom||'0'%>px;">
+            <div class="shop-list">
+                <div class="shop-top" style="color: <%style.titleColor||'#FFFFFF'%>;">
+                    <img src="<%imgsrc style.top_image%>" />
+                    <div class="shop-top-title"><%style.title%></div>
+                    <%if style.link%>
+                        <div class="shop-more">更多<i class="icon icon-right"></i></div>
+                    <%/if%>
+                </div>
+                <div class="shop-content" style="background-color: <%style.bgColor%>;">
+                    <%each data as item%>
+                        <div class="shop-block">
+                            <div class="shop-logo">
+                                <img src="<%imgsrc item.logo%>" />
+                                <div class="shop-distance">
+                                    <i class="icon icon-locationfill"></i>500km
+                                </div>
+                            </div>
+                            <div class="shop-info">
+                                <div class="shop-title"><%item.storename%></div>
+                                <div class="shop-sales"><%item.score%>分 | 月售<%item.salesVolume%></div>
+                                <div class="shop-tag">
+                                    <%each item.tag as tabItem%>
+                                    <label class="shop-tag-label"><%tabItem%></label>
+                                    <%/each%>
+                                </div>
+                            </div>
+                        </div>
+                    <%/each%>
+                </div>
+            </div>
+        </div>
+    </div>
+</script>
+<!-- 风格六 -->
+<script type="text/html" id="tpl_show_shop6">
+    <div class="drag" data-itemid="<%itemid%>" group_name="<%group_name%>" group_key="<%group_key%>" data-id="<%group_name%>">
+        <div class="model-shop model-shop6" style="margin-bottom: <%style.marginBottom||'0'%>px;background-color: <%style.bgColor%>;">
+            <div class="shop-list">
+                <%each data as item%>
+                    <div class="shop-block">
+                        <img src="<%imgsrc item.logo%>" />
+                        <div class="shop-info">
+                            <div class="shop-title"><%item.storename%></div>
+                            <div class="shop-address">
+                                <div class="shop-city"><i class="icon icon-locationfill"></i><%item.address%></div>
+                                <div class="shop-distance">500m</div>
+                            </div>
+                            <div class="shop-desc">
+                                <div class="shop-desc-block"><i class="icon icon-favorfill"></i> <%item.score%></div>
+                                <div class="shop-desc-block"><i class="icon icon-time"></i> <%item.storehours%></div>
+                                <div class="shop-desc-block"><i class="icon icon-licai"></i> <%item.salesVolume%></div>
+                            </div>
+                            <div class="shop-tag">
+                                <%each item.tag as tabItem%>
+                                    <label class="shop-tag-label"><%tabItem%></label>
+                                <%/each%>
+                            </div>
+                        </div>
+                    </div>
+                <%/each%>
+            </div>
+        </div>
+    </div>
+</script>
+

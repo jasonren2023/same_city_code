@@ -1,0 +1,133 @@
+{php include wl_template('common/header');}
+<style>
+    #memberInfo .form-group{
+        margin-bottom: 10px!important;
+    }
+    #memberInfo .img-photo{
+        max-width: 150px;
+        max-height: 150px;
+        float:left;
+        margin:2px;
+    }
+    #memberInfo video{
+        height: 300px!important;
+        width: auto!important;
+        border: 1px solid #ddd;
+        padding: 5px;
+    }
+    .margin-r-5{
+        margin-right: 5px;
+    }
+</style>
+<ul class="nav nav-tabs">
+    <li><a href="{php echo web_url('dating/member/dynamicList')}">动态列表</a></li>
+    <li class="active"><a href="javascript:;">动态信息</a></li>
+</ul>
+<div class="app-content">
+    <div class="app-form" id="memberInfo">
+        <form class="form-horizontal form form-validate" method="post">
+            <div class="form-group">
+                <label class="col-sm-2 control-label">用户信息</label>
+                <div class="col-sm-9">
+                    <input type="text" class="form-control" disabled="disabled" value="{$info['nickname']}">
+                    <div class="input-group" style="margin-top:2px;">
+                        <img src="{$info['avatar']}" class="img-responsive img-thumbnail" width="132">
+                    </div>
+                </div>
+            </div>
+            <div class="form-group">
+                <label class="col-sm-2 control-label">其他要求</label>
+                <div class="col-sm-9">
+                    <textarea class="form-control" disabled="disabled" style="height: 150px;resize: none;">{$info['content']}</textarea>
+                </div>
+            </div>
+            <div class="form-group">
+                <label class="col-sm-2 control-label">图片信息</label>
+                <div class="col-sm-9" style="padding-top: 6px;">
+                    {if is_array($info['photo_show'])}
+                        {loop $info['photo_show'] $img}
+                            <img src="{$img}" class="img-responsive img-thumbnail img-photo">
+                        {/loop}
+                    {else}
+                        <label class="label label-default label-danger">未上传照片</label>
+                    {/if}
+                </div>
+            </div>
+            <div class="form-group">
+                <label class="col-sm-2 control-label">视频信息</label>
+                <div class="col-sm-9" style="padding-top: 6px;">
+                    {if $info['video']}
+                    <video src="{$info['video_show']}" controls="controls" loop="loop">
+                        您的浏览器不支持 video 标签。请更新或者更换浏览器
+                    </video>
+                    {else}
+                    <label class="label label-default label-danger">未上传视频</label>
+                    {/if}
+                </div>
+            </div>
+            <div class="form-group">
+                <label class="col-sm-2 control-label">发布时间</label>
+                <div class="col-sm-9">
+                    <input class="form-control" type="text" value="{$info['create_time_text']}" disabled="disabled"/>
+                </div>
+            </div>
+            <div class="form-group">
+                <label class="col-sm-2 control-label">浏览量</label>
+                <div class="col-sm-9">
+                    <input class="form-control" type="text" value="{$info['pv']}" disabled="disabled"/>
+                </div>
+            </div>
+            <div class="form-group">
+                <label class="col-sm-2 control-label">地址</label>
+                <div class="col-sm-9">
+                    <input class="form-control" type="text" value="{$info['address']}" disabled="disabled"/>
+                </div>
+            </div>
+            <div class="form-group">
+                <label class="col-sm-2 control-label">审核状态</label>
+                <div class="col-sm-9" style="padding-top: 6px;">
+                    {if $info['status'] == 1}
+                        <label class="label label-default label-info">审核中</label>
+                    {elseif $info['status'] == 2}
+                        <label class="label label-default label-danger">未通过</label>
+                    {else}
+                        <label class="label label-default label-success">显示中</label>
+                    {/if}
+                </div>
+            </div>
+            <div class="form-group {if $info['status'] != 2}hide{/if}">
+                <label class="col-sm-2 control-label">未通过原因</label>
+                <div class="col-sm-9">
+                    <textarea class="form-control" disabled="disabled" style="height: 150px;resize: none;">{$info['reason']}</textarea>
+                </div>
+            </div>
+            <div class="form-group">
+                <label class="col-sm-2 control-label"></label>
+                <div class="col-sm-9">
+                    <a href="{php echo web_url('dating/member/dynamicList')}" class="btn btn-danger min-width margin-r-5">返回</a>
+                    {if $info['status'] == 1}
+                        <a href="{php echo web_url('dating/member/dynamicExamine',['id'=>$info['id'],'status'=>3])}" data-toggle="ajaxPost" data-confirm="确定通过审核？" class="btn btn-primary min-width margin-r-5">通过</a>
+                        <a href="javascript:;" class="btn btn-success btn-reject min-width margin-r-5" data-id="{$info['id']}">驳回</a>
+                    {/if}
+                </div>
+            </div>
+        </form>
+    </div>
+</div>
+<script>
+    //点击驳回
+    $(document).on('click','.btn-reject',function (){
+        let id = $(this).data('id'),
+            url = "{php echo web_url('dating/member/dynamicExamine')}";
+        tip.prompt('请输入驳回原因！', {
+            maxlength: 230,
+            callback: function (reason) {
+                $.post(url,{id:id,status:2,reason:reason},function (res){
+                    if(res.status == 0) tip.msgbox.err(res.result.message);
+                    else tip.msgbox.suc(res.result.message,res.result.url);
+                },'json');
+            }
+        });
+    });
+</script>
+{php include wl_template('common/footer');}

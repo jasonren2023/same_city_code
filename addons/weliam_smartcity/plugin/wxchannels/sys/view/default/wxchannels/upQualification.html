@@ -1,0 +1,48 @@
+{php include wl_template('common/header');}
+<style>
+    .fui-goods-list{width:100%;border-bottom: 1px dashed #e1ecee;padding-top:5px;padding-bottom:5px;}
+    .fui-goods-list span{display: block;padding:0;}
+</style>
+<ul class="nav nav-tabs" id="myTab">
+    <li class="active"><a href="javascript:;">上传类目资质</a></li>
+</ul>
+<div class="app-content">
+    <div class="app-form">
+        <form action="" method="post" class="form-horizontal form form-validate" >
+            <div class="panel panel-default">
+                <div class="panel-heading">上传类目资质</div>
+                <div class="panel-body">
+                    <div class="form-group">
+                        <label class="col-sm-4 control-label must">营业执照或组织机构代码证</label>
+                        <div class="col-sm-7">
+                            {php echo attachment_select_multi('license',$qualif['license']);}
+                        </div>
+                    </div>
+                    <div class="form-group">
+                        <label class="col-sm-4 control-label must">类目所需资质材料</label>
+                        <div class="col-sm-7">
+                            {php echo attachment_select_multi('certificate',$qualif['certificate']);}
+                            <span class="help-block">类目所需资质材料最多十张图片</span>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <div class="form-group">
+                <label class="col-sm-2 control-label"></label>
+                <div class="col-sm-9">
+                    <input type="hidden" name="id" value="{$third_cat_id}" />
+                    <input type="hidden" name="page" value="{$page}" />
+                    <input type="submit" name="submit" value="提交" class="btn btn-primary min-width" />
+                    <input type="hidden" name="token" value="{$_W['token']}" />
+                </div>
+            </div>
+        </form>
+    </div>
+</div>
+{php include wl_template('common/footer');}
+
+
+
+
+
+

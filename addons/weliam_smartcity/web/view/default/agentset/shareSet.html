@@ -1,0 +1,50 @@
+{php include wl_template('common/header');}
+<ul class="nav nav-tabs" id="myTab">
+	<li class="active"><a href="#tab_share">分享设置</a></li>
+</ul>
+<div class="app-content">
+	<div class="app-form">
+		<form action="" method="post" class="form-horizontal form form-validate">
+			<div class="panel-heading">系统设置</div>
+			<div class="tab-content">
+				<div class="form-group">
+					<label class="col-sm-2 control-label">分享标题<span class="must-fill">*</span></label>
+					<div class="col-sm-9">
+						<input type="text" name="share[share_title]" class="form-control" value="{$settings['share_title']}" >
+						<div class="help-block">未设置标题时会默认使用总平台的分享设置</div>
+					</div>
+				</div>
+				<div class="form-group">
+					<label class="col-sm-2 control-label">公众号分享图片</label>
+					<div class="col-sm-9">
+						{php echo attachment_select('share[share_image]', $settings['share_image'])}
+						<div class="help-block">默认分享图片，建议500*500</div>
+					</div>
+				</div>
+				{if p('wxapp')}
+				<div class="form-group">
+					<label class="col-sm-2 control-label">小程序分享图片</label>
+					<div class="col-sm-9">
+						{php echo attachment_select('share[wxapp_share_image]', $settings['wxapp_share_image'])}
+						<div class="help-block">小程序分享图片，建议500*400</div>
+					</div>
+				</div>
+				{/if}
+				<div class="form-group">
+					<label class="col-sm-2 control-label">分享描述</label>
+					<div class="col-sm-9">
+					<input type="text" name="share[share_desc]" class="form-control" value="{$settings['share_desc']}" >
+					</div>
+				</div>
+			</div>
+			<div class="form-group">
+				<label class="col-sm-2 control-label"></label>
+				<div class="col-sm-9">
+					<input type="submit" name="submit" value="提交" class="btn btn-primary min-width" />
+					<input type="hidden" name="token" value="{$_W['token']}" />
+				</div>
+			</div>
+		</form>
+	</div>
+</div>
+{php include wl_template('common/footer');}

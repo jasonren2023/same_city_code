@@ -1,0 +1,68 @@
+<style>
+    #selectShopInfo .shopAvatar img{
+        width: 50px!important;
+        height: 50px!important;
+    }
+    #selectShopInfo .modal-content{
+        max-height: 1000px!important;
+    }
+    #selectShopInfo .modal-body.form-horizontal{
+        padding-bottom: 0!important;
+    }
+    #selectShopInfo svg{
+        display: inline-block!important;
+    }
+</style>
+<div class="modal-dialog" id="selectShopInfo" style="min-width: 60%!important;">
+    <div class="modal-content">
+        <div class="modal-header">
+            <button data-dismiss="modal" class="close" type="button">×</button>
+            <h4 class="modal-title">请选择商户</h4>
+        </div>
+        <div class="modal-body form-horizontal">
+            <!--搜索-->
+            <div class="form-group">
+                <div class="col-sm-10">
+                    <input class="form-control" placeholder="商户名称/id/联系电话..." id="searchShopInfoInput" value=""/>
+                </div>
+                <div class="btn btn-primary searchSelectShopInfo" data-plugin="plugin">搜索</div>
+            </div>
+            <!--表格-->
+            <div class="app-table-list">
+                <div class="panel panel-default" style="height: 500px;overflow: auto;">
+                    <table class="table table-hover table-responsive table-bordered" style="border: 1px solid #e5e5e5;">
+                        <thead>
+                            <tr>
+                                <th class="text-center">店铺头像</th>
+                                <th class="text-center">店铺名称</th>
+                                <th class="text-center">联系方式</th>
+                                <th class="text-center">详细地址</th>
+                                <th class="text-center">操作</th>
+                            </tr>
+                        </thead>
+                        <tbody class="text-center" id="selectShopList">
+                            {php include wl_template('utility/select_shop_tpl');}
+                        </tbody>
+                    </table>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+<script>
+    $("#selectShopInfo").on('click','.searchSelectShopInfo',function () {
+        let search = $("#searchShopInfoInput").val();//获取搜索信息
+        if (!search) {
+            tip.msgbox.err('请输入搜索内容');
+            return;
+        }
+        var url = biz.url('utility/select/selectShopInfo',{search:search,get_type:'list',params:"{$params}"},'');
+        $.ajax(url, {
+            type: "get",
+            dataType: "html",
+            cache: false,
+        }).done(function(html) {
+            $(document).find("#selectShopList").html(html);
+        })
+    });
+</script>

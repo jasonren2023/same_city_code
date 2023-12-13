@@ -1,0 +1,39 @@
+<div class="input-group data-item" style="margin-top: 10px;">
+    <input type="hidden" name="ids[]" class="form-control" value="{$ba['id']}">
+    <span class="input-group-addon">银行名称</span>
+    <select name="name[]" class="form-control" required style="width: 100%;">
+        <option value="SCNX_DEBIT"   {if $ba['bank'] ==  'SCNX_DEBIT' }selected{/if}>四川农信（借记卡）</option>
+        <option value="NCCB_DEBIT"   {if $ba['bank'] ==  'NCCB_DEBIT' }selected{/if}>四川天府银行（借记卡）</option>
+        <option value="ICBC_DEBIT"   {if $ba['bank'] ==  'ICBC_DEBIT' }selected{/if}>工商银行（借记卡）</option>
+        <option value="ICBC_CREDIT"  {if  'ICBC_CREDIT' == $ba['bank']}selected{/if}>工商银行（信用卡）</option>
+        <option value="ABC_DEBIT"    {if 'ABC_DEBIT' == $ba['bank']}selected{/if}   >农业银行（借记卡）</option>
+        <option value="ABC_CREDIT"   {if 'ABC_CREDIT' == $ba['bank']}selected{/if}  >农业银行（信用卡）</option>
+        <option value="PSBC_CREDIT"  {if 'PSBC_CREDIT' == $ba['bank']}selected{/if} >邮储银行（信用卡）</option>
+        <option value="PSBC_DEBIT"   {if 'PSBC_DEBIT' == $ba['bank']}selected{/if}  >邮储银行（借记卡）</option>
+        <option value="CCB_DEBIT"    {if 'CCB_DEBIT' == $ba['bank']}selected{/if}   >建设银行（借记卡）</option>
+        <option value="CCB_CREDIT"   {if 'CCB_CREDIT' == $ba['bank']}selected{/if}  >建设银行（信用卡）</option>
+        <option value="CMB_DEBIT"    {if 'CMB_DEBIT' == $ba['bank']}selected{/if}   >招商银行（借记卡）</option>
+        <option value="CMB_CREDIT"   {if 'CMB_CREDIT' == $ba['bank']}selected{/if}  >招商银行（信用卡）</option>
+        <option value="BOC_DEBIT"    {if 'BOC_DEBIT' == $ba['bank']}selected{/if}   >中国银行（借记卡）</option>
+        <option value="BOC_CREDIT"   {if 'BOC_CREDIT' == $ba['bank']}selected{/if}  >中国银行（信用卡）</option>
+        <option value="COMM_DEBIT"   {if 'COMM_DEBIT' == $ba['bank']}selected{/if}  >交通银行（借记卡）</option>
+        <option value="COMM_CREDIT"  {if 'COMM_CREDIT' == $ba['bank']}selected{/if} >交通银行（信用卡）</option>
+        <option value="SPDB_DEBIT"   {if 'SPDB_DEBIT' == $ba['bank']}selected{/if}  >浦发银行（借记卡）</option>
+        <option value="SPDB_CREDIT"  {if 'SPDB_CREDIT' == $ba['bank']}selected{/if} >浦发银行（信用卡）</option>
+        <option value="GDB_DEBIT"    {if 'GDB_DEBIT' == $ba['bank']}selected{/if}   >广发银行（借记卡）</option>
+        <option value="GDB_CREDIT"   {if 'GDB_CREDIT' == $ba['bank']}selected{/if}  >广发银行（信用卡）</option>
+        <option value="CMBC_DEBIT"   {if 'CMBC_DEBIT' == $ba['bank']}selected{/if}  >民生银行（借记卡）</option>
+        <option value="CMBC_CREDIT"  {if 'CMBC_CREDIT' == $ba['bank']}selected{/if} >民生银行（信用卡）</option>
+        <option value="PAB_DEBIT"    {if 'PAB_DEBIT' == $ba['bank']}selected{/if}   >平安银行（借记卡）</option>
+        <option value="PAB_CREDIT"   {if 'PAB_CREDIT' == $ba['bank']}selected{/if}  >平安银行（信用卡）</option>
+        <option value="CEB_DEBIT"    {if 'CEB_DEBIT' == $ba['bank']}selected{/if}   >光大银行（借记卡）</option>
+        <option value="CEB_CREDIT"   {if 'CEB_CREDIT' == $ba['bank']}selected{/if}  >光大银行（信用卡）</option>
+        <option value="CIB_DEBIT"    {if 'CIB_DEBIT' == $ba['bank']}selected{/if}   >兴业银行（借记卡）</option>
+        <option value="CIB_CREDIT"   {if 'CIB_CREDIT' == $ba['bank']}selected{/if}  >兴业银行（信用卡）</option>
+        <option value="CITIC_DEBIT"  {if 'CITIC_DEBIT' == $ba['bank']}selected{/if} >中信银行（借记卡）</option>
+        <option value="CITIC_CREDIT" {if 'CITIC_CREDIT' == $ba['bank']}selected{/if}>中信银行（信用卡）</option>
+    </select>
+    <span class="input-group-addon">返现比例(%)</span>
+    <input type="text" name="rate[]" class="form-control" value="{$ba['rate']}">
+    <span onclick="removes(this)" class="input-group-addon btn btn-default data-item-delete"><i class="fa fa-remove"></i> 删除</span>
+</div>

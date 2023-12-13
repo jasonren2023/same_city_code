@@ -1,0 +1,124 @@
+{php include wl_template('common/header');}
+<ul class="nav nav-tabs" id="myTab">
+    <li class="active"><a href="javascript:;">订单列表</a></li>
+</ul>
+<div class="app-content">
+    <!--顶部操作-->
+    <div class="app-filter">
+        <div class="filter-list">
+            <form action="" method="get" class="form-horizontal" role="form" id="form1">
+                <input type="hidden" name="c" value="site" />
+                <input type="hidden" name="a" value="entry" />
+                <input type="hidden" name="m" value="{MODULE_NAME}" />
+                <input type="hidden" name="p" value="dating" />
+                <input type="hidden" name="ac" value="matchmaker" />
+                <input type="hidden" name="do" value="orderList" />
+                <input type="hidden" name="status" value="{$_GPC['payfor']}" />
+                <div class="form-group">
+                    <label class="col-sm-2 control-label">付费类型</label>
+                    <div class="col-sm-9">
+                        <div class="btn-group">
+                            <a href="{php echo wl_filter_url('payfor:0');}" class="btn {if intval($_GPC['payfor']) == 0}btn-primary{else}btn-default{/if}">全部</a>
+                            <a href="{php echo wl_filter_url('payfor:1');}" class="btn {if $_GPC['payfor'] == 1}btn-primary{else}btn-default{/if}">置顶</a>
+                            <a href="{php echo wl_filter_url('payfor:2');}" class="btn {if $_GPC['payfor'] == 2}btn-primary{else}btn-default{/if}">红娘入驻</a>
+                            <a href="{php echo wl_filter_url('payfor:3');}" class="btn {if $_GPC['payfor'] == 3}btn-primary{else}btn-default{/if}">开通会员</a>
+                        </div>
+                    </div>
+                </div>
+                <div class="form-group form-inline">
+                    <label class="col-sm-2 control-label">筛选</label>
+                    <div class="col-sm-9">
+                        <select name="keywordtype" class="form-control">
+                            <option value="1" {if $_GPC['keywordtype']==1}selected="selected"{/if}>用户昵称</option>
+                            <option value="2" {if $_GPC['keywordtype']==2}selected="selected"{/if}>订单号</option>
+                        </select>
+                        <input type="text" name="keyword" class="form-control" value="{$_GPC['keyword']}"  placeholder="请输入关键字"/>
+                    </div>
+                </div>
+                <div class="form-group form-inline">
+                    <label class="col-sm-2 control-label">支付时间</label>
+                    <div class="col-sm-9">
+                        {php echo tpl_select_time_info('time_limit', array('starttime' => date('Y-m-d',$starttime), 'endtime' => date('Y-m-d', $endtime)));}
+                    </div>
+                </div>
+                <div class="form-group">
+                    <div class="col-sm-2 control-label"></div>
+                    <div class="col-sm-9">
+                        <button class="btn btn-primary" type="submit">搜索</button>
+                        <a href="{php echo web_url('dating/matchmaker/orderList')}" class="btn btn-danger">清除</a>
+                        <button class="btn btn-default min-width" name="export" type="submit" value="export"><i class="fa fa-download"></i>导出</button>
+                    </div>
+                </div>
+            </form>
+        </div>
+    </div>
+    <!--表格信息-->
+    <div class="app-table-list">
+        <!--列表信息-->
+        <div class="table-responsive order-list">
+            <table class="table table-hover">
+                <thead>
+                    <tr>
+                        <th class="text-center">订单号</th>
+                        <th class="text-center">用户信息</th>
+                        <th class="text-center">下单时间</th>
+                        <th class="text-center">付费类型</th>
+                        <th class="text-center">订单金额</th>
+                        <th class="text-center">支付方式</th>
+                        <th class="text-center">支付时间</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    {loop $list $key $val}
+                        <tr class="text-center">
+                            <td>{$val['orderno']}</td>
+                            <td>
+                                <div style="height: 50px;float: left">
+                                    <div style="width: 50px;height: 50px;float: left;border-radius: 50%;overflow: hidden;">
+                                        <img src="{$val['avatar']}" style="width: 100%;height: 100%"/>
+                                    </div>
+                                    <div style="float:left;height: 50px;line-height: 50px;margin-left: 5px">
+                                        {$val['nickname']}
+                                    </div>
+                                </div>
+                            </td>
+                            <td>{php echo date("Y-m-d H:i",$val['createtime']);}</td>
+                            <td>
+                                <!-- datingTop=置顶，datingMatchmaker=红娘入驻，datingVip=开通会员-->
+                                {if $val['payfor'] == 'datingTop'}
+                                    <label class="label label-primary">置顶</label>
+                                {elseif $val['payfor'] == 'datingMatchmaker'}
+                                    <label class="label label-inverse">红娘入驻</label>
+                                {elseif $val['payfor'] == 'datingVip'}
+                                    <label class="label label-danger">开通会员</label>
+                                {/if}
+                            </td>
+                            <td>{$val['price']}</td>
+                            <td>
+                                {if $val['status'] > 0 && $val['status'] != 5}
+                                    {if $val['paytype']==1}
+                                        <span> <i class="icow icow-yue text-warning" style="font-size: 17px;"></i><span>余额支付</span></span>
+                                    {elseif $val['paytype']==2}
+                                        <span> <i class="icow icow-weixinzhifu text-success" style="font-size: 17px"></i>微信支付</span>
+                                    {elseif $val['paytype']==3}
+                                        <span><i class="icow icow-zhifubaozhifu text-primary" style="font-size: 17px"></i>支付宝支付</span>
+                                    {else}
+                                        <label class='label label-danger'>未知方式</label>
+                                    {/if}
+                                {else}
+                                    <label class='label label-default'>未支付</label>
+                                {/if}
+                            </td>
+                            <td>{if $val['paytime'] > 0}{php echo date("Y-m-d H:i",$val['paytime']);}{/if}</td>
+                        </tr>
+                    {/loop}
+                </tbody>
+            </table>
+        </div>
+        <!--操作按钮 分页信息-->
+        <div class="app-table-foot clearfix">
+            <div class="pull-right">{$pager}</div>
+        </div>
+    </div>
+</div>
+{php include wl_template('common/footer');}

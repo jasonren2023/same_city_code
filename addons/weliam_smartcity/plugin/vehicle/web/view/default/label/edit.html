@@ -1,0 +1,52 @@
+{php include wl_template('common/header');}
+<ul class="nav nav-tabs">
+    <li><a href="{php echo web_url('vehicle/route/labelList')}">标签列表</a></li>
+    <li class="active"><a href="javascript:;">{if $id}编辑{else}添加{/if}标签</a></li>
+</ul>
+<div class="app-content">
+    <div class="app-form">
+        <div class="panel panel-default">
+            <form class="form-horizontal form-validate" method="post">
+                <div class="form-group">
+                    <label class="col-sm-2 control-label">标签名称</label>
+                    <div class="col-sm-9">
+                        <input class="form-control" type="text" required name="data[name]" value="{$info['name']}" maxlength="45"/>
+                    </div>
+                </div>
+                <div class="form-group">
+                    <label class="col-sm-2 control-label">适用场景</label>
+                    <div class="col-sm-9">
+                        <label class="checkbox-inline" style="padding-left: 30px;margin-left: 0;">
+                            <input type="checkbox" name="data[is_passenger]" value="2" {if $info['is_passenger'] == 2}checked="checked"{/if}> 载客
+                        </label>
+                        <label class="checkbox-inline" style="padding-left: 30px;margin-left: 0;">
+                            <input type="checkbox" name="data[is_goods]" value="2" {if $info['is_goods'] == 2}checked="checked"{/if}> 载货
+                        </label>
+                        <label class="checkbox-inline" style="padding-left: 30px;margin-left: 0;">
+                            <input type="checkbox" name="data[are_passenger]" value="2" {if $info['are_passenger'] == 2}checked="checked"{/if}> 找客
+                        </label>
+                        <label class="checkbox-inline" style="padding-left: 30px;margin-left: 0;">
+                            <input type="checkbox" name="data[are_goods]" value="2" {if $info['are_goods'] == 2}checked="checked"{/if}> 找货
+                        </label>
+                        <span class="help-block">请至少选择一项，否则当前标签不生效!</span>
+                    </div>
+                </div>
+                <div class="form-group">
+                    <label class="col-sm-2 control-label">排序</label>
+                    <div class="col-sm-9">
+                        <input class="form-control" type="number" digits="true" name="data[sort]" value="{$info['sort']}" />
+                    </div>
+                </div>
+                <div class="form-group">
+                    <label class="col-sm-2 control-label"></label>
+                    <div class="col-sm-9">
+                        <input type="hidden" name="token" value="{$_W['token']}" />
+                        <input type="hidden" name="id" value="{$id}" />
+                        <input type="submit" name="submit" value="提交" class="btn btn-primary col-sm-1 min-width" />
+                    </div>
+                </div>
+            </form>
+        </div>
+    </div>
+</div>
+{php include wl_template('common/footer');}

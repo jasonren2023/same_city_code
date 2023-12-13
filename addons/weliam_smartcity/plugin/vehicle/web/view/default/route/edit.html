@@ -1,0 +1,375 @@
+{php include wl_template('common/header');}
+<style>
+    select {
+        appearance: none !important;
+        -moz-appearance: none !important;
+        -webkit-appearance: none !important;
+        background: white !important;
+        width: 199px !important;
+    }
+    .city_list{
+        margin-bottom: 15px;
+        border: 1px solid #CCC;
+        padding: 10px;
+        min-height: 45px;
+    }
+    .city_list .city_name{
+        background-color: #e4e4e4;
+        border: 1px solid #e5e6e7;
+        display: inline-block;
+        padding: 0px 5px;
+        border-radius: 5px;
+        font-size: 13px;
+        height: 20px;
+        line-height: 20px;
+        cursor: pointer;
+        margin-right: 5px;
+    }
+    .city_list .city_name span{
+        margin-left: 4px;
+        font-size: 15px;
+
+    }
+</style>
+<ul class="nav nav-tabs">
+    <li><a href="{php echo web_url('vehicle/route/routeList')}">路线列表</a></li>
+    <li class="active"><a href="javascript:;">{if $id}编辑{else}发布{/if}路线</a></li>
+</ul>
+<div class="app-content">
+    <div class="app-form">
+        <div class="panel panel-default" id="vehicleContent">
+            <form class="form-horizontal form-validate" method="post">
+                <div class="form-group">
+                    <label class="col-sm-2 control-label">发布人</label>
+                    <div class="col-sm-9">
+                        <div class="input-group">
+                            <input type="text" value="{$user['nickname']}" class="form-control user_nickname">
+                            <input type="hidden" value="{$user['id']}" class="user_mid">
+                            <span class="btn input-group-addon" data-toggle="selectUser">选择用户</span>
+                        </div>
+                        <div class="input-group" style="margin-top:.5em;">
+                            <img src="{$user['avatar']}" onerror="this.src='./resource/images/nopic.jpg'" class="img-responsive img-thumbnail" width="132" data-times="1">
+                        </div>
+                    </div>
+                </div>
+                <div class="form-group">
+                    <label class="col-sm-2 control-label">发布类型</label>
+                    <div class="col-sm-9">
+                        <label class="radio-inline">
+                            <input type="radio" v-model="info.type" value="1"> 乘客
+                        </label>
+                        <label class="radio-inline">
+                            <input type="radio" v-model="info.type" value="2"> 车主
+                        </label>
+                    </div>
+                </div>
+                <div class="form-group">
+                    <label class="col-sm-2 control-label">运输类型</label>
+                    <div class="col-sm-9">
+                        <label class="radio-inline" v-if="info.type == 1">
+                            <input type="radio" v-model="info.transport_type" value="1"> 载客
+                        </label>
+                        <label class="radio-inline" v-if="info.type == 1">
+                            <input type="radio" v-model="info.transport_type" value="2"> 载货
+                        </label>
+                        <label class="radio-inline" v-if="info.type == 2">
+                            <input type="radio" v-model="info.transport_type" value="3"> 找客
+                        </label>
+                        <label class="radio-inline" v-if="info.type == 2">
+                            <input type="radio" v-model="info.transport_type" value="4"> 找货
+                        </label>
+                    </div>
+                </div>
+                <div class="form-group" v-if="info.transport_type == 1 || info.transport_type == 3">
+                    <label class="col-sm-2 control-label" v-if="info.type == 1">人数</label>
+                    <label class="col-sm-2 control-label" v-else>空位</label>
+                    <div class="col-sm-9">
+                        <input class="form-control" type="number" v-model="info.people">
+                    </div>
+                </div>
+                <div class="form-group" v-if="info.transport_type == 2 || info.transport_type == 4">
+                    <label class="col-sm-2 control-label" v-if="info.type == 1">重量(kg)</label>
+                    <label class="col-sm-2 control-label" v-else>载重(kg)</label>
+                    <div class="col-sm-9">
+                        <input class="form-control" type="number" v-model="info.weight">
+                    </div>
+                </div>
+                <div class="form-group" v-if="info.type == 2">
+                    <label class="col-sm-2 control-label">班次</label>
+                    <div class="col-sm-9">
+                        <label class="radio-inline">
+                            <input type="radio" v-model="info.frequency" value="1"> 一次
+                        </label>
+                        <label class="radio-inline">
+                            <input type="radio" v-model="info.frequency" value="2"> 每天
+                        </label>
+                    </div>
+                </div>
+                <div class="form-group">
+                    <label class="col-sm-2 control-label">出发时间</label>
+                    <div class="col-sm-9">
+                        <div class="input-group">
+                            <input type="text" name="start_time" value="{$info['start_time']}"
+                                   placeholder="请选择日期时间"
+                                   readonly="readonly"
+                                   class="datetimepicker form-control valid"
+                                   style="padding-left: 12px;" aria-invalid="false">
+                        </div>
+                    </div>
+                </div>
+                <div class="form-group">
+                    <label class="col-sm-2 control-label">出发点</label>
+                    <div class="col-sm-9">
+                        <div class="input-group">
+                            <input class="form-control" value="{$info['start_address']}" id="c-start_address" type="text" disabled="disabled" required="required">
+                            <input class="form-control hide" value="{$info['start_lng']}" id="c-start_lng" type="text">
+                            <input class="form-control hide" value="{$info['start_lat']}" id="c-start_lat" type="text">
+                            <span class="btn input-group-addon" data-toggle="addresspicker" data-address-id="c-start_address" data-lng-id="c-start_lng" data-lat-id="c-start_lat">地图定位</span>
+                        </div>
+                    </div>
+                </div>
+                <div class="form-group">
+                    <label class="col-sm-2 control-label">终点</label>
+                    <div class="col-sm-9">
+                        <div class="input-group">
+                            <input class="form-control" value="{$info['end_address']}" id="c-end_address" type="text" disabled="disabled" required="required">
+                            <input class="form-control hide" value="{$info['end_lng']}" id="c-end_lng" type="text">
+                            <input class="form-control hide" value="{$info['end_lat']}" id="c-end_lat" type="text">
+                            <span class="btn input-group-addon" data-toggle="addresspicker" data-address-id="c-end_address" data-lng-id="c-end_lng" data-lat-id="c-end_lat">地图定位</span>
+                        </div>
+                    </div>
+                </div>
+                <div class="form-group">
+                    <label class="col-sm-2 control-label">途径地点</label>
+                    <div class="col-sm-9">
+                        <div class="city_list">
+                            <li class="city_name" v-for="(item,index) in info.pass_by" @click="delPassBy(index)">{{item}}<span>×</span></li>
+                        </div>
+                        <div class="btn btn-info" @click="addPassBy()">添加地点</div>
+                    </div>
+                </div>
+                <div class="form-group">
+                    <label class="col-sm-2 control-label">联系人</label>
+                    <div class="col-sm-9">
+                        <input class="form-control" v-model="info.contacts" type="text">
+                    </div>
+                </div>
+                <div class="form-group">
+                    <label class="col-sm-2 control-label">联系方式</label>
+                    <div class="col-sm-9">
+                        <input class="form-control" v-model="info.contacts_phone" type="text">
+                    </div>
+                </div>
+                <div class="form-group">
+                    <label class="col-sm-2 control-label">标签</label>
+                    <div class="col-sm-9">
+                        <label class="checkbox-inline" style="padding-left: 30px;margin-left: 0;"
+                               v-for="(item,index) in label"
+                               v-if="(info.transport_type == 1 && item.is_passenger == 2)
+                                    || (info.transport_type == 2 && item.is_goods == 2)
+                                    || (info.transport_type == 3 && item.are_passenger == 2)
+                                    || (info.transport_type == 4 && item.are_goods == 2)">
+                            <input type="checkbox" v-model="info.label_id" :value="item.id"> {{item.name}}
+                        </label>
+                    </div>
+                </div>
+                <div class="form-group">
+                    <label class="col-sm-2 control-label">备注</label>
+                    <div class="col-sm-9">
+                        <textarea class="form-control" v-model="info.remarks" style="resize: none;" rows="5"></textarea>
+                    </div>
+                </div>
+                <div class="form-group">
+                    <label class="col-sm-2 control-label">状态</label>
+                    <div class="col-sm-9">
+                        <label class="radio-inline">
+                            <input type="radio" v-model="info.status" value="2"> 待审核
+                        </label>
+                        <label class="radio-inline">
+                            <input type="radio" v-model="info.status" value="3"> 未通过
+                        </label>
+                        <label class="radio-inline">
+                            <input type="radio" v-model="info.status" value="4"> 进行中
+                        </label>
+                        <label class="radio-inline">
+                            <input type="radio" v-model="info.status" value="5"> 已完成
+                        </label>
+                    </div>
+                </div>
+                <div class="form-group" v-if="info.status == 3">
+                    <label class="col-sm-2 control-label">驳回原因</label>
+                    <div class="col-sm-9">
+                        <textarea class="form-control" v-model="info.reason" style="resize: none;" rows="5"></textarea>
+                    </div>
+                </div>
+                <!-- 提交按钮 -->
+                <div class="form-group">
+                    <label class="col-sm-2 control-label"></label>
+                    <div class="col-sm-9">
+                        <input type="hidden" name="token" value="{$_W['token']}" />
+                        <input type="button" @click="submitInfo()" value="提交" class="btn btn-primary col-sm-1 min-width" />
+                    </div>
+                </div>
+            </form>
+        </div>
+    </div>
+</div>
+<script>
+    let recruit = new Vue({
+        el:'#vehicleContent',
+        data:{
+            id:"{$id}",
+            startProvince:JSON.parse('{php echo json_encode($province)}'),//出发城市 - 省列表
+            startCity:JSON.parse('{php echo json_encode($startCity)}'),//出发城市 - 市列表
+            startArea:JSON.parse('{php echo json_encode($startArea)}'),//出发城市 - 区列表
+            endProvince:JSON.parse('{php echo json_encode($province)}'),//终点 - 省列表
+            endCity:JSON.parse('{php echo json_encode($endCity)}'),//终点 - 市列表
+            endArea:JSON.parse('{php echo json_encode($endArea)}'),//终点 - 区列表
+            label:JSON.parse('{php echo json_encode($label)}'),//标签
+            //招聘信息
+            info: JSON.parse('{php echo json_encode($info)}') ? JSON.parse('{php echo json_encode($info)}') : {
+                mid: '',//用户id
+                type: 1,//发布类型:1=乘客,2=车主
+                transport_type: 1,//运输类型:1=载客,2=载货,3=找客,4=找货
+                people: 1,//人数/空位
+                weight: 0,//重量/载重(kg)
+                frequency: 1,//班次:1=一次,2=每天
+                start_time: '',//出发时间
+                start_address: '',//出发点 - 详细地址
+                start_lng: '',//出发点 - 经度
+                start_lat: '',//出发点 - 纬度
+                end_address: '',//终点 - 详细地址
+                end_lng: '',//终点 - 经度
+                end_lat: '',//终点 - 纬度
+                pass_by: {},//途径地点
+                contacts: '',//联系人
+                contacts_phone: '',//联系方式
+                label_id: [],//标签
+                remarks: '',//备注
+                create_time: '',//发布时间
+                pv: '',//浏览量
+                status: 4,//状态:1=待付款,2=待审核,3=未通过,4=进行中,5=已完成
+                reason: '',//驳回原因
+            },
+        },
+        watch: {
+            //改变发布类型时同步修改运输类型
+            'info.type'(){
+                if(this.info.type == 1) this.info.transport_type = 1;
+                else this.info.transport_type = 3;
+            },
+            //运输类型修改  进行标签信息修改
+            'info.transport_type'(){
+                //根据运输类型获取标签列表
+                let list = [];
+                if (this.info.transport_type == 1) list = this.getLabelList('is_passenger');
+                else if (this.info.transport_type == 2) list = this.getLabelList('is_goods');
+                else if (this.info.transport_type == 3) list = this.getLabelList('are_passenger');
+                else if (this.info.transport_type == 4) list = this.getLabelList('are_goods');
+                //循环判断  删除不存在的内容
+                let label_id = this.info.label_id;
+                $.each(label_id,function (k,v) {
+                    if($.inArray(v, list) == -1){
+                        delete label_id[k];
+                    }
+                });
+                //信息重组
+                label_id = Object.values(label_id);
+                this.info.label_id = label_id;
+                this.$forceUpdate();
+            },
+        },
+        methods: {
+            //提交信息
+            submitInfo(){
+                let _this = this,
+                    _info = _this.info;
+                //补充信息 —— 获取发布方信息
+                _info.mid = $(".user_mid").val() ? $(".user_mid").val() : _info.mid ;
+                //补充信息 —— 获取出发点详细地址、经纬度
+                _info.start_address = $("#c-start_address").val() ? $("#c-start_address").val() : _info.start_address;
+                _info.start_lng = $("#c-start_lng").val() ? $("#c-start_lng").val() : _info.start_lng ;
+                _info.start_lat = $("#c-start_lat").val() ? $("#c-start_lat").val() : _info.start_lat ;
+                //补充信息 —— 获取终点详细地址、经纬度
+                _info.end_address = $("#c-end_address").val() ? $("#c-end_address").val() : _info.end_address;
+                _info.end_lng = $("#c-end_lng").val() ? $("#c-end_lng").val() : _info.end_lng ;
+                _info.end_lat = $("#c-end_lat").val() ? $("#c-end_lat").val() : _info.end_lat ;
+                //提交信息
+                let link = "{php echo web_url('vehicle/route/routeEdit');}";
+                $.post(link,{data:_info,id:_this.id},function (res) {
+                    if(res.errno == 1){
+                        tip.alert(res.message,function () {
+                            let href = "{php echo web_url('vehicle/route/routeList');}";
+                            window.location.href = href;
+                        });
+                    }else{
+                        tip.msgbox.err(res.message);
+                    }
+                },'json');
+            },
+            //点击添加途径地点
+            addPassBy(){
+                let _this = this,
+                    passBy = _this.info.pass_by,
+                    length = Object.keys(passBy).length;
+                //判断数量是否已经到达限制
+                if(length >= 10){
+                    tip.alert("数量已达限制");
+                    return false;
+                }
+                //信息处理 地点列表类型改为数组
+                let passByType = typeof passBy;
+                if(passByType != 'array') passBy = Object.values(passBy);
+                //执行添加地点操作
+                tip.prompt('请输入途径地点名称,最大允许添加10个地点!',function (text) {
+                    //判断数组是否已经包含当前地点
+                    if($.inArray(text, passBy) !== -1){
+                        tip.alert("当前地点已经存在");
+                        return false;
+                    }
+                    //添加一个内容
+                    passBy.push(text);
+                    passBy = Object.values(passBy);
+                    passBy = JSON.stringify(passBy);
+                    _this.info.pass_by = JSON.parse(passBy);
+                    _this.$forceUpdate();
+                });
+            },
+            //点击删除途径地点
+            delPassBy(index){
+                let passBy = this.info.pass_by;
+                //删除内容
+                delete passBy[index];
+                //信息重组
+                passBy = Object.values(passBy);
+                this.info.pass_by = passBy;
+                this.$forceUpdate();
+            },
+            //根据条件返回标签内容
+            getLabelList(key){
+                let _this = this,
+                    _list = [];
+                $.each(_this.label,function (k,v) {
+                    if(v[key] == 2) _list.push(v.id);
+                });
+                return _list;
+            },
+        }
+    });
+    //初始化时间选择器
+    require(["datetimepicker"], function(){
+        var option = {
+            lang : "zh",
+            step : 5,
+            timepicker : true,
+            closeOnDateSelect : true,
+            format : "Y-m-d H:i"
+        };
+        $(".datetimepicker[name = 'start_time']").datetimepicker(option);
+    });
+    //出发时间时间被修改
+    $(document).on('change',"[name='start_time']",function (){
+        recruit.info.start_time = $(this).val();
+    });
+</script>
+{php include wl_template('common/footer');}

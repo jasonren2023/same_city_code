@@ -1,0 +1,14 @@
+<div class="input-group data-item" style="margin-top: 10px;">
+    <span class="input-group-addon">规格名</span>
+    <input type="text" name="specname[]" class="form-control" value="{$itmes['name']}">
+    <span class="input-group-addon">活动价￥</span>
+    <input type="number" name="specprice[]" class="form-control" value="{$itmes['price']}">
+    <span class="input-group-addon">市场价￥</span>
+    <input type="number" name="specoldprice[]" class="form-control" value="{$itmes['oldprice']}">
+    <span class="input-group-addon">总库存</span>
+    <input type="number" name="specallstock[]" class="form-control" value="{$itmes['allstock']}">
+    <span class="input-group-addon">每日库存</span>
+    <input type="number" name="specdaystock[]" class="form-control" value="{$itmes['daystock']}">
+    <input type="hidden" name="specids[]" class="form-control" value="{$itmes['id']}">
+    <span onclick="removes(this)" class="input-group-addon btn btn-default data-item-delete"><i class="fa fa-remove"></i> 删除</span>
+</div>

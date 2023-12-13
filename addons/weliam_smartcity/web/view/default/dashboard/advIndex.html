@@ -1,0 +1,197 @@
+{php include wl_template('common/header');}
+<style>
+	.btn-group a{
+		margin: 2px 0!important;
+	}
+</style>
+<ul class="nav nav-tabs">
+	<li class="active"><a href="#">幻灯片</a></li>
+</ul>
+<div class="app-content">
+	<div class="app-filter">
+		<div class="filter-action">
+			<a class="btn btn-primary" href="{php echo web_url('dashboard/adv/edit')}">添加幻灯片</a>
+		</div>
+		<div class="filter-list">
+			<form action="" method="get" class="form-horizontal" role="form" id="form1">
+				<input type="hidden" name="c" value="site">
+				<input type="hidden" name="a" value="entry">
+				<input type="hidden" name="m" value="{MODULE_NAME}">
+				<input type="hidden" name="p" value="dashboard">
+				<input type="hidden" name="ac" value="adv">
+				<input type="hidden" name="do" value="index">
+				<input type="hidden" name="type" value="{$_GPC['type']}">
+				<div class="form-group">
+					<label class="col-sm-2 control-label">请选择类型</label>
+					<div class="col-sm-9">
+						<div class="btn-group">
+							<a href="{php echo wl_filter_url('type:');}" class="btn {if empty($_GPC['type'])}btn-primary{else}btn-default{/if}">全部</a>
+							<a href="{php echo wl_filter_url('type:-1');}" class="btn {if $_GPC['type'] == '-1'}btn-primary{else}btn-default{/if}">首页</a>
+							<a href="{php echo wl_filter_url('type:1');}" class="btn {if $_GPC['type'] == '1'}btn-primary{else}btn-default{/if}">好店</a>
+							<a href="{php echo wl_filter_url('type:2');}" class="btn {if $_GPC['type'] == '2'}btn-primary{else}btn-default{/if}">卡券</a>
+							<a href="{php echo wl_filter_url('type:4');}" class="btn {if $_GPC['type'] == '4'}btn-primary{else}btn-default{/if}">抢购</a>
+							{if p('groupon')}
+							<a href="{php echo wl_filter_url('type:7');}" class="btn {if $_GPC['type'] == '7'}btn-primary{else}btn-default{/if}">团购</a>
+							{/if}
+							{if p('wlfightgroup')}
+							<a href="{php echo wl_filter_url('type:8');}" class="btn {if $_GPC['type'] == '8'}btn-primary{else}btn-default{/if}">拼团</a>
+							{/if}
+							{if p('bargain')}
+							<a href="{php echo wl_filter_url('type:9');}" class="btn {if $_GPC['type'] == '9'}btn-primary{else}btn-default{/if}">砍价</a>
+							{/if}
+							{if p('headline')}
+							<a href="{php echo wl_filter_url('type:10');}" class="btn {if $_GPC['type'] == '10'}btn-primary{else}btn-default{/if}">头条</a>
+							{/if}
+							{if p('citycard')}
+							<a href="{php echo wl_filter_url('type:11');}" class="btn {if $_GPC['type'] == '11'}btn-primary{else}btn-default{/if}">名片</a>
+							{/if}
+							{if p('citydelivery')}
+							<a href="{php echo wl_filter_url('type:12');}" class="btn {if $_GPC['type'] == '12'}btn-primary{else}btn-default{/if}">同城配送</a>
+							{/if}
+							{if p('yellowpage')}
+							<a href="{php echo wl_filter_url('type:13');}" class="btn {if $_GPC['type'] == '13'}btn-primary{else}btn-default{/if}">黄页114</a>
+							{/if}
+							{if p('activity')}
+							<a href="{php echo wl_filter_url('type:14');}" class="btn {if $_GPC['type'] == '14'}btn-primary{else}btn-default{/if}">活动</a>
+							{/if}
+							{if p('recruit')}
+								<a href="{php echo wl_filter_url('type:15');}" class="btn {if $_GPC['type'] == '15'}btn-primary{else}btn-default{/if}">求职招聘</a>
+							{/if}
+							{if p('dating')}
+								<a href="{php echo wl_filter_url('type:16');}" class="btn {if $_GPC['type'] == '16'}btn-primary{else}btn-default{/if}">相亲交友</a>
+							{/if}
+							{if p('vehicle')}
+								<a href="{php echo wl_filter_url('type:17');}" class="btn {if $_GPC['type'] == '17'}btn-primary{else}btn-default{/if}">顺风车</a>
+							{/if}
+							{if p('housekeep')}
+								<a href="{php echo wl_filter_url('type:18');}" class="btn {if $_GPC['type'] == '18'}btn-primary{else}btn-default{/if}">家政服务</a>
+							{/if}
+							{if uniacid_p('mobilerecharge')}
+							<a href="{php echo wl_filter_url('type:19');}" class="btn {if $_GPC['type'] == '19'}btn-primary{else}btn-default{/if}">话费充值</a>
+							{/if}
+							{if file_exists(PATH_MODULE . 'L304.log') && !is_agent() }
+							<a href="{php echo wl_filter_url('type:120');}" class="btn {if $_GPC['type'] == '120'}btn-primary{else}btn-default{/if}">直播列表</a>
+							{/if}
+							{if p('house')}
+							<a href="{php echo wl_filter_url('type:20');}" class="btn {if $_GPC['type'] == '20'}btn-primary{else}btn-default{/if}">房产</a>
+							{/if}
+							<a href="{php echo wl_filter_url('type:21');}" class="btn {if $_GPC['type'] == '20'}btn-primary{else}btn-default{/if}">支付广告</a>
+							{if agent_p('hotel')}
+							<a href="{php echo wl_filter_url('type:22');}" class="btn {if $_GPC['type'] == '22'}btn-primary{else}btn-default{/if}">酒店</a>
+							{/if}
+						</div>
+					</div>
+				</div>
+				<div class="form-group">
+					<label class="col-sm-2 control-label">搜索内容</label>
+					<div class="col-sm-9">
+						<input type="text" name="keyname" class="form-control" value="{$_GPC['keyname']}" placeholder="请输入搜索内容">
+					</div>
+				</div>
+				<div class="form-group">
+					<label class="col-sm-2 control-label"></label>
+					<div class="col-sm-9">
+						<span class="btn btn-primary" id="search">搜索</span>
+					</div>
+				</div>
+			</form>
+		</div>
+	</div>
+	<div class="app-table-list">
+		<div class="table-responsive">
+			<table class="table table-hover table-bordered">
+				<thead>
+					<tr>
+						<th class="text-center">图片</th>
+						<th class="text-center">显示顺序</th>
+						<th class="text-center">标题</th>
+						<th class="text-center">连接</th>
+						<th class="text-center">状态</th>
+						<th class="text-center">位置</th>
+						<th class="text-center">操作</th>
+					</tr>
+				</thead>
+				<tbody>
+					{loop $advs $adv}
+						<tr  class="text-center">
+							<td><img class="scrollLoading" src="{php echo tomedia($adv['thumb'])}" data-url="{php echo tomedia($adv['thumb'])}" onerror="this.src='{php echo tomedia($adv['thumb'])}'" height="50" width="100"/></td>
+							<td>{$adv['displayorder']}</td>
+							<td>{$adv['advname']}</td>
+							<td class="text-lue">{$adv['link']}</td>
+							<td>{php echo tpl_change_status('dashboard/adv/changeStatus&id='.$adv['id'],$adv['enabled'])}</td>
+							<td>
+								{if $adv['type'] == 0 || empty($adv['type'])}
+									首页
+								{else if $adv['type'] == 1}
+									好店
+								{else if $adv['type'] == 2}
+									超级券
+								{else if $adv['type'] == 3}
+									商家折扣
+								{else if $adv['type'] == 4}
+									抢购
+								{else if $adv['type'] == 5}
+									一卡通
+								{else if $adv['type'] == 6}
+									活动
+								{else if $adv['type'] == 8}
+									拼团
+								{else if $adv['type'] == 9}
+									砍价列表
+								{else if $adv['type'] == 7}
+									团购
+								{else if $adv['type'] == 10}
+									头条
+								{else if $adv['type'] == 11}
+									名片
+								{else if $adv['type'] == 12}
+									同城配送
+								{else if $adv['type'] == 13}
+									黄页114
+								{else if $adv['type'] == 14}
+									活动
+								{else if $adv['type'] == 15}
+									求职招聘
+								{else if $adv['type'] == 16}
+									相亲交友
+								{else if $adv['type'] == 17}
+									顺风车
+								{else if $adv['type'] == 18}
+									家政服务
+								{else if $adv['type'] == 19}
+									话费充值
+								{else if $adv['type'] == 120}
+									直播列表
+								{else if $adv['type'] == 20}
+								    房产
+								{else if $adv['type'] == 21}
+									支付广告
+								{else if $adv['type'] == 22}
+									酒店预约
+								{/if}
+							</td>
+							<td>
+								<a class="btn btn-sm btn-warning" href="{php echo web_url('dashboard/adv/edit',array('id'=>$adv['id']))}">编辑</a>
+								<a class="btn btn-sm btn-danger" data-toggle="ajaxRemove" href="{php echo web_url('dashboard/adv/delete',array('id'=>$adv['id']))}" data-confirm="确定删除当前信息?">删除</a>
+							</td>
+						</tr>
+					{/loop}
+				</tbody>
+			</table>
+		</div>
+		<div class="app-table-foot clearfix">
+			<div class="pull-left">
+
+			</div>
+			<div class="pull-right">
+				{$pager}
+			</div>
+		</div>
+	</div>
+</div>
+<script type="text/javascript">
+	$("#search").click(function(){
+		$('#form1')[0].submit();
+	});
+</script>
+{php include wl_template('common/footer');}

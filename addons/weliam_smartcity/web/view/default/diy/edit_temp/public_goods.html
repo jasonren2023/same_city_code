@@ -1,0 +1,147 @@
+<!--------------------------  通用商品组件群  ----------------------------------->
+<!-- 风格一 -->
+<script type="text/html" id="tpl_edit_public_goods">
+    <div class="form-group">
+        <div class="col-sm-2 control-label">背景颜色</div>
+        <div class="col-sm-9">
+            <div class="input-group input-group-sm">
+                <input class="form-control diy-bind color" data-bind-child="style" data-bind="bgColor" value="<%style.bgColor||'#FFFFFF'%>" type="color" />
+                <span class="input-group-addon btn btn-default" onclick="$(this).prev().val('#ffffff').trigger('propertychange')">清除</span>
+            </div>
+        </div>
+    </div>
+    <div class="form-group">
+        <div class="col-sm-2 control-label">外边距</div>
+        <div class="col-sm-9">
+            <div class="form-group">
+                <div class="slider col-sm-8" data-value="<%style.margin||'0'%>" data-min="0" data-max="30"></div>
+                <div class="col-sm-9 control-labe count"><span><%style.margin||'0'%></span>px(像素)</div>
+                <input class="diy-bind input" data-bind-child="style" data-bind="margin" value="<%style.margin%>" type="hidden" />
+            </div>
+        </div>
+    </div>
+    <div class="form-group">
+        <div class="col-sm-2 control-label">内边距</div>
+        <div class="col-sm-9">
+            <div class="form-group">
+                <div class="slider col-sm-8" data-value="<%style.padding||'0'%>" data-min="0" data-max="30"></div>
+                <div class="col-sm-9 control-labe count"><span><%style.padding||'0'%></span>px(像素)</div>
+                <input class="diy-bind input" data-bind-child="style" data-bind="padding" value="<%style.padding%>" type="hidden" />
+            </div>
+        </div>
+    </div>
+    <div class="form-group">
+        <div class="col-sm-2 control-label">下边距</div>
+        <div class="col-sm-9">
+            <div class="form-group">
+                <div class="slider col-sm-8" data-value="<%style.marginBottom%>" data-min="0" data-max="30"></div>
+                <div class="col-sm-9 control-labe count"><span><%style.marginBottom%></span>px(像素)</div>
+                <input class="diy-bind input" data-bind-child="style" data-bind="marginBottom" value="<%style.marginBottom%>" type="hidden" />
+            </div>
+        </div>
+    </div>
+    <div class="form-items indent" data-min="1">
+        <div class="inner">
+            <%each data as item itemid%>
+            <div class="item"  data-id="<%itemid%>">
+                <span class="btn-del" title="删除"></span>
+                <div class="item-image">
+                    <img src="<%item.logo%>" onerror="this.src='../addons/{MODULE_NAME}/web/resource/images/nopic.jpg';"/>
+                    <span class="select_goods selectButton" data-plugin="<%plugin%>" data-id="<%itemid%>">选择商品</span>
+                </div>
+                <div class="item-form">
+                    <div class="input-group" style="margin-bottom:0;">
+                        <span class="input-group-addon btn btn-default">商品名称</span>
+                        <input type="text" class="form-control" disabled value="<%item.goods_name%>" />
+                    </div>
+                    <div class="input-group" style="margin-top:10px;margin-bottom:0; ">
+                        <span class="input-group-addon btn btn-default">店铺名称</span>
+                        <input type="text" class="form-control diy-bind" disabled value="<%item.storename%>" />
+                    </div>
+                </div>
+            </div>
+            <%/each%>
+        </div>
+        <div class="btn btn-w-m btn-block btn-default btn-outline" id="addChild"><i class="fa fa-plus"></i> 添加一个</div>
+    </div>
+</script>
+<!-- 风格二 -->
+<script type="text/html" id="tpl_edit_public_goods2">
+    <div class="form-group">
+        <div class="col-sm-2 control-label">背景颜色</div>
+        <div class="col-sm-9">
+            <div class="input-group input-group-sm">
+                <input class="form-control diy-bind color" data-bind-child="style" data-bind="bgColor" value="<%style.bgColor||'#FFFFFF'%>" type="color" />
+                <span class="input-group-addon btn btn-default" onclick="$(this).prev().val('#ffffff').trigger('propertychange')">清除</span>
+            </div>
+        </div>
+    </div>
+    <div class="form-group">
+        <div class="col-sm-2 control-label">下边距</div>
+        <div class="col-sm-9">
+            <div class="form-group">
+                <div class="slider col-sm-8" data-value="<%style.marginBottom%>" data-min="0" data-max="30"></div>
+                <div class="col-sm-9 control-labe count"><span><%style.marginBottom%></span>px(像素)</div>
+                <input class="diy-bind input" data-bind-child="style" data-bind="marginBottom" value="<%style.marginBottom%>" type="hidden" />
+            </div>
+        </div>
+    </div>
+    <div class="form-group">
+        <div class="col-sm-2 control-label">外边距</div>
+        <div class="col-sm-9">
+            <div class="form-group">
+                <div class="slider col-sm-8" data-value="<%style.margin||'0'%>" data-min="0" data-max="30"></div>
+                <div class="col-sm-9 control-labe count"><span><%style.margin||'0'%></span>px(像素)</div>
+                <input class="diy-bind input" data-bind-child="style" data-bind="margin" value="<%style.margin%>" type="hidden" />
+            </div>
+        </div>
+    </div>
+    <div class="form-group">
+        <div class="col-sm-2 control-label">按钮文字</div>
+        <div class="col-sm-9">
+            <div class="form-group">
+                <input class="form-control diy-bind"  data-bind-child="params" data-bind="button_name" placeholder="请输入按钮文字" value="<%params.button_name%>"/>
+            </div>
+        </div>
+    </div>
+    <div class="form-group">
+        <div class="col-sm-2 control-label">标题</div>
+        <div class="col-sm-9">
+            <div class="form-group">
+                <input class="form-control diy-bind"  data-bind-child="params" data-bind="title" placeholder="请输入标题名称" value="<%params.title%>"/>
+            </div>
+        </div>
+    </div>
+    <div class="form-group">
+        <div class="col-sm-2 control-label">副标题</div>
+        <div class="col-sm-9">
+            <div class="form-group">
+                <input class="form-control diy-bind" maxlength="25" data-bind-child="params" data-bind="sub_title" placeholder="请输入副标题内容" value="<%params.sub_title%>" />
+            </div>
+        </div>
+    </div>
+    <div class="form-items indent" data-min="3" data-max="20">
+        <div class="inner">
+            <%each data as item itemid%>
+            <div class="item" data-id="<%itemid%>">
+                <span class="btn-del" title="删除"></span>
+                <div class="item-image">
+                    <img src="<%item.logo%>" onerror="this.src='../addons/{MODULE_NAME}/web/resource/images/nopic.jpg';"/>
+                    <span class="select_goods selectButton" data-plugin="<%plugin%>" data-id="<%itemid%>">选择商品</span>
+                </div>
+                <div class="item-form">
+                    <div class="input-group" style="margin-bottom:0px; ">
+                        <span class="input-group-addon btn btn-default">商品名称</span>
+                        <input type="text" class="form-control" disabled value="<%item.goods_name%>" />
+                    </div>
+                    <div class="input-group" style="margin-top:10px;margin-bottom:0px; ">
+                        <span class="input-group-addon btn btn-default">店铺名称</span>
+                        <input type="text" class="form-control diy-bind" disabled value="<%item.storename%>" />
+                    </div>
+                </div>
+            </div>
+            <%/each%>
+        </div>
+        <div class="btn btn-w-m btn-block btn-default btn-outline" id="addChild"><i class="fa fa-plus"></i> 添加一个</div>
+    </div>
+</script>

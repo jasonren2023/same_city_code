@@ -1,0 +1,82 @@
+{php include wl_template('common/header');}
+<style>
+    .form-group{max-width: 100%!important;}
+</style>
+<ul class="nav nav-tabs">
+    <li class="active"><a href="#">搜索栏内容</a></li>
+</ul>
+<div class="app-content">
+    <div class="app-form">
+        <form action="" class="form-horizontal form form-validate" method="post">
+            <div class="panel panel-default">
+                <div class="panel-body">
+                    <div class="form-group diymenu">
+                    <label class="col-sm-2 control-label">搜索栏标签页</label>
+                    <div class="col-sm-9">
+                        <div class="app-table-list">
+                            <div class="table-responsive">
+                                <table class="table table-hover">
+                                    <thead>
+                                    <tr>
+                                        <th class="text-center" width="25%">默认名称</th>
+                                        <th class="text-center" width="25%">修改名称</th>
+                                        <th class="text-center" width="25%">排序(数字越大越靠前)</th>
+                                        <th class="text-center" width="25%">按钮开关</th>
+                                    </tr>
+                                    </thead>
+                                    <tbody>
+                                        <tr>
+                                            <td style="text-align: center;">商品</td>
+                                            <td style="text-align: center;"><input type="text" class="form-control" placeholder="商品"  name="plugin[spname]"  value="{$plugin['spname']}"/></td>
+                                            <td style="text-align: center;"><input class="form-control" type="number"  name="plugin[sporder]"  value="{$plugin['sporder']}"/></td>
+                                            <td style="text-align: center;">
+                                                <input type="checkbox" class="js-switch" name="plugin[spstatus]" value="1" {if $plugin['spstatus']}checked="checked" {/if}>
+                                            </td>
+                                        </tr>
+                                        {if agent_p('headline')}
+                                        <tr>
+                                            <td style="text-align: center;">头条</td>
+                                            <td style="text-align: center;"><input type="text" class="form-control" placeholder="头条"  name="plugin[ttname]"  value="{$plugin['ttname']}"/></td>
+                                            <td style="text-align: center;"><input class="form-control" type="number"  name="plugin[ttorder]"  value="{$plugin['ttorder']}"/></td>
+                                            <td style="text-align: center;">
+                                                <input type="checkbox" class="js-switch" name="plugin[ttstatus]" value="1" {if $plugin['ttstatus']}checked="checked" {/if}>
+                                            </td>
+                                        </tr>
+                                        {/if}
+                                        <tr>
+                                            <td style="text-align: center;">店铺</td>
+                                            <td style="text-align: center;"><input type="text" class="form-control" placeholder="店铺"  name="plugin[dpname]"  value="{$plugin['dpname']}"/></td>
+                                            <td style="text-align: center;"><input class="form-control" type="number"  name="plugin[dporder]"  value="{$plugin['dporder']}"/></td>
+                                            <td style="text-align: center;">
+                                                <input type="checkbox" class="js-switch" name="plugin[dpstatus]" value="1" {if $plugin['dpstatus']}checked="checked" {/if}>
+                                            </td>
+                                        </tr>
+                                        {if agent_p('pocket')}
+                                        <tr>
+                                            <td style="text-align: center;">帖子</td>
+                                            <td style="text-align: center;"><input type="text" class="form-control" placeholder="帖子"  name="plugin[tzname]"  value="{$plugin['tzname']}"/></td>
+                                            <td style="text-align: center;"><input class="form-control" type="number"  name="plugin[tzorder]"  value="{$plugin['tzorder']}"/></td>
+                                            <td style="text-align: center;">
+                                                <input type="checkbox" class="js-switch" name="plugin[tzstatus]" value="1" {if $plugin['tzstatus']}checked="checked" {/if}>
+                                            </td>
+                                        </tr>
+                                        {/if}
+                                    </tbody>
+                                </table>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                <div class="form-group">
+                    <label class="col-sm-2 control-label"></label>
+                    <div class="col-sm-9">
+                        <input type="submit" name="submit" value="保存" class="btn btn-primary min-width" />
+                        <input type="hidden" name="token" value="{$_W['token']}" />
+                    </div>
+                </div>
+            </div>
+    </div>
+    </form>
+</div>
+</div>
+{php include wl_template('common/footer');}

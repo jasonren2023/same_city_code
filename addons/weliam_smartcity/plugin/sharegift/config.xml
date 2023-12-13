@@ -1,0 +1,29 @@
+<?xml version="1.0" encoding="utf-8"?>
+<manifest>
+	<application>
+		<name><![CDATA[分享有礼]]></name>
+		<identifie><![CDATA[sharegift]]></identifie>
+		<version><![CDATA[1.0.0]]></version>
+		<type><![CDATA[interact]]></type>
+		<description><![CDATA[分享降价或者拿佣金]]></description>
+		<author><![CDATA[微连科技]]></author>
+		<url><![CDATA[http://www.weliam.cn/]]></url>
+	</application>
+	<setting>
+		<agent embed="false" />
+		<system embed="true" />
+		<task embed="true" />
+	</setting>
+	<agentmenu>
+	</agentmenu>
+	<systemmenu>
+		<menu title="记录" font="fa-inbox">
+			<entry title="分享记录" do="sharerecord" ac="sharebase" iscover="true"/>
+			<entry title="佣金明细" do="sharecurrent" ac="sharebase"/>
+			<entry title="提现记录" do="shareapply" ac="sharebase"/>
+		</menu>
+		<menu title="设置" font="fa-inbox">
+			<entry title="基础设置" do="baseset" ac="sharebase" />
+		</menu>
+	</systemmenu>
+</manifest>

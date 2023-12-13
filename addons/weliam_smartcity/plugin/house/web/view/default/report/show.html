@@ -1,0 +1,140 @@
+{php include wl_template('common/header');}
+<script type="text/javascript" src="{URL_WEB_JS}diyarea.js"></script>
+<style>
+    #memberInfo .form-group{
+        margin-bottom: 10px!important;
+    }
+    #memberInfo .img-photo{
+        max-width: 150px;
+        max-height: 150px;
+        float:left;
+        margin:2px;
+    }
+    #memberInfo video{
+        height: 300px!important;
+        width: auto!important;
+        border: 1px solid #ddd;
+        padding: 5px;
+    }
+    .margin-r-5{
+        margin-right: 5px;
+    }
+</style>
+<ul class="nav nav-tabs" id="myTab">
+    <li class="active"><a href="#tab_basic">基础信息</a></li>
+    <!--<li><a href="#tab_contact">联系方式</a></li>-->
+    <!--<li><a href="#tab_requirement">择偶要求</a></li>-->
+    <!--<li><a href="#tab_personality">个性信息</a></li>-->
+    <!--<li><a href="#tab_other">其他信息</a></li>-->
+</ul>
+<div class="app-content">
+    <div class="app-form" id="memberInfo">
+        <form class="form-horizontal form form-validate" method="post">
+            <div class="tab-content">
+                <!-- 基本信息 -->
+                <div class="tab-pane active" id="tab_basic">
+                    <div class="panel panel-default">
+                        <div class="panel-heading">基本信息</div>
+                        <div class="panel-body">
+                            <!--{if info['status']!=2}-->
+                            <div class="form-group">
+                                <label class="col-sm-2 control-label">标题</label>
+                                <div class="col-sm-9">
+                                    <input class="form-control" disabled="disabled" type="text" name="info[title]" value="{$info['title']}"  />
+                                </div>
+                            </div>
+                            <!--{/if}-->
+                            <div class="form-group">
+                                <label class="col-sm-2 control-label">描述</label>
+                                <div class="col-sm-9">
+                                    <textarea name="info[describe]" class="form-control" disabled="disabled">{$info['describe']}</textarea>
+                                </div>
+                            </div>
+
+                            <div class="form-group">
+                                <label class="col-sm-2 control-label">相册<span class="form-must">*</span></label>
+                                <div class="col-sm-9">
+                                    {php echo attachment_select_multi('info[images]',$info['images']);}
+                                </div>
+                            </div>
+
+                            <div class="form-group" id="video-info">
+                                <label class="col-sm-2 control-label">视频</label>
+                                <div class="col-sm-9">
+                                   <div class="input-group">
+                                        <input type="text" value="{$info['videos']}" name="info[videos]" class="form-control" autocomplete="off" id="cimg-videourl">
+                                        <span class="input-group-btn">
+											<button class="btn btn-default" type="button" data-toggle="selectVideo" data-input="#cimg-videourl" data-img="#pimg-videourl" >选择媒体文件</button>
+										</span>
+                                    </div>
+                                    <div class="{if $info['videos']}show{else}hide{/if}" style="width: 300px;height: 300px;">
+                                        <video style="max-height: 300px;" src="{$info['videos']}" controls="controls">
+                                            您的浏览器不支持该视频播放，请更新浏览器或更换浏览器。
+                                        </video>
+                                    </div>
+                                </div>
+                            </div>
+                            
+                            <div class="form-group">
+                                <label class="col-sm-2 control-label">处理结果<span class="form-must">*</span></label>
+                                <div class="col-sm-9">
+                                    <textarea name="info[result]" required class="form-control" {if $info['status']!=1} disabled="disabled" {/if}>{$info['result']}</textarea>
+                                </div>
+                            </div>
+
+
+
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <div class="form-group">
+                <label class="col-sm-2 control-label"></label>
+                <div class="col-sm-9">
+                    {if $info['status']==1}
+                    <input type="submit" name="submit" value="提交" class="btn btn-primary min-width" />
+                    {/if}
+                    <input type="hidden" name="token" value="{$_W['token']}" />
+                    <input type="hidden" name="id" value="{$_GPC['id']}" />
+
+                    <a href="{php echo web_url('house/House/reportList')}" class="btn btn-danger min-width margin-r-5">返回</a>
+                </div>
+            </div>
+        </form>
+    </div>
+</div>
+<script>
+    let two_id = "{php echo $info['area_two_id']}";
+    /**
+     * 分类二级联动
+     * @type {Array}
+     */
+    $("#oneID").on("change", function () {
+        //删除现有的二级分类信息
+        $("#twoID option:gt(0)").remove();
+        //获取参数信息
+        var id = $(this).val(),
+            list = [],
+            html = '';
+        //请求后台获取下级菜单
+        if(id > 0){
+            $.post("{php echo web_url('house/House/getSubClass')}",{id:id}, function(data){
+                list = data['data'];
+                //根据内容生成html
+                if (list) {
+                    $.each(list, function (k, v) {
+                        console.log(list)
+                        if(v['id'] == two_id){
+                            html += "<option value='" + v['id'] + "' selected>" + v['name'] + "</option>";
+                        }else{
+                            html += "<option value='" + v['id'] + "'  >" + v['name'] + "</option>";
+                        }
+                    });
+                }
+                //加载新的内容信息
+                $("#twoID").append(html);
+            }, 'json');
+        }
+    });
+</script>
+{php include wl_template('common/footer');}

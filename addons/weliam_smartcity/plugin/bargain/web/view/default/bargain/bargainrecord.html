@@ -1,0 +1,154 @@
+{php include wl_template('common/header');}
+<style>
+	.image-content{
+		width: 50px;
+		height: 50px;
+		display: inline-block;
+		float: left;
+		margin-right: 10px;
+	}
+	.image-content img{
+		width: 100%;
+		height: 100%;
+	}
+	.text-content{
+		float: left;
+		display: inline-block;
+		width: calc(100% - 60px);
+	}
+	.shop-name{
+		word-break:break-all;
+		display:-webkit-box;/**对象作为伸缩盒子模型展示**/
+		-webkit-box-orient:vertical;/**设置或检索伸缩盒子对象的子元素的排列方式**/
+		-webkit-line-clamp:3;/**显示的行数**/
+		overflow:hidden;/**隐藏超出的内容**/
+	}
+</style>
+<ul class="nav nav-tabs">
+	<li class="active"><a href="{php echo web_url('bargain/bargain_web/bargainrecord')}">砍价记录</a></li>
+</ul>
+<div class="app-content">
+	<div class="app-filter">
+		<div class="filter-list">
+			<form action="" method="get" class="form-horizontal" role="form" id="form1">
+				<input type="hidden" name="c" value="site" />
+				<input type="hidden" name="a" value="entry" />
+				<input type="hidden" name="m" value="{MODULE_NAME}" />
+				<input type="hidden" name="p" value="bargain" />
+				<input type="hidden" name="ac" value="bargain_web" />
+				<input type="hidden" name="do" value="bargainrecord" />
+				<div class="form-group form-inline">
+					<label class="col-sm-2 control-label">关键字</label>
+					<div class="col-sm-9">
+						<select name="keywordtype" class="form-control">
+							<option value="">关键字类型</option>
+							<option value="1" {if $_GPC['keywordtype']==1}selected="selected"{/if}>商品ID</option>
+							<option value="2" {if $_GPC['keywordtype']==2}selected="selected"{/if}>活动ID</option>
+							<option value="3" {if $_GPC['keywordtype']==3}selected="selected"{/if}>发起人ID</option>
+							<option value="4" {if $_GPC['keywordtype']==4}selected="selected"{/if}>帮砍者ID</option>
+							<option value="5" {if $_GPC['keywordtype']==5}selected="selected"{/if}>商品名称</option>
+							<option value="6" {if $_GPC['keywordtype']==6}selected="selected"{/if}>发起人昵称</option>
+							<option value="7" {if $_GPC['keywordtype']==7}selected="selected"{/if}>帮砍者昵称</option>
+						</select>
+						<input type="text" name="keyword" class="form-control" value="{$_GPC['keyword']}"  placeholder="请输入关键字"/>
+                    </div>
+				</div>
+				<div class="form-group">
+					<label class="col-sm-2 control-label">砍价时间</label>
+					<div class="col-sm-9">
+						{php echo tpl_select_time_info('time_limit', array('starttime' => date('Y-m-d',$starttime), 'endtime' => date('Y-m-d', $endtime)));}
+					</div>
+				</div>
+				<div class="form-group">
+					<label class="col-sm-2 control-label"></label>
+					<div class="col-sm-9">
+						<button class="btn btn-primary" id="search">筛选</button>
+					</div>
+				</div>
+			</form>
+		</div>
+	</div>		
+	<div class="app-table-list">
+		<div class="table-responsive">
+			<table id="de1" class="table table-hover table-bordered">
+				<thead>
+					<tr>
+						<th class="text-center" width="5%">活动ID</th>
+						<th class="text-center" width="25%">商品</th>
+						<th class="text-center" width="15%">所属商家</th>
+						<th class="text-center" width="15%">发起人</th>
+						<th class="text-center" width="15%">帮砍好友</th>
+						<th class="text-center" width="10%">砍价/现价</th>
+						<th class="text-center" width="15%">时间</th>
+					</tr>
+				</thead>
+				<tbody>
+				{loop $records $item}
+				<tr class="text-center">
+					<td>
+						<center>{php echo $item['userid']}</center>
+					</td>
+					<!--商品-->
+					<td>
+						<div class="image-content">
+							<img src="{php echo tomedia($item['logo'])}" >
+						</div>
+						<div class="text-content text-left">
+							<div class="shop-name">{$item['gname']}</div><br/>
+							商品ID：{$item['activityid']}
+						</div>
+					</td>
+					<!--所属商家-->
+					<td>
+						<div class="image-content">
+							<img src="{php echo tomedia($item['merchantlogo'])}" >
+						</div>
+						<div class="text-content text-left">
+							<div class="shop-name">{$item['storename']}</div><br/>
+							商户ID：{$item['sid']}
+						</div>
+					</td>
+					<!--发起人-->
+					<td>
+						<div class="image-content">
+							<img src="{php echo tomedia($item['useravatar'])}" >
+						</div>
+						<div class="text-content text-left">
+							<div class="shop-name">{$item['username']}</div><br/>
+							发起人ID：{$item['authorid']}
+						</div>
+					</td>
+					<!--帮砍好友-->
+					<td>
+						<div class="image-content">
+							<img src="{php echo tomedia($item['avatar'])}" >
+						</div>
+						<div class="text-content text-left">
+							<div class="shop-name">{$item['nickname']}</div><br/>
+							帮砍好友ID：{$item['mid']}
+						</div>
+					</td>
+					<!--金额-->
+					<td>
+						<span><span style="color: orangered;">￥{$item['bargainprice']}</span> / ￥{$item['afterprice']}</span>
+					</td>
+					<!--时间-->
+					<td>
+						{$item['createtime']}
+					</td>
+				</tr>
+				{/loop}
+				</tbody>
+			</table>
+		</div>
+		<div class="app-table-foot clearfix">
+			<div class="pull-left">
+				
+			</div>
+			<div class="pull-right">
+				{$pager}
+			</div>
+		</div>
+	</div>
+</div>			
+{php include wl_template('common/footer');}

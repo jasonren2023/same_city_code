@@ -1,0 +1,71 @@
+<div class="modal-dialog" id="selectLiveGoodsInfo" style="min-width: 60%!important;">
+    <!--css样式-->
+    <style>
+        #selectLiveGoodsInfo{
+            padding-right: 4px;
+            position: fixed;
+            top: 15%;
+            left: 25%;
+        }
+        #selectLiveGoodsList .userAvatar img{
+            width: 50px!important;
+            height: 50px!important;
+        }
+        #selectLiveGoodsList .modal-content{
+            max-height: 1000px!important;
+        }
+        #selectLiveGoodsList .modal-body.form-horizontal{
+            padding-bottom: 0!important;
+        }
+        #selectLiveGoodsList svg{
+            display: inline-block!important;
+        }
+    </style>
+    <!--列表信息-->
+    <div class="modal-content">
+        <div class="modal-header">
+            <button data-dismiss="modal" class="close" type="button">×</button>
+            <h4 class="modal-title">请选择商品</h4>
+        </div>
+        <div class="modal-body form-horizontal">
+            <div class="app-table-list" id="selectLiveGoodsList">
+                {php include wl_template('goods/select_goods');}
+            </div>
+        </div>
+    </div>
+    <!--js样式-->
+    <script>
+        /**
+         * 分页操作
+         */
+        $('#selectLiveGoodsList').on('click','.pull-right li a',function (event) {
+            //禁止跳转
+            event.preventDefault();
+            //参数信息获取
+            let _this = $(this),
+                href = _this.attr('href');
+            //请求获取信息
+            $.ajax(href, {
+                data:{is_block:1},
+                type: "POST",
+                dataType: "html",
+                cache: false,
+            }).done(function(html) {
+                $(document).find("#selectLiveGoodsList").html(html);
+            });
+            return false;
+        });
+        /**
+         * 选中商品 调用方法进行处理
+         */
+        $('#selectLiveGoodsList').on('click','.selectedLiveGoods',function () {
+            //基本参数信息获取
+            let _this = $(this),
+                params = _this.data('params');
+            //调用处理方法
+            liveGoodsSelected(params);
+            //自动关闭选择器
+            $(document).find("#closeButton").click();
+        });
+    </script>
+</div>

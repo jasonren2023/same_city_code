@@ -1,0 +1,60 @@
+<?xml version="1.0" encoding="utf-8"?>
+<manifest>
+	<application>
+		<name><![CDATA[房产信息]]></name>
+		<identifie><![CDATA[house]]></identifie>
+		<version><![CDATA[1.0.0]]></version>
+		<type><![CDATA[expand]]></type>
+		<description><![CDATA[足不出户了解周边房源]]></description>
+		<author><![CDATA[微连科技]]></author>
+		<url><![CDATA[http://www.weliam.cn/]]></url>
+	</application>
+	<setting>
+		<agent embed="true" />
+		<store embed="true" />
+		<system embed="true" />
+		<task embed="true" />
+	</setting>
+	<storemenu>
+		<menu title="房产管理" font="fa-inbox" >
+			<entry title="新房管理" ac="House" do="newHouseList" iscover="true"></entry>
+			<entry title="租房管理" ac="House" do="rentingList"></entry>
+			<entry title="二手房管理" ac="House" do="oldHouseList"></entry>
+		</menu>
+		<menu title="顾问管理" font="fa-inbox">
+			<entry title="顾问管理" ac="Adviser" do="adviserList"></entry>
+		</menu>
+	</storemenu>
+	<agentmenu>
+		<menu title="房产管理" font="fa-inbox" >
+			<entry title="小区管理" ac="House" do="apartmentList" iscover="true"></entry>
+			<entry title="新房管理" ac="House" do="newHouseList"></entry>
+			<entry title="租房管理" ac="House" do="rentingList"></entry>
+			<entry title="二手房管理" ac="House" do="oldHouseList"></entry>
+			<entry title="标签管理" ac="House" do="labelList" ></entry>
+			<entry title="举报反馈" ac="House" do="reportlist"></entry>
+		</menu>
+		<menu title="顾问管理" font="fa-inbox">
+			<entry title="顾问管理" ac="Adviser" do="adviserList"></entry>
+		</menu>
+		<menu title="设置" font="fa-inbox" >
+			<entry title="基础设置" ac="BasicSetting" do="basicsetting"></entry>
+		</menu>
+	</agentmenu>
+	<systemmenu>
+		<menu title="房产管理" font="fa-inbox" >
+			<entry title="小区管理" ac="House" do="apartmentList"></entry>
+			<entry title="新房管理" ac="House" do="newHouseList"></entry>
+			<entry title="租房管理" ac="House" do="rentingList"></entry>
+			<entry title="二手房管理" ac="House" do="oldHouseList"></entry>
+			<entry title="标签管理" ac="House" do="labelList" iscover="true"></entry>
+			<entry title="举报反馈" ac="House" do="reportlist"></entry>
+		</menu>
+		<menu title="顾问管理" font="fa-inbox">
+			<entry title="顾问管理" ac="Adviser" do="adviserList"></entry>
+		</menu>
+		<menu title="设置" font="fa-inbox" >
+			<entry title="基础设置" ac="BasicSetting" do="basicsetting"></entry>
+		</menu>
+	</systemmenu>
+</manifest>

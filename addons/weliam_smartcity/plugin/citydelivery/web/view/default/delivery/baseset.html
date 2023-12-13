@@ -1,0 +1,203 @@
+{php include wl_template('common/header');}
+<ul class="nav nav-tabs" id="myTab">
+	<li class="active"><a href="#tab_api">接口设置</a></li>
+    <li ><a href="#tab_share">分享设置</a></li>
+</ul>
+<div class="app-content">
+    <div class="app-form">
+        <form action="" method="post" class="form-horizontal form-validate" id="setting-form">
+            <div class="panel panel-default">
+                <div class="panel-heading">配送设置</div>
+                <div class="panel-body">
+                    <div class="tab-content">
+                    	<div class="tab-pane active" id="tab_api">
+                    		
+                    		<div class="form-group">
+								<label class="col-sm-2 control-label">跑腿公司</label>
+								<div class="col-sm-9">
+									<label class="radio-inline" onclick="changeapi(0)">
+										<input type="radio" class="form-control" name="base[type]" value="0" {if $base['type'] == 0 || empty($base['type'])}checked="checked"{/if}> 按总后台设置
+									</label>
+									<label class="radio-inline" onclick="changeapi(3)">
+										<input type="radio" class="form-control" name="base[type]" value="3" {if $base['type'] == 3}checked="checked"{/if}> {if $_W['wlsetting']['trade']['maketext']}{$_W['wlsetting']['trade']['maketext']}{else}码科{/if}
+									</label>
+									<label class="radio-inline" onclick="changeapi(1)">
+										<input type="radio" class="form-control" name="base[type]" value="1" {if $base['type'] == 1}checked="checked"{/if}> 达达
+									</label>
+									<label class="radio-inline" onclick="changeapi(2)">
+										<input type="radio" class="form-control" name="base[type]" value="2" {if $base['type'] == 2}checked="checked"{/if}> UU跑腿
+									</label>
+								</div>
+							</div>
+							
+							<div id="make" {if $base['type'] != 3} style="display: none;"  {/if}>
+								<div class="form-group">
+									<label class="col-sm-2 control-label">{if $_W['wlsetting']['trade']['maketext']}{$_W['wlsetting']['trade']['maketext']}{else}码科{/if}跑腿系统域名</label>
+									<div class="col-sm-9">
+										<input type="text" class="form-control" name="make[domain]" value="{$make['domain']}" />
+										<span class="help-block">安装{if $_W['wlsetting']['trade']['maketext']}{$_W['wlsetting']['trade']['maketext']}{else}码科{/if}跑腿系统的域名，默认使用智慧城市当前域名,结尾需要'/'。</span>
+									</div>
+								</div>
+								<div class="form-group">
+									<label class="col-sm-2 control-label">小程序Appid</label>
+									<div class="col-sm-9">
+										<input type="text" class="form-control"  name="make[appid]" value="{$make['appid']}" />
+										<span class="help-block">{if $_W['wlsetting']['trade']['maketext']}{$_W['wlsetting']['trade']['maketext']}{else}码科{/if}跑腿的小程序appid</span>
+									</div>
+								</div>
+								<div class="form-group">
+									<label class="col-sm-2 control-label">对接Token</label>
+									<div class="col-sm-9">
+										<input type="text" class="form-control" name="make[token]" value="{$make['token']}" />
+										<span class="help-block">{if $_W['wlsetting']['trade']['maketext']}{$_W['wlsetting']['trade']['maketext']}{else}码科{/if}跑腿系统生成的对接token参数</span>
+									</div>
+								</div>
+							</div>
+							
+							<div id="dada" {if $base['type'] != 1} style="display: none;"  {/if} >
+								<div class="form-group">
+									<label class="col-sm-2 control-label">app_key</label>
+									<div class="col-sm-9">
+										<input type="text" class="form-control" name="dada[appKey]" value="{$dada['appKey']}" />
+										<span class="help-block">达达开发者账号app_key</span>
+									</div>
+								</div>
+								<div class="form-group">
+									<label class="col-sm-2 control-label">app_secret</label>
+									<div class="col-sm-9">
+										<input type="text" class="form-control" name="dada[appSecret]" value="{$dada['appSecret']}"/>
+										<span class="help-block">达达开发者账号app_secret</span>
+									</div>
+								</div>
+							</div>
+                    		
+                            <div class="form-group" id="dadasource" {if $base['type'] == 3 || $base['type'] == 2 || ($apiset['citydelivery']['type'] != 1 && $base['type'] != 1) } style="display: none;" {/if} >
+                                <label class="col-sm-2 control-label">达达商户编号</label>
+                                <div class="col-sm-9">
+                                    <input type="text" name="base[dada_source_id]" class="form-control" value="{$base['dada_source_id']}" />
+                                    <span class="help-block">达达平台商户编号</span>
+                                </div>
+                            </div>
+                            
+                            <div  id="UUpt" {if $base['type'] != 2} style="display: none;"  {/if} >
+								<div class="form-group">
+									<label class="col-sm-2 control-label">APPID</label>
+									<div class="col-sm-9">
+										<input type="text" class="form-control" name="UUpt[appid]" value="{$UUpt['appid']}"/>
+										<span class="help-block">UU跑腿应用appid</span>
+									</div>
+								</div>
+								<div class="form-group">
+									<label class="col-sm-2 control-label">APPKEY</label>
+									<div class="col-sm-9">
+										<input type="text" class="form-control" name="UUpt[appkey]" value="{$UUpt['appkey']}"/>
+										<span class="help-block">UU跑腿应用appkey</span>
+									</div>
+								</div>
+								<div class="form-group">
+									<label class="col-sm-2 control-label">OPENID</label>
+									<div class="col-sm-9">
+										<input type="text" class="form-control" name="UUpt[openid]" value="{$UUpt['openid']}"/>
+										<span class="help-block">UU跑腿应用openid</span>
+									</div>
+								</div>
+							</div>
+                            
+                            
+                            <div class="form-group">
+                                <label class="col-sm-2 control-label">首页社群</label>
+                                <div class="col-sm-9">
+                                    <select name="base[communityid]" class="form-control chosen-select">
+                                        <option value="0" >不显示社群</option>
+                                        {loop $communitylist $key $val}
+                                        <option value="{$val['id']}" {if $val['id'] == $base['communityid']}selected{/if}>{$val['communname']}</option>
+                                        {/loop}
+                                    </select>
+                                    <span class="help-block">请选择首页是否显示社群</span>
+                                </div>
+                            </div>
+                    		
+                    	</div>
+                    	
+                    	
+                    	
+                        <div class="tab-pane" id="tab_share">
+                           
+                            <div class="alert alert-info">
+                                <b>适用模板变量：[昵称] [时间] [系统名称]</b>
+                            </div>
+                            <div class="form-group">
+                                <label class="col-sm-2 control-label">分享标题</label>
+                                <div class="col-sm-9">
+                                    <input type="text" name="base[share_title]" class="form-control" value="{$base['share_title']}" />
+                                </div>
+                            </div>
+                            <div class="form-group">
+                                <label class="col-sm-2 control-label">分享图片</label>
+                                <div class="col-sm-9">
+                                    {php echo attachment_select('base[share_image]', $base['share_image']);}
+                                    <span class="help-block">推荐图片尺寸500X500</span>
+                                </div>
+                            </div>
+                            <div class="form-group">
+                                <label class="col-sm-2 control-label">分享描述</label>
+                                <div class="col-sm-9">
+                                    <input type="text" name="base[share_desc]" class="form-control" value="{$base['share_desc']}" />
+                                </div>
+                            </div>
+                        
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <div class="form-group">
+                <label class="col-sm-2 control-label"></label>
+                <div class="col-sm-9">
+                    <input type="submit" name="submit" value="提交" class="btn btn-primary min-width" />
+                    <input type="hidden" name="token" value="{$_W['token']}" />
+                </div>
+            </div>
+        </form>
+    </div>
+</div>
+<script>
+    $(function() {
+        window.optionchanged = false;
+        $('#myTab a').click(function(e) {
+            e.preventDefault(); //阻止a链接的跳转行为
+            $(this).tab('show'); //显示当前选中的链接及关联的content
+        })
+    });
+    
+    var apitype = "{$apiset['citydelivery']['type']}";
+    
+    function changeapi(flag){
+    	if(flag == 0){
+    		$('#make').hide();
+    		$('#dada').hide();
+    		$('#UUpt').hide();
+    		if(apitype == 1){
+    			$('#dadasource').show();
+    		}else{
+    			$('#dadasource').hide();
+    		}
+    	}else if(flag == 1){
+    		$('#make').hide();
+    		$('#dada').show();
+    		$('#UUpt').hide();
+    		$('#dadasource').show();
+    	}else if(flag == 2){
+    		$('#make').hide();
+    		$('#dada').hide();
+    		$('#UUpt').show();
+    		$('#dadasource').hide();
+    	}else if(flag == 3){
+    		$('#make').show();
+    		$('#dada').hide();
+    		$('#UUpt').hide();
+    		$('#dadasource').hide();
+    	}
+    }
+    
+</script>
+{php include wl_template('common/footer');}

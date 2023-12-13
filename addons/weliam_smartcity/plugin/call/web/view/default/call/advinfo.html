@@ -1,0 +1,15 @@
+<div class="adv removedav">
+    <div class="form-group" style="margin-bottom:10px;">
+        <div class="col-sm-9">
+            <div class="input-group" style="margin: 0;">
+                <div class="input-group-addon" style="padding: 3px;">
+                    <input type="hidden" name="advlogo[]" value="{$adv['thumb']}" id="advlogo_{$kw}"  >
+                    <img {if $adv['thumb']} src="{php echo tomedia($adv['thumb'])}" {else} src="{URL_MODULE}web/resource/image/store.png" {/if}  id="pimg_{$kw}" style="height:25px;width:25px;cursor: pointer" data-toggle="selectAttachment" data-input="#advlogo_{$kw}" data-img="#pimg_{$kw}">
+                </div>
+                <input type="text" name="advlink[]" class="form-control" value="{$adv['link']}" readonly="readonly" placeholder="" id="advlink_{$kw}">
+                <span data-input="#advlink_{$kw}" data-toggle="selectUrl" class="input-group-addon btn btn-default">选择链接</span>
+                <span onclick="removesadv(this)" class="input-group-addon btn btn-default clearinput">X</span>
+            </div>
+        </div>
+    </div>
+</div>

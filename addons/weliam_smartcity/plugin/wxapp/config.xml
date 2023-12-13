@@ -1,0 +1,27 @@
+<?xml version="1.0" encoding="utf-8"?>
+<manifest>
+	<application>
+		<name><![CDATA[微信小程序]]></name>
+		<identifie><![CDATA[wxapp]]></identifie>
+		<version><![CDATA[1.0.0]]></version>
+		<type><![CDATA[channel]]></type>
+		<description><![CDATA[微信小程序，无缝对接公众号的会员数据，帮您省去运营烦恼。]]></description>
+		<author><![CDATA[微连科技]]></author>
+		<url><![CDATA[http://www.weliam.cn/]]></url>
+	</application>
+	<setting>
+		<agent embed="false" />
+		<system embed="true" />
+		<task embed="true" />
+	</setting>
+	<agentmenu>
+	</agentmenu>
+	<systemmenu>
+		<menu title="小程序" font="fa-inbox">
+			<entry title="小程序信息" ac="wxappset" do="wxapp_info" iscover="true" />
+			<entry title="小程序设置" ac="wxappset" do="wxapp_setting" />
+			<entry title="跳转小程序" ac="wxappset" do="wxapp_skips" />
+			<entry title="小程序发布" ac="wxappset" do="wxapp_upload" />
+		</menu>
+	</systemmenu>
+</manifest>

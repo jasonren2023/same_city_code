@@ -1,0 +1,234 @@
+{php include wl_template('common/header');}
+<ul class="nav nav-tabs">
+    <li class="active"><a href="{php echo web_url('setting/noticeset/smsadd')}">编辑业务员</a></li>
+</ul>
+<div class="app-content">
+    <div class="app-form">
+        <form action="" method="post" class="form-horizontal form form-validate">
+            <div class="panel panel-default">
+                <div class="panel-heading">编辑业务员</div>
+                <div class="alert alert-warning">
+                    <p>业务员务必已经开通分销，未开通分销无法添加为业务员</p>
+                </div>
+                <div class="panel-body">
+                    <div class="form-group">
+                        <label class="col-sm-2 control-label">选择业务员</label>
+                        <div class="col-sm-9">
+                            <div class="input-group">
+                                <input type="text" value="{$item['nickname']}" readonly="" class="form-control user_nickname">
+                                <input type="hidden" name="mid" value="{$item['mid']}" class="user_mid">
+                                <span class="btn input-group-addon" data-toggle="selectUser" data-params='{"is_salesman":1}'>选择用户</span>
+                            </div>
+                            <div class="input-group" style="margin-top:.5em;">
+                                <img src="{$item['avatar']}" onerror="this.src='./resource/images/nopic.jpg';" class="img-responsive img-thumbnail" width="132">
+                            </div>
+                        </div>
+                    </div>
+                    <div class="form-group">
+                        <label class="col-sm-2 control-label">关联商家</label>
+                        <div class="col-sm-9">
+                            <div class='input-group'>
+                                <div class="input-group">
+                                    <input type="text" class="form-control col-sm-9" id="namemerchant" name="" value="{$item['storename']}" disabled style="width: 460px;">
+                                    <span class="input-group-btn"><button class="btn btn-default" type="button" onclick="popwin = $('#modal-module-merchant').modal();">选择商家</button></span>
+                                </div>
+                                <div class="input-group " style="margin-top:.5em;">
+                                    <input type="hidden" value="{$item['storeid']}" name="storeid" id="sidmerchant">
+                                    <img src="{if empty($item['logo'])}../web/resource/images/nopic.jpg{else}{php echo tomedia($item['logo'])}{/if}" class="img-responsive img-thumbnail" width="150" id="imgmerchant" />
+                                    <em class="close" style="position:absolute; top: 0px; right: -14px;" title="删除" onclick="remove_merchant(this)">×</em>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="form-group">
+                        <label class="col-sm-2 control-label must">业务员姓名</label>
+                        <div class="col-sm-9">
+                            <input type="text" name="name" class="form-control" value="{$item['name']}" placeholder="请输入业务员姓名" required>
+                        </div>
+                    </div>
+                    <div class="form-group">
+                        <label class="col-sm-2 control-label must">业务员电话</label>
+                        <div class="col-sm-9">
+                            <input type="text" name="mobile" class="form-control" value="{$item['mobile']}" placeholder="请输入业务员电话" required>
+                        </div>
+                    </div>
+                    <div class="form-group">
+                        <label class="col-sm-2 control-label must">适用插件</label>
+                        <div class="col-sm-9">
+                            <label class="checkbox-inline">
+                                <input type="checkbox" {if $item['alone_plugin'] == 1} checked="checked" {/if} name="alone_plugin" value="1" id="plugin-checkbox">启用独立设置适用插件
+                            </label>
+                            <div class="help-block">默认适用插件按系统设置，可单独设置业务员的适用插件</div>
+                        </div>
+                    </div>
+                    <div class="form-group plugin-input" {if $item['alone_plugin'] != 1}style="display: none"{/if}>
+                        <label class="col-sm-2 control-label must"></label>
+                        <div class="col-sm-9">
+                            <div class="input-group">
+                                <label class="checkbox-inline" style="padding-left: 30px;margin-left: 0;">
+                                    <input type="checkbox" name="plugin[]" value="rush" {if in_array('rush',$plugin)}checked="true"{/if}>抢购
+                                </label>
+                                <label class="checkbox-inline" style="padding-left: 30px;margin-left: 0;">
+                                    <input type="checkbox" name="plugin[]" value="groupon" {if in_array('groupon',$plugin)}checked="true"{/if}>团购
+                                </label>
+                                <label class="checkbox-inline" style="padding-left: 30px;margin-left: 0;">
+                                    <input type="checkbox" name="plugin[]" value="fightgroup" {if in_array('fightgroup',$plugin)}checked="true"{/if}>拼团
+                                </label>
+                                <label class="checkbox-inline" style="padding-left: 30px;margin-left: 0;">
+                                    <input type="checkbox" name="plugin[]" value="coupon" {if in_array('coupon',$plugin)}checked="true"{/if}>卡券
+                                </label>
+                                <label class="checkbox-inline" style="padding-left: 30px;margin-left: 0;">
+                                    <input type="checkbox" name="plugin[]" value="bargain" {if in_array('bargain',$plugin)}checked="true"{/if}>砍价
+                                </label>
+                                <label class="checkbox-inline" style="padding-left: 30px;margin-left: 0;">
+                                    <input type="checkbox" name="plugin[]" value="payonline" {if in_array('payonline',$plugin)}checked="true"{/if}>买单
+                                </label>
+                                {if uniacid_p('citydelivery')}
+                                <label class="checkbox-inline" style="padding-left: 30px;margin-left: 0;">
+                                    <input type="checkbox" name="plugin[]" value="citydelivery" {if in_array('citydelivery',$plugin)}checked="true"{/if}>同城配送
+                                </label>
+                                {/if}
+                            </div>
+                            <div class="help-block">一项都不勾选则视为全部勾选</div>
+                        </div>
+                    </div>
+                    <div class="form-group">
+                        <label class="col-sm-2 control-label must">佣金比例</label>
+                        <div class="col-sm-9">
+                            <label class="checkbox-inline">
+                                <input type="checkbox" {if $item['alone'] == 1} checked="checked" {/if} name="alone" value="1" id="alone-checkbox">启用独立佣金
+                            </label>
+                            <div class="help-block">默认佣金比例按系统设置默认比例，可单独设置业务员佣金比例</div>
+                        </div>
+                    </div>
+                    <div class="form-group scale-input" {if $item['alone'] != 1}style="display: none"{/if}>
+                        <label class="col-sm-2 control-label must"></label>
+                        <div class="col-sm-9">
+                            <div class="input-group">
+                                <input type="text" name="scale" required placeholder="请输入业务员提成比例" autocomplete="off" class="form-control" value="{$item['scale']}">
+                                <span class="input-group-addon">%</span>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="form-group">
+                        <label class="col-sm-2 control-label must">管理店铺</label>
+                        <div class="col-sm-9">
+                            <label class="checkbox-inline">
+                                <input type="checkbox" {if $item['manage_store'] == 1} checked="checked" {/if} name="manage_store" value="1" id="manage-store-checkbox">启用独立设置
+                            </label>
+                            <div class="help-block">默认跟随系统设置，可启用独立设置业务员权限</div>
+                        </div>
+                    </div>
+                    <div class="form-group hasmanage-input" {if $item['manage_store'] != 1}style="display: none"{/if}>
+                        <label class="col-sm-2 control-label must"></label>
+                        <div class="col-sm-9">
+                            <label class="radio-inline">
+                                <input type="radio" name="hasmanage" value="0" {if empty($item['hasmanage'])}checked{/if}>禁用管理店铺
+                            </label>
+                            <label class="radio-inline">
+                                <input type="radio" name="hasmanage" value="1" {if !empty($item['hasmanage'])}checked{/if}>启用管理店铺
+                            </label>
+                        </div>
+                    </div>
+                    <div class="form-group">
+                        <label class="col-sm-2 control-label must">状态</label>
+                        <div class="col-sm-9">
+                            <label class="radio-inline">
+                                <input type="radio" name="enabled" value="0" {if empty($item['enabled'])}checked{/if}>禁用
+                            </label>
+                            <label class="radio-inline">
+                                <input type="radio" name="enabled" value="1" {if !empty($item['enabled'])}checked{/if}>启用
+                            </label>
+                            <div class="help-block">关闭后业务员将无法享受店铺佣金</div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <div class="form-group">
+                <label class="col-sm-2 control-label"></label>
+                <div class="col-sm-9">
+                    <input type="submit" name="submit" value="提交" class="btn btn-primary min-width" />
+                    <input type="hidden" name="token" value="{$_W['token']}" />
+                    <input type="hidden" name="id" value="{$item['id']}" />
+                </div>
+            </div>
+        </form>
+    </div>
+</div>
+
+<div id="modal-module-merchant" class="modal fade" tabindex="-1">
+    <div class="modal-dialog" style='width: 920px;'>
+        <div class="modal-content">
+            <div class="modal-header">
+                <button aria-hidden="true" data-dismiss="modal" class="close" type="button">×</button>
+                <h3>选取</h3></div>
+            <div class="modal-body">
+                <div class="row">
+                    <div class="input-group">
+                        <input type="text" class="form-control" name="keyword" value="" id="search-kwd-merchant" placeholder="请输入商家名称，不输入任何内容搜索结果为所有商家。" />
+                        <span class='input-group-btn'><button type="button" class="btn btn-default" onclick="search_merchant();">搜索</button></span>
+                    </div>
+                </div>
+                <div id="module-merchant" style="padding-top:5px;"></div>
+            </div>
+            <div class="modal-footer"><a href="#" class="btn btn-default" data-dismiss="modal" aria-hidden="true">关闭</a></div>
+        </div>
+    </div>
+</div>
+
+<script>
+    $("#plugin-checkbox").click(function(){
+        if($('#plugin-checkbox').is(':checked')) {
+            $('.plugin-input').show();
+        } else {
+            $('.plugin-input').hide();
+        }
+    });
+    $("#alone-checkbox").click(function(){
+        if($('#alone-checkbox').is(':checked')) {
+            $('.scale-input').show();
+        } else {
+            $('.scale-input').hide();
+        }
+    });
+    $("#manage-store-checkbox").click(function(){
+        if($('#manage-store-checkbox').is(':checked')) {
+            $('.hasmanage-input').show();
+        } else {
+            $('.hasmanage-input').hide();
+        }
+    });
+    function search_merchant() {
+        $("#module-merchant").html("正在搜索....")
+        $.get("{php echo web_url('goodshouse/goodshouse/selectMerchant')}", {
+            keyword: $.trim($('#search-kwd-merchant').val())
+        }, function(dat){
+            $('#module-merchant').html(dat);
+        });
+    }
+    function remove_merchant(obj){
+        $('#goodsidmerchant').val('');
+        $('#namemerchant').val('');
+        $('#imgmerchant').attr("src",'');
+    }
+    function select_merchant(o) {
+        if($('#sidmerchant').val() != o.id){
+            $.post("{php echo web_url('citydelivery/active/cateinfo')}",{sid:o.id},function(d){
+                $('#cateinfo').html('');
+                var html = '<option value="">请选择商品分类</option>';
+                for(var i=0;i<d.twotype.length;i++){
+                    html += '<option value='+d.twotype[i].id+'>'+d.twotype[i].name+'</option>';
+                }
+                $('#cateinfo').append(html);
+            },"json");
+        }
+        $('#sidmerchant').val(o.id);
+        $('#namemerchant').val(o.storename);
+        $('#imgmerchant').attr("src",o.logo);
+        $('#modal-module-merchant').modal('hide');
+        util.tips("操作成功");
+
+
+    }
+</script>
+{php include wl_template('common/footer');}

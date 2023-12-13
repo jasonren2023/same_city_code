@@ -1,0 +1,2 @@
+商品名,商家名,分类,缩略图,图集(英文逗号分隔),价格(最多保留两位小数),原价(最多保留两位小数),额外配送费(最多保留两位小数),会员特权（0 无 1减免 2特供）,会员减免,商品状态（2上架 4下架）,排序
+测试商品,测试商户,测试分类,http://weilamdemo.oss-cn-qingdao.aliyuncs.com/images/26/2020/04/uOCdrhA18NZnr2D77R6XJN8RoGj6w6.jpg,"http://weilamdemo.oss-cn-qingdao.aliyuncs.com/images/26/2020/03/aS1r0C8cxx8n5A0RyAANrSesAF8EfD.png,http://weilamdemo.oss-cn-qingdao.aliyuncs.com/images/26/2020/03/YreD3DQ7lYpGLrCCqpiGIG1rq7gZII.jpg,http://weilamdemo.oss-cn-qingdao.aliyuncs.com/images/26/2020/03/TrdQw3XQQSBB88bs4Yov4hZpSp2Wc2.jpg",10,15,0.5,1,0.5,2,0

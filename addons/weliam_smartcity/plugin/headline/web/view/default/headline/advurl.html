@@ -1,0 +1,9 @@
+<div class="data-item" style="margin: 0;margin-bottom:15px;">
+    {php echo attachment_select('adv[]',$ad['img'],$key)}
+    <div class="input-group" style="margin: 0;margin-top:10px;">
+        <input type="text" name="link[]" class="form-control is_judge" is_judge="false" value="{$ad['url']}" readonly="readonly" name="link" placeholder="" id="advlink{$key}">
+        <span data-input="#advlink{$key}" data-toggle="selectUrl" class="input-group-addon btn btn-default">选择链接</span>
+        <span class="input-group-addon btn btn-default clearinput">X清除链接</span>
+        <span onclick="removes(this)" class="input-group-addon btn btn-default data-item-delete">删除幻灯片</span>
+    </div>
+</div>

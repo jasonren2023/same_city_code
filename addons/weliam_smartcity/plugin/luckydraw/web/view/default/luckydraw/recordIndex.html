@@ -1,0 +1,102 @@
+{php include wl_template('common/header');}
+<ul class="nav nav-tabs" id="myTab">
+    <li class="active"><a href="javascript:;">活动列表</a></li>
+</ul>
+<!-- 直播间信息列表 -->
+<div class="app-content">
+    <div class="app-filter">
+        <div class="filter-list">
+            <form action="" method="get" class="form-horizontal" role="form" id="form1">
+                <input type="hidden" name="c" value="site" />
+                <input type="hidden" name="a" value="entry" />
+                <input type="hidden" name="m" value="{MODULE_NAME}" />
+                <input type="hidden" name="p" value="luckydraw" />
+                <input type="hidden" name="ac" value="luckydraw" />
+                <input type="hidden" name="do" value="recordIndex" />
+
+                <div class="form-group">
+                    <label class="col-sm-2 control-label">抽奖活动</label>
+                    <div class="col-sm-9">
+                        {$draw['title']}(ID:{$drawid})
+                    </div>
+                </div>
+                <div class="form-group">
+                    <label class="col-sm-2 control-label">状态</label>
+                    <div class="col-sm-9">
+                        <div class="btn-group">
+                            <a href="{php echo wl_filter_url('status:0');}" class="btn {if $status == 0}btn-primary{else}btn-default{/if}">全部</a>
+                            <a href="{php echo wl_filter_url('status:3');}" class="btn {if $status == 3}btn-primary{else}btn-default{/if}">未开奖</a>
+                            <a href="{php echo wl_filter_url('status:1');}" class="btn {if $status == 1}btn-primary{else}btn-default{/if}">待开奖</a>
+                            <a href="{php echo wl_filter_url('status:2');}" class="btn {if $status == 2}btn-primary{else}btn-default{/if}">已开奖</a>
+                        </div>
+                    </div>
+                </div>
+
+            </form>
+        </div>
+    </div>
+    <div class="app-table-list">
+        <div class="table-responsive order-list">
+            <table class="table table-hover">
+                <thead>
+                <tr>
+                    <th class="text-center">记录id</th>
+                    <th class="text-center">开始时间</th>
+                    <th class="text-center">开奖条件</th>
+                    <th class="text-center">开奖时间</th>
+                    <th class="text-center">记录状态</th>
+                    <th class="text-center">操作</th>
+                </tr>
+                </thead>
+                <tbody>
+                {loop $list $de}
+                <tr>
+                    <td class="text-center">{$de['id']}</td>
+                    <td class="text-center">{php echo date('Y-m-d H:i',$de['createtime'])}</td>
+                    <td class="text-center">
+                        {if $de['drawstatus'] > 0}
+                        抽奖码{$de['drawcodenum']}个,还差{$de['lacknum']}个
+                        {else}
+                        时间:{php echo date('Y-m-d H:i',$de['endtime'])}
+                        {/if}
+                    </td>
+                    <td class="text-center">
+                        {if $de['drawtime'] > 0}
+                        {php echo date('Y-m-d H:i',$de['drawtime'])}
+                        {else}
+                        <span  class="label label-default">未开奖</span>
+                        {/if}
+                    </td>
+                    <td class="text-center">
+                        {if $de['status'] == 0}
+                        <span  class="label label-default">未开奖</span>
+                        {else if $de['status'] == 1}
+                        <span  class="label label-warning">待开奖</span>
+                        {else if $de['status'] == 2}
+                        <span  class="label label-success">已开奖</span>
+                        {/if}
+                    </td>
+                    <td class="text-center">
+                        {if $de['status'] == 1}
+                        <a href="{php echo web_url('luckydraw/luckydraw/drawing', array('id'=>$de['id']))}" data-toggle="ajaxRemove" data-confirm="确定开奖此条活动记录吗？">开奖 - </a>
+                        {/if}
+                        {if p('wxplatform')}
+                        <a class="js-clip" data-url="{php echo h5_url('pages/subPages2/lottery/lotteryIndex/lotteryIndex',['id' => $de['drawid'],'recordid'=>$de['id']]);}" href="javascript:;">复制链接 -</a>
+                        {/if}
+                        {if p('wxapp')}
+                        <a class="js-clip" data-url="pages/subPages2/coursegoods/coursegoods?id={$de['drawid']}&recordid={$de['id']}" href="javascript:;">复制路径 -</a>
+                        {/if}
+                        <a href="{php echo web_url('luckydraw/luckydraw/prizeIndex', array('keyword'=>$de['id'],'keywordtype'=>4))}">查看抽奖码</a>
+                    </td>
+                </tr>
+                {/loop}
+                </tbody>
+            </table>
+        </div>
+        <div class="app-table-foot clearfix">
+            <div class="pull-left"></div>
+            <div class="pull-right">{$pager}</div>
+        </div>
+    </div>
+</div>
+{php include wl_template('common/footer');}

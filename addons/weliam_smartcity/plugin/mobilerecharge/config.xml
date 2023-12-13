@@ -1,0 +1,25 @@
+<?xml version="1.0" encoding="utf-8"?>
+<manifest>
+	<application>
+		<name><![CDATA[话费充值]]></name>
+		<identifie><![CDATA[mobilerecharge]]></identifie>
+		<version><![CDATA[1.0.0]]></version>
+		<type><![CDATA[expand]]></type>
+		<description><![CDATA[话费充值]]></description>
+		<author><![CDATA[微连科技]]></author>
+		<url><![CDATA[http://www.weliam.cn/]]></url>
+	</application>
+	<setting>
+		<agent embed="false" />
+		<system embed="true" />
+		<task embed="false" />
+	</setting>
+	<agentmenu>
+	</agentmenu>
+	<systemmenu>
+		<menu title="话费充值" font="fa-inbox">
+			<entry title="充值订单" ac="mrecharge" do="orderList" iscover="true"  />
+			<entry title="充值设置" ac="mrecharge" do="baseSet"  />
+		</menu>
+	</systemmenu>
+</manifest>

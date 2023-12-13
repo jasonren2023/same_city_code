@@ -1,0 +1,474 @@
+{php include wl_template('common/header');}
+<ul class="nav nav-tabs">
+    <li><a href="{php echo web_url('recruit/recruitment/recruitList')}">招聘列表</a></li>
+    <li class="active"><a href="javascript:;">{if $id}编辑{else}发布{/if}招聘信息</a></li>
+</ul>
+<div class="app-content">
+    <div class="app-form">
+        <div class="panel panel-default" id="recruitContent">
+            <form class="form-horizontal form-validate" method="post">
+                <div class="form-group">
+                    <label class="col-sm-2 control-label">职位名称</label>
+                    <div class="col-sm-9">
+                        <input class="form-control" type="text" required  v-model="info.title" maxlength="45"/>
+                    </div>
+                </div>
+                <div class="form-group">
+                    <label class="col-sm-2 control-label">行业职位</label>
+                    <div class="col-sm-9">
+                        <div class="row row-fix js-address-selector">
+                            <div class="col-md-4">
+                                <select v-model="info.industry_pid" class="form-control">
+                                    <option v-for="(item,index) in industryList" :value="item.id">{{ item.title }}</option>
+                                </select>
+                            </div>
+                            <div class="col-md-4">
+                                <select v-model="info.industry_id" class="form-control">
+                                    <option v-for="(item,index) in subIndustryList" :value="item.id">{{ item.title }}</option>
+                                </select>
+                            </div>
+                            <div class="col-md-4">
+                                <select v-model="info.position_id" class="form-control">
+                                    <option v-for="(item,index) in positionList" :value="item.id">{{ item.title }}</option>
+                                </select>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                {if !is_store()}
+                <div class="form-group">
+                    <label class="col-sm-2 control-label">是否置顶</label>
+                    <div class="col-sm-9">
+                        <label class="radio-inline">
+                            <input type="radio" v-model="info.is_top" value="0"> 不置顶
+                        </label>
+                        <label class="radio-inline">
+                            <input type="radio" v-model="info.is_top" value="1"> 置顶
+                        </label>
+                    </div>
+                </div>
+                <div :class="{'form-group':true,'hide':(info.is_top != 1)}">
+                    <label class="col-sm-2 control-label">置顶结束时间</label>
+                    <div class="col-sm-9">
+                        <div class="input-group">
+                            <input type="text" name="top_end_time" value="{$info['top_end_time']}"
+                                   placeholder="请选择日期时间"
+                                   readonly="readonly"
+                                   class="datetimepicker form-control valid"
+                                   style="padding-left: 12px;" aria-invalid="false">
+                        </div>
+                    </div>
+                </div>
+
+                <div class="form-group">
+                    <label class="col-sm-2 control-label">招聘类型</label>
+                    <div class="col-sm-9">
+                        <label class="radio-inline">
+                            <input type="radio" v-model="info.recruitment_type" value="1">个人招聘
+                        </label>
+                        <label class="radio-inline">
+                            <input type="radio" v-model="info.recruitment_type" value="2">企业招聘
+                        </label>
+                    </div>
+                </div>
+                <div class="form-group" v-if="info.recruitment_type == 1">
+                    <label class="col-sm-2 control-label">发布人</label>
+                    <div class="col-sm-9">
+                        <div class="input-group">
+                            <input type="text" value="{$user['nickname']}" class="form-control user_nickname">
+                            <input type="hidden" class="user_mid">
+                            <span class="btn input-group-addon" data-toggle="selectUser">选择用户</span>
+                        </div>
+                        <div class="input-group" style="margin-top:.5em;">
+                            <img src="{$user['avatar']}" onerror="this.src='./resource/images/nopic.jpg'" class="img-responsive img-thumbnail" width="132" data-times="1">
+                        </div>
+                    </div>
+                </div>
+                <div class="form-group" v-if="info.recruitment_type == 2">
+                    <label class="col-sm-2 control-label">发布企业</label>
+                    <div class="col-sm-9">
+                        <div class="input-group">
+                            <input type="text" value="{$shop['storename']}" class="form-control shop_name">
+                            <input type="hidden" class="shop_id">
+                            <span class="btn input-group-addon" data-toggle="selectShop">选择商家</span>
+                        </div>
+                        <div class="input-group" style="margin-top:.5em;">
+                            <img src="{php echo tomedia($shop['logo'])}" onerror="this.src='./resource/images/nopic.jpg'" class="img-responsive img-thumbnail" width="132" data-times="1">
+                        </div>
+                    </div>
+                </div>
+                {/if}
+                <div class="form-group">
+                    <label class="col-sm-2 control-label">工作类型</label>
+                    <div class="col-sm-9">
+                        <label class="radio-inline">
+                            <input type="radio" v-model="info.job_type" value="1">全职
+                        </label>
+                        <label class="radio-inline">
+                            <input type="radio" v-model="info.job_type" value="2">兼职
+                        </label>
+                    </div>
+                </div>
+                <!--全职 —— 输入信息-->
+                <div class="form-group" v-if="info.job_type == 1">
+                    <label class="col-sm-2 control-label">薪资待遇</label>
+                    <div class="col-sm-9">
+                        <label class="radio-inline">
+                            <input type="radio" v-model="info.full_type" value="1">面议
+                        </label>
+                        <label class="radio-inline">
+                            <input type="radio" v-model="info.full_type" value="2">指定
+                        </label>
+                    </div>
+                </div>
+                <div class="form-group" v-if="info.job_type == 1 && info.full_type == 2">
+                    <label class="col-sm-2 control-label">每月薪资</label>
+                    <div class="col-sm-9">
+                        <div class="input-group">
+                            <input type="number" digits="true" v-model="info.full_salary_min" class="form-control">
+                            <span class="btn input-group-addon">元 ~ </span>
+                            <input type="number" digits="true" v-model="info.full_salary_max" class="form-control">
+                            <span class="btn input-group-addon">元</span>
+                        </div>
+                    </div>
+                </div>
+                <div class="form-group" v-if="info.job_type == 1">
+                    <label class="col-sm-2 control-label">职位福利</label>
+                    <div class="col-sm-9">
+                        <label class="checkbox checkbox-inline" v-for="(item,index) in welfareLabel" style="margin-left: 0;margin-right: 20px;">
+                            <input type="checkbox" v-model="info.welfare" :value="item.id"> {{item.title}}
+                        </label>
+                    </div>
+                </div>
+                <!--兼职 —— 输入信息-->
+                <div class="form-group" v-if="info.job_type == 2">
+                    <label class="col-sm-2 control-label">薪资待遇</label>
+                    <div class="col-sm-9">
+                        <div class="input-group">
+                            <input type="number" digits="true" v-model="info.part_salary" class="form-control">
+                            <span class="btn input-group-addon" style="padding: 0!important;">
+                                <select v-model="info.part_type" style="height: 32px!important;border: none;padding-right: 45px;">
+                                    <option value="1">元/时 </option>
+                                    <option value="2">元/天 </option>
+                                </select>
+                            </span>
+                        </div>
+                    </div>
+                </div>
+                <div class="form-group" v-if="info.job_type == 2">
+                    <label class="col-sm-2 control-label">结算方式</label>
+                    <div class="col-sm-9">
+                        <select v-model="info.part_settlement" class="form-control">
+                            <option value="1">日结</option>
+                            <option value="2">周结</option>
+                            <option value="3">月结</option>
+                            <option value="4">完工结算</option>
+                        </select>
+                    </div>
+                </div>
+                <div class="form-group">
+                    <label class="col-sm-2 control-label">工作区域</label>
+                    <div class="col-sm-9">
+                        <div class="row row-fix js-address-selector">
+                            <div class="col-md-4">
+                                <select v-model="info.work_province" class="form-control">
+                                    <option v-for="(item,index) in provinceList" :value="item.id">{{ item.name }}</option>
+                                </select>
+                            </div>
+                            <div class="col-md-4">
+                                <select v-model="info.work_city" class="form-control">
+                                    <option v-for="(item,index) in cityList" :value="item.id">{{ item.name }}</option>
+                                </select>
+                            </div>
+                            <div class="col-md-4">
+                                <select v-model="info.work_area" class="form-control">
+                                    <option v-for="(item,index) in areaList" :value="item.id">{{ item.name }}</option>
+                                </select>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                <div class="form-group">
+                    <label class="col-sm-2 control-label">工作地址</label>
+                    <div class="col-sm-9">
+                        <div class="input-group">
+                            <input class="form-control" value="{$info['work_address']}" id="c-address" type="text" required="required">
+                            <input class="form-control hide" value="{$info['work_lng']}" id="c-lng" type="text">
+                            <input class="form-control hide" value="{$info['work_lat']}" id="c-lat" type="text">
+                            <span class="btn input-group-addon" data-toggle="addresspicker" data-address-id="c-address" data-lng-id="c-lng" data-lat-id="c-lat">地图定位</span>
+                        </div>
+                    </div>
+                </div>
+                <div class="form-group">
+                    <label class="col-sm-2 control-label">联系人</label>
+                    <div class="col-sm-9">
+                        <input class="form-control" type="text" required v-model="info.contacts"/>
+                    </div>
+                </div>
+                <div class="form-group">
+                    <label class="col-sm-2 control-label">联系电话</label>
+                    <div class="col-sm-9">
+                        <input class="form-control" type="text" required v-model="info.contact_phone"/>
+                    </div>
+                </div>
+                <div class="form-group">
+                    <label class="col-sm-2 control-label">性别要求</label>
+                    <div class="col-sm-9">
+                        <label class="radio-inline">
+                            <input type="radio" v-model="info.gender" value="1">不限
+                        </label>
+                        <label class="radio-inline">
+                            <input type="radio" v-model="info.gender" value="2">男
+                        </label>
+                        <label class="radio-inline">
+                            <input type="radio" v-model="info.gender" value="3">女
+                        </label>
+                    </div>
+                </div>
+                <div class="form-group">
+                    <label class="col-sm-2 control-label">年龄要求</label>
+                    <div class="col-sm-9">
+                        <div class="input-group">
+                            <input type="number" digits="true" v-model="info.age_min" class="form-control">
+                            <span class="btn input-group-addon">岁 ~ </span>
+                            <input type="number" digits="true" v-model="info.age_max" class="form-control">
+                            <span class="btn input-group-addon">岁</span>
+                        </div>
+                    </div>
+                </div>
+                <div class="form-group">
+                    <label class="col-sm-2 control-label">招聘人数</label>
+                    <div class="col-sm-9">
+                        <div class="input-group">
+                            <input type="number" digits="true" v-model="info.people_number" class="form-control">
+                            <span class="btn input-group-addon">人</span>
+                        </div>
+                    </div>
+                </div>
+                <div class="form-group">
+                    <label class="col-sm-2 control-label">学历要求</label>
+                    <div class="col-sm-9">
+                        <select v-model="info.education_label_id" class="form-control">
+                            <option value="0">学历不限</option>
+                            <option v-for="(item,index) in educationLabel" :value="item.id">{{ item.title }}</option>
+                        </select>
+                    </div>
+                </div>
+                <div class="form-group">
+                    <label class="col-sm-2 control-label">经验要求</label>
+                    <div class="col-sm-9">
+                        <select v-model="info.experience_label_id" class="form-control">
+                            <option value="0">经验不限</option>
+                            <option v-for="(item,index) in experienceLabel" :value="item.id">{{ item.title }}</option>
+                        </select>
+                    </div>
+                </div>
+                <div class="form-group">
+                    <label class="col-sm-2 control-label">状态</label>
+                    <div class="col-sm-9">
+                        {if !is_store()}
+                        <label class="radio-inline">
+                            <input type="radio" v-model="info.status" value="2"> 审核中
+                        </label>
+                        <label class="radio-inline">
+                            <input type="radio" v-model="info.status" value="3"> 未通过
+                        </label>
+                        {/if}
+                        <label class="radio-inline">
+                            <input type="radio" v-model="info.status" value="4"> 招聘中
+                        </label>
+                        <label class="radio-inline">
+                            <input type="radio" v-model="info.status" value="5"> 已结束
+                        </label>
+                    </div>
+                </div>
+                <div class="form-group">
+                    <label class="col-sm-2 control-label">职位描述</label>
+                    <div class="col-sm-9">
+                        <textarea placeholder="请输入职位描述..." class="form-control" rows="10" style="resize: none;font-size: 15px;" id="job_description">{$jobDescription}</textarea>
+                    </div>
+                </div>
+                {if !is_store()}
+                <div class="form-group">
+                    <label class="col-sm-2 control-label">排序</label>
+                    <div class="col-sm-9">
+                        <input class="form-control" type="number" v-model="info.sort"/>
+                    </div>
+                </div>
+                <div class="form-group">
+                    <label class="col-sm-2 control-label">虚拟浏览量</label>
+                    <div class="col-sm-9">
+                        <input class="form-control" type="number" v-model="info.fictitious_pv"/>
+                    </div>
+                </div>
+                {/if}
+                <!-- 提交按钮 -->
+                <div class="form-group">
+                    <label class="col-sm-2 control-label"></label>
+                    <div class="col-sm-9">
+<!--                        <input type="hidden" name="token" value="{$_W['token']}" />-->
+<!--                        <input type="hidden" name="id" value="{$id}" />-->
+<!--                        <input type="submit" name="submit" value="提交" class="btn btn-primary col-sm-1 min-width" />-->
+                        <input type="button" value="提交" class="btn btn-primary col-sm-1 min-width" @click="submitInfo()" />
+                    </div>
+                </div>
+            </form>
+        </div>
+    </div>
+</div>
+<script>
+    let recruit = new Vue({
+        el:'#recruitContent',
+        data:{
+            id:"{$id}",
+            industryList:JSON.parse('{php echo json_encode($oneIndustry)}'),//上级行业列表
+            subIndustryList:JSON.parse('{php echo json_encode($subIndustryList)}'),//子行业列表
+            positionList:JSON.parse('{php echo json_encode($positionList)}'),//职位信息列表
+            provinceList:JSON.parse('{php echo json_encode($provinceList)}'),//省列表
+            cityList:JSON.parse('{php echo json_encode($cityList)}'),//市列表
+            areaList:JSON.parse('{php echo json_encode($areaList)}'),//区列表
+            welfareLabel:JSON.parse('{php echo json_encode($welfareLabel)}'),//标签 - 职位福利
+            educationLabel:JSON.parse('{php echo json_encode($educationLabel)}'),//标签 - 学历要求
+            experienceLabel:JSON.parse('{php echo json_encode($experienceLabel)}'),//标签 - 经验要求
+            //招聘信息
+            info: JSON.parse('{php echo json_encode($info)}') ? JSON.parse('{php echo json_encode($info)}') : {
+                title: '',//职位名称
+                industry_pid: '',//上级行业id
+                industry_id: '',//子行业id
+                position_id: '',//职位id
+                recruitment_type: 1,//招聘类型:1=个人招聘,2=企业招聘
+                is_top: 0,//是否置顶:0=未置顶，1=置顶中
+                top_end_time: 0,//置顶结束时间
+                release_mid: '',//发布用户id
+                release_sid: '',//发布企业id
+                job_type: 1,//工作类型：1=全职，2=兼职
+                full_type: 1,//全职 - 薪资待遇：1=面议，2=指定
+                full_salary_min: '',//全职 - 薪资待遇：最低薪资
+                full_salary_max: '',//全职 - 薪资待遇：最高薪资
+                welfare:[],//全职 - 职位福利
+                part_type: 1,//兼职 - 薪资类型：1=元/时，2=元/天
+                part_salary: '',//兼职 - 薪资待遇：薪资金额
+                part_settlement: 1,//兼职 - 结算方式：1=日结，2=周结，3=月结，4=完工结算
+                work_province: '',//工作区域 - 省
+                work_city: '',//工作区域 - 市
+                work_area: '',//工作区域 - 区
+                work_address: '',//工作详细地址
+                work_lng:'',//经度
+                work_lat:'',//纬度
+                contacts:'',//联系人
+                contact_phone:'',//联系方式
+                gender: 1,//性别要求：1=不限，2=男，3=女
+                age_min:'',//最小年龄要求
+                age_max:'',//最大年龄要求
+                people_number: 1,//招聘人数
+                education_label_id: 0,//学历要求
+                experience_label_id: 0,//经验要求
+                status: 4,//招聘状态：1=待付款，2=审核中，3=未通过，4=招聘中，5=已结束
+                job_description:'',//职位描述
+                sort:"{php echo $sort ? : 0;}",//排序信息
+                fictitious_pv: 0,//虚拟浏览量
+            },
+        },
+        watch: {
+            //行业职位三级联动 —— 改变上级行业时重新生成子行业信息
+            'info.industry_pid'(){
+                let _this = this;
+                $.post("{php echo web_url('recruit/recruitment/getSubIndustry');}",{id:this.info.industry_pid},function (res) {
+                    if(res.errno == 1){
+                        _this.subIndustryList = res.data;
+                        _this.info.industry_id =  res.data[0].id;
+                    }else{
+                        tip.alert(res.message)
+                    }
+                },'json');
+            },
+            //行业职位三级联动 —— 改变子行业时重新生成职位信息
+            'info.industry_id'(){
+                let _this = this;
+                $.post("{php echo web_url('recruit/recruitment/getPosition');}",{id:this.info.industry_id},function (res) {
+                    if(res.errno == 1){
+                        _this.positionList = res.data;
+                        _this.info.position_id =  res.data[0].id;
+                    }else{
+                        tip.alert(res.message)
+                    }
+                },'json');
+            },
+            //区域三级联动 —— 改变省时同步改变市级信息
+            'info.work_province'(){
+                let _this = this;
+                $.post("{php echo web_url('area/areaagent/getAreaInfo');}",{id:_this.info.work_province,lv:2},function (res) {
+                    if(res.errno == 1){
+                        _this.cityList = res.data;
+                        _this.info.work_city = res.data[0].id;
+                    }else{
+                        tip.alert(res.message)
+                    }
+                },'json');
+            },
+            //区域三级联动 —— 改变市时同步改变区级信息
+            'info.work_city'(){
+                let _this = this;
+                $.post("{php echo web_url('area/areaagent/getAreaInfo');}",{id:_this.info.work_city,lv:3},function (res) {
+                    if(res.errno == 1){
+                        _this.areaList = res.data;
+                        _this.info.work_area = res.data[0].id;
+                    }else{
+                        tip.alert(res.message)
+                    }
+                },'json');
+            },
+        },
+        methods: {
+            //提交信息
+            submitInfo(){
+                let _this = this,
+                    _info = _this.info;
+                //补充信息 —— 获取发布方信息
+                _info.release_mid = $(".user_mid").val() ? $(".user_mid").val() : _info.release_mid ;
+                _info.release_sid = $(".shop_id").val() ? $(".shop_id").val() : _info.release_sid ;
+                //补充信息 —— 获取工作详细地址、经纬度
+                _info.work_address = $("#c-address").val() ? $("#c-address").val() : _info.work_address ;
+                _info.work_lng = $("#c-lng").val() ? $("#c-lng").val() : _info.work_lng ;
+                _info.work_lat = $("#c-lat").val() ? $("#c-lat").val() : _info.work_lat ;
+                //获取文本信息
+                _info.job_description = $("#job_description").val() ? $("#job_description").val() : _info.job_description ;
+                //提交信息
+                let link = "{php echo web_url('recruit/recruitment/recruitEdit');}";
+                $.post(link,{data:_info,id:_this.id},function (res) {
+                    if(res.errno == 1){
+                        tip.alert(res.message,function () {
+                            let href = "{php echo web_url('recruit/recruitment/recruitList');}";
+                            window.location.href = href;
+                        });
+                    }else{
+                        tip.msgbox.err(res.message);
+                    }
+                },'json');
+            },
+        },
+        mounted(){
+            //基础参数信息获取
+            if(!this.info.industry_pid) this.info.industry_pid = this.industryList[0].id;
+            if(!this.info.work_province) this.info.work_province = this.provinceList[0].id;
+        }
+    });
+</script>
+<script type="text/javascript">
+    //初始化时间选择器
+    require(["datetimepicker"], function(){
+        var option = {
+            lang : "zh",
+            step : 5,
+            timepicker : true,
+            closeOnDateSelect : true,
+            format : "Y-m-d H:i"
+        };
+        $(".datetimepicker[name = 'top_end_time']").datetimepicker(option);
+    });
+    //置顶结束时间被修改
+    $(document).on('change',"[name='top_end_time']",function (){
+        recruit.info.top_end_time = $(this).val();
+    });
+</script>
+{php include wl_template('common/footer');}

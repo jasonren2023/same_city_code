@@ -1,0 +1,30 @@
+<form action="{php echo web_url('halfcard/halfcode/remark')}" method="post" class="form-horizontal form-validate">
+    <div class="modal-dialog" style="z-index: 50;">
+        <div class="modal-content">
+            <div class="modal-header">
+                <button data-dismiss="modal" class="close" type="button">×</button>
+                <h4 class="modal-title">编辑激活码备注</h4>
+            </div>
+            <div class="modal-body" style="margin-left: 100px;">
+                <div class="form-group">
+                    <label class="col-sm-2 control-label">激活码范围</label>
+                    <div class="col-sm-6 col-xs-12">
+                        <input type="text" class="form-control" placeholder="" name="id_num" value="" />
+                        <span class="help-block">请输入激活码ID，参考形式：100,400</span>
+                    </div>
+                </div>
+                <div class="form-group">
+                    <label class="col-sm-2 control-label">新的备注</label>
+                    <div class="col-sm-6 col-xs-12">
+                        <input type="text" class="form-control" placeholder="" name="remark" value="" />
+                        <span class="help-block">用于区分激活码不同场景</span>
+                    </div>
+                </div>
+            </div>
+            <div class="modal-footer">
+                <button type="submit" class="btn btn-primary">提交更改</button>
+                <button type="button" class="btn btn-default" data-dismiss="modal">关闭</button>
+            </div>
+        </div>
+    </div>
+</form>

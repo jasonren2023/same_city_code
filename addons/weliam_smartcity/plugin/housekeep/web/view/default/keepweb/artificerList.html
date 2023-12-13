@@ -1,0 +1,271 @@
+{php include wl_template('common/header');}
+<style type='text/css'>
+    .order-rank img{width:16px; height:16px;}
+    .js-remark,.js-admin-remark{word-break:break-all; overflow:hidden; background: #FDEEEE;color: #ED5050;padding: 5px 10px;}
+    td.goods-info{position:relative; padding-left:60px;}
+    .goods-info .img{position:absolute;top:50%; margin-top:-25px; background: url({IMAGE_LOADING}) center center no-repeat; width:50px;height:50px; }
+    .goods-info span {white-space: nowrap;overflow: hidden;text-overflow: ellipsis;display: block;}
+    .status-text{cursor:pointer;}
+</style>
+<ul class="nav nav-tabs">
+    <li class="active"><a href="{php echo wl_filter_url('status:0');}">服务者列表</a></li>
+</ul>
+<div class="app-content">
+    <div class="app-filter">
+        <div class="filter-action">
+            <a href="{php echo web_url('housekeep/KeepWeb/editArtificer')}" class="btn btn-primary">添加服务者</a>
+        </div>
+        <div class="filter-list">
+            <form action="" method="get" class="form-horizontal" role="form" id="form1">
+                <input type="hidden" name="c" value="site" />
+                <input type="hidden" name="a" value="entry" />
+                <input type="hidden" name="m" value="{MODULE_NAME}" />
+                <input type="hidden" name="p" value="housekeep" />
+                <input type="hidden" name="ac" value="KeepWeb" />
+                <input type="hidden" name="do" value="artificerList" />
+                <input type="hidden" name="status" value="{$_GPC['status']}" />
+                <div class="form-group">
+                    <label class="col-sm-2 control-label">服务者状态</label>
+                    <div class="col-sm-9">
+                        <div class="btn-group">
+                            <a href="{php echo wl_filter_url('status:0');}" class="btn {if intval($_GPC['status']) == 0}btn-primary{else}btn-default{/if}">不限</a>
+                            <a href="{php echo wl_filter_url('status:1');}" class="btn {if $_GPC['status'] == 1}btn-primary{else}btn-default{/if}">营业中</a>
+                            <a href="{php echo wl_filter_url('status:5');}" class="btn {if $_GPC['status'] == 5}btn-primary{else}btn-default{/if}">待审核</a>
+                            <a href="{php echo wl_filter_url('status:3');}" class="btn {if $_GPC['status'] == 3}btn-primary{else}btn-default{/if}">已下架</a>
+                            <a href="{php echo wl_filter_url('status:6');}" class="btn {if $_GPC['status'] == 6}btn-primary{else}btn-default{/if}">被驳回</a>
+                            <a href="{php echo wl_filter_url('status:4');}" class="btn {if $_GPC['status'] == 4}btn-primary{else}btn-default{/if}">被删除</a>
+                        </div>
+                    </div>
+                </div>
+                <div class="form-group">
+                    <label class="col-sm-2 control-label">关键字</label>
+                    <div class="col-md-3">
+                        <select name="keywordtype" class="form-control">
+                            <option value="">关键字类型</option>
+                            <option value="1" {if $_GPC['keywordtype']==1}selected="selected"{/if}>服务者姓名</option>
+                            <option value="4" {if $_GPC['keywordtype']==4}selected="selected"{/if}>服务类目</option>
+                            <option value="2" {if $_GPC['keywordtype']==2}selected="selected"{/if}>用户昵称</option>
+                            <option value="3" {if $_GPC['keywordtype']==3}selected="selected"{/if}>用户mid</option>
+                        </select>
+                    </div>
+                    <div class="col-md-4">
+                        <input type="text" name="keyword" class="form-control" value="{$_GPC['keyword']}"  placeholder="请输入关键字"/>
+                    </div>
+                </div>
+                <div class="form-group">
+                    <label class="col-sm-2 control-label"></label>
+                    <div class="col-sm-9">
+                        <button class="btn btn-primary" id="search">筛选</button>
+                    </div>
+                </div>
+            </form>
+        </div>
+    </div>
+    <div class="app-table-list">
+        <div class="panel-body table-responsive collapse in order-list" id="order-template-item-4" style="padding: 0;">
+            <table class="table table-hover table-bordered">
+                <thead style="background-color: #FFFFFF;">
+                <tr>
+                    <th width="3%" class="text-center"><input type="checkbox" name="checkall" value="" id="checkall" class="checkboxall" onclick="var ck = this.checked; $(':checkbox').each(function(){this.checked = ck});"/></th>
+                    <th width="5%" style="text-align:center;">ID</th>
+                    <th width="12%">服务者信息</th>
+                    <th width="15%" style="text-align:center;">服务类目</th>
+                    {if $_W['wlsetting']['attestation']['switch'] > 0}
+                    <th width="10%" style="text-align:center;">认证</th>
+                    {/if}
+                    <th width="13%" style="text-align:center;">绑定用户</th>
+                    <th width="17%" style="text-align:center;">联系地址</th>
+                    <th width="10%" style="text-align:center;">状态</th>
+                    <th width="15%" style="text-align:center;">操作</th>
+                </tr>
+                </thead>
+                <tbody>
+                {loop $list $item}
+                <tr>
+                    <td><center><input type="checkbox" name="items[]" value="{$item['id']}" class="checkbox" /></center></td>
+                    <td class="text-center">{$item['id']}</td>
+                    <td class="goods-info line-feed">
+                        <div class="img"><img class="scrollLoading" src="{IMAGE_PIXEL}" data-url="{php echo tomedia($item['thumb'])}" height="50" width="50" onerror="this.src='{IMAGE_NOPIC_SMALL}'" ></div>
+                        <div class="title" style="padding-left: 60px;">
+                            <span>{$item['name']}</span>
+                            <span>{if $item['gender'] == 1}男{else}女{/if};{$item['mobile']}</span>
+                        </div>
+                    </td>
+                    <td class="text-center">
+                        {loop $item['levelarray'] $key $it}
+                        <span class="label {if $key%2 == 0} label-success {else if $key%3 == 0} label-info {else} label-warning {/if}">{$it['title']}</span>
+                        {/loop}
+                    </td>
+                    {if $_W['wlsetting']['attestation']['switch'] > 0}
+                    <td class="text-center">
+                        {if $item['attestation']['attestation'] > 0}
+                        <img  title="已认证" src="../../../../addons/{MODULE_NAME}/plugin/housekeep/web/resource/image/arwebrz.png" height="30" width="30" >
+                        {else}
+                        <img  title="未认证" src="../../../../addons/{MODULE_NAME}/plugin/housekeep/web/resource/image/webrz.png" height="30" width="30" >
+                        {/if}
+                        {if $item['attestation']['bondflag'] > 0}
+                        <img  title="已缴纳保证金" src="../../../../addons/{MODULE_NAME}/plugin/housekeep/web/resource/image/arwebbzj.png" height="30" width="30" >
+                        {else}
+                        <img  title="未缴纳保证金" src="../../../../addons/{MODULE_NAME}/plugin/housekeep/web/resource/image/webbzj.png" height="30" width="30" >
+                        {/if}
+                    </td>
+                    {/if}
+                    {if $item['mid'] > 0}
+                    <td class="goods-info line-feed">
+                        <div class="img"><img class="scrollLoading" src="{IMAGE_PIXEL}" data-url="{php echo tomedia($item['memberinfo']['avatar'])}" height="50" width="50" onerror="this.src='{IMAGE_NOPIC_SMALL}'" ></div>
+                        <div class="title" style="padding-left: 60px;">
+                            <span>{$item['memberinfo']['nickname']}</span>
+                            <span>MID:{$item['memberinfo']['id']}</span>
+                        </div>
+                    </td>
+                    {else}
+                    <td class="text-center">
+                        <span class="label label-warning">未绑定用户</span>
+                    </td>
+                    {/if}
+                    <td class="text-center">
+                        {$item['address']}
+                    </td>
+                    <td class="text-center">
+                        {if $item['status'] == 0 }<span class="label label-default">歇业中</span>{/if}
+                        {if $item['status'] == 1 }<span class="label label-success">服务中</span>{/if}
+                        {if $item['status'] == 2 }<span class="label label-default">未支付</span>{/if}
+                        {if $item['status'] == 3 }<span class="label label-warning">已过期</span>{/if}
+                        {if $item['status'] == 4 }<span class="label label-danger">被删除</span>{/if}
+                        {if $item['status'] == 5 }<span class="label label-info">待审核</span>{/if}
+                        {if $item['status'] == 6 }<span class="label label-warning">被驳回</span>{/if}
+                    </td>
+                    <td class="text-center" style="position: relative;">
+                        <p style="color: #428bca;display: inline-block;"><a href="{php echo web_url('housekeep/KeepWeb/editArtificer', array('id' => $item['id']))}">编辑</a> </p>
+                        {if $item['status'] == 0 || $item['status'] == 4 || $item['status'] == 6}
+                        <p style="color: #428bca;display: inline-block;"><a href="{php echo web_url('housekeep/KeepWeb/changeArtificer', array('id'=>$item['id'],'status'=> 1))}" data-toggle="ajaxRemove" data-confirm="确定此服务者开始服务？">启用</a></p>
+                        {/if}
+                        {if $item['status'] == 5}
+                        <p style="color: #428bca;display: inline-block;"><a href="{php echo web_url('housekeep/KeepWeb/changeArtificer', array('id'=>$item['id'],'status'=> 1,'nflag' => 1))}" data-toggle="ajaxRemove" data-confirm="确定此服务者通过审核？">通过</a></p>
+                        <p style="color: #428bca;display: inline-block;"><a href="javascript:;" class="rejectdis" appid="{$item['id']}">驳回</a></p>
+                        {/if}
+                        {if $item['status'] == 1}
+                        <p style="color: #428bca;display: inline-block;"><a href="{php echo web_url('housekeep/KeepWeb/changeArtificer', array('id'=>$item['id'],'status'=> 0))}" data-toggle="ajaxRemove" data-confirm="确定此服务者停止服务？">歇业</a></p>
+                        {/if}
+                        {if $item['status'] == 4}
+                        <p style="color: #428bca;display: inline-block;"><a href="{php echo web_url('housekeep/KeepWeb/changeArtificer', array('id'=>$item['id'],'status'=> 7))}" data-toggle="ajaxRemove" data-confirm="确定彻底删除此服务者信息？">彻底删除</a></p>
+                        {else}
+                        <p style="color: #428bca;display: inline-block;"><a href="{php echo web_url('housekeep/KeepWeb/changeArtificer', array('id'=>$item['id'],'status'=> 4))}" data-toggle="ajaxRemove" data-confirm="确定删除此服务者信息？">删除</a></p>
+                        {/if}
+                    </td>
+                </tr>
+                {/loop}
+                </tbody>
+            </table>
+        </div>
+        <div class="app-table-foot clearfix">
+            <div class="pull-left">
+                <button class="btn btn-default btn-sm" type="button" onclick="location.reload();"><i class="fa fa-refresh"></i></button>
+                <div class="btn-group btn-group-sm">
+                    <button  class="btn btn-default" disabled="disabled" id="checkYse" onclick="checkOrDelete(1);">批量启用</button>
+                    <button  class="btn btn-default" disabled="disabled" id="checkNo" onclick="checkOrDelete(0);">批量歇业</button>
+                </div>
+                <button class="btn btn-default btn-sm" type="button" disabled="disabled" id="delete" onclick="checkOrDelete(4);"><i class="fa fa-trash"></i> 回收站</button>
+            </div>
+            <div class="pull-right">
+                {$pager}
+            </div>
+        </div>
+    </div>
+
+    <div id="modal-module-gift22" class="modal fade" tabindex="-1">
+        <div class="modal-dialog" style='width: 920px;'>
+            <div class="modal-content">
+                <div class="modal-header">
+                    <button aria-hidden="true" data-dismiss="modal" class="close" type="button">×</button>
+                    <h3>驳回理由</h3>
+                </div>
+                <div class="modal-body" style="padding: 0;">
+                    <div class="modal-body">
+                        <textarea id="remark" name="admin_remark" class="form-control" rows="5"></textarea>
+                    </div>
+                </div>
+                <div class="modal-footer" style="padding:15px;">
+                    <a class="btn btn-default js-cancel" aria-hidden="true" data-dismiss="modal">取消</a>
+                    <a class="btn btn-primary js-order-id-post" order-id="" data-dismiss="modal" aria-hidden="true">确定</a>
+                </div>
+            </div>
+        </div>
+    </div>
+
+</div>
+<script>
+
+    function checkOrDelete(check){
+        var content = '';
+        if(check==1) content = '确认启用选中服务者？';
+        if(check==0) content = '确认歇业选中服务者？';
+        if(check==4) content = '确认把选中服务者信息放入回收站？如果服务者信息已在回收站将会被彻底删除。';
+        layer.open({
+            title: [
+                '提示',
+                'background-color:#18A689; color:#fff;'
+            ]
+            ,anim: 'up'
+            ,content: content
+            ,btn: ['确认', '取消']
+            ,yes:function(index){
+                $('.layer-anim').remove();
+                var ids = [];
+                var $checks=$('.checkbox:checkbox:checked');
+                $checks.each(function() {
+                    if (this.checked) {
+                        ids.push(this.value);
+                    };
+                });
+                //处理
+                $.post("{php echo web_url('housekeep/KeepWeb/allchangestatus')}", { ids : ids ,status:check}, function(data){
+                    if(!data.errno){
+                        util.tips("操作成功！");
+                        location.reload();
+                    }else{
+                        util.tips(data.message);
+                    };
+                }, 'json');
+            }
+        });
+    }
+
+    $(function(){
+        $('.checkbox,.checkboxall').click(function(){
+            var $checks=$('.checkbox:checkbox:checked');
+            $('#check').attr('disabled','');
+            if($checks.length>0) {
+                $('#checkYse').attr('disabled',false);
+                $('#checkNo').attr('disabled',false);
+                $('#delete').attr('disabled',false);
+            }else{
+                $('#checkYse').attr('disabled',true);
+                $('#checkNo').attr('disabled',true);
+                $('#delete').attr('disabled',true);
+            }
+        });
+
+        //驳回申请理由
+        $('.rejectdis').click(function(){
+            var appid = $(this).attr('appid');
+            $('.js-order-id-post').attr("order-id",appid);
+            popwin = $('#modal-module-gift22').modal();
+        });
+
+        $('.js-order-id-post').click(function() {
+            var order_id = $(this).attr('order-id');
+            var remark = $('#remark').val();
+            $.post("{php echo web_url('housekeep/KeepWeb/changeArtificer')}",{status:6,id:order_id,reason:remark},function(d){
+                if(!d.errno){
+                    util.tips('驳回成功!');
+                    location.reload();
+                }
+            },"json");
+            //$('#order-remark-container').hide();
+            $('.main').css("opacity","1");$('.nav').css("opacity","1");$('.big-menu').css("opacity","1");
+        });
+
+    });
+</script>
+{php include wl_template('common/footer');}

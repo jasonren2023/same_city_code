@@ -1,0 +1,26 @@
+<?xml version="1.0" encoding="utf-8"?>
+<manifest>
+	<application>
+		<name><![CDATA[微信公众号]]></name>
+		<identifie><![CDATA[wxplatform]]></identifie>
+		<version><![CDATA[1.0.0]]></version>
+		<type><![CDATA[channel]]></type>
+		<description><![CDATA[微信公众号，无缝对接公众号的会员数据，帮您省去运营烦恼。]]></description>
+		<author><![CDATA[微连科技]]></author>
+		<url><![CDATA[http://www.weliam.cn/]]></url>
+	</application>
+	<setting>
+		<agent embed="false" />
+		<system embed="true" />
+		<task embed="true" />
+	</setting>
+	<agentmenu>
+	</agentmenu>
+	<systemmenu>
+		<menu title="公众号" font="fa-inbox">
+			<entry title="公众号信息" ac="wechat" do="info" iscover="true" />
+			<entry title="自动回复" ac="wechat" do="autoreply"  />
+			<entry title="自定义菜单" ac="wechat" do="diymenu"  />
+		</menu>
+	</systemmenu>
+</manifest>

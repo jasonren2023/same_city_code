@@ -1,0 +1,132 @@
+{php include wl_template('common/header');}
+<style type='text/css'>
+    .order-rank img{width:16px; height:16px;}
+    .js-remark,.js-admin-remark{word-break:break-all; overflow:hidden; background: #FDEEEE;color: #ED5050;padding: 5px 10px;}
+    td.goods-info{position:relative; padding-left:60px;}
+    .goods-info .img{position:absolute;top:50%; margin-top:-25px; background: url({IMAGE_LOADING}) center center no-repeat; width:50px;height:50px; }
+    .goods-info span {white-space: nowrap;overflow: hidden;text-overflow: ellipsis;display: block;}
+    .status-text{cursor:pointer;}
+</style>
+<ul class="nav nav-tabs">
+    <li class="active"><a href="javascript:;">商品列表</a></li>
+</ul>
+<div class="app-content">
+
+    <div class="app-table-list">
+        <div class="panel-body table-responsive collapse in order-list" id="order-template-item-4" style="padding: 0;">
+            <table class="table table-hover table-bordered">
+                <thead style="background-color: #FFFFFF;">
+                <tr>
+                    <th width="5%" style="text-align:center;">内部商品ID</th>
+                    <th width="20%">商品信息</th>
+                    <th width="15%" style="text-align:center;">商品类目</th>
+                    <th width="15%" style="text-align:center;">商品状态</th>
+                    <th width="10%" style="text-align:center;">售价/库存</th>
+                    <th width="15%" style="text-align:center;">上传/修改时间</th>
+                    <th width="20%" style="text-align:center;">操作</th>
+                </tr>
+                </thead>
+                <tbody>
+                {loop $list $item}
+                <tr>
+                    <td class="text-center">{$item['product_id']}</td>
+                    <td class="goods-info line-feed">
+                        <div class="img"><img class="scrollLoading" src="{IMAGE_PIXEL}" data-url="{php echo tomedia($item['thumb'])}" height="50" width="50" onerror="this.src='{IMAGE_NOPIC_SMALL}'" ></div>
+                        <div class="title" style="padding-left: 60px;">
+                            <span>{$item['title']}</span>
+                        </div>
+                    </td>
+                    <td class="text-center">
+                        {$item['catinfo']['first_cat_name']}/{$item['catinfo']['second_cat_name']}/{$item['catinfo']['third_cat_name']}
+                    </td>
+                    <td class="text-center">
+                        {if $item['status'] == 0}
+                        <span class="label label-info">待上架</span>
+                        {else if $item['status'] == 11}
+                        <span class="label label-warning">自主下架</span><br/>
+                        {else if $item['status'] == 5}
+                        <span class="label label-success">上架中</span><br/>
+                        {else if $item['status'] == 12}
+                        <span class="label label-warning">售磬下架</span><br/>
+                        {else if $item['status'] == 13}
+                        <span class="label label-danger">违规下架</span><br/>
+                        {/if}
+                        <br/>
+                        {if $item['edit_status'] == 0}
+                        <span class="label label-info">待审核</span>
+                        {else if $item['edit_status'] == 1}
+                        <span class="label label-default">编辑中</span><br/>
+                        {else if $item['edit_status'] == 2}
+                        <span class="label label-warning">审核中</span><br/>
+                        {else if $item['edit_status'] == 3}
+                        <span class="label label-danger">审核驳回</span><br/>
+                        {else if $item['edit_status'] == 4}
+                        <span class="label label-success">审核通过</span><br/>
+                        {/if}
+                    </td>
+                    <td class="text-center">
+                        ￥{$item['sealprice']}<br/>
+                        {$item['stock_num']}个
+                    </td>
+                    <td class="text-center">
+                        {$item['create_time']}<br/>
+                        {$item['update_time']}
+                    </td>
+                    <td class="text-center" style="position: relative;">
+                        <!--                        <p style="color: #428bca;display: inline-block;"><a href="{php echo web_url('housekeep/KeepWeb/editService', array('id' => $item['id']))}">编辑</a> </p>-->
+                        {if $item['status'] == 5}
+                        <p style="color: #428bca;display: inline-block;"><a href="{php echo web_url('wxchannels/channelweb/changeegoods', array('id'=>$item['product_id'],'status' =>2 ))}" data-toggle="ajaxRemove" data-confirm="确定下架此商品？">下架</a></p>
+                        {/if}
+                        {if $item['status'] == 11 || $item['status'] == 12}
+                        <p style="color: #428bca;display: inline-block;"><a href="{php echo web_url('wxchannels/channelweb/changeegoods', array('id'=>$item['product_id'],'status' =>1 ))}" data-toggle="ajaxRemove" data-confirm="确定上架此商品？">上架</a></p>
+                        {/if}
+                        {if $item['edit_status'] == 2}
+                        <p style="color: #428bca;display: inline-block;"><a href="{php echo web_url('wxchannels/channelweb/changeegoods', array('id'=>$item['product_id'],'status' =>4 ))}" data-toggle="ajaxRemove" data-confirm="确定撤回此商品的提审吗？">撤回审核</a></p>
+                        {/if}
+                        <p style="color: #428bca;display: inline-block;"><a data-toggle="ajaxModal"  href="{php echo web_url('wxchannels/channelweb/updatemodal', array('id' => $item['product_id']))}">快速更新</a></p>
+                        {if $item['edit_status'] == 3}
+                        <p style="color: #428bca;display: inline-block;"><a href="javascript:;" class="rejectdis" reason="{$item['reject_reason']}">查看驳回原因</a></p>
+                        {/if}
+                        <p style="color: #428bca;display: inline-block;"><a href="{php echo web_url('wxchannels/channelweb/changeegoods', array('id'=>$item['product_id'],'status' =>3))}" data-toggle="ajaxRemove" data-confirm="确定删除此商品？">删除</a></p>
+                    </td>
+                </tr>
+                {/loop}
+                </tbody>
+            </table>
+        </div>
+        <div class="app-table-foot clearfix">
+            <div class="pull-right">
+                {$pager}
+            </div>
+        </div>
+    </div>
+
+    <div id="modal-module-gift22" class="modal fade" tabindex="-1">
+        <div class="modal-dialog" style='width: 920px;'>
+            <div class="modal-content">
+                <div class="modal-header">
+                    <button aria-hidden="true" data-dismiss="modal" class="close" type="button">×</button>
+                    <h3>驳回理由</h3>
+                </div>
+                <div class="modal-body" style="padding: 0;">
+                    <div class="modal-body">
+                        <textarea id="remark" name="admin_remark" class="form-control" rows="5"></textarea>
+                    </div>
+                </div>
+                <div class="modal-footer" style="padding:15px;">
+                    <a class="btn btn-default js-cancel" aria-hidden="true" data-dismiss="modal">关闭</a>
+                </div>
+            </div>
+        </div>
+    </div>
+
+</div>
+<script>
+    //驳回理由查看
+    $('.rejectdis').click(function(){
+        var reason = $(this).attr('reason');
+        $('#remark').value(reason);
+        popwin = $('#modal-module-gift22').modal();
+    });
+</script>
+{php include wl_template('common/footer');}

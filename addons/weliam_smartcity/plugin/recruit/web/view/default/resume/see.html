@@ -1,0 +1,235 @@
+{php include wl_template('common/header');}
+<style>
+    #work{
+        border: 1px solid #e8e9eb;
+        background-color: #eee;
+        font-size: 13px;
+    }
+    #work .block{
+        border-bottom: 1px solid #fff;
+        padding: 10px 15px;
+    }
+    #work .block .title{
+        width: 50%;
+        float: left;
+        height: 20px;
+        line-height: 20px;
+    }
+    #work .block .time{
+        width: 50%;
+        float: right;
+        height: 20px;
+        line-height: 20px;
+        text-align: right;
+    }
+    #work .block .corporate{
+        width: 100%;
+        float: left;
+        height: 20px;
+        line-height: 20px;
+    }
+    #work .block .contentTitle{
+        height: 100%;
+        width: 70px;
+        display: inline-block;
+        text-align: left;
+    }
+    #work .block .textTitle{
+        float: left;
+    }
+    #work .block .title .contentTitle{
+        color: #64CF8C;
+    }
+    #work .block .time .contentTitle{
+        color: #FF8F00;
+    }
+    #work .block .corporate .contentTitle{
+        color: #518DF5;
+    }
+    #work .block .textTitle{
+        color: #23c6c8;
+    }
+    #work .block textarea{
+        width: calc(100% - 70px);
+        resize: none;
+        border: none;
+        background: #eee;
+        padding: 0!important;
+        min-height: 150px;
+    }
+    .educational{
+        border-top: 1px solid #eeeeee;
+    }
+    .educational .left{
+        float: left;
+        width: 150px;
+        font-size: 15px;
+        text-align: center;
+        padding-top: 10px;
+        position: relative;
+        height: 85px;
+        border-bottom: 1px solid #EEE;
+    }
+    .educational .left .spot{
+        width: 6px;
+        height: 6px;
+        background: #409EFF;
+        border-radius: 50%;
+        position: absolute;
+        right: -3px;
+        top: 20px;
+    }
+    .educational .right{
+        float: right;
+        width: calc(100% - 150px);
+        padding-top: 20px;
+        border-left: 1px solid #EEE;
+        border-bottom: 1px solid #EEE;
+        padding-left: 30px;
+        min-height: 85px;
+    }
+    .educational .right .info .title{
+        box-sizing: border-box;
+        -webkit-tap-highlight-color: rgba(0, 0, 0, 0);
+        display: inline-block;
+        padding: 0 5px;
+        height: 20px;
+        line-height: 20px;
+        border-radius: 2px;
+        text-align: center;
+        margin-right: 10px;
+        margin-bottom: 5px;
+    }
+    .educational .right .info .work .title{
+        color: #64CF8C;
+        background: #ECF9F1;
+    }
+    .educational .right .info .corporate .title{
+        color: #FF8F00;
+        background: #FFE0D1;
+    }
+</style>
+<ul class="nav nav-tabs">
+    <li><a href="{php echo web_url('recruit/recruitment/resumeList')}">简历列表</a></li>
+    <li class="active"><a href="javascript:;">简历查看</a></li>
+</ul>
+<div class="app-content">
+    <div class="app-form">
+        <div class="panel panel-default">
+            <form class="form-horizontal form-validate" method="post">
+                <div class="form-group">
+                    <label class="col-sm-2 control-label">用户信息</label>
+                    <div class="col-sm-9">
+                        <div class="input-group">
+                            <span class="input-group-addon">姓名</span>
+                            <input type="text" class="form-control" disabled="disabled" value="{$info['name']}">
+                            <span class="input-group-addon">年龄</span>
+                            <input type="text" class="form-control" disabled="disabled" value="{$info['age']}">
+                            <span class="input-group-addon">性别</span>
+                            <input type="text" class="form-control" disabled="disabled" value="{if $info['gender'] == 2}男{else}女{/if}">
+                            <span class="input-group-addon">最高学历</span>
+                            <input type="text" class="form-control" disabled="disabled" value="{$info['education']}">
+                        </div>
+                        <div class="input-group" style="margin-top:2px;">
+                            <img src="{php echo tomedia($info['avatar']);}" class="img-responsive img-thumbnail" width="132">
+                        </div>
+                    </div>
+                </div>
+                <div class="form-group">
+                    <label class="col-sm-2 control-label">联系方式</label>
+                    <div class="col-sm-9">
+                        <input class="form-control" type="text" disabled="disabled" value="{$info['phone']}"/>
+                    </div>
+                </div>
+                <div class="form-group">
+                    <label class="col-sm-2 control-label">上岗状态</label>
+                    <div class="col-sm-9">
+                        <input class="form-control" type="text" disabled="disabled" value="{$info['work_status']}"/>
+                    </div>
+                </div>
+                <div class="form-group">
+                    <label class="col-sm-2 control-label">工作经验</label>
+                    <div class="col-sm-9">
+                        <input class="form-control" type="text" disabled="disabled" value="{$info['experience']}"/>
+                    </div>
+                </div>
+                <div class="form-group">
+                    <label class="col-sm-2 control-label">期望职位</label>
+                    <div class="col-sm-9" style="padding-top: 6px;">
+                        {loop $info['expect_position'] $position}
+                            <label class="label label-primary">{$position}</label>
+                        {/loop}
+                    </div>
+                </div>
+                <div class="form-group">
+                    <label class="col-sm-2 control-label">工作类型</label>
+                    <div class="col-sm-9" style="padding-top: 6px;">
+                        <label class="label label-info">{if $info['job_type'] == 1}全职{else}兼职{/if}</label>
+                    </div>
+                </div>
+                <div class="form-group">
+                    <label class="col-sm-2 control-label">期望薪资</label>
+                    <div class="col-sm-9">
+                        <input class="form-control" type="text" disabled="disabled" value="{$info['expect_salary_min']}{if $info['job_type'] == 1}元/月{else}元/天{/if} ~ {$info['expect_salary_max']}{if $info['job_type'] == 1}元/月{else}元/天{/if}"/>
+                    </div>
+                </div>
+                <div class="form-group">
+                    <label class="col-sm-2 control-label">期望工作区域</label>
+                    <div class="col-sm-9">
+                        <input class="form-control" type="text" disabled="disabled" value="{$info['expect_work_province']}{if $info['expect_work_city']}.{$info['expect_work_city']}{if $info['expect_work_area']}.{$info['expect_work_area']}{/if}{/if}"/>
+                    </div>
+                </div>
+                <div class="form-group">
+                    <label class="col-sm-2 control-label">工作经历</label>
+                    <div class="col-sm-9">
+                        <div id="work">
+                            {loop $info['work_experience'] $work}
+                                <div class="block">
+                                    <div class="title"><span class="contentTitle">项目名称：</span>{$work['title']}</div>
+                                    <div class="time"><span class="contentTitle">项目时间：</span>{php echo date("Y-m-d",$work['start_time'])} ~ {if $work['end_time'] > 0}{php echo date("Y-m-d",$work['end_time'])}{else}至今{/if}</div>
+                                    <div class="corporate"><span class="contentTitle">所在企业：</span>{$work['corporate_name']}</div>
+                                    <div class="contentTitle textTitle">基本描述： </div>
+                                    <textarea disabled="disabled">{$work['content']}{$work['content']}{$work['content']}{$work['content']}{$work['content']}{$work['content']}{$work['content']}{$work['content']}</textarea>
+                                </div>
+                            {/loop}
+                        </div>
+                    </div>
+                </div>
+                <div class="form-group">
+                    <label class="col-sm-2 control-label">教育经历</label>
+                    <div class="col-sm-9">
+                        <div class="educational">
+                            {loop $info['educational_experience'] $educational}
+                                <div class="left">
+                                    <div>{php echo date("Y-m-d",$educational['start_time'])}</div>
+                                    <div>至</div>
+                                    <div>{php echo date("Y-m-d",$educational['end_time'])}</div>
+                                    <div class="spot"></div>
+                                </div>
+                                <div class="right">
+                                    <div class="info">
+                                        <div class="work">
+                                            <div class="title">就读学校：</div>{$educational['school']}
+                                        </div>
+                                        {if $educational['major']}
+                                            <div class="corporate">
+                                                <div class="title">就读专业：</div>{$educational['major']}
+                                            </div>
+                                        {/if}
+                                    </div>
+                                </div>
+                            {/loop}
+                        </div>
+                    </div>
+                </div>
+                <div class="form-group">
+                    <label class="col-sm-2 control-label">自我评价</label>
+                    <div class="col-sm-9">
+                        <textarea class="form-control" rows="10" style="resize: none;font-size: 15px;" disabled="disabled">{$info['self_evaluation']}</textarea>
+                    </div>
+                </div>
+            </form>
+        </div>
+    </div>
+</div>
+{php include wl_template('common/footer');}

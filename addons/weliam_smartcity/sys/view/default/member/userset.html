@@ -1,0 +1,196 @@
+{php include wl_template('common/header');}
+<ul class="nav nav-tabs" id="myTab">
+    <li class="active"><a href="#tab_basic">用户设置</a></li>
+</ul>
+<div class="app-content">
+    <div class="app-form">
+        <form action="" method="post" class="form-horizontal form form-validate">
+            <div class="panel panel-default">
+                <div class="panel-heading">用户设置</div>
+                <div class="panel-body">
+                    <div class="form-group">
+                        <label class="col-sm-2 control-label">短信验证码</label>
+                        <div class="col-sm-9">
+                            <label class="radio-inline"><input type="radio" name="userset[smsver]" value="1" {if $settings['smsver'] == 1} checked {/if}>禁用</label>
+                            <label class="radio-inline"><input type="radio" name="userset[smsver]" value="0" {if $settings['smsver'] != 1} checked {/if}>启用</label>
+                            <span class="help-block">启用短信验证可以保证用户所填手机号码的真实性,在用户注册时生效。</span>
+                        </div>
+                    </div>
+                    <div class="form-group">
+                        <label class="col-sm-2 control-label">图形验证码</label>
+                        <div class="col-sm-9">
+                            <label class="radio-inline"><input type="radio" name="userset[verifycode]" value="0" {if $settings['verifycode'] != 1} checked {/if}>禁用</label>
+                            <label class="radio-inline"><input type="radio" name="userset[verifycode]" value="1" {if $settings['verifycode'] == 1} checked {/if}>启用</label>
+                            <span class="help-block">启用图形验证码能有效防止短信被恶意消耗,在用户注册时生效。</span>
+                        </div>
+                    </div>
+                    <div class="form-group">
+                        <label class="col-sm-2 control-label">要求绑定手机</label>
+                        <div class="col-sm-9">
+                            {if p('rush')}
+                            <label class="checkbox-inline">
+                                <input type="checkbox" {if in_array('rush',$settings['plugin'])} checked="checked" {/if} name="plugin[]" value="rush" id="wk1">抢购活动
+                            </label>
+                            {/if}
+                            {if p('groupon')}
+                            <label class="checkbox-inline">
+                                <input type="checkbox" {if in_array('groupon',$settings['plugin'])} checked="checked" {/if} name="plugin[]" value="groupon" >团购活动
+                            </label>
+                            {/if}
+                            {if p('wlfightgroup')}
+                            <label class="checkbox-inline">
+                                <input type="checkbox" {if in_array('wlfightgroup',$settings['plugin'])} checked="checked" {/if} name="plugin[]" value="wlfightgroup" id="wk2">拼团商城
+                            </label>
+                            {/if}
+                            {if p('wlcoupon')}
+                            <label class="checkbox-inline">
+                                <input type="checkbox" {if in_array('coupon',$settings['plugin'])} checked="checked" {/if} name="plugin[]" value="coupon" id="wk5">超级券
+                            </label>
+                            {/if}
+                            {if p('activity')}
+                            <label class="checkbox-inline">
+                                <input type="checkbox" {if in_array('activity',$settings['plugin'])} checked="checked" {/if} name="plugin[]" value="activity" id="wk6">同城活动
+                            </label>
+                            {/if}
+                            {if p('halfcard')}
+                            <label class="checkbox-inline">
+                                <input type="checkbox" {if in_array('halfcard',$settings['plugin'])} checked="checked" {/if} name="plugin[]" value="halfcard" id="wk3">一卡通
+                            </label>
+                            {/if}
+                            {if p('pocket')}
+                            <label class="checkbox-inline">
+                                <input type="checkbox" {if in_array('pocket',$settings['plugin'])} checked="checked" {/if} name="plugin[]" value="pocket" id="wk4">掌上信息
+                            </label>
+                            {/if}
+                            <label class="checkbox-inline">
+                                <input type="checkbox" {if in_array('charge',$settings['plugin'])} checked="checked" {/if} name="plugin[]" value="charge" >付费入驻
+                            </label>
+                            {if p('distribution')}
+                            <label class="checkbox-inline">
+                                <input type="checkbox" {if in_array('distribution',$settings['plugin'])} checked="checked" {/if} name="plugin[]" value="distribution" >申请分销商
+                            </label>
+                            {/if}
+                            {if p('bargain')}
+                            <label class="checkbox-inline">
+                                <input type="checkbox" {if in_array('bargain',$settings['plugin'])} checked="checked" {/if} name="plugin[]" value="bargain" >发起砍价
+                            </label>
+                            <label class="checkbox-inline">
+                                <input type="checkbox" {if in_array('helpbargain',$settings['plugin'])} checked="checked" {/if} name="plugin[]" value="helpbargain" >帮忙砍价
+                            </label>
+                            {/if}
+                            {if p('consumption')}
+                            <label class="checkbox-inline">
+                                <input type="checkbox" {if in_array('consumption',$settings['plugin'])} checked="checked" {/if} name="plugin[]" value="consumption" >积分兑换
+                            </label>
+                            {/if}
+                            {if p('draw')}
+                            <label class="checkbox-inline">
+                                <input type="checkbox" {if in_array('draw',$settings['plugin'])} checked="checked" {/if} name="plugin[]" value="draw" >幸运抽奖
+                            </label>
+                            {/if}
+                            <label class="checkbox-inline">
+                                <input type="checkbox" {if in_array('private',$settings['plugin'])} checked="checked" {/if} name="plugin[]" value="private">评论回复私信
+                            </label>
+                            {if p('housekeep')}
+                            <label class="checkbox-inline">
+                                <input type="checkbox" {if in_array('housekeep',$settings['plugin'])} checked="checked" {/if} name="plugin[]" value="housekeep" >家政需求发布
+                            </label>
+                            {/if}
+                            {if uniacid_p('dating')}
+                            <label class="checkbox-inline">
+                                <input type="checkbox" {if in_array('dating',$settings['plugin'])} checked="checked" {/if} name="plugin[]" value="dating" >相亲资料提交
+                            </label>
+                            {/if}
+                            {if uniacid_p('luckydraw')}
+                            <label class="checkbox-inline">
+                                <input type="checkbox" {if in_array('luckydraw',$settings['plugin'])} checked="checked" {/if} name="plugin[]" value="luckydraw" >锦鲤抽奖广告和分享
+                            </label>
+                            {/if}
+                        </div>
+                    </div>
+                    <div class="form-group">
+                        <label class="col-sm-2 control-label">同手机绑定方式</label>
+                        <div class="col-sm-9">
+                            <label class="radio-inline"><input type="radio" name="userset[onemobiletype]" value="0" {if $settings['onemobiletype'] == 0 || empty($settings['onemobiletype'])} checked {/if}>合并用户数据</label>
+                            <label class="radio-inline"><input type="radio" name="userset[onemobiletype]" value="1" {if $settings['onemobiletype'] == 1} checked {/if}>改绑新用户</label>
+                            <label class="radio-inline"><input type="radio" name="userset[onemobiletype]" value="2" {if $settings['onemobiletype'] == 2} checked {/if}>禁止绑定</label>
+                            <span class="help-block">几条用户数据同时绑定一个手机号时的处理方式。</span>
+                        </div>
+                    </div>
+                    <div class="form-group">
+                        <label class="col-sm-2 control-label">站内私信</label>
+                        <div class="col-sm-9">
+                            <label class="radio-inline"><input type="radio" name="userset[privatestatus]" value="0" {if $settings['privatestatus'] == 0 || empty($settings['privatestatus'])} checked {/if}>开启</label>
+                            <label class="radio-inline"><input type="radio" name="userset[privatestatus]" value="1" {if $settings['privatestatus'] == 1} checked {/if}>关闭</label>
+                            <span class="help-block">是否开启系统私信功能。</span>
+                        </div>
+                    </div>
+                    <div class="form-group">
+                        <label class="col-sm-2 control-label">自助注销</label>
+                        <div class="col-sm-9">
+                            <label class="radio-inline"><input type="radio" name="userset[cancellation]" value="1" {if $settings['cancellation'] == 1} checked {/if}>开启</label>
+                            <label class="radio-inline"><input type="radio" name="userset[cancellation]" value="0" {if $settings['cancellation'] == 0 || empty($settings['cancellation'])} checked {/if}>关闭</label>
+                            <span class="help-block">开启后用户可以在个人中心注销账号。</span>
+                        </div>
+                    </div>
+                    <div class="form-group">
+                        <label class="col-sm-2 control-label">自动获取定位授权</label>
+                        <div class="col-sm-9">
+                            <label class="radio-inline"><input type="radio" name="userset[getGps]" value="0" {if $settings['getGps'] == 0 || empty($settings['getGps'])} checked {/if}>开启</label>
+                            <label class="radio-inline"><input type="radio" name="userset[getGps]" value="1" {if $settings['getGps'] == 1} checked {/if}>关闭</label>
+                            <span class="help-block">开启后用户进入系统时就会提示获取定位信息。</span>
+                        </div>
+                    </div>
+                    <div class="form-group">
+                        <label class="col-sm-2 control-label">黑名单提示语</label>
+                        <div class="col-sm-9">
+                            <input type="text" name="userset[black_desc]" placeholder="您被禁止访问，请联系客服" class="form-control" value="{$settings['black_desc']}" >
+                            <span class="help-block">被加入黑名单的用户访问时看到的提示文字。</span>
+                        </div>
+                    </div>
+                    <div class="form-group">
+                        <label class="col-sm-2 control-label">个人中心背景</label>
+                        <div class="col-sm-9">
+                            {php echo attachment_select('userset[userbg]', $settings['userbg']);}
+                            <span class="help-block">建议图片大小750*500，<a href="{URL_MODULE}h5/resource/image/userCenterImg.png" target="_blank">默认背景参考点击查看</a></span>
+                        </div>
+                    </div>
+                    <div class="form-group">
+                        <label class="col-sm-2 control-label">个人主页背景</label>
+                        <div class="col-sm-9">
+                            {php echo attachment_select('userset[usermainbg]', $settings['usermainbg']);}
+                            <span class="help-block">建议图片大小750*520，<a href="{URL_MODULE}h5/resource/image/mainbgimg.png" target="_blank">默认背景参考点击查看</a></span>
+                        </div>
+                    </div>
+                    <div class="form-group">
+                        <label class="col-sm-2 control-label">用户协议</label>
+                        <div class="col-sm-9">
+                            {php echo tpl_diy_editor_create('userset[describe]',$settings['describe']);}
+                        </div>
+                    </div>
+                    <div class="form-group">
+                        <label class="col-sm-2 control-label">隐私政策</label>
+                        <div class="col-sm-9">
+                            {php echo tpl_diy_editor_create('userset[privacy]',$settings['privacy']);}
+                        </div>
+                    </div>
+                    <div class="form-group">
+                        <label class="col-sm-2 control-label">敏感词过滤</label>
+                        <div class="col-sm-9">
+                            <textarea name="userset[sensitive]" class="form-control" rows="4" >{$settings['sensitive']}</textarea>
+                            <div class="help-block">用户发布信息时需要过滤的关键词，用英文逗号分割：“,”</div>
+                        </div>
+                    </div>
+                </div>
+                <div class="form-group">
+                    <label class="col-sm-2 control-label"></label>
+                    <div class="col-sm-9">
+                        <input type="submit" name="submit" value="提交" class="btn btn-primary min-width" />
+                        <input type="hidden" name="token" value="{$_W['token']}" />
+                    </div>
+                </div>
+            </div>
+        </form>
+    </div>
+</div>
+{php include wl_template('common/footer');}

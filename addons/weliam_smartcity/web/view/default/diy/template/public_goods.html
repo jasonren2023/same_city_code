@@ -1,0 +1,109 @@
+<!--------------------------  通用商品组件群  ----------------------------------->
+<!-- 风格一 -->
+<script type="text/html" id="tpl_show_public_goods">
+    <div class="drag" data-itemid="<%itemid%>"  group_name="<%group_name%>" group_key="<%group_key%>" data-id="<%group_name%>">
+        <div class="goods_public_1 goods_style_4" style="margin-bottom: <%style.marginBottom||'1'%>px;padding: <%style.margin||'0'%>px;">
+            <div class="transverse" style="padding: <%style.padding||'0'%>px;background-color:<%style.bgColor||'#ffffff'%>;">
+                <div class="transverse_list">
+                    <div class="goods_father">
+                        <%each data as item%>
+                        <div class="goods_item"  style="padding-right: <%style.padding||'0'%>px;">
+                            <div class="goods_img">
+                                <img class="image" src="<%imgsrc item.logo%>" onerror="this.src='../addons/{MODULE_NAME}/web/resource/images/default.png';"/>
+                            </div>
+                            <div class="goods_tit"><%item.goods_name%></div>
+                            <div class="goods_price">
+                                <div class="present_price">
+                                    <div class="span">￥<%item.price%></div>
+                                </div>
+                                <%if item.oldprice%>
+                                <div class="original_price">￥<%item.oldprice%></div>
+                                <%/if%>
+                            </div>
+                        </div>
+                        <%/each%>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</script>
+<!-- 风格二 -->
+<script type="text/html" id="tpl_show_public_goods2">
+    <div class="drag" data-itemid="<%itemid%>"  group_name="<%group_name%>" group_key="<%group_key%>" data-id="<%group_name%>">
+        <div class="goods_public_2 diy-public_goods2" style="margin-bottom: <%style.marginBottom||'1'%>px;padding: <%style.margin||'1'%>px;">
+            <div class="goodslist" style="background:<%style.bgColor%>;">
+                <div class="hdtt-t">
+                    <div class="hdtt-t-l">
+                        <div class="h1"><%params.title||'主标题'%></div>
+                        <div class="p"><%params.sub_title||'副标题内容'%></div>
+                    </div>
+                    <div class="hdtt-t-r">
+                        <div class="span">
+                            <div class="em">1</div>/2
+                        </div>
+                    </div>
+                </div>
+                <div class="goodslist-d">
+                    <%each data as item%>
+                    <div class="goodslist-i">
+                        <div class="a">
+                            <div class="goodslist-i-t">
+                                <img src="<%imgsrc item.long_logo%>" onerror="this.src='../addons/{MODULE_NAME}/web/resource/images/default.png';">
+                            </div>
+                        </div>
+                        <div class="goodslist-i-c">
+                            <div class="goodslist-i-c-t">
+                                <div class="goodslist-i-c-t-l"><%item.storename%></div>
+                                <!--       <div class="goodslist-i-c-t-r">999m</div>-->
+                            </div>
+                            <div class="goodslist-i-c-c">
+                                <div class="a">
+                                    <div class="i">
+                                        <%if item.plugin == 'rush'%>
+                                        抢购
+                                        <%else if item.plugin == 'groupon'%>
+                                        团购
+                                        <%else if item.plugin == 'wlfightgroup'%>
+                                        拼团
+                                        <%else if item.plugin == 'coupon'%>
+                                        卡券
+                                        <%else if item.plugin == 'bargain'%>
+                                        砍价
+                                        <%else%>
+                                        标签
+                                        <%/if%>
+                                    </div>
+                                    <%item.goods_name%>
+                                </div>
+                            </div>
+                            <div class="goodslist-i-c-c2">
+                                <div class="h1"><%item.price%><div class="i inline">元</div>
+                                    <%if item.vipstatus == 1%>
+                                    <div class="span"><div class="i">会员</div>优惠<%item.discount_price%>元</div>
+                                    <%/if%>
+                                </div>
+                                <div class="h2">
+                                    <div class="a"><%params.button_name%></div>
+                                </div>
+                            </div>
+                            <div class="goodslist-i-c-b">
+                                <div class="p">
+                                    <%if item.plugin == 'coupon'%>
+                                    <div class="span" style="text-decoration: none;"><%if item.vipstatus == 1%>VIP特供<%else if item.vipstatus == 2%>VIP特价:<%item.vipprice%><%else%>无限制<%/if%></div>
+                                    <%else%>
+                                    <%if item.oldprice%>
+                                    <div class="span">￥<%item.oldprice%></div>
+                                    <%/if%>
+                                    <%/if%>
+                                    <div class="em"><%item.buy_num%>人喜欢</div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                    <%/each%>
+                </div>
+            </div>
+        </div>
+    </div>
+</script>

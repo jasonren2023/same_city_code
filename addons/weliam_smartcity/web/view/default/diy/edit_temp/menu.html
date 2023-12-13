@@ -1,0 +1,230 @@
+<!--------------------------  菜单配置群  ----------------------------------->
+<!-- 风格一 -->
+<script type="text/html" id="tpl_edit_menu">
+    <div class="form-group">
+        <div class="col-sm-2 control-label">背景颜色</div>
+        <div class="col-sm-9">
+            <div class="input-group">
+                <input class="form-control diy-bind color" data-bind-child="style" data-bind="background" value="<%style.background%>" type="color" />
+                <span class="input-group-addon btn btn-default" onclick="$(this).prev().val('#ffffff').trigger('propertychange')">清除</span>
+            </div>
+        </div>
+    </div>
+
+    <div class="form-group">
+        <div class="col-sm-2 control-label">按钮形状</div>
+        <div class="col-sm-9">
+            <label class="radio-inline"><input type="radio" name="navstyle" value="" class="diy-bind" data-bind-child="style" data-bind="navstyle" <%if style.navstyle==''%>checked="checked"<%/if%>> 正方形</label>
+            <label class="radio-inline"><input type="radio" name="navstyle" value="radius" class="diy-bind" data-bind-child="style" data-bind="navstyle" <%if style.navstyle=='radius'%>checked="checked"<%/if%>> 圆角</label>
+            <label class="radio-inline"><input type="radio" name="navstyle" value="circle" class="diy-bind" data-bind-child="style" data-bind="navstyle" <%if style.navstyle=='circle'%>checked="checked"<%/if%>> 圆形</label>
+        </div>
+    </div>
+    <div class="form-group">
+        <div class="col-sm-2 control-label">下边距</div>
+        <div class="col-sm-9">
+            <div class="form-group">
+                <div class="slider col-sm-8" data-value="<%style.marginbottom%>" data-min="0" data-max="30"></div>
+                <div class="col-sm-9 control-labe count"><span><%style.marginbottom%></span>px(像素)</div>
+                <input class="diy-bind input" data-bind-child="style" data-bind="marginbottom" value="<%style.marginbottom%>" type="hidden" />
+            </div>
+        </div>
+    </div>
+    <div class="form-group">
+        <div class="col-sm-2 control-label">左右边距</div>
+        <div class="col-sm-9">
+            <div class="form-group">
+                <div class="slider col-sm-8" data-value="<%style.leftRight%>" data-min="0" data-max="30"></div>
+                <div class="col-sm-9 control-labe count"><span><%style.leftRight%></span>px(像素)</div>
+                <input class="diy-bind input" data-bind-child="style" data-bind="leftRight" value="<%style.leftRight%>" type="hidden" />
+            </div>
+        </div>
+    </div>
+    <div class="form-group">
+        <div class="col-sm-2 control-label">显示方式</div>
+        <div class="col-sm-9">
+            <label class="radio-inline"><input type="radio" name="showtype" value="0" class="diy-bind" data-bind-child="style" data-bind="showtype" data-bind-init="true" <%if style.showtype=='0'||!style.showtype%>checked="checked"<%/if%>>单页显示</label>
+            <label class="radio-inline"><input type="radio" name="showtype" value="1" class="diy-bind" data-bind-child="style" data-bind="showtype" data-bind-init="true" <%if style.showtype=='1'%>checked="checked"<%/if%>> 多页滑动显示</label>
+        </div>
+    </div>
+    <div class="form-group">
+        <div class="col-sm-2 control-label">每行数量</div>
+        <div class="col-sm-9">
+            <label class="radio-inline"><input type="radio" name="rownum" value="3" class="diy-bind" data-bind-child="style" data-bind="rownum" <%if style.rownum=='3'%>checked="checked"<%/if%>> 3个</label>
+            <label class="radio-inline"><input type="radio" name="rownum" value="4" class="diy-bind" data-bind-child="style" data-bind="rownum" <%if style.rownum=='4'%>checked="checked"<%/if%>> 4个</label>
+            <label class="radio-inline"><input type="radio" name="rownum" value="5" class="diy-bind" data-bind-child="style" data-bind="rownum" <%if style.rownum=='5'%>checked="checked"<%/if%>> 5个</label>
+        </div>
+    </div>
+    <%if style.showtype>0%>
+        <div class="form-group">
+            <div class="col-sm-2 control-label">每页数量</div>
+            <div class="col-sm-9">
+                <div class="form-group">
+                    <div class="slider col-sm-8" data-value="<%style.pagenum||8%>" data-min="3" data-max="20"></div>
+                    <div class="col-sm-9 control-labe count"><span><%style.pagenum||8%></span>个</div>
+                    <input class="diy-bind input" data-bind-child="style" data-bind="pagenum" value="<%style.pagenum||8%>" type="hidden" />
+                </div>
+                <div class="help-block">超出设定数量自动分页</div>
+            </div>
+        </div>
+        <div class="form-group">
+            <div class="col-sm-2 control-label">切页按钮形状</div>
+            <div class="col-sm-9">
+                <label class="radio-inline"><input type="radio" name="dotstyle" value="rectangle" class="diy-bind" data-bind-child="style" data-bind="dotstyle" <%if style.dotstyle=='rectangle'%>checked="checked"<%/if%> > 长方形</label>
+                <label class="radio-inline"><input type="radio" name="dotstyle" value="square" class="diy-bind" data-bind-child="style" data-bind="dotstyle" <%if style.dotstyle=='square'%>checked="checked"<%/if%>> 正方形</label>
+                <label class="radio-inline"><input type="radio" name="dotstyle" value="round" class="diy-bind" data-bind-child="style" data-bind="dotstyle" <%if style.dotstyle=='round'%>checked="checked"<%/if%>> 圆形</label>
+            </div>
+        </div>
+        <div class="form-group">
+            <div class="col-sm-2 control-label">切页按钮形状</div>
+            <div class="col-sm-9">
+                <label class="radio-inline"><input type="radio" name="dotalign" value="left" class="diy-bind" data-bind-child="style" data-bind="dotalign" <%if style.dotalign=='left'%>checked="checked"<%/if%> > 居左</label>
+                <label class="radio-inline"><input type="radio" name="dotalign" value="center" class="diy-bind" data-bind-child="style" data-bind="dotalign" <%if style.dotalign=='center'%>checked="checked"<%/if%>> 居中</label>
+                <label class="radio-inline"><input type="radio" name="dotalign" value="right" class="diy-bind" data-bind-child="style" data-bind="dotalign" <%if style.dotalign=='right'%>checked="checked"<%/if%>> 居右</label>
+            </div>
+        </div>
+
+    <%/if%>
+    <div class="form-items" data-min="1">
+        <div class="inner" id="form-items">
+            <%each data as child itemid %>
+            <div class="item" data-id="<%itemid%>">
+                <span class="btn-del" title="删除"></span>
+                <div class="item-image square">
+                    <div class="text" data-toggle="selectAttachment" data-input="#cimg-<%itemid%>" data-img="#pimg-<%itemid%>">选择图片</div>
+                    <img src="<%imgsrc child.imgurl%>" onerror="this.src='../addons/{MODULE_NAME}/web/resource/images/nopic.jpg';" id="pimg-<%itemid%>" />
+                    <input type="hidden" class="diy-bind" data-bind-parent="data" data-bind-child="<%itemid%>" data-bind="imgurl"  id="cimg-<%itemid%>" value="<%child.imgurl%>" />
+                </div>
+                <div class="item-form">
+                    <div class="input-group" style="margin-bottom:0px; ">
+                        <span class="input-group-addon">文字</span>
+                        <input type="text" class="form-control diy-bind" data-bind-parent="data" data-bind-child="<%itemid%>" data-bind="text" placeholder="请选择图片或输入图片地址" value="<%child.text%>" style="width: 60%" />
+                        <input class="form-control diy-bind color " data-bind-parent="data" data-bind-child="<%itemid%>" data-bind="color" value="<%child.color%>" type="color" style="width: 40%" />
+                        <span class="input-group-addon btn btn-default" onclick="$(this).prev().val('#666666').trigger('propertychange')">重置颜色</span>
+                    </div>
+                    <div class="input-group" style="margin-top:10px; margin-bottom:0px; ">
+                        <input type="text" class="form-control diy-bind" readonly="readonly" data-bind-parent="data" data-bind-child="<%itemid%>" data-bind="linkurl" id="curl-<%itemid%>" placeholder="请选择链接或输入链接地址" value="<%child.linkurl%>" />
+                        <span class="input-group-addon btn btn-default" data-toggle="selectUrl" data-input="#curl-<%itemid%>">选择链接</span>
+                    </div>
+                </div>
+                <div class="tips-text">推荐图片比例100*100</div>
+            </div>
+            <%/each%>
+        </div>
+        <div class="btn btn-w-m btn-block btn-default btn-outline" id="addChild"><i class="fa fa-plus"></i> 添加一个</div>
+    </div>
+</script>
+<!-- 风格二 -->
+<script type="text/html" id="tpl_edit_menu2">
+    <div class="form-group">
+        <div class="col-sm-2 control-label">背景颜色</div>
+        <div class="col-sm-9">
+            <div class="input-group">
+                <input class="form-control diy-bind color" data-bind-child="style" data-bind="background" value="<%style.background%>" type="color" />
+                <span class="input-group-addon btn btn-default" onclick="$(this).prev().val('#ffffff').trigger('propertychange')">清除</span>
+            </div>
+        </div>
+    </div>
+    <div class="form-group">
+        <div class="col-sm-2 control-label">按钮形状</div>
+        <div class="col-sm-9">
+            <label class="radio-inline"><input type="radio" name="navstyle" value="" class="diy-bind" data-bind-child="style" data-bind="navstyle" <%if style.navstyle==''%>checked="checked"<%/if%>> 正方形</label>
+            <label class="radio-inline"><input type="radio" name="navstyle" value="radius" class="diy-bind" data-bind-child="style" data-bind="navstyle" <%if style.navstyle=='radius'%>checked="checked"<%/if%>> 圆角</label>
+        </div>
+    </div>
+    <div class="form-group">
+        <div class="col-sm-2 control-label">下边距</div>
+        <div class="col-sm-9">
+            <div class="form-group">
+                <div class="slider col-sm-8" data-value="<%style.marginbottom%>" data-min="0" data-max="30"></div>
+                <div class="col-sm-9 control-labe count"><span><%style.marginbottom%></span>px(像素)</div>
+                <input class="diy-bind input" data-bind-child="style" data-bind="marginbottom" value="<%style.marginbottom%>" type="hidden" />
+            </div>
+        </div>
+    </div>
+    <div class="form-group">
+        <div class="col-sm-2 control-label">左右边距</div>
+        <div class="col-sm-9">
+            <div class="form-group">
+                <div class="slider col-sm-8" data-value="<%style.leftRight%>" data-min="0" data-max="30"></div>
+                <div class="col-sm-9 control-labe count"><span><%style.leftRight%></span>px(像素)</div>
+                <input class="diy-bind input" data-bind-child="style" data-bind="leftRight" value="<%style.leftRight%>" type="hidden" />
+            </div>
+        </div>
+    </div>
+    <div class="form-group">
+        <div class="col-sm-2 control-label">显示方式</div>
+        <div class="col-sm-9">
+            <label class="radio-inline"><input type="radio" name="showtype" value="0" class="diy-bind" data-bind-child="style" data-bind="showtype" data-bind-init="true" <%if style.showtype=='0'||!style.showtype%>checked="checked"<%/if%>>单页显示</label>
+            <label class="radio-inline"><input type="radio" name="showtype" value="1" class="diy-bind" data-bind-child="style" data-bind="showtype" data-bind-init="true" <%if style.showtype=='1'%>checked="checked"<%/if%>> 多页滑动显示</label>
+        </div>
+    </div>
+    <div class="form-group">
+        <div class="col-sm-2 control-label">每行数量</div>
+        <div class="col-sm-9">
+            <label class="radio-inline"><input type="radio" name="rownum" value="2" class="diy-bind" data-bind-child="style" data-bind="rownum" <%if style.rownum=='2'%>checked="checked"<%/if%>> 2个</label>
+            <label class="radio-inline"><input type="radio" name="rownum" value="3" class="diy-bind" data-bind-child="style" data-bind="rownum" <%if style.rownum=='3'%>checked="checked"<%/if%>> 3个</label>
+        </div>
+    </div>
+    <%if style.showtype>0%>
+    <div class="form-group">
+        <div class="col-sm-2 control-label">每页数量</div>
+        <div class="col-sm-9">
+            <div class="form-group">
+                <div class="slider col-sm-8" data-value="<%style.pagenum||4%>" data-min="2" data-max="20"></div>
+                <div class="col-sm-9 control-labe count"><span><%style.pagenum||4%></span>个</div>
+                <input class="diy-bind input" data-bind-child="style" data-bind="pagenum" value="<%style.pagenum||4%>" type="hidden" />
+            </div>
+            <div class="help-block">超出设定数量自动分页</div>
+        </div>
+    </div>
+    <div class="form-group">
+        <div class="col-sm-2 control-label">切页按钮形状</div>
+        <div class="col-sm-9">
+            <label class="radio-inline"><input type="radio" name="dotstyle" value="rectangle" class="diy-bind" data-bind-child="style" data-bind="dotstyle" <%if style.dotstyle=='rectangle'%>checked="checked"<%/if%> > 长方形</label>
+            <label class="radio-inline"><input type="radio" name="dotstyle" value="square" class="diy-bind" data-bind-child="style" data-bind="dotstyle" <%if style.dotstyle=='square'%>checked="checked"<%/if%>> 正方形</label>
+            <label class="radio-inline"><input type="radio" name="dotstyle" value="round" class="diy-bind" data-bind-child="style" data-bind="dotstyle" <%if style.dotstyle=='round'%>checked="checked"<%/if%>> 圆形</label>
+        </div>
+    </div>
+    <div class="form-group">
+        <div class="col-sm-2 control-label">切页按钮形状</div>
+        <div class="col-sm-9">
+            <label class="radio-inline"><input type="radio" name="dotalign" value="left" class="diy-bind" data-bind-child="style" data-bind="dotalign" <%if style.dotalign=='left'%>checked="checked"<%/if%> > 居左</label>
+            <label class="radio-inline"><input type="radio" name="dotalign" value="center" class="diy-bind" data-bind-child="style" data-bind="dotalign" <%if style.dotalign=='center'%>checked="checked"<%/if%>> 居中</label>
+            <label class="radio-inline"><input type="radio" name="dotalign" value="right" class="diy-bind" data-bind-child="style" data-bind="dotalign" <%if style.dotalign=='right'%>checked="checked"<%/if%>> 居右</label>
+        </div>
+    </div>
+    <%/if%>
+    <div class="form-items" data-min="1">
+        <div class="inner" id="form-items">
+            <%each data as child itemid %>
+            <div class="item" data-id="<%itemid%>">
+                <span class="btn-del" title="删除"></span>
+                <div class="item-image square">
+                    <div class="text" data-toggle="selectAttachment" data-input="#cimg-<%itemid%>" data-img="#pimg-<%itemid%>">选择图片</div>
+                    <img src="<%imgsrc child.imgurl%>" onerror="this.src='../addons/{MODULE_NAME}/web/resource/images/nopic.jpg';" id="pimg-<%itemid%>" />
+                    <input type="hidden" class="diy-bind" data-bind-parent="data" data-bind-child="<%itemid%>" data-bind="imgurl"  id="cimg-<%itemid%>" value="<%child.imgurl%>" />
+                </div>
+                <div class="item-form">
+                    <div class="input-group" style="margin-bottom:0px; ">
+                        <span class="input-group-addon">标题</span>
+                        <input type="text" class="form-control diy-bind" data-bind-parent="data" data-bind-child="<%itemid%>" data-bind="text" placeholder="请选择图片或输入图片地址" value="<%child.text%>" style="width: 115px;" />
+                        <span class="input-group-addon">标题颜色</span>
+                        <input class="form-control diy-bind color " data-bind-parent="data" data-bind-child="<%itemid%>" data-bind="color" value="<%child.color%>" type="color" style="width: 30px" />
+                    </div>
+                    <div class="input-group" style="margin-top:10px; margin-bottom:0px; ">
+                        <span class="input-group-addon btn btn-default" data-toggle="selectUrl" data-input="#curl-<%itemid%>">选择链接</span>
+                        <input type="text" class="form-control diy-bind" readonly="readonly" data-bind-parent="data" data-bind-child="<%itemid%>" data-bind="linkurl" id="curl-<%itemid%>" placeholder="请选择链接" value="<%child.linkurl%>" />
+                        <span class="input-group-addon">背景颜色</span>
+                        <input class="form-control diy-bind color" data-bind-parent="data" data-bind-child="<%itemid%>" data-bind="bgColor" value="<%child.bgColor%>" type="color" style="width: 30px" />
+                    </div>
+                </div>
+                <div class="tips-text">推荐图片比例100*100</div>
+            </div>
+            <%/each%>
+        </div>
+        <div class="btn btn-w-m btn-block btn-default btn-outline" id="addChild"><i class="fa fa-plus"></i> 添加一个</div>
+    </div>
+</script>
+
+
+

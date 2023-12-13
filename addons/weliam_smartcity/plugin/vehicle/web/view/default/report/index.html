@@ -1,0 +1,163 @@
+{php include wl_template('common/header');}
+<style>
+    .user{
+        height: 60px;
+        min-width: 180px;
+    }
+    .user .img{
+        width: 60px;
+        height: 60px;
+        float: left;
+        position: relative;
+    }
+    .user .img img{
+        width: 60px;
+        height: 60px;
+        border-radius: 50%;
+    }
+    .user .img i{
+        position: absolute;
+        top: 0;
+        right: 0px;
+        color: #FFF;
+        opacity: .7;
+        font-size: 13px;
+        border-radius: 50%;
+        width: 20px;
+        height: 20px;
+        line-height: 20px;
+        text-align: center;
+    }
+    .user .info{
+        float: left;
+        height: 60px;
+        width: calc(100% - 60px);
+        padding-left: 10px;
+        padding-top: 10px;
+        font-size: 15px;
+        text-align: left;
+        line-height: 50px;
+    }
+</style>
+<ul class="nav nav-tabs" id="myTab">
+    <li class="active"><a href="javascript:;">举报列表</a></li>
+</ul>
+<div class="app-content">
+    <!--顶部操作-->
+    <div class="app-filter">
+        <div class="filter-list">
+            <form action="" method="get" class="form-horizontal" role="form" id="form1">
+                <input type="hidden" name="c" value="site" />
+                <input type="hidden" name="a" value="entry" />
+                <input type="hidden" name="m" value="{MODULE_NAME}" />
+                <input type="hidden" name="p" value="vehicle" />
+                <input type="hidden" name="ac" value="report" />
+                <input type="hidden" name="do" value="reportList" />
+                <input type="hidden" name="status" value="{$status}" />
+                <div class="form-group">
+                    <div class="col-sm-2 control-report">举报内容</div>
+                    <div class="col-sm-9">
+                        <input type="text" class="form-control" name="report_content" value="{$reportContent}" placeholder="请输入内容...">
+                    </div>
+                </div>
+                <div class="form-group">
+                    <report class="col-sm-2 control-report">状态</report>
+                    <div class="col-sm-9">
+                        <div class="btn-group">
+                            <a href="{php echo wl_filter_url('status:0');}" class="btn {if $status == 0}btn-primary{else}btn-default{/if}">全部</a>
+                            <a href="{php echo wl_filter_url('status:1');}" class="btn {if $status == 1}btn-primary{else}btn-default{/if}">待处理</a>
+                            <a href="{php echo wl_filter_url('status:2');}" class="btn {if $status == 2}btn-primary{else}btn-default{/if}">处理中</a>
+                            <a href="{php echo wl_filter_url('status:3');}" class="btn {if $status == 3}btn-primary{else}btn-default{/if}">已处理</a>
+                        </div>
+                    </div>
+                </div>
+                <div class="form-group">
+                    <div class="col-sm-2 control-report"></div>
+                    <div class="col-sm-9">
+                        <button class="btn btn-primary" type="submit">搜索</button>
+                        <a href="{php echo web_url('vehicle/report/reportList')}" class="btn btn-danger">清除</a>
+                    </div>
+                </div>
+            </form>
+        </div>
+    </div>
+    <!--表格信息-->
+    <div class="app-table-list">
+        <!--列表信息-->
+        <div class="table-responsive order-list">
+            <table class="table table-hover">
+                <thead>
+                    <tr>
+                        <th class="text-center"><input type="checkbox" /></th>
+                        <th class="text-center">举报人</th>
+                        <th class="text-center">举报信息</th>
+                        <th class="text-center">举报时间</th>
+                        <th class="text-center">被举报人</th>
+                        <th class="text-center">路线信息</th>
+                        <th class="text-center">状态</th>
+                        <th class="text-center">操作</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    {loop $list $key $item}
+                        <tr class="text-center">
+                            <td><input type="checkbox" value="{$item['id']}" /></td>
+                            <td>
+                                <div class="user">
+                                    <div class="img">
+                                        <img src="{$item['avatar']}">
+                                    </div>
+                                    <div class="info">
+                                        <div>{$item['nickname']}</div>
+                                    </div>
+                                </div>
+                            </td>
+                            <td >
+                                <div style="overflow: auto;max-height: 150px!important;max-width: 300px!important;padding: 10px;text-align: left;">
+                                    {$item['describe']}
+                                </div>
+                            </td>
+                            <td>{php echo date("Y-m-d H:i:s",$item['create_time']);}</td>
+                            <td>
+                                <label class="label label-primary">{$item['contacts']}</label><br />
+                                {if $item['contacts_phone']}
+                                <label class="label label-danger margin-t-5" style="display: inline-block;">{$item['contacts_phone']}</label>
+                                {/if}
+                            </td>
+                            <td class="text-left">
+                                {if $item['start_address']}起点：{$item['start_address']}<br />{/if}
+                                {if $item['end_address']}终点：{$item['end_address']}{/if}
+                            </td>
+                            <td>
+                                {if $item['status'] == 1}
+                                    <label class="label label-danger">待处理</label>
+                                {elseif $item['status'] == 2}
+                                    <label class="label label-info">处理中</label>
+                                {elseif $item['status'] == 3}
+                                    <label class="label label-primary">已处理</label>
+                                {/if}
+                            </td>
+                            <td>
+                                {if $item['status'] == 1}
+                                    <a href="{php echo web_url('vehicle/report/reportChangeStatus',['id'=>$item['id'],'status'=>2])}" data-toggle="ajaxPost" class="btn btn-info btn-sm">处理中</a>
+                                    <a href="{php echo web_url('vehicle/report/reportChangeStatus',['id'=>$item['id'],'status'=>3])}" data-toggle="ajaxPost" class="btn btn-primary btn-sm">已处理</a>
+                                {elseif $item['status'] == 2}
+                                    <a href="{php echo web_url('vehicle/report/reportChangeStatus',['id'=>$item['id'],'status'=>3])}" data-toggle="ajaxPost" class="btn btn-primary btn-sm">已处理</a>
+                                {/if}
+                                    <a href="{php echo web_url('vehicle/report/reportDel',['ids'=>$item['id']])}" class="btn btn-danger btn-sm" data-toggle="ajaxRemove" data-confirm="确定删除当前信息？">删除</a>
+                            </td>
+                        </tr>
+                    {/loop}
+                </tbody>
+            </table>
+        </div>
+        <!--操作按钮 分页信息-->
+        <div class="app-table-foot clearfix">
+            <div class="pull-left">
+                <button class="btn btn-default" type="button" data-toggle='batch-remove' data-confirm="确定删除当前选中的所有信息？" data-href="{php echo web_url('vehicle/report/reportDel')}">批量删除</button>
+            </div>
+            <div class="pull-right">{$pager}</div>
+        </div>
+    </div>
+</div>
+{php include wl_template('common/footer');}

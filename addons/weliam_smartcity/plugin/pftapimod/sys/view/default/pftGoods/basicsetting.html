@@ -1,0 +1,89 @@
+{php include wl_template('common/header');}
+<ul class="nav nav-tabs" id="myTab">
+    <li class="active"><a href="#tab_basic">接口设置</a></li>
+</ul>
+<div class="app-content">
+    <div class="app-form">
+        <form action="" method="post" class="form-horizontal form form-validate">
+            <div class="panel panel-default">
+                <div class="panel-heading">票付通设置</div>
+                <div class="form-group">
+                    <label class="col-sm-2 control-label">票付通平台</label>
+                    <div class="col-sm-9">
+                        <label class="radio-inline">
+                            <input type="radio" value="1" onclick="$('#pftswitch').show();" name="set[pftswitch]" {if $settings['pftswitch']==1} checked {/if}>{if is_agent()}单独设置{else}开启{/if}
+                        </label>
+                        <label class="radio-inline">
+                            <input type="radio" value="0" onclick="$('#pftswitch').hide();" name="set[pftswitch]" {if $settings['pftswitch']!=1} checked {/if}>{if is_agent()}按总后台{else}关闭{/if}
+                        </label>
+                    </div>
+                </div>
+                <div id="pftswitch" {if $settings['pftswitch']!=1} style="display: none;" {/if}>
+                    <div class="alert alert-warning">
+                        <p>请在票付通平台系统后台查找对应数据填入设置项目</p>
+                        <p>票付通回调地址:<span class="js-clip" style="color: cornflowerblue;" data-url="{$backurl}">{$backurl}</span></p>
+                    </div>
+                    <div class="panel-body">
+                        <div class="form-group">
+                            <label class="col-sm-2 control-label">票付通账号</label>
+                            <div class="col-sm-9">
+                                <input type="text" name="set[account]"   autocomplete="off" class="form-control" value="{$settings['account']}">
+                            </div>
+                        </div>
+                        <div class="form-group">
+                            <label class="col-sm-2 control-label">票付通密码</label>
+                            <div class="col-sm-9">
+                                <input type="text" name="set[pwd]"   autocomplete="off" class="form-control" value="{$settings['pwd']}">
+                            </div>
+                        </div>
+                        <div class="form-group">
+                            <label class="col-sm-2 control-label">票付通环境</label>
+                            <div class="col-sm-9">
+                                <label class="radio-inline">
+                                    <input type="radio" value="1" name="set[environment]" {if $settings['environment']==1} checked {/if}>正式
+                                </label>
+                                <label class="radio-inline">
+                                    <input type="radio" value="0" name="set[environment]" {if $settings['environment']!=1} checked {/if}>测试
+                                </label>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                <div class="panel-heading">亿奇达设置</div>
+                <div class="form-group">
+                    <label class="col-sm-2 control-label">亿奇达</label>
+                    <div class="col-sm-9">
+                        <label class="radio-inline">
+                            <input type="radio" value="1" onclick="$('#yqdswitch').show();" name="set[yqdswitch]" {if $settings['yqdswitch']==1} checked {/if}>{if is_agent()}单独设置{else}开启{/if}
+                        </label>
+                        <label class="radio-inline">
+                            <input type="radio" value="0" onclick="$('#yqdswitch').hide();" name="set[yqdswitch]" {if $settings['yqdswitch']!=1} checked {/if}>{if is_agent()}按总后台{else}关闭{/if}
+                        </label>
+                    </div>
+                </div>
+                <div id="yqdswitch" {if $settings['yqdswitch']!=1} style="display: none;" {/if}>
+                    <div class="form-group">
+                        <label class="col-sm-2 control-label">亿奇达账号</label>
+                        <div class="col-sm-9">
+                            <input type="text" name="set[yqduser]"   autocomplete="off" class="form-control" value="{$settings['yqduser']}">
+                        </div>
+                    </div>
+                    <div class="form-group">
+                        <label class="col-sm-2 control-label">亿奇达秘钥</label>
+                        <div class="col-sm-9">
+                            <input type="text" name="set[yqdsecret]"   autocomplete="off" class="form-control" value="{$settings['yqdsecret']}">
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <div class="form-group">
+                <label class="col-sm-2 control-label"></label>
+                <div class="col-sm-9">
+                    <input type="submit" name="submit" value="提交" class="btn btn-primary min-width" />
+                    <input type="hidden" name="token" value="{$_W['token']}" />
+                </div>
+            </div>
+        </form>
+    </div>
+</div>
+{php include wl_template('common/footer');}

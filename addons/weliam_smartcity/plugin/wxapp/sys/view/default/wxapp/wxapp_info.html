@@ -1,0 +1,145 @@
+{php include wl_template('common/header');}
+<ul class="nav nav-tabs">
+	<li class="active"><a href="javascript:;">小程序配置</a></li>
+</ul>
+<style>
+
+</style>
+<div class="app-content">
+	<div class="channel-set">
+		<div class="pull-left">
+			<div class="channel-title">微信小程序</div>
+			<div class="channel-des">绑定微信小程序，将平台与微信小程序打通</div>
+		</div>
+		<div class="pull-right">
+			<a class="btn btn-primary" href="{php echo web_url('wxapp/wxappset/wxapp_info_edit')}">编辑配置信息</a>
+		</div>
+	</div>
+	<div class="app-form">
+		<div class="panel panel-default">
+			<form action="" class="form-horizontal form " method="post">
+				<div class="panel-body">
+					<div class="form-group">
+						<div class="col-sm-2 control-label">小程序名称</div>
+						<div class="col-sm-9">
+							<input class="form-control" type="text" value="{$info['name']}" readonly="readonly"/>
+						</div>
+					</div>
+					<div class="form-group">
+						<div class="col-sm-2 control-label">AppId</div>
+						<div class="col-sm-9">
+							<input class="form-control" type="text" value="{$info['appid']}" readonly="readonly"/>
+						</div>
+					</div>
+					<div class="form-group">
+						<div class="col-sm-2 control-label">AppSecret</div>
+						<div class="col-sm-9">
+							<input class="form-control" type="text" value="{$info['secret']}" readonly="readonly"/>
+						</div>
+					</div>
+					<div class="form-group">
+						<div class="col-sm-2 control-label">原始ID</div>
+						<div class="col-sm-9">
+							<input class="form-control" type="text" value="{$info['original_id']}" readonly="readonly"/>
+						</div>
+					</div>
+					<div class="form-group">
+						<div class="col-sm-2 control-label">小程序LOGO</div>
+						<div class="col-sm-9">
+							<div style="max-width: 150px;max-height: 150px;padding: 4px;">
+								<img src="{$info['logo']}" style="display:inline-block;max-width: 100%;max-height: 100%;"/>
+							</div>
+						</div>
+					</div>
+					<div class="form-group">
+						<div class="col-sm-2 control-label">二维码</div>
+						<div class="col-sm-9">
+							<div style="max-width: 150px;max-height: 150px;padding: 4px;">
+								<img src="{$info['qrcode']}" style="display:inline-block;max-width: 100%;max-height: 100%;"/>
+							</div>
+						</div>
+					</div>
+					<div class="form-group">
+						<div class="col-sm-2 control-label">小程序上传密钥</div>
+						<div class="col-sm-9">
+							<textarea class="form-control" name="data[rsa_private_key]" rows="27" style="resize: none;font-size:13px;"   readonly="readonly">{$info['rsa_private_key']}</textarea>
+						</div>
+					</div>
+					<div class="form-group-title">服务器配置信息</div>
+					<div class="form-group">
+						<label class="col-sm-2 control-label">request合法域名</label>
+						<div class="col-sm-9">
+							<div class="input-group">
+								<input type="text" value="https://{$auth['siteurl']}" class="form-control valid"  readonly="readonly">
+								<a class="btn btn-info btn-sm js-clip input-group-addon" data-url="{$auth['siteurl']}" href="javascript:;" >复制链接</a>
+							</div>
+						</div>
+					</div>
+					<div class="form-group">
+						<label class="col-sm-2 control-label">socket合法域名</label>
+						<div class="col-sm-9">
+							<div class="input-group">
+								<input type="text" value="wss://{$auth['siteurl']}" class="form-control valid"  readonly="readonly">
+								<a class="btn btn-info btn-sm js-clip input-group-addon" data-url="{$auth['siteurl']}" href="javascript:;" >复制链接</a>
+							</div>
+						</div>
+					</div>
+					<div class="form-group">
+						<label class="col-sm-2 control-label">uploadFile合法域名</label>
+						<div class="col-sm-9">
+							<div class="input-group">
+								<input type="text" value="https://{$auth['siteurl']}" class="form-control valid"  readonly="readonly">
+								<a class="btn btn-info btn-sm js-clip input-group-addon" data-url="{$auth['siteurl']}" href="javascript:;" >复制链接</a>
+							</div>
+						</div>
+					</div>
+					<div class="form-group">
+						<label class="col-sm-2 control-label">downloadFile合法域名</label>
+						<div class="col-sm-9">
+							<div class="input-group">
+								<input type="text" value="https://{$auth['siteurl']}" class="form-control valid"  readonly="readonly">
+								<a class="btn btn-info btn-sm js-clip input-group-addon" data-url="{$auth['siteurl']}" href="javascript:;" >复制链接</a>
+							</div>
+						</div>
+					</div>
+					<div class="form-group-title">消息推送</div>
+					<div class="form-group">
+						<label class="col-sm-2 control-label">URL(服务器地址)</label>
+						<div class="col-sm-9">
+							<div class="input-group">
+								<input type="text" value="{$infoUrl}" class="form-control valid"  readonly="readonly">
+								<a class="btn btn-info btn-sm js-clip input-group-addon" data-url="{$infoUrl}" href="javascript:;" >复制链接</a>
+							</div>
+						</div>
+					</div>
+					<div class="form-group">
+						<label class="col-sm-2 control-label">Token(令牌)</label>
+						<div class="col-sm-9">
+							<div class="input-group">
+								<input type="text" value="{$info['token']}" class="form-control valid"  readonly="readonly">
+								<a class="btn btn-info btn-sm js-clip input-group-addon" data-url="{$info['token']}" href="javascript:;" >复制内容</a>
+							</div>
+						</div>
+					</div>
+					<div class="form-group">
+						<label class="col-sm-2 control-label">EncodingAESKey(消息加密密钥)</label>
+						<div class="col-sm-9">
+							<div class="input-group">
+								<input type="text" value="{$info['aes_key']}" class="form-control valid"  readonly="readonly">
+								<a class="btn btn-info btn-sm js-clip input-group-addon" data-url="{$info['aes_key']}" href="javascript:;" >复制内容</a>
+							</div>
+						</div>
+					</div>
+					<div class="form-group">
+						<label class="col-sm-2 control-label">数据格式</label>
+						<div class="col-sm-8">
+							<input type="text" value="JSON" class="form-control valid col-sm-9"  readonly="readonly">
+						</div>
+					</div>
+				</div>
+			</form>
+
+		</div>
+	</div>
+</div>
+{php include wl_template('common/footer');}

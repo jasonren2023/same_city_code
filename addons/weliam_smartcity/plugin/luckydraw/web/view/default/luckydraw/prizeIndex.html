@@ -1,0 +1,184 @@
+{php include wl_template('common/header');}
+<style>
+    td.goods-info{position:relative;padding-left:60px;}
+    .goods-info .img{position:absolute;top:50%;margin-top:-25px;background: url({IMAGE_LOADING}
+    ) center center no-repeat;width:50px;height:50px;}
+    .goods-info span{white-space: nowrap;overflow: hidden;text-overflow: ellipsis;display: block;}
+    .status-text{cursor:pointer;}
+    .col-md-1{padding-right: 0px;}
+    .all-tips{margin-left: 65px;}
+</style>
+<ul class="nav nav-tabs" id="myTab">
+    <li class="active"><a href="javascript:;">活动列表</a></li>
+</ul>
+<!-- 直播间信息列表 -->
+<div class="app-content">
+    <div class="app-filter">
+        <div class="filter-list">
+            <form action="" method="get" class="form-horizontal" role="form" id="form1">
+                <input type="hidden" name="c" value="site" />
+                <input type="hidden" name="a" value="entry" />
+                <input type="hidden" name="m" value="{MODULE_NAME}" />
+                <input type="hidden" name="p" value="luckydraw" />
+                <input type="hidden" name="ac" value="luckydraw" />
+                <input type="hidden" name="do" value="prizeIndex" />
+                <div class="form-group">
+                    <label class="col-sm-2 control-label">中奖等级</label>
+                    <div class="col-sm-9">
+                        <div class="btn-group">
+                            <a href="{php echo wl_filter_url('status:');}" class="btn {if $status == 0}btn-primary{else}btn-default{/if}">全部</a>
+                            <a href="{php echo wl_filter_url('status:5');}" class="btn {if $status == 5}btn-primary{else}btn-default{/if}">未开奖</a>
+                            <a href="{php echo wl_filter_url('status:1');}" class="btn {if $status == 1}btn-primary{else}btn-default{/if}">未中奖</a>
+                            <a href="{php echo wl_filter_url('status:2');}" class="btn {if $status == 2}btn-primary{else}btn-default{/if}">一等奖</a>
+                            <a href="{php echo wl_filter_url('status:3');}" class="btn {if $status == 3}btn-primary{else}btn-default{/if}">二等奖</a>
+                            <a href="{php echo wl_filter_url('status:4');}" class="btn {if $status == 4}btn-primary{else}btn-default{/if}">三等奖</a>
+                        </div>
+                    </div>
+                </div>
+                <div class="form-group form-inline">
+                    <label class="col-sm-2 control-label">筛选条件</label>
+                    <div class="col-sm-9">
+                        <select name="keywordtype" class="form-control">
+                            <option value="1" {if $_GPC['keywordtype']==1}selected="selected"{/if}>用户昵称</option>
+                            <option value="2" {if $_GPC['keywordtype']==2}selected="selected"{/if}>用户电话</option>
+                            <option value="3" {if $_GPC['keywordtype']==3}selected="selected"{/if}>抽奖码</option>
+                            <option value="4" {if $_GPC['keywordtype']==4}selected="selected"{/if}>抽奖记录id</option>
+
+                        </select>
+                        <input type="text" name="keyword" class="form-control" value="{$_GPC['keyword']}"  placeholder="请输入关键字"/>
+                    </div>
+                </div>
+                <div class="form-group">
+                    <label class="col-sm-2 control-label">时间筛选</label>
+                    <div class="col-md-3">
+                        <select name="timetype" class="form-control">
+                            <option value="">请选择时间类型</option>
+                            <option value="1" {if $_GPC['timetype']==1}selected="selected"{/if}>中奖时间</option>
+                            <option value="2" {if $_GPC['timetype']==2}selected="selected"{/if}>领奖时间</option>
+                        </select>
+                    </div>
+                    <div class="col-md-2">
+                        {php echo tpl_select_time_info('time_limit', array('starttime' => date('Y-m-d H:i',$starttime), 'endtime' => date('Y-m-d H:i', $endtime)));}
+                    </div>
+                </div>
+                <div class="form-group">
+                    <div class="col-sm-2 control-label"></div>
+                    <div class="col-sm-9">
+                        <input type="hidden" name="recordid" value="{$recordid}" />
+                        <button class="btn btn-primary" type="submit">搜索</button>
+                    </div>
+                </div>
+            </form>
+        </div>
+    </div>
+    <div class="app-table-list">
+        <div class="table-responsive order-list">
+            <table class="table table-hover">
+                <thead>
+                <tr>
+                    <th class="text-center">活动主题</th>
+                    <th class="text-center">中奖奖品</th>
+                    <th class="">抽奖人</th>
+                    <th class="text-center">抽奖码</th>
+                    <th class="text-center">抽奖码来源</th>
+                    <th class="text-center">获取/中奖时间</th>
+                    <th class="text-center">领奖时间</th>
+                    <th class="text-center">操作</th>
+                </tr>
+                </thead>
+                <tbody>
+                {loop $list $de}
+                <tr>
+                    <td class="text-center">{$de['drawtitle']}</td>
+                    <td class="text-center">
+                        {if $de['draw_goods_id'] > 0}
+                        <img src="{$de['goodslogo']}" style="width: 30px;height: 30px;">
+                        {$de['goodsname']}
+                        {else}
+                        - 无 -
+                        {/if}
+                    </td>
+                    <td class="goods-info">
+                        <div class="img"><img src="{$de['avatar']}" height="50" width="50" ></div>
+                        <div class="all-tips">
+                            <span class="" style="font-family: "Arial","Microsoft YaHei","黑体","宋体",sans-serif ;">{$de['nickname']}</span>
+                            <span class="" style="font-family: "Arial","Microsoft YaHei","黑体","宋体",sans-serif ;">{$de['mobile']}</span>
+                        </div>
+                    </td>
+                    <td class="text-center">
+                        {$de['codenum']}<br/><br/>
+                        {if $de['status'] == 2}
+                        <span  class="label label-success">一等奖</span>
+                        {else if $de['status'] == 3}
+                        <span  class="label label-danger">二等奖</span>
+                        {else if $de['status'] == 4}
+                        <span  class="label label-warning">三等奖</span>
+                        {else if $de['status'] == 0}
+                        <span  class="label label-info">未开奖</span>
+                        {else if $de['status'] == 1}
+                        <span  class="label label-default">未中奖</span>
+                        {/if}
+                        {if $de['preset'] == 1}
+                        <span  class="label label-success">内定一等奖</span>
+                        {else if $de['preset'] == 2}
+                        <span  class="label label-danger">内定二等奖</span>
+                        {else if $de['preset'] == 3}
+                        <span  class="label label-warning">内定三等奖</span>
+                        {/if}
+                    </td>
+                    <td class="text-center">{$de['pluginname']}</td>
+                    <td class="text-center">
+                        {$de['createtime']}
+                        <br/>
+                        {if $de['drawtime']}
+                        {$de['drawtime']}
+                        {else}
+                        - 无 -
+                        {/if}
+                    </td>
+                    <td class="text-center">
+                        {if $de['gettime']}
+                        {$de['gettime']}
+                        {else}
+                        - 无 -
+                        {/if}
+                    </td>
+                    <td class="text-center">
+                        {if !empty($de['url'])}
+                        <p style="color: #428bca;display: inline-block;">
+                            <a href="{$de['url']}" target='_blank' >查看订单</a>
+                        </p>
+                        {/if}
+                        {if $de['status'] == 0}
+                        {if $de['preset'] > 0}
+                        <a href="{php echo web_url('luckydraw/luckydraw/cancelPreset',array('id'=>$de['id']))}" data-toggle="ajaxRemove" data-confirm="确定取消此抽奖码的内定中奖？"> - 取消内定</a>
+                        {else if empty(Customized::init('priest735')) }
+                        <a href="{php echo web_url('luckydraw/luckydraw/setPreset',array('id'=>$de['id'],'reid' => $de['draw_reid'],'acid' => $de['draw_acid'],'preset' => 1))}" data-toggle="ajaxRemove" data-confirm="确定将此抽奖码内定为一等奖？"> - 内定一等奖</a>
+                        {if $de['twoprizenum'] > 0}
+                        <a href="{php echo web_url('luckydraw/luckydraw/setPreset',array('id'=>$de['id'],'reid' => $de['draw_reid'],'acid' => $de['draw_acid'],'preset' => 2))}" data-toggle="ajaxRemove" data-confirm="确定将此抽奖码内定为二等奖？"> - 内定二等奖</a>
+                        {/if}
+                        {if $de['threeprizenum'] > 0}
+                        <a href="{php echo web_url('luckydraw/luckydraw/setPreset',array('id'=>$de['id'],'reid' => $de['draw_reid'],'acid' => $de['draw_acid'],'preset' => 3))}" data-toggle="ajaxRemove" data-confirm="确定将此抽奖码内定为三等奖？"> - 内定三等奖</a>
+                        {/if}
+                        {/if}
+                        {/if}
+                        {if empty($de['url']) && $de['status'] > 0}
+                        - 无 -
+                        {/if}
+                    </td>
+                </tr>
+                {/loop}
+                </tbody>
+            </table>
+        </div>
+        <div class="app-table-foot clearfix">
+            <div class="pull-left">
+
+            </div>
+            <div class="pull-right">
+                {$pager}
+            </div>
+        </div>
+    </div>
+</div>
+{php include wl_template('common/footer');}

@@ -1,0 +1,56 @@
+<?xml version="1.0" encoding="utf-8"?>
+<manifest>
+	<application>
+		<name><![CDATA[三方商品]]></name>
+		<identifie><![CDATA[pftapimod]]></identifie>
+		<version><![CDATA[1.0.0]]></version>
+		<type><![CDATA[expand]]></type>
+		<description><![CDATA[三方商品，快捷售卖]]></description>
+		<author><![CDATA[微连科技]]></author>
+		<url><![CDATA[http://www.weliam.cn/]]></url>
+	</application>
+	<setting>
+		<agent embed="true" />
+		<system embed="true" />
+		<task embed="false" />
+	</setting>
+	<agentmenu>
+		<menu title="商品" font="fa-inbox" >
+			<entry title="票付通" ac="pftGoods" do="pftGoodsList"></entry>
+			<entry title="亿奇达" ac="pftGoods" do="yqdGoodsList"></entry>
+		</menu>
+<!--		<menu title="信息" font="fa-inbox" >-->
+<!--			<entry title="商品列表" ac="Tiezi" do="lists" iscover="true"></entry>-->
+<!--			<entry title="订单列表" ac="Tiezi" do="orders"></entry>-->
+<!--			<entry title="黑名单用户" ac="Tiezi" do="blacklist"></entry>-->
+<!--		</menu>-->
+<!--		<menu title="内容" font="fa-inbox">-->
+<!--			<entry title="幻灯片" ac="Slide" do="lists"></entry>-->
+<!--			<entry title="分类列表" ac="Type" do="lists"></entry>-->
+<!--		</menu>-->
+<!--		<menu title="内容审核" font="fa-inbox">-->
+<!--			<entry title="评论审核" ac="ToExamine" do="comment"></entry>-->
+<!--			<entry title="回复审核" ac="ToExamine" do="reply"></entry>-->
+<!--		</menu>-->
+		<menu title="设置" font="fa-inbox" >
+			<entry title="基础设置" ac="basicSetting" do="agentsetting" iscover="true"></entry>
+		</menu>
+	</agentmenu>
+	<systemmenu>
+		<menu title="信息" font="fa-inbox" >
+			<entry title="商品列表" ac="pftGoods" do="pftGoodsList"></entry>
+			<entry title="亿奇达" ac="pftGoods" do="yqdGoodsList"></entry>
+		</menu>
+<!--		<menu title="内容" font="fa-inbox">-->
+<!--			<entry title="幻灯片" ac="Slide" do="lists"></entry>-->
+<!--			<entry title="分类列表" ac="Type" do="lists"></entry>-->
+<!--		</menu>-->
+<!--		<menu title="内容审核" font="fa-inbox">-->
+<!--			<entry title="评论审核" ac="ToExamine" do="comment"></entry>-->
+<!--			<entry title="回复审核" ac="ToExamine" do="reply"></entry>-->
+<!--		</menu>-->
+		<menu title="设置" font="fa-inbox" >
+			<entry title="基础设置" ac="basicSetting" do="basicsetting" iscover="true"></entry>
+		</menu>
+	</systemmenu>
+</manifest>

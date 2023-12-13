@@ -1,0 +1,6 @@
+<div class="input-group data-item" style="margin-top: 10px;">
+    <input type="text" name="urltext[]" style="width: 20%;" class="form-control" value="{$url['text']}" placeholder="链接名" >
+    <input type="text" value="{$url['url']}" style="width: 80%;" class="form-control valid" name="copyurl[]" readonly="readonly" id="advlink{$kk}">
+    <span data-input="#advlink{$kk}" data-toggle="selectUrl" class="input-group-addon btn btn-default">选择链接</span>
+    <span onclick="removes(this)" class="input-group-addon btn btn-default data-item-delete"><i class="fa fa-remove"></i> 删除</span>
+</div>

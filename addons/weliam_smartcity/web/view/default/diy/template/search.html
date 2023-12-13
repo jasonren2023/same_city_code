@@ -1,0 +1,54 @@
+<!--------------------------  搜索框组件群  ----------------------------------->
+<!-- 风格一 -->
+<script type="text/html" id="tpl_show_search">
+    <div class="drag" data-itemid="<%itemid%>" group_name="<%group_name%>" group_key="<%group_key%>" data-id="<%group_name%>">
+        <div class="diy-search <%style.searchstyle%>" style="display: block;background: <%style.background%>;padding: 8px 10px;margin-bottom:<%style.marginBottom%>px;">
+            <div class="inners left" style="background: <%style.inputbackground||'#fff'%>;">
+                <div class="search-icon" style="color: <%style.iconcolor%>;"><i class="icon icon-search"></i></div>
+                <div class="search-input" style="text-align: <%style.textalign%>; color: <%style.color%>;">
+                    <span><%params.placeholder%></span>
+                </div>
+            </div>
+        </div>
+    </div>
+</script>
+<!-- 风格二 -->
+<script type="text/html" id="tpl_show_search2">
+    <div class="drag" data-itemid="<%itemid%>" group_name="<%group_name%>" group_key="<%group_key%>" data-id="<%group_name%>">
+        <div class="diy-search <%style.searchstyle%>" style="background: <%style.background%>;padding: 8px 10px;margin-bottom:<%style.marginBottom%>px;">
+            <div class="diy-search-l" style="color: <%style.areaColor%>;">选择地区<i class="icon iconfont icon-unfold city-logo"></i></div>
+            <div class="inners diy-search-r" style="background: <%style.inputbackground||'#fff'%>;">
+                <div class="search-icon" style="color: <%style.iconcolor%>;"><i class="icon icon-search"></i></div>
+                <div class="search-input" style="text-align: <%style.textalign%>; color: <%style.color%>;">
+                    <span><%params.placeholder%></span>
+                </div>
+            </div>
+        </div>
+    </div>
+</script>
+<!-- 风格三 -->
+<script type="text/html" id="tpl_show_search3">
+    <div class="drag" data-itemid="<%itemid%>" group_name="<%group_name%>" group_key="<%group_key%>" data-id="<%group_name%>">
+        <div class="diy-search3" style="background: <%style.background%>;margin-bottom:<%style.marginBottom%>px;">
+            <div class="diy-search3-d">
+                <div class="diy-search3-l" style="color: <%style.titlecolor%>;">
+                    <%params.textcontent%>
+                </div>
+                <div class="diy-search3-r">
+                    <div>
+                        <div class="diy-search3-r-d"  style="background: <%style.inputbackground||'#fff'%>;color: <%style.iconcolor%>;">
+                            <div class="i icon iconfont icon-search inline" style="color: <%style.iconcolor%>;"></div>搜索
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <div class="search-wave">
+                <div class="search-wave-d">
+                    <div class="search-wave-i wave-i1"><img class="image" src="../addons/{MODULE_NAME}/web/resource/diy/images/wave-i1.png" /></div>
+                    <div class="search-wave-i wave-i2"><img class="image" src="../addons/{MODULE_NAME}/web/resource/diy/images/wave-i2.png" /></div>
+                    <div class="search-wave-i wave-i3"><img class="image" src="../addons/{MODULE_NAME}/web/resource/diy/images/wave-i1.png" /></div>
+                </div>
+            </div>
+        </div>
+    </div>
+</script>

@@ -1,0 +1,23 @@
+<div class="form-group sms-template-1 data-item">
+    <label class="col-md-2 control-label">数据值</label>
+    <div class="col-sm-9">
+        <div class="input-group form-group" style="margin: 0;">
+            <span class="input-group-addon">模版变量</span>
+            <input type="text" name="data_temp[]" class="form-control valid" value="{$data['data_temp']}">
+            <span class="input-group-addon" style="border-left: 0; border-right: 0;">数据变量</span>
+            <select name="data_shop[]" class="form-control valid" style="min-width: 200px;">
+                <option value="【验证码】" {if $data['data_shop'] == '【验证码】'}selected{/if}>手机验证码</option>
+                <option value="【系统名称】" {if $data['data_shop'] == '【系统名称】'}selected{/if}>系统名称</option>
+                <option value="【版权信息】" {if $data['data_shop'] == '【版权信息】'}selected{/if}>版权信息</option>
+                <option value="【核销码】" {if $data['data_shop'] == '【核销码】'}selected{/if}>订单核销码</option>
+                <option value="【昵称】" {if $data['data_shop'] == '【昵称】'}selected{/if}>用户昵称</option>
+                <option value="【商品名】" {if $data['data_shop'] == '【商品名】'}selected{/if}>商品名称</option>
+                <option value="【店铺名】" {if $data['data_shop'] == '【店铺名】'}selected{/if}>店铺名称</option>
+                <option value="【数量】" {if $data['data_shop'] == '【数量】'}selected{/if}>商品数量</option>
+                <option value="【过期时间】" {if $data['data_shop'] == '【过期时间】'}selected{/if}>过期时间</option>
+            </select>
+            <span class="input-group-addon btn btn-default data-item-delete"><i class="fa fa-remove"></i> 删除</span>
+        </div>
+        <span class="help-block">数据变量替换模板变量，例如：模版变量=${name}，仅填英文变量name即可。</span>
+    </div>
+</div>

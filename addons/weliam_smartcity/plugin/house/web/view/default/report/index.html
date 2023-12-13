@@ -1,0 +1,280 @@
+{php include wl_template('common/header');}
+<style>
+    .user{
+        height: 60px;
+        min-width: 180px;
+    }
+    .user .img{
+        width: 60px;
+        height: 60px;
+        float: left;
+        position: relative;
+    }
+    .user .img img{
+        width: 60px;
+        height: 60px;
+        border-radius: 50%;
+    }
+    .user .img i{
+        position: absolute;
+        top: 0;
+        right: 0px;
+        color: #FFF;
+        opacity: .7;
+        font-size: 13px;
+        border-radius: 50%;
+        width: 20px;
+        height: 20px;
+        line-height: 20px;
+        text-align: center;
+    }
+    .user .img i.icon-male{
+        background: #0d8ddb;
+    }
+    .user .img i.icon-female{
+        background: #ed5565;
+        transform: rotate(  30deg) skew(  0deg);
+    }
+    .user .info{
+        float: left;
+        height: 60px;
+        width: calc(100% - 60px);
+        padding-left: 10px;
+        font-size: 15px;
+        text-align: left;
+        line-height: 20px;
+    }
+</style>
+<style type='text/css'>
+    .order-rank img{width:16px; height:16px;}
+    .js-remark,.js-admin-remark{word-break:break-all; overflow:hidden; background: #FDEEEE;color: #ED5050;padding: 5px 10px;}
+    td.goods-info{position:relative; padding-left:60px;}
+    .goods-info .img{position:absolute;top:50%; margin-top:-25px; background: url({IMAGE_LOADING}) center center no-repeat; width:50px;height:50px; }
+    .goods-info span {white-space: nowrap;overflow: hidden;text-overflow: ellipsis;display: block;}
+    .status-text{cursor:pointer;}
+</style>
+<ul class="nav nav-tabs">
+    <li class="active"><a href="javascript:;">反馈列表</a></li>
+</ul>
+<div class="app-content">
+    <div class="app-filter">
+
+        <div class="filter-list">
+            <form action="" method="get" class="form-horizontal" role="form" id="form1">
+                <input type="hidden" name="c" value="site" />
+                <input type="hidden" name="a" value="entry" />
+                <input type="hidden" name="m" value="{MODULE_NAME}" />
+                <input type="hidden" name="p" value="house" />
+                <input type="hidden" name="ac" value="House" />
+                <input type="hidden" name="do" value="reportList" />
+                <input type="hidden" name="status" value="{$_GPC['status']}" />
+                <input type="hidden" name="house_type" value="{$_GPC['house_type']}" />
+                <div class="form-group">
+                    <label class="col-sm-2 control-label">类型</label>
+                    <div class="col-sm-9">
+                        <div class="btn-group">
+                            <a href="{php echo wl_filter_url('house_type:0');}" class="btn {if $_GPC['house_type'] == 0}btn-primary{else}btn-default{/if}">全部</a>
+                            <a href="{php echo wl_filter_url('house_type:6');}" class="btn {if $_GPC['house_type'] == 6}btn-primary{else}btn-default{/if}">平台反馈</a>
+                            <a href="{php echo wl_filter_url('house_type:1');}" class="btn {if $_GPC['house_type'] == 1}btn-primary{else}btn-default{/if}">新房举报</a>
+                            <a href="{php echo wl_filter_url('house_type:2');}" class="btn {if $_GPC['house_type'] == 2}btn-primary{else}btn-default{/if}">二手房举报</a>
+                            <a href="{php echo wl_filter_url('house_type:3');}" class="btn {if $_GPC['house_type'] == 3}btn-primary{else}btn-default{/if}">租房举报</a>
+                            <a href="{php echo wl_filter_url('house_type:4');}" class="btn {if $_GPC['house_type'] == 4}btn-primary{else}btn-default{/if}">小区举报</a>
+                        </div>
+                    </div>
+                </div>
+                <div class="form-group">
+                    <label class="col-sm-2 control-label">状态</label>
+                    <div class="col-sm-9">
+                        <div class="btn-group">
+                            <a href="{php echo wl_filter_url('status:0');}" class="btn {if $_GPC['status'] == 0}btn-primary{else}btn-default{/if}">全部</a>
+                            <a href="{php echo wl_filter_url('status:1');}" class="btn {if $_GPC['status'] == 1}btn-primary{else}btn-default{/if}">待处理</a>
+                            <a href="{php echo wl_filter_url('status:3');}" class="btn {if $_GPC['status'] == 3}btn-primary{else}btn-default{/if}">已处理</a>
+                        </div>
+                    </div>
+                </div>
+                <div class="form-group">
+                    <div class="col-sm-2 control-label">搜索</div>
+                    <div class="col-md-3">
+                        <select name="keywordtype" class="form-control">
+                            <option value="">关键字类型</option>
+                            <option value="1" {if $_GPC['keywordtype']==1}selected="selected"{/if}>用户名</option>
+                            <option value="2" {if $_GPC['keywordtype']==2}selected="selected"{/if}>标题</option>
+                        </select>
+                    </div>
+                    <div class="col-md-4">
+                        <input type="text" class="form-control" name="name" value="{$_GPC['name']}" placeholder="请输入关键字">
+                    </div>
+                </div>
+                <div class="form-group">
+                    <label class="col-sm-2 control-label"></label>
+                    <div class="col-sm-9">
+                        <button class="btn btn-primary" id="search">筛选</button>
+                    </div>
+                </div>
+            </form>
+        </div>
+    </div>
+    <div class="app-table-list">
+        <div class="panel-body table-responsive collapse in order-list" id="order-template-item-4" style="padding: 0;">
+            <table class="table table-hover table-bordered">
+                <thead style="background-color: #FFFFFF;">
+                <tr>
+                    <th width="5%" class="text-center"><input type="checkbox" name="checkall" value="" id="checkall" class="checkboxall" onclick="var ck = this.checked; $(':checkbox').each(function(){this.checked = ck});"/></th>
+                    <!--<th width="10%" style="text-align:center;">头像</th>-->
+                    <!--<th width="10%" style="text-align:center;">用户</th>-->
+                    <th width="15%" style="text-align:center;">反馈用户信息</th>
+                    <th width="15%" style="text-align:center;">反馈标题</th>
+                    <th width="15%" style="text-align:center;">信息类型</th>
+                    <th width="15%" style="text-align:center;">房源信息</th>
+                    <th width="10%" style="text-align:center;">反馈时间</th>
+                    <th width="10%" style="text-align:center;">处理状态</th>
+                    <th width="20%" style="text-align:center;">操作</th>
+                </tr>
+                </thead>
+                <tbody>
+                {loop $list $item}
+                <tr>
+                    <td><center><input type="checkbox" name="items[]" value="{$item['id']}" class="checkbox" /></center></td>
+                    <!--反馈用户信息-->
+                    <td>
+                        <div class="user">
+                            <div class="img">
+                                <img src="{$item['avatar']}">
+                            </div>
+                            <div class="info">
+                                <div>{$item['nickname']}</div>
+                                <div>{$item['mobile']}</div>
+                                <div>MID:{$item['user_id']}</div>
+                            </div>
+                        </div>
+                    </td>
+                    <!--反馈标题-->
+                    <td class="text-center">{$item['title']}</td>
+                    <!--信息类型-->
+                    <td class="text-center">
+                        {if $item['house_type'] == 0}<label class="label label-warning">平台反馈</label>{/if}
+                        {if $item['house_type'] == 1}<label class="label label-info">新房举报</label>{/if}
+                        {if $item['house_type'] == 2}<label class="label label-default">二手房举报</label>{/if}
+                        {if $item['house_type'] == 3}<label class="label label-success">租房举报</label>{/if}
+                        {if $item['house_type'] == 4}<label class="label label-danger">小区举报</label>{/if}
+                    </td>
+                    <!--房源信息-->
+                    <td class="goods-info line-feed">
+                        {if $item['house_type'] > 0}
+                        <div class="img"><img class="scrollLoading" src="{IMAGE_PIXEL}" data-url="{php echo tomedia($item['house_image'])}" height="50" width="50" onerror="this.src='{IMAGE_NOPIC_SMALL}'" ></div>
+                        <div class="title" style="padding-left: 60px;">
+                            <span>{$item['house_title']}</span>
+                            <a href="{$item['houseurl']}">查看房源</a>
+                        </div>
+                        {else}
+                        {if $item['house_type'] == 0}<label class="label label-warning">平台反馈</label>{/if}
+                        {/if}
+                    </td>
+                    <!--反馈时间-->
+                    <td class="text-center">{$item['createtime']}</td>
+                    <!--处理状态-->
+                    <td class="text-center">
+                        {if $item['status'] == 1}
+                        <label class="label label-default">待处理</label>
+                        {elseif $item['status'] == 2}
+                        <label class="label label-danger">处理中</label>
+                        {elseif $item['status'] == 3}
+                        <label class="label label-primary">已处理</label>
+                        {/if}
+                    </td>
+                    <!--操作-->
+                    <td class="text-center" style="position: relative;">
+                        {if $item['status']!=1}
+                        <p style="color: #428bca;display: inline-block;"><a href="{php echo web_url('house/House/reportShow', array('id' => $item['id']))}">查看</a> </p>
+                        {/if}
+                        {if $item['status']==1}
+                        <p style="color: #428bca;display: inline-block;"><a href="{php echo web_url('house/House/reportShow', array('id' => $item['id']))}">处理</a> </p>
+                        <!--<p style="color: #428bca;display: inline-block;"><a href="{php echo web_url('house/House/reportShow', array('id' => $item['id']))}" class="btn btn-primary btn-sm">开始处理</a> </p>-->
+                        {/if}
+                        <p style="color: #428bca;display: inline-block;"><a href="{php echo web_url('house/House/reportDel', array('ids'=>($item['id'])))}" data-toggle="ajaxRemove" data-confirm="确定删除此条反馈？">删除</a></p>
+                    </td>
+                </tr>
+                {/loop}
+                </tbody>
+            </table>
+        </div>
+        <div class="app-table-foot clearfix">
+            <div class="pull-left">
+                <button class="btn btn-default btn-sm" type="button" onclick="location.reload();"><i class="fa fa-refresh"></i></button>
+                <!--<div class="btn-group btn-group-sm">-->
+                <!--    <button  class="btn btn-default" disabled="disabled" id="checkYse" onclick="checkOrDelete(1);">批量上架</button>-->
+                <!--    <button  class="btn btn-default" disabled="disabled" id="checkNo" onclick="checkOrDelete(0);">批量下架</button>-->
+                <!--</div>-->
+                <button class="btn btn-default btn-sm" type="button" disabled="disabled" id="delete" onclick="checkOrDelete(4);"><i class="fa fa-trash"></i> 删除</button>
+            </div>
+            <div class="pull-right">
+                {$pager}
+            </div>
+        </div>
+    </div>
+
+
+</div>
+<script>
+
+    function checkOrDelete(check){
+        var content = '';
+        if(check==1) content = '确认上架选中反馈信息？';
+        if(check==0) content = '确认下架选中反馈信息？';
+        if(check==4) content = '确认删除选中的反馈信息？';
+        layer.open({
+            title: [
+                '提示',
+                'background-color:#18A689; color:#fff;'
+            ]
+            ,anim: 'up'
+            ,content: content
+            ,btn: ['确认', '取消']
+            ,yes:function(index){
+                $('.layer-anim').remove();
+                var ids = [];
+                var $checks=$('.checkbox:checkbox:checked');
+                $checks.each(function() {
+                    if (this.checked) {
+                        ids.push(this.value);
+                    };
+                });
+                //处理
+                $.post("{php echo web_url('house/House/reportDel')}", { ids : ids ,status:check}, function(data){
+                    if(!data.errno){
+                        util.tips("操作成功！");
+                        location.reload();
+                    }else{
+                        util.tips(data.message);
+                    };
+                }, 'json');
+            }
+        });
+    }
+
+    $(function(){
+        $('.checkbox,.checkboxall').click(function(){
+            var $checks=$('.checkbox:checkbox:checked');
+            $('#check').attr('disabled','');
+            if($checks.length>0) {
+                $('#checkYse').attr('disabled',false);
+                $('#checkNo').attr('disabled',false);
+                $('#delete').attr('disabled',false);
+            }else{
+                $('#checkYse').attr('disabled',true);
+                $('#checkNo').attr('disabled',true);
+                $('#delete').attr('disabled',true);
+            }
+        });
+
+        //驳回申请理由
+        $('.rejectdis').click(function(){
+            var appid = $(this).attr('appid');
+            $('.js-order-id-post').attr("order-id",appid);
+            popwin = $('#modal-module-gift22').modal();
+        });
+
+
+    });
+</script>
+{php include wl_template('common/footer');}

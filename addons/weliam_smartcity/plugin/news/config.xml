@@ -1,0 +1,30 @@
+<?xml version="1.0" encoding="utf-8"?>
+<manifest>
+	<application>
+		<name><![CDATA[消息管理]]></name>
+		<identifie><![CDATA[news]]></identifie>
+		<version><![CDATA[1.0.0]]></version>
+		<type><![CDATA[help]]></type>
+		<description><![CDATA[模板消息、短信消息等相关的消息管理]]></description>
+		<author><![CDATA[微连科技]]></author>
+		<url><![CDATA[http://www.weliam.cn/]]></url>
+	</application>
+	<setting>
+		<agent embed="false" />
+		<system embed="true" />
+		<task embed="false" />
+	</setting>
+	<agentmenu>
+
+	</agentmenu>
+	<systemmenu>
+		<menu title="模板消息" font="fa-inbox">
+			<entry title="模板消息" ac="template" do="index" iscover="true"/>
+		</menu>
+		<menu title="短信设置" font="fa-inbox">
+			<entry title="短信模板" ac="noticeset" do="smslist" />
+			<entry title="短信设置" ac="noticeset" do="smsset" />
+			<entry title="参数设置" ac="noticeset" do="smsparams" />
+		</menu>
+	</systemmenu>
+</manifest>

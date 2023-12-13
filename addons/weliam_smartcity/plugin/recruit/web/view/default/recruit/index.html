@@ -1,0 +1,291 @@
+{php include wl_template('common/header');}
+<ul class="nav nav-tabs" id="myTab">
+    <li class="active"><a href="javascript:;">招聘列表</a></li>
+</ul>
+<div class="app-content">
+    <!--顶部操作-->
+    <div class="app-filter">
+        <div class="filter-action">
+            <a href="{php echo web_url('recruit/recruitment/recruitEdit')}" class="btn btn-primary">发布招聘</a>
+        </div>
+        <div class="filter-list">
+            <form action="" method="get" class="form-horizontal" role="form" id="form1">
+                <input type="hidden" name="c" value="site" />
+                <input type="hidden" name="a" value="entry" />
+                <input type="hidden" name="m" value="{MODULE_NAME}" />
+                <input type="hidden" name="p" value="recruit" />
+                <input type="hidden" name="ac" value="recruitment" />
+                <input type="hidden" name="do" value="recruitList" />
+                <input type="hidden" name="recruitment_type" value="{$recruitmentType}" />
+                <input type="hidden" name="status" value="{$status}" />
+                <input type="hidden" name="is_top" value="{$isTop}" />
+                <div class="form-group">
+                    <div class="col-sm-2 control-label">职位名称</div>
+                    <div class="col-sm-9">
+                        <input type="text" class="form-control" name="title" value="{$title}" placeholder="请输入职位名称...">
+                    </div>
+                </div>
+                <div class="form-group">
+                    <label class="col-sm-2 control-label">职位行业</label>
+                    <div class="col-sm-9">
+                        <div class="row row-fix js-address-selector">
+                            <div class="col-md-4">
+                                <select name="industry_pid" class="form-control">
+                                    <option value="0">全部</option>
+                                    {loop $industry $oneItem}
+                                        <option value="{$oneItem['id']}" {if $oneItem['id'] == $industryPid}selected="selected"{/if}>{$oneItem['title']}</option>
+                                    {/loop}
+                                </select>
+                            </div>
+                            <div class="col-md-4">
+                                <select name="industry_id" class="form-control">
+                                    <option value="0">全部</option>
+                                    {loop $subIndustry $subItem}
+                                        <option value="{$subItem['id']}" {if $subItem['id'] == $industryId}selected="selected"{/if}>{$subItem['title']}</option>
+                                    {/loop}
+                                </select>
+                            </div>
+                            <div class="col-md-4">
+                                <select name="position_id" class="form-control">
+                                    <option value="0">全部</option>
+                                    {loop $position $positionItem}
+                                        <option value="{$positionItem['id']}" {if $positionItem['id'] == $positionId}selected="selected"{/if}>{$positionItem['title']}</option>
+                                    {/loop}
+                                </select>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                {if !is_store()}
+                <div class="form-group">
+                    <label class="col-sm-2 control-label">招聘类型</label>
+                    <div class="col-sm-9">
+                        <div class="btn-group">
+                            <a href="{php echo wl_filter_url('recruitment_type:0');}" class="btn {if $recruitmentType == 0}btn-primary{else}btn-default{/if}">全部</a>
+                            <a href="{php echo wl_filter_url('recruitment_type:1');}" class="btn {if $recruitmentType == 1}btn-primary{else}btn-default{/if}">个人招聘</a>
+                            <a href="{php echo wl_filter_url('recruitment_type:2');}" class="btn {if $recruitmentType == 2}btn-primary{else}btn-default{/if}">企业招聘</a>
+                        </div>
+                    </div>
+                </div>
+                {/if}
+                <div class="form-group">
+                    <label class="col-sm-2 control-label">招聘状态</label>
+                    <div class="col-sm-9">
+                        <div class="btn-group">
+                            <a href="{php echo wl_filter_url('status:0');}" class="btn {if $status == 0}btn-primary{else}btn-default{/if}">全部</a>
+                            <a href="{php echo wl_filter_url('status:1');}" class="btn {if $status == 1}btn-primary{else}btn-default{/if}">待付款</a>
+                            <a href="{php echo wl_filter_url('status:2');}" class="btn {if $status == 2}btn-primary{else}btn-default{/if}">审核中</a>
+                            <a href="{php echo wl_filter_url('status:3');}" class="btn {if $status == 3}btn-primary{else}btn-default{/if}">未通过</a>
+                            <a href="{php echo wl_filter_url('status:4');}" class="btn {if $status == 4}btn-primary{else}btn-default{/if}">招聘中</a>
+                            <a href="{php echo wl_filter_url('status:5');}" class="btn {if $status == 5}btn-primary{else}btn-default{/if}">已结束</a>
+                        </div>
+                    </div>
+                </div>
+                <div class="form-group">
+                    <label class="col-sm-2 control-label">置顶状态</label>
+                    <div class="col-sm-9">
+                        <div class="btn-group">
+                            <a href="{php echo wl_filter_url('is_top:0');}" class="btn {if $isTop == 0}btn-primary{else}btn-default{/if}">全部</a>
+                            <a href="{php echo wl_filter_url('is_top:1');}" class="btn {if $isTop == 1}btn-primary{else}btn-default{/if}">置顶中</a>
+                            <a href="{php echo wl_filter_url('is_top:2');}" class="btn {if $isTop == 2}btn-primary{else}btn-default{/if}">未置顶</a>
+                        </div>
+                    </div>
+                </div>
+                <div class="form-group">
+                    <div class="col-sm-2 control-label"></div>
+                    <div class="col-sm-9">
+                        <button class="btn btn-primary" type="submit">搜索</button>
+                        <a href="{php echo web_url('recruit/recruitment/recruitList')}" class="btn btn-danger">清除</a>
+                        <button class="btn btn-warning" type="submit" name="export" value="1">导出</button>
+                    </div>
+                </div>
+            </form>
+        </div>
+    </div>
+    <!--表格信息-->
+    <div class="app-table-list">
+        <!--列表信息-->
+        <div class="table-responsive order-list">
+            <table class="table table-hover">
+                <thead>
+                    <tr>
+                        <th width="3%" class="text-center"><input type="checkbox" /></th>
+                        <th width="10%" class="text-center">职位名称</th>
+                        <th width="5%" class="text-center">所属职位</th>
+                        <th width="5%" class="text-center">招聘类型</th>
+                        <th width="10%" class="text-center">发布方</th>
+                        <th width="10%" class="text-center">联系人</th>
+                        <th width="5%" class="text-center">招聘状态</th>
+                        <th width="15%" class="text-center">工作地址</th>
+                        <th width="10%" class="text-center">发布时间</th>
+                        <th width="5%" class="text-center">排序</th>
+                        <th width="5%" class="text-center">薪资</th>
+                        <th width="5%" class="text-center">是否置顶</th>
+                        <th width="12%" class="text-center">操作</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    {loop $list $key $val}
+                        <tr class="text-center">
+                            <td><input type="checkbox" value="{$val['id']}" /></td>
+                            <td>{$val['title']}</td>
+                            <td>{$val['position']}</td>
+                            <td>
+                                {if $val['recruitment_type'] == 1}
+                                    <label class="label label-success">个人招聘</label>
+                                {else}
+                                    <label class="label label-danger">企业招聘</label>
+                                {/if}
+                            </td>
+                            <td>{$val['release']}</td>
+                            <td>
+                                {$val['contacts']}<br />
+                                {$val['contact_phone']}
+                            </td>
+                            <td>
+                                {if $val['status'] == 1}
+                                    <label class="label label-primary">待付款</label>
+                                {elseif  $val['status'] == 2}
+                                    <label class="label label-inverse">审核中</label>
+                                {elseif  $val['status'] == 3}
+                                    <label class="label label-danger">未通过</label>
+                                {elseif  $val['status'] == 4}
+                                    <label class="label label-success">招聘中</label>
+                                {else}
+                                    <label class="label label-default">已结束</label>
+                                {/if}
+                            </td>
+                            <td>{$val['work_address']}</td>
+                            <td>{php echo date("Y-m-d H:i",$val['create_time']);}</td>
+                            <td>{$val['sort']}</td>
+                            <td>{$val['salary']}</td>
+                            <td>
+                                {if $val['is_top'] == 1}
+                                    <label class="label label-success">置顶中</label><br />
+                                    <label class="label label-success" style="display: inline-block;margin-top: 5px;">结束时间：{php echo date("Y-m-d H:i",$val['top_end_time'])}</label>
+                                {else}
+                                    <label class="label label-default">未置顶</label>
+                                {/if}
+                            </td>
+                            <td>
+                                <!--招聘状态：1=待付款，2=审核中，3=未通过，4=招聘中，5=已结束-->
+                                {if $val['status'] == 1}
+
+
+                                {elseif  $val['status'] == 2}
+                                    <a href="javascript:;" class="btn btn-sm btn-info rejectdis" appid="{$val['id']}">驳回</a>
+                                    <a href="{php echo web_url('recruit/recruitment/changeRecruitStatus', ['ids'=>$val['id'],'status'=>4])}" class="btn btn-sm btn-primary" data-toggle="ajaxPost" data-confirm="确定让当前招聘信息通过审核？">通过</a>
+                                    <a href="{php echo web_url('recruit/recruitment/recruitSee', ['id'=>$val['id']])}" class="btn btn-sm btn-warning">查看</a>
+                                {elseif  $val['status'] == 3}
+                                    <a href="{php echo web_url('recruit/recruitment/changeRecruitStatus', ['ids'=>$val['id'],'status'=>4])}" class="btn btn-sm btn-primary" data-toggle="ajaxPost" data-confirm="确定让当前招聘信息通过审核？">通过</a>
+                                {elseif  $val['status'] == 4}
+                                    <a href="{php echo web_url('recruit/recruitment/recruitEdit',['id'=>$val['id']])}" class="btn btn-warning btn-sm">编辑</a>
+                                    <a href="{php echo web_url('recruit/recruitment/changeRecruitStatus', ['ids'=>$val['id'],'status'=>5])}" class="btn btn-sm btn-default" data-toggle="ajaxPost" data-confirm="确定当前职位已结束招聘？">招聘结束</a>
+                                {else}
+                                    <a href="{php echo web_url('recruit/recruitment/changeRecruitStatus', ['ids'=>$val['id'],'status'=>4])}" class="btn btn-sm btn-success" data-toggle="ajaxPost" data-confirm="确定再次进行招聘？">再次招聘</a>
+                                {/if}
+                                <a href="{php echo web_url('recruit/recruitment/recruitDel',['ids'=>$val['id']])}" class="btn btn-danger btn-sm" data-toggle="ajaxRemove" data-confirm="确定删除当前招聘信息？">删除</a>
+                            </td>
+                        </tr>
+                    {/loop}
+                </tbody>
+            </table>
+        </div>
+        <!--操作按钮 分页信息-->
+        <div class="app-table-foot clearfix">
+            <div class="pull-left">
+                <button class="btn btn-default" type="button" data-toggle='batch-remove' data-confirm="确定删除当前选中的所有招聘信息？" data-href="{php echo web_url('recruit/recruitment/recruitDel')}">批量删除</button>
+<!--                <button class="btn btn-default" type="button" data-toggle='batch' data-confirm="确定让当前选中的所有招聘信息不通过审核？" data-href="{php echo web_url('recruit/recruitment/changeRecruitStatus',['status'=>3])}">批量不通过</button>-->
+                <button class="btn btn-default" type="button" data-toggle='batch' data-confirm="确定让当前选中的所有招聘信息通过审核？" data-href="{php echo web_url('recruit/recruitment/changeRecruitStatus',['status'=>4])}">批量通过</button>
+            </div>
+            <div class="pull-right">{$pager}</div>
+        </div>
+    </div>
+
+    <div id="modal-module-gift22" class="modal fade" tabindex="-1">
+        <div class="modal-dialog" style='width: 920px;'>
+            <div class="modal-content">
+                <div class="modal-header">
+                    <button aria-hidden="true" data-dismiss="modal" class="close" type="button">×</button>
+                    <h3>驳回理由</h3>
+                </div>
+                <div class="modal-body" style="padding: 0;">
+                    <div class="modal-body">
+                        <textarea id="remark" name="admin_remark" class="form-control" rows="5"></textarea>
+                    </div>
+                </div>
+                <div class="modal-footer" style="padding:15px;">
+                    <a class="btn btn-default js-cancel" aria-hidden="true" data-dismiss="modal">取消</a>
+                    <a class="btn btn-primary js-order-id-post" order-id="" data-dismiss="modal" aria-hidden="true">确定</a>
+                </div>
+            </div>
+        </div>
+    </div>
+
+
+</div>
+<script>
+    //行业职位三级联动 —— 改变上级行业时重新生成子行业信息
+    $("[name='industry_pid']").on('change',function () {
+        let id = $(this).val();
+        let html = '<option value="0">全部</option>';
+        if(id > 0){
+            //选择了行业信息
+            $.post("{php echo web_url('recruit/recruitment/getSubIndustry');}",{id:id},function (res) {
+                if(res.errno == 1){
+                    $.each(res.data,function (k,v) {
+                        html += '<option value="'+v['id']+'">'+v['title']+'</option>';
+                    });
+                    $("[name='industry_id']").html(html).change();
+                }else{
+                    tip.alert(res.message)
+                }
+            },'json');
+        }else{
+            //选择了全部
+            $("[name='industry_id']").html(html).change();
+        }
+    });
+    //行业职位三级联动 —— 改变子行业时重新生成职位信息
+    $("[name='industry_id']").on('change',function () {
+        let id = $(this).val();
+        let html = '<option value="0">全部</option>';
+        if(id > 0){
+            //选择了行业信息
+            $.post("{php echo web_url('recruit/recruitment/getPosition');}",{id:id},function (res) {
+                if(res.errno == 1){
+                    $.each(res.data,function (k,v) {
+                        html += '<option value="'+v['id']+'">'+v['title']+'</option>';
+                    });
+                    $("[name='position_id']").html(html);
+                }else{
+                    tip.alert(res.message)
+                }
+            },'json');
+        }else{
+            //选择了全部
+            $("[name='position_id']").html(html);
+        }
+    });
+
+    //驳回申请理由
+    $('.rejectdis').click(function(){
+        var appid = $(this).attr('appid');
+        $('.js-order-id-post').attr("order-id",appid);
+        popwin = $('#modal-module-gift22').modal();
+    });
+
+    $('.js-order-id-post').click(function() {
+        var order_id = $(this).attr('order-id');
+        var remark = $('#remark').val();
+        $.post("{php echo web_url('recruit/recruitment/changeRecruitStatus')}",{status:3,ids:order_id,reason:remark},function(d){
+            if(!d.errno){
+                util.tips('驳回成功!');
+                location.reload();
+            }
+        },"json");
+        $('.main').css("opacity","1");$('.nav').css("opacity","1");$('.big-menu').css("opacity","1");
+    });
+
+</script>
+{php include wl_template('common/footer');}

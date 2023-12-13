@@ -1,0 +1,92 @@
+{php include wl_template('common/header');}
+<script type="text/javascript" src="{URL_WEB_JS}diyarea.js"></script>
+<style>
+    #memberInfo .form-group{
+        margin-bottom: 10px!important;
+    }
+    #memberInfo .img-photo{
+        max-width: 150px;
+        max-height: 150px;
+        float:left;
+        margin:2px;
+    }
+    #memberInfo video{
+        height: 300px!important;
+        width: auto!important;
+        border: 1px solid #ddd;
+        padding: 5px;
+    }
+    .margin-r-5{
+        margin-right: 5px;
+    }
+</style>
+<ul class="nav nav-tabs" id="myTab">
+    <li class="active"><a href="#tab_basic">基础信息</a></li>
+    <!--<li><a href="#tab_contact">联系方式</a></li>-->
+    <!--<li><a href="#tab_requirement">择偶要求</a></li>-->
+    <!--<li><a href="#tab_personality">个性信息</a></li>-->
+    <!--<li><a href="#tab_other">其他信息</a></li>-->
+</ul>
+<div class="app-content">
+    <div class="app-form" id="memberInfo">
+        <form class="form-horizontal form form-validate" method="post">
+            <div class="tab-content">
+                <!-- 基本信息 -->
+                <div class="tab-pane active" id="tab_basic">
+                    <div class="panel panel-default">
+                        <div class="panel-heading">基本信息</div>
+                        <div class="panel-body">
+
+                            {if $_GPC['id']==0 || $info['pid']}
+                            <div class="form-group">
+                                <label class="col-sm-2 control-label">上级区域</label>
+                                <div class="col-sm-9">
+                                    <select name="info[pid]" class="form-control">
+                                        {loop $allgroup $groups}
+                                        <option value="{$groups['id']}" {if $info['pid'] == $groups['id']}selected{/if}>{$groups['name']}</option>
+                                        {/loop}
+                                    </select>
+                                </div>
+                            </div>
+                            {/if}
+
+                            <div class="form-group">
+                                <label class="col-sm-2 control-label">区域名称<span class="form-must">*</span></label>
+                                <div class="col-sm-9">
+                                    <input class="form-control" type="text" name="info[name]" value="{$info['name']}"  />
+                                </div>
+                            </div>
+
+
+
+                            <!--<div class="form-group">-->
+                            <!--    <label class="col-sm-2 control-label">创建时间</label>-->
+                            <!--    <div class="col-sm-9">-->
+                            <!--        <input class="form-control" type="text" disabled="disabled" value="{$info['create_time_text']}"  />-->
+                            <!--    </div>-->
+                            <!--</div>-->
+
+                            <div class="form-group">
+                                <label class="col-sm-2 control-label">排序</label>
+                                <div class="col-sm-9">
+                                    <input class="form-control"  type="number" min="0"  name="info[weigh]" value="{$info['weigh']}"  />
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <div class="form-group">
+                <label class="col-sm-2 control-label"></label>
+                <div class="col-sm-9">
+                    <input type="submit" name="submit" value="提交" class="btn btn-primary min-width" />
+                    <input type="hidden" name="token" value="{$_W['token']}" />
+                    <input type="hidden" name="id" value="{$_GPC['id']}" />
+
+                    <a href="{php echo web_url('house/House/areaIndex')}" class="btn btn-danger min-width margin-r-5">返回</a>
+                </div>
+            </div>
+        </form>
+    </div>
+</div>
+{php include wl_template('common/footer');}

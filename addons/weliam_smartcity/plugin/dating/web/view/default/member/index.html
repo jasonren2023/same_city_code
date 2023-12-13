@@ -1,0 +1,214 @@
+{php include wl_template('common/header');}
+<style>
+    .user{
+        height: 60px;
+        min-width: 180px;
+    }
+    .user .img{
+        width: 60px;
+        height: 60px;
+        float: left;
+        position: relative;
+    }
+    .user .img img{
+        width: 60px;
+        height: 60px;
+        border-radius: 50%;
+    }
+    .user .img i{
+        position: absolute;
+        top: 0;
+        right: 0px;
+        color: #FFF;
+        opacity: .7;
+        font-size: 13px;
+        border-radius: 50%;
+        width: 20px;
+        height: 20px;
+        line-height: 20px;
+        text-align: center;
+    }
+    .user .img i.icon-male{
+        background: #0d8ddb;
+    }
+    .user .img i.icon-female{
+        background: #ed5565;
+        transform: rotate(  30deg) skew(  0deg);
+    }
+    .user .info{
+        float: left;
+        height: 60px;
+        width: calc(100% - 60px);
+        padding-left: 10px;
+        font-size: 15px;
+        text-align: left;
+        line-height: 20px;
+    }
+</style>
+<ul class="nav nav-tabs" id="myTab">
+    <li class="active"><a href="javascript:;">会员列表</a></li>
+</ul>
+<div class="app-content">
+    <!--顶部操作-->
+    <div class="app-filter">
+        <div class="filter-action">
+            <a href="{php echo web_url('dating/member/memberSee')}" class="btn btn-primary">添加用户</a>
+        </div>
+        <div class="filter-list">
+            <form action="" method="get" class="form-horizontal" role="form" id="form1">
+                <input type="hidden" name="c" value="site" />
+                <input type="hidden" name="a" value="entry" />
+                <input type="hidden" name="m" value="{MODULE_NAME}" />
+                <input type="hidden" name="p" value="dating" />
+                <input type="hidden" name="ac" value="member" />
+                <input type="hidden" name="do" value="memberList" />
+                <input type="hidden" name="examine" value="{$examine}" />
+                <div class="form-group">
+                    <div class="col-sm-2 control-label">会员昵称</div>
+                    <div class="col-sm-9">
+                        <input type="text" class="form-control" name="nickname" value="{$nickname}" placeholder="请输入会员昵称...">
+                    </div>
+                </div>
+                <div class="form-group">
+                    <label class="col-sm-2 control-label">状态</label>
+                    <div class="col-sm-9">
+                        <div class="btn-group">
+                            <a href="{php echo wl_filter_url('examine:0');}" class="btn {if $examine == 0}btn-primary{else}btn-default{/if}">全部</a>
+                            <a href="{php echo wl_filter_url('examine:1');}" class="btn {if $examine == 1}btn-primary{else}btn-default{/if}">待审核</a>
+                            <a href="{php echo wl_filter_url('examine:2');}" class="btn {if $examine == 2}btn-primary{else}btn-default{/if}">未通过</a>
+                            <a href="{php echo wl_filter_url('examine:3');}" class="btn {if $examine == 3}btn-primary{else}btn-default{/if}">显示中</a>
+                        </div>
+                    </div>
+                </div>
+                <div class="form-group">
+                    <div class="col-sm-2 control-label"></div>
+                    <div class="col-sm-9">
+                        <button class="btn btn-primary" type="submit">搜索</button>
+                        <a href="{php echo web_url('dating/member/memberList')}" class="btn btn-danger">清除</a>
+                    </div>
+                </div>
+            </form>
+        </div>
+    </div>
+    <!--表格信息-->
+    <div class="app-table-list">
+        <!--列表信息-->
+        <div class="table-responsive order-list">
+            <table class="table table-hover">
+                <thead>
+                    <tr>
+                        <th class="text-center"><input type="checkbox" /></th>
+                        <th class="text-center">ID</th>
+                        <th class="text-left">用户信息</th>
+                        {if $_W['aid'] == 0}
+                            <th class="text-center">所属代理</th>
+                            <th class="text-center">所属红娘(点击修改)</th>
+                        {/if}
+                        <th class="text-center">身高(cm)/体重(kg)</th>
+                        <th class="text-center">{if $university}年纪{else}婚姻情况{/if}</th>
+                        <th class="text-center">{if $university}专业{else}学历{/if}</th>
+                        <th class="text-center">所在城市</th>
+                        <th class="text-center">状态</th>
+                        <th class="text-center">是否置顶</th>
+                        <th class="text-center">创建时间</th>
+                        <th class="text-center">操作</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    {loop $list $key $item}
+                        <tr class="text-center">
+                            <td><input type="checkbox" value="{$item['id']}" /></td>
+                            <td>{$item['id']}</td>
+                            <td>
+                                <div class="user">
+                                    <div class="img">
+                                        <img src="{$item['avatar']}">
+                                        {if $item['gneder'] == 1}
+                                            <i class="icon icon-male"></i>
+                                        {else}
+                                            <i class="icon icon-female"></i>
+                                        {/if}
+                                    </div>
+                                    <div class="info">
+                                        <div>{$item['nickname']}</div>
+                                        <div>{$item['birth']}</div>
+                                        <div>MID:{$item['mid']}</div>
+                                    </div>
+                                </div>
+                            </td>
+                            {if $_W['aid'] == 0}
+                                <td><label class="label label-success">{$item['agent_name']}</label></td>
+                                <td>
+                                    <a href="{php echo web_url('dating/member/changeMatchmaker',['type'=>'get','id'=>$item['matchmaker_id'],'mid'=>$item['mid'],'member_id'=>$item['id']])}">
+                                        {if $item['matchmaker_id'] > 0}
+                                            {$item['matchmaker_name']}
+                                        {else}
+                                            点击添加
+                                        {/if}
+                                    </a>
+                                </td>
+                            {/if}
+                            <td>{$item['height']}cm/{$item['weight']}kg</td>
+                            <td>
+                                <label class="label label-success">{$item['martext']}</label>
+                            </td>
+                            <td>
+                                <label class="label label-default">{$item['edutext']}</label>
+                            </td>
+                            <td>{$item['province']}-{$item['city']}-{$item['area']}</td>
+                            <td>
+                                {if $item['examine'] == 1}
+                                    <label class="label label-default">待审核</label>
+                                {elseif $item['examine'] == 2}
+                                    <label class="label label-danger">未通过</label>
+                                {elseif $item['examine'] == 3}
+                                    <label class="label label-primary">显示中</label>
+                                {/if}
+                            </td>
+                            <td>
+                                {if $item['is_top'] == 1}
+                                    <label class="label label-default">未置顶</label>
+                                {else}
+                                    <label class="label label-inverse">置顶中</label>
+                                {/if}
+                            </td>
+                            <td>{php echo date('Y-m-d H:i',$item['create_time']);}</td>
+                            <td>
+                                <a href="{php echo web_url('dating/member/memberSee',['id'=>$item['id']])}" class="btn btn-info btn-sm">查看</a>
+                                <a href="{php echo web_url('dating/member/memberDel',['ids'=>$item['id']])}" class="btn btn-danger btn-sm" data-toggle="ajaxRemove" data-confirm="确定删除当前标签信息？">删除</a>
+                                {if $item['examine'] == 1}
+                                    <a href="{php echo web_url('dating/member/memberExamine',['id'=>$item['id'],'status'=>3])}" data-toggle="ajaxPost" class="btn btn-primary btn-sm">通过</a>
+                                    <a href="javascript:;" class="btn btn-success btn-sm btn-reject" data-id="{$item['id']}">驳回</a>
+                                {/if}
+                            </td>
+                        </tr>
+                    {/loop}
+                </tbody>
+            </table>
+        </div>
+        <!--操作按钮 分页信息-->
+        <div class="app-table-foot clearfix">
+            <div class="pull-left">
+                <button class="btn btn-default" type="button" data-toggle='batch-remove' data-confirm="确定删除当前选中的所有标签信息？" data-href="{php echo web_url('dating/member/memberDel')}">批量删除</button>
+            </div>
+            <div class="pull-right">{$pager}</div>
+        </div>
+    </div>
+</div>
+<script>
+    //点击驳回
+    $(document).on('click','.btn-reject',function (){
+        let id = $(this).data('id'),
+            url = "{php echo web_url('dating/member/memberExamine')}";
+        tip.prompt('请输入驳回原因！', {
+            maxlength: 230,
+            callback: function (reason) {
+                $.post(url,{id:id,status:2,reason:reason},function (res){
+                    if(res.status == 0) tip.msgbox.err(res.result.message);
+                    else tip.msgbox.suc(res.result.message,res.result.url);
+                },'json');
+            }
+        });
+    });
+</script>
+{php include wl_template('common/footer');}

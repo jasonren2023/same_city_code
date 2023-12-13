@@ -1,0 +1,163 @@
+{php include wl_template('common/header');}
+<ul class="nav nav-tabs">
+    <li class="active"><a href="javascript:;">编辑服务者</a></li>
+</ul>
+<div class="app-content">
+    <div class="app-form">
+        <form action="" method="post" class="form-horizontal form form-validate">
+            <div class="form-group-title">服务者信息</div>
+            <div class="form-group">
+                <label class="col-sm-2 control-label">绑定用户</label>
+                <div class="col-sm-9">
+                    <input type='hidden' name="artificer[mid]" value="{$artificer['mid']}" />
+                    {php echo tpl_select_user('aMid',$artificer['mid']);}
+                </div>
+            </div>
+            <div class="form-group">
+                <label class="col-sm-2 control-label"><span class="form-must">*</span>姓名</label>
+                <div class="col-sm-9">
+                    <input type="text" name="artificer[name]" maxlength="16" class="form-control" value="{$artificer['name']}" placeholder="请输入服务者姓名" required>
+                </div>
+            </div>
+            <div class="form-group">
+                <label class="col-sm-2 control-label"><span class="form-must">*</span>性别</label>
+                <div class="col-sm-9">
+                    <label class="radio-inline">
+                        <input type="radio" name="artificer[gender]" value="1" {if empty($artificer['gender']) || $artificer['gender'] == 1}checked{/if}> 男
+                    </label>
+                    <label class="radio-inline">
+                        <input type="radio" name="artificer[gender]" value="2" {if $artificer['gender'] == 2} checked{/if}> 女
+                    </label>
+                </div>
+            </div>
+            <div class="form-group">
+                <label class="col-sm-2 control-label"><span class="form-must">*</span>联系电话</label>
+                <div class="col-sm-9">
+                    <input type="number" name="artificer[mobile]" maxlength="16" class="form-control" value="{$artificer['mobile']}" placeholder="请输入服务者联系电话" required>
+                </div>
+            </div>
+            <div class="form-group">
+                <label class="col-sm-2 control-label"><span class="form-must">*</span>头像照片</label>
+                <div class="col-sm-9">
+                    {php echo attachment_select('artificer[thumb]', $artificer['thumb'])}
+                    <span class="help-block">服务者头像照片，建议使用正方形图片</span>
+                </div>
+            </div>
+            <div class="form-group">
+                <label class="col-sm-2 control-label"><span class="form-must">*</span>服务类目</label>
+                <div class="col-sm-9">
+                    <select name="category[]" class="form-control select2" multiple>
+                        {loop $categoryes $parent}
+                        <optgroup label="{$parent['title']}">
+                            {loop $parent['list'] $children}
+                            <option value="{$children['id']}" {if in_array($children['id'], $cateids)}selected{/if}>{$children['title']}</option>
+                            {/loop}
+                        </optgroup>
+                        {/loop}
+                    </select>
+                </div>
+            </div>
+            <div class="form-group">
+                <label class="col-sm-2 control-label"><span class="form-must">*</span>联系地址</label>
+                <div class="col-sm-9">
+                    {php echo tpl_select_address('artificer[address]','artificer[lng]','artificer[lat]',$artificer['address'],$artificer['lng'],$artificer['lat'])}
+                </div>
+            </div>
+<!--            <div class="form-group">-->
+<!--                <label class="col-sm-2 control-label">添加标签</label>-->
+<!--                <div class="col-sm-9">-->
+<!--                    <div class="data-data">-->
+<!--                        <div class="col-sm-8" style="margin: 0px;padding-left: 0;float: left;margin-bottom: 1rem;">-->
+<!--                            <span class="rule_pro" style="position: relative;top: 5px;left: 5px;">{$artificer['tagarray']}</span>-->
+<!--                            <input type="hidden" name="artificer[tagarray]" class="form-control valid" value="{$artificer['tagarray']}">-->
+<!--                        </div>-->
+<!--                        <br/>-->
+<!--                        <div class="input-group" style="margin: 0px;padding-right: 0;float: left">-->
+<!--                            <input type="text" class="form-control valid" placeholder="在此输入一个标签,然后点击添加">-->
+<!--                            <span class="input-group-addon btn btn-default addshux">添加</span>-->
+<!--                            <span class="input-group-addon btn btn-default chongzhi">重置</span>-->
+<!--                        </div>-->
+<!--                    </div>-->
+<!--                </div>-->
+<!--            </div>-->
+
+
+            <div class="form-group">
+                <label class="col-sm-2 control-label">工作照片</label>
+                <div class="col-sm-9">
+                    {php echo attachment_select_multi('artificer[thumbs]',$artificer['thumbs']);}
+                </div>
+            </div>
+            <div class="form-group">
+                <label class="col-sm-2 control-label">案例照片</label>
+                <div class="col-sm-9">
+                    {php echo attachment_select_multi('artificer[casethumbs]',$artificer['casethumbs']);}
+                </div>
+            </div>
+<!--            <div class="form-group">-->
+<!--                <label class="col-sm-2 control-label">详细介绍</label>-->
+<!--                <div class="col-sm-9">-->
+<!--                    {php echo tpl_diy_editor_create('artificer[detail]', $artificer['detail']);}-->
+<!--                </div>-->
+<!--            </div>-->
+            <div class="form-group">
+                <label class="col-sm-2 control-label">列表排序</label>
+                <div class="col-sm-9">
+                    <input type="number" name="artificer[sort]" maxlength="16" class="form-control" value="{$artificer['sort']}" placeholder="排序数字，数字越大越靠前">
+                </div>
+            </div>
+            <div class="form-group">
+                <label class="col-sm-2 control-label">服务者状态</label>
+                <div class="col-sm-9">
+                    <label class="radio-inline">
+                        <input type="radio" name="artificer[status]" value="1" {if $artificer['status'] == 1}checked{/if}> 营业中
+                    </label>
+                    <label class="radio-inline">
+                        <input type="radio" name="artificer[status]" value="0" {if empty($artificer['status'])} checked{/if}> 歇业中
+                    </label>
+                    {if $artificer['status'] == 4}
+                    <label class="radio-inline">
+                        <input type="radio" name="artificer[status]" value="4" {if $artificer['status'] == 4} checked{/if}> 被删除
+                    </label>
+                    {/if}
+                    {if $artificer['status'] == 5}
+                    <label class="radio-inline">
+                        <input type="radio" name="artificer[status]" value="5" {if $artificer['status'] == 5} checked{/if}> 待审核
+                    </label>
+                    {/if}
+                    {if $artificer['status'] == 6}
+                    <label class="radio-inline">
+                        <input type="radio" name="artificer[status]" value="6" {if $artificer['status'] == 6} checked{/if}> 被驳回
+                    </label>
+                    {/if}
+                </div>
+            </div>
+            <div class="form-group">
+                <label class="col-sm-2 control-label"></label>
+                <div class="col-sm-9">
+                    <input type="submit" name="submit" value="提交" class="btn btn-primary min-width" />
+                    <input type="hidden" name="token" value="{$_W['token']}" />
+                    <input type="hidden" name="id" value="{$artificer['id']}" />
+                </div>
+            </div>
+        </form>
+    </div>
+</div>
+<script>
+    $('body').on('click','.addshux',function(){
+        var valueinput = $(this).parent().find('input');
+        var value = valueinput.val();
+        if(value == ''){
+            util.tips('请在编辑框输入内容');return false;
+        }
+        var valueelemt = $(this).parents('.data-data').find('.rule_pro');
+        valueelemt.append(value+',');
+        var nowvalue = valueelemt.next().val();
+        valueelemt.next().val(nowvalue+value+',');
+        valueinput.val('').focus();
+    });
+    $('body').on('click','.chongzhi',function(){
+        $(this).parents('.data-data').find('.rule_pro').text('').next().val('');
+    });
+</script>
+{php include wl_template('common/footer');}

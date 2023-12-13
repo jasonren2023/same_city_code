@@ -1,0 +1,73 @@
+<!--------------------------  选项卡组件群  ----------------------------------->
+<!-- 首页选项卡 -->
+<script type="text/html" id="tpl_show_options">
+    <div class="drag fixed" data-itemid="<%itemid%>" group_name="<%group_name%>" group_key="<%group_key%>" data-id="<%group_name%>">
+        <style>
+            #sort_<%itemid%> li{
+                               color: <%style.defaultBg%>;
+                           }
+            #sort_<%itemid%> li:first-of-type{
+                               color: <%style.selectBg%>;
+                           }
+            #sort_<%itemid%> li:first-of-type span{
+                               background-color: <%style.selectBg%>;
+                           }
+        </style>
+        <div class="model-options" style="margin-bottom: <%style.marginBottom||'0'%>px;background:<%style.background%>;">
+            <ul id="sort_<%itemid%>">
+                <%each data as item%>
+                <%if item.status == 1%>
+                <li class="sort_<%itemid%>" sort="<%item.sort%>"><%item.nickname%><span></span></li>
+                <%/if%>
+                <%/each%>
+            </ul>
+        </div>
+    </div>
+</script>
+<!-- 商品选项卡 -->
+<script type="text/html" id="tpl_show_options2">
+    <style>
+        #sort_<%itemid%> li{
+                           color: <%style.defaultBg%>;
+                       }
+        #sort_<%itemid%> li:first-of-type{
+                           color: <%style.selectBg%>;
+                       }
+        #sort_<%itemid%> li:first-of-type span{
+                           background-color: <%style.selectBg%>;
+                       }
+    </style>
+    <div class="drag fixed" data-itemid="<%itemid%>" group_name="<%group_name%>" group_key="<%group_key%>" data-id="<%group_name%>">
+        <div class="model-options" style="margin-bottom: <%style.marginBottom||'0'%>px;background:<%style.background%>;">
+            <ul id="sort_<%itemid%>" style="-webkit-justify-content: space-around;justify-content: space-around;">
+                <%each data as item%>
+                <li class="sort_<%itemid%>" sort="<%item.sort%>"><%item.name%><span></span></li>
+                <%/each%>
+            </ul>
+        </div>
+    </div>
+</script>
+<!-- 商户选项卡 -->
+<script type="text/html" id="tpl_show_options3">
+    <style>
+        .model-options ul li{
+            color: <%style.defaultBg%>;
+        }
+        .model-options ul li:first-of-type{
+            color: <%style.selectBg%>;
+        }
+        .model-options ul li:first-of-type span{
+            background-color: <%style.selectBg%>;
+        }
+    </style>
+    <div class="drag fixed" data-itemid="<%itemid%>" group_name="<%group_name%>" group_key="<%group_key%>" data-id="<%group_name%>">
+        <div class="diy-shop" style="margin-bottom: <%style.marginBottom||'1'%>px;">
+            <ul style="-webkit-justify-content: space-around;justify-content: space-around;">
+                <%each data as item%>
+                <li order="<%item.order%>"><%item.title%></li>
+                <%/each%>
+            </ul>
+        </div>
+    </div>
+</script>
+

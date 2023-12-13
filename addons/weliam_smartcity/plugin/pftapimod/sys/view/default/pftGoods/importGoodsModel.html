@@ -1,0 +1,177 @@
+<style>
+    #selectGoodsList .goodsImg img{
+        width: 50px;
+        height: 50px;
+    }
+    #selectGoodsList .modal-body.form-horizontal{
+        padding: 0 30px;
+    }
+    #selectGoodsList .modal-content{
+        max-height: 800px;
+    }
+</style>
+<div class="modal-dialog selectGoodsList"  id="selectGoodsList" style="min-width: 60%!important;">
+    <div class="modal-content">
+        <div class="modal-header">
+            <button data-dismiss="modal" class="close" type="button">×</button>
+            <h4 class="modal-title">门票列表</h4>
+        </div>
+        <div class="modal-body form-horizontal">
+            <!--表格-->
+            <div class="app-table-list selectGoodsTable" id="selectGoodsTable">
+                <div class="panel panel-default table-responsive">
+                    <table class="table table-hover table-bordered" style="border: 1px solid #e5e5e5;">
+                        <thead>
+                        <tr>
+                            <th class="text-center" width="5%"><input type="checkbox" name="checkall" value="" id="checkall" class="checkboxall" onclick="var ck = this.checked; $(':checkbox').each(function(){this.checked = ck});"/></th>
+                            <th class="text-center" width="30%">门票名称</th>
+                            <th class="text-center" width="15%">门票参数(供应商id/商品id/门票id)</th>
+                            <th class="text-center" width="10%">门票价格</th>
+                            <th class="text-center" width="10%">门票状态</th>
+                            <th class="text-center" width="30%">操作</th>
+                        </tr>
+                        </thead>
+                        <tbody class="text-center">
+                        {loop $tickets $val}
+                        <tr>
+                            <td class="text-center">
+                                <center> <input type="checkbox" name="items[]" value="{$val['UUid']}" class="checkbox" style="min-height:16px;"/></center>
+                            </td>
+                            <td class="text-center goodsImg">
+                                {$val['UUtitle']}
+                            </td>
+                            <td class="text-center">
+                                {$val['UUaid']}/{$val['UUlid']}/{$val['UUid']}
+                            </td>
+                            <td>
+                                <span style="color: red">￥</span>{$val['UUtprice']}
+                            </td>
+                            <td>
+                                {if $val['UUstatus'] == 2}
+                                <span class="label label-warning">下架</span>
+                                {else if $val['UUstatus'] == 1}
+                                <span class="label label-success">上架</span>
+                                {else}
+                                <span class="label label-default">已删除</span>
+                                {/if}
+                            </td>
+                            <td class="text-center goodsImg">
+                                <button type="button" class="btn btn-success "onclick="importGoods({$val['UUid']},1,{$val['UUlid']});">导入为抢购商品</button>
+                                <button type="button" class="btn btn-success "onclick="importGoods({$val['UUid']},2,{$val['UUlid']});">导入为团购商品</button>
+                            </td>
+                        </tr>
+                        {/loop}
+                        </tbody>
+                    </table>
+                </div>
+                <div class="app-table-foot clearfix">
+                    <div class="pull-left">
+<!--                        <button class="btn btn-default" type="button" data-toggle='ajaxPost' data-confirm="确定将勾选门票导入为多规格抢购商品？" data-href="{php echo web_url('pftapimod/pftGoods/importGoods',['plugin'=>1])}">导入为多规格抢购商品</button>-->
+<!--                        <button class="btn btn-default" type="button" data-toggle='ajaxPost' data-confirm="确定将勾选门票导入为多规格团购商品？" data-href="{php echo web_url('pftapimod/pftGoods/importGoods',['plugin'=>2])}">导入为多规格团购商品</button>-->
+                        <div class="btn-group btn-group-sm">
+                            <button  class="btn btn-default" disabled="disabled" id="checkYse" onclick="importOptionGoods(1,{$val['UUlid']});">导入为多规格抢购商品</button>
+                            <button  style="margin-left: 10px;" class="btn btn-default" disabled="disabled" id="checkNo" onclick="importOptionGoods(2,{$val['UUlid']});">导入为多规格团购商品</button>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+        <div class="modal-footer">
+            <button data-dismiss="modal" class="btn btn-default cancelSelectGoods" type="button">关闭</button>
+        </div>
+    </div>
+</div>
+
+
+<script>
+
+    function importGoods(id,plugin,lid){
+        var content = '';
+        if(plugin==1) content = '确认将此商品导入成为抢购商品？';
+        if(plugin==2) content = '确认将此商品导入成为团购商品？';
+        if(plugin==3) content = '确认将此商品导入成为拼团商品？';
+        layer.open({
+            title: [
+                '提示',
+                'background-color:#18A689; color:#fff;'
+            ]
+            ,anim: 'up'
+            ,content: content
+            ,btn: ['确认', '取消']
+            ,yes:function(index){
+                $('.layer-anim').remove();
+                //处理
+                $.post("{php echo web_url('pftapimod/pftGoods/importGoods')}", { id : id ,lid : lid , plugin:plugin}, function(data){
+                    if(!data.status){
+                        util.tips("操作成功！");
+                        if(plugin == 1){
+                            location.href = "{php echo web_url('goodshouse/goodshouse/createactive',array('plugin' => 'rush'))}&id="+data.id;
+                        }else if(plugin == 2){
+                            location.href = "{php echo web_url('goodshouse/goodshouse/createactive',array('plugin' => 'groupon'))}&id="+data.id;
+                        }else if(plugin == 3){
+                            location.href = "{php echo web_url('goodshouse/goodshouse/createactive',array('plugin' => 'wlfightgroup'))}&id="+data.id;
+                        }
+                    }else{
+                        util.tips(data.result.message);
+                    };
+                    $('.layui-layer-shade').remove();
+                }, 'json');
+            }
+        });
+    }
+
+    function importOptionGoods(plugin,lid){
+        var content = '';
+        if(plugin==1) content = '确定将勾选门票导入为多规格抢购商品？';
+        if(plugin==2) content = '确定将勾选门票导入为多规格团购商品？';
+        layer.open({
+            title: [
+                '提示',
+                'background-color:#18A689; color:#fff;'
+            ]
+            ,anim: 'up'
+            ,content: content
+            ,btn: ['确认', '取消']
+            ,yes:function(index){
+                $('.layer-anim').remove();
+                var ids = [];
+                var $checks=$('.checkbox:checkbox:checked');
+                $checks.each(function() {
+                    if (this.checked) {
+                        ids.push(this.value);
+                    };
+                });
+                //处理
+                $.post("{php echo web_url('pftapimod/pftGoods/importOptionGoods')}", { ids : ids ,plugin:plugin, lid : lid}, function(data){
+                    if(!data.errno){
+                        util.tips("操作成功！");
+                        if(plugin == 1){
+                            location.href = "{php echo web_url('goodshouse/goodshouse/createactive',array('plugin' => 'rush'))}&id="+data.id;
+                        }else if(plugin == 2){
+                            location.href = "{php echo web_url('goodshouse/goodshouse/createactive',array('plugin' => 'groupon'))}&id="+data.id;
+                        }else if(plugin == 3){
+                            location.href = "{php echo web_url('goodshouse/goodshouse/createactive',array('plugin' => 'wlfightgroup'))}&id="+data.id;
+                        }
+                    }else{
+                        util.tips(data.message);
+                    };
+                }, 'json');
+            }
+        });
+    }
+
+    $(function(){
+        $('.checkbox,.checkboxall').click(function(){
+            var $checks=$('.checkbox:checkbox:checked');
+            $('#check').attr('disabled','');
+            if($checks.length>0) {
+                $('#checkYse').attr('disabled',false);
+                $('#checkNo').attr('disabled',false);
+            }else{
+                $('#checkYse').attr('disabled',true);
+                $('#checkNo').attr('disabled',true);
+            }
+        });
+    });
+
+</script>

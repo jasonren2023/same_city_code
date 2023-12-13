@@ -1,0 +1,97 @@
+{php include wl_template('common/header');}
+<style>
+    .user .image{
+        display: inline-block;
+    }
+    .user .image img{
+        width: 50px;
+        height: 50px;
+        border-radius: 50%;
+    }
+    .user .title{
+        display: inline-block;
+    }
+</style>
+<ul class="nav nav-tabs" id="myTab">
+    <li class="active"><a href="javascript:;">用户列表</a></li>
+</ul>
+<!-- 直播间信息列表 -->
+<div class="app-content">
+    <!-- 顶部搜索内容 -->
+    <div class="app-filter">
+        <div class="filter-action"></div>
+        <div class="filter-list">
+            <form action="" method="get" class="form-horizontal" role="form" id="form1">
+                <input type="hidden" name="c" value="site" />
+                <input type="hidden" name="a" value="entry" />
+                <input type="hidden" name="m" value="{MODULE_NAME}" />
+                <input type="hidden" name="p" value="draw" />
+                <input type="hidden" name="ac" value="user" />
+                <input type="hidden" name="do" value="userIndex" />
+                <div class="form-group">
+                    <div class="col-sm-2 control-label">用户昵称</div>
+                    <div class="col-sm-9">
+                        <input type="text" class="form-control" name="nickname" value="{$nickname}" placeholder="请输入用户昵称...">
+                    </div>
+                </div>
+                <div class="form-group">
+                    <div class="col-sm-2 control-label"></div>
+                    <div class="col-sm-9">
+                        <button class="btn btn-primary" type="submit">搜索</button>
+                        <button class="btn btn-warning" type="submit" name="export" value="1">导出</button>
+                        <a href="{php echo web_url('draw/user/userIndex')}" class="btn btn-danger">清除</a>
+                    </div>
+                </div>
+            </form>
+        </div>
+    </div>
+    <!-- 表格内容 -->
+    <div class="app-table-list">
+        <div class="table-responsive order-list">
+            <table class="table table-hover">
+                <thead>
+                    <tr>
+                        <th class="text-center">用户信息</th>
+                        <th class="text-center">手机号</th>
+                        <th class="text-center">积分/余额</th>
+                        <th class="text-center">抽奖次数</th>
+                        <th class="text-center">中奖次数</th>
+                        <th class="text-center">操作</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    {loop $list $vo}
+                        <tr class="text-center">
+                            <td class="user">
+                                <div class="image">
+                                    <img src="{$vo['avatar']}" />
+                                </div>
+                                <div class="title">{$vo['nickname']}</div>
+                            </td>
+                            <td>{if $vo['mobile']}{$vo['mobile']}{else}--{/if}</td>
+                            <td>
+                                <span class="label label-info">
+                                    积分 {if $vo['credit1']}{$vo['credit1']}{else}0.00{/if}
+                                </span>
+                                <br>
+                                <span class="label label-warning" style="display: inline-block;margin-top: 5px;">
+                                    余额 {if $vo['credit2']}{$vo['credit2']}{else}0.00{/if}
+                                </span>
+                            </td>
+                            <td>{$vo['total_draw']}</td>
+                            <td>{$vo['total_prize']}</td>
+                            <td>
+                                <a class="btn btn-sm btn-danger" href="{php echo web_url('draw/prize/prizeIndex',['mid'=>$vo['mid']]);}">查看详情</a>
+                            </td>
+                        </tr>
+                    {/loop}
+                </tbody>
+            </table>
+        </div>
+        <div class="app-table-foot clearfix">
+            <div class="pull-left"></div>
+            <div class="pull-right">{$pager}</div>
+        </div>
+    </div>
+</div>
+{php include wl_template('common/footer');}

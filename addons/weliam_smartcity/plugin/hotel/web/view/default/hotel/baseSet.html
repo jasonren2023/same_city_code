@@ -1,0 +1,150 @@
+{php include wl_template('common/header');}
+<ul class="nav nav-tabs" id="myTab">
+    <li class="active"><a href="#tab_basic">基本设置</a></li>
+    <li ><a href="#tab_text">文本替换</a></li>
+    <li ><a href="#tab_share">分享设置</a></li>
+</ul>
+<div class="app-content">
+    <div class="app-form">
+        <form action="" method="post" class="form-horizontal form form-validate">
+            <div class="panel panel-default">
+                <div class="panel-heading">基本设置</div>
+                <div class="panel-body">
+                    <div class="tab-content">
+                        <div class="tab-pane active" id="tab_basic">
+                            <div class="form-group">
+                                <label class="col-sm-2 control-label">酒店功能</label>
+                                <div class="col-sm-9">
+                                    <label class="radio-inline"><input type="radio" name="set[switch]" value="1" {if $set['switch'] == 1}checked="checked"{/if}>开启</label>
+                                    <label class="radio-inline"><input type="radio" name="set[switch]" value="0" {if $set['switch'] != 1}checked="checked"{/if}>关闭</label>
+                                </div>
+                            </div>
+                            <div class="form-group">
+                                <label class="col-sm-2 control-label">资讯关联头条分类</label>
+                                <div class="col-sm-9">
+                                    <select name="set[headid]" class="form-control chosen-select">
+                                        {loop $headlist $key $val}
+                                        <option value="{$val['id']}" {if $val['id'] == $set['headid']}selected{/if}>{$val['name']}</option>
+                                        {/loop}
+                                    </select>
+                                    <span class="help-block">选择后该分类下的文章头条会作为酒店资讯信息显示在酒店组件首页。</span>
+                                </div>
+                            </div>
+                            <div class="form-group">
+                                <label class="col-sm-2 control-label">取消政策</label>
+                                <div class="col-sm-9">
+                                    <textarea class="form-control" name="set[cancel_desc]" maxlength="200" rows="5" style="resize: none;">{$set['cancel_desc']}</textarea>
+                                </div>
+                            </div>
+                            <div class="form-group">
+                                <label class="col-sm-2 control-label">温馨提示</label>
+                                <div class="col-sm-9">
+                                    <textarea class="form-control" name="set[tip_desc]" maxlength="200" rows="5" style="resize: none;">{$set['tip_desc']}</textarea>
+                                </div>
+                            </div>
+                            <div class="form-group">
+                                <label class="col-sm-2 control-label">预约订房协议</label>
+                                <div class="col-sm-9">
+                                    <div class="input-group"  style="width: 100%;">
+                                        {php echo tpl_diy_editor_create('set[agreement]', $set['agreement']);}
+                                    </div>
+                                </div>
+                            </div>
+
+
+
+
+                        </div>
+                        <div class="tab-pane" id="tab_text">
+
+                            <div class="form-group">
+                                <label class="col-sm-2 control-label">推荐酒店</label>
+                                <div class="col-sm-9">
+                                    <input type="text" name="set[tjjdtext]" placeholder="推荐酒店" class="form-control" value="{$set['tjjdtext']}" />
+                                </div>
+                            </div>
+                            <div class="form-group">
+                                <label class="col-sm-2 control-label">推荐描述</label>
+                                <div class="col-sm-9">
+                                    <input type="text" name="set[tjjddesc]" placeholder="精心挑选，经济舒适" class="form-control" value="{$set['tjjddesc']}" />
+                                </div>
+                            </div>
+                            <div class="form-group">
+                                <label class="col-sm-2 control-label">最新资讯</label>
+                                <div class="col-sm-9">
+                                    <input type="text" name="set[zxzxtext]" placeholder="最新资讯" class="form-control" value="{$set['zxzxtext']}" />
+                                </div>
+                            </div>
+                            <div class="form-group">
+                                <label class="col-sm-2 control-label">资讯描述</label>
+                                <div class="col-sm-9">
+                                    <input type="text" name="set[zxzxdesc]" placeholder="酒店资讯，活动信息，尽在这里" class="form-control" value="{$set['zxzxdesc']}" />
+                                </div>
+                            </div>
+                            <div class="form-group">
+                                <label class="col-sm-2 control-label">附近酒店</label>
+                                <div class="col-sm-9">
+                                    <input type="text" name="set[fjjdtext]" placeholder="附近酒店" class="form-control" value="{$set['fjjdtext']}" />
+                                </div>
+                            </div>
+                            <div class="form-group">
+                                <label class="col-sm-2 control-label">酒店描述</label>
+                                <div class="col-sm-9">
+                                    <input type="text" name="set[fjjddesc]" placeholder="附近酒店，一览无余" class="form-control" value="{$set['fjjddesc']}" />
+                                </div>
+                            </div>
+                        </div>
+                        <div class="tab-pane" id="tab_share">
+                            <div class="alert alert-info">
+                                <b>适用模板变量：[昵称] [时间] [系统名称]</b>
+                            </div>
+                            <div class="form-group">
+                                <label class="col-sm-2 control-label">分享标题</label>
+                                <div class="col-sm-9">
+                                    <input type="text" name="set[share_title]" class="form-control" value="{$set['share_title']}" />
+                                </div>
+                            </div>
+                            <div class="form-group">
+                                <label class="col-sm-2 control-label">分享图片</label>
+                                <div class="col-sm-9">
+                                    {php echo attachment_select('set[share_image]', $set['share_image']);}
+                                </div>
+                            </div>
+                            <div class="form-group">
+                                <label class="col-sm-2 control-label">分享描述</label>
+                                <div class="col-sm-9">
+                                    <input type="text" name="set[share_desc]" class="form-control" value="{$set['share_desc']}" />
+                                </div>
+                            </div>
+                        </div>
+
+
+
+                    </div>
+                </div>
+            </div>
+            <div class="form-group">
+                <label class="col-sm-2 control-label"></label>
+                <div class="col-sm-9">
+                    <input type="submit" name="submit" value="提交" class="btn btn-primary min-width" />
+                    <input type="hidden" name="token" value="{$_W['token']}" />
+                </div>
+            </div>
+        </form>
+    </div>
+</div>
+
+
+<script>
+
+    $(function() {
+        window.optionchanged = false;
+        $('#myTab a').click(function(e) {
+            e.preventDefault(); //阻止a链接的跳转行为
+            $(this).tab('show'); //显示当前选中的链接及关联的content
+        })
+    });
+
+</script>
+
+{php include wl_template('common/footer');}

@@ -1,0 +1,164 @@
+{php include wl_template('common/header');}
+<meta name="referrer" content="never">
+<ul class="nav nav-tabs" id="myTab">
+    <li class="active"><a href="javascript:;">成员列表</a></li>
+</ul>
+<!-- 直播间信息列表 -->
+<div class="app-content">
+    <div class="app-filter">
+        <!--顶部提示信息-->
+        <div class="alert alert-warning">
+            注意事项：<br />
+            1、如果发现信息有异常，请点击信息同步。<br />
+            2、添加成员每日最多操作10000次；删除成员每日最多操作10000次；信息同步每日最多请求10000次，每次同步消耗若干次。<br>
+            3、角色数量限制信息:管理员10个，运营者500个，主播500个<br />
+            4、添加角色信息后请同步信息，否则不会显示添加的角色信息；如果添加多个角色，建议在添加完所有角色后再同步信息防止同步接口次数浪费<br />
+            5、管理员和运营者角色不能重复，一个用户只能存在其中一个角色。<br />
+        </div>
+        <!--操作按钮-->
+        <div class="filter-action">
+            <a href="{php echo web_url('live/member/addMember');}" class="btn btn-primary">添加成员</a>
+            <a href="javascript:;" class="btn btn-info" id="infoSynchronization">信息同步</a>
+        </div>
+        <!--搜索操作内容-->
+        <div class="filter-list">
+            <form action="" method="get" class="form-horizontal" role="form" id="form1">
+                <input type="hidden" name="c" value="site" />
+                <input type="hidden" name="a" value="entry" />
+                <input type="hidden" name="m" value="{MODULE_NAME}" />
+                <input type="hidden" name="p" value="live" />
+                <input type="hidden" name="ac" value="member" />
+                <input type="hidden" name="do" value="memberIndex" />
+                <div class="form-group">
+                    <div class="col-sm-2 control-label">成员昵称</div>
+                    <div class="col-sm-9">
+                        <input type="text" class="form-control" name="nickname" value="{$nickname}" placeholder="请输入成员昵称...">
+                    </div>
+                </div>
+                <div class="form-group">
+                    <label class="col-sm-2 control-label">角色{$memberRole}类型</label>
+                    <div class="col-sm-9">
+                        <!-- 具有的身份：0:超级管理员，1:管理员，2:主播，3:运营者 -->
+                        <select name="member_role" class="form-control">
+                            <option value="" {if !$memberRole}selected{/if}>全部</option>
+                            <option value="5" {if $memberRole == 5}selected{/if}>超级管理员</option>
+                            <option value="1" {if $memberRole == 1}selected{/if}>管理员</option>
+                            <option value="2" {if $memberRole == 2}selected{/if}>主播</option>
+                            <option value="3" {if $memberRole == 3}selected{/if}>运营者</option>
+                        </select>
+                    </div>
+                </div>
+                <div class="form-group">
+                    <div class="col-sm-2 control-label"></div>
+                    <div class="col-sm-9">
+                        <button class="btn btn-primary" type="submit">搜索</button>
+                        <a href="{php echo web_url('live/member/memberIndex')}" class="btn btn-danger">清除</a>
+                    </div>
+                </div>
+            </form>
+        </div>
+    </div>
+    <div class="app-table-list">
+        <div class="table-responsive order-list">
+            <table class="table table-hover">
+                <thead>
+                    <tr>
+                        <th class="text-center" width="10%">头像</th>
+                        <th class="text-center" width="10%">昵称</th>
+                        <th class="text-center" width="25%">openid</th>
+                        <th class="text-center" width="10%">角色</th>
+                        <th class="text-center" width="25%">更新时间</th>
+                        <th class="text-center" width="10%">微信号</th>
+                        <th class="text-center" width="10%">操作</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    {loop $list $val}
+                        <tr class="text-center">
+                            <td>
+                                <img class="scrollLoading" src="{$val['avatar']}" data-url="{php echo tomedia($mem['avatar'])}" onerror="this.src='{IMAGE_NOPIC_SMALL}'" height="50" width="50"/>
+                            </td>
+                            <td>{$val['nickname']}</td>
+                            <td>{$val['openid']}</td>
+                            <td>
+                                <!-- 具有的身份：0:超级管理员，1:管理员，2:主播，3:运营者 -->
+                                {if $val['member_role'] == 0}
+                                    <span class="label label-success">超级管理员</span>
+                                {elseif $val['member_role'] == 1}
+                                    <span class="label label-primary">管理员</span>
+                                {elseif $val['member_role'] == 2}
+                                    <span class="label label-warning">主播</span>
+                                {elseif $val['member_role'] == 3}
+                                    <span class="label label-danger">运营者</span>
+                                {/if}
+                            </td>
+                            <td>{php echo date("Y-m-d H:i:s",$val['update_time']);}</td>
+                            <td>{$val['account_number']}</td>
+                            <td>
+                                {if $val['member_role'] != 0}
+                                    <a href="javascript:;" class="btn btn-sm btn-danger deleteGoodsButton" data-id="{$val['id']}">删除成员</a>
+                                {/if}
+                            </td>
+                        </tr>
+                    {/loop}
+                </tbody>
+            </table>
+        </div>
+        <div class="app-table-foot clearfix">
+            <div class="pull-left"></div>
+            <div class="pull-right">{$pager}</div>
+        </div>
+    </div>
+</div>
+<script>
+    /**
+     * 信息同步
+     */
+    $("#infoSynchronization").on('click',function () {
+        $('#page-loading').show();
+        let synchronizatio = function(page){
+            $.post("{php echo web_url('live/member/infoSynchronization')}",{page:page},function (res) {
+                if(res.errno == 0){
+                    page++;
+                    if(res.data['total_page'] >= page){
+                        //总页数大于等于 下一页则继续进行信息同步
+                        synchronizatio(page);
+                    }else{
+                        //信息同步完成
+                        tip.alert("同步完成",function () {
+                            history.go(0);
+                        });
+                    }
+                }else{
+                    tip.alert(res.message,function () {
+                        history.go(0);
+                    });
+                }
+            },'json');
+        };
+        synchronizatio(1);
+    });
+    /**
+     * 点击删除角色信息
+     */
+    $(".deleteGoodsButton").on('click',function(){
+        //基本参数信息获取
+        let _this = $(this),
+            id = _this.data('id');
+        //获取微信号 并且请求后台进行删除操作
+        tip.prompt('请输入当前角色用户的微信号，如果输入他人微信号可能导致删除错误！',function (text) {
+            //判断是否存在微信号
+            if(text.length <= 0){
+                tip.alert('请输入微信号');
+                return false;
+            }
+            //请求后台进行删除操作
+            $.post("{php echo web_url('live/member/deleteMemberInfo')}",{id:id,username:text},function (res) {
+                tip.alert(res.message,function () {
+                    history.go(0);
+                });
+            },'json');
+        });
+    });
+</script>
+{php include wl_template('common/footer');}

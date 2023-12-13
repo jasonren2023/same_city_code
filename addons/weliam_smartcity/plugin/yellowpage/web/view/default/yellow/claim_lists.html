@@ -1,0 +1,205 @@
+{php include wl_template('common/header');}
+<ul class="nav nav-tabs">
+    <li class="active"><a href="javascript:;">认领管理</a></li>
+</ul>
+<div class="app-content">
+    <div class="app-filter">
+        <div class="filter-list">
+            <form class="form-horizontal" action="{php echo web_url('yellowpage/yellowpage/claim_lists')}" method="post">
+                <div class="form-group form-inline">
+                    <label class="col-sm-2 control-label">关键字类型</label>
+                    <div class="col-sm-9">
+                        <select name="keywordtype" class="form-control">
+                            <option value="1" {if $_GPC['keywordtype']==1}selected="selected"{/if}>认领人昵称</option>
+                            <option value="2" {if $_GPC['keywordtype']==2}selected="selected"{/if}>认领实名</option>
+                            <option value="3" {if $_GPC['keywordtype']==3}selected="selected"{/if}>认领手机</option>
+                            <option value="4" {if $_GPC['keywordtype']==4}selected="selected"{/if}>黄页商户名</option>
+                        </select>
+                        <input type="text" name="keyword" class="form-control" value="{$_GPC['keyword']}"  placeholder="请输入关键字"/>
+                    </div>
+                </div>
+                <div class="form-group">
+                    <label class="col-sm-2 control-label">提交时间</label>
+                    <div class="col-sm-9">
+                        {php echo tpl_select_time_info('time_limit', array('starttime' => date('Y-m-d',$starttime), 'endtime' => date('Y-m-d', $endtime)));}
+                    </div>
+                </div>
+                <div class="form-group">
+                    <div class="col-sm-2 control-label"></div>
+                    <div class="col-sm-9">
+                        <button class="btn btn-primary" type="submit">搜索</button>
+                    </div>
+                </div>
+            </form>
+        </div>
+    </div>
+    <div class="app-table-list">
+        {if !empty($lists)}
+        <div class="table-responsive">
+            <table class="table table-hover table-bordered">
+                <thead>
+                <tr>
+                    <th class="text-center"><input type="checkbox" /></th>
+                    <th class="text-center">用户信息</th>
+                    <th class="text-center">商家信息</th>
+                    <th class="text-center">认领人实名</th>
+                    <th class="text-center">认领人电话</th>
+                    <th class="text-center">详细内容</th>
+                    <th class="text-center">提交时间</th>
+                    <th class="text-center">支付状态</th>
+                    <th class="text-center">认领状态</th>
+                    <th class="text-center">操作</th>
+                </tr>
+                </thead>
+                <tbody>
+                {loop $lists $list}
+                <tr class="text-center">
+                    <td>
+                        <input type="checkbox" value="{$list['id']}" />
+                    </td>
+                    <td>
+                        <img class="img-40" src="{php echo tomedia($list['member']['avatar'])}" style="border-radius:50%;border:1px solid #efefef;" onerror="this.src='../addons/{MODULE_NAME}/web/resource/images/nopic-small.jpg'" height="40" width="40">
+                        <br>{$list['member']['nickname']}<br>
+                            {$list['member']['mobile']}
+                    </td>
+                    <td class="name text-left">
+                        <div style="display: flex">
+                            <img class="img-40" src="{php echo tomedia($list['pageinfo']['logo'])}" style="border-radius:50%;border:1px solid #efefef;margin-top: 20px;" onerror="this.src='../addons/{MODULE_NAME}/web/resource/images/nopic-small.jpg'" height="40" width="40">
+                            <span style="display: flex;flex-direction: column;justify-content: center;align-items: flex-start;padding-left: 5px">
+                                    <p><b>黄页名称：</b>{$list['pageinfo']['name']}</p>
+                                    <p><b>所属分类：</b>{$list['pageinfo']['one_class_name']} - {$list['pageinfo']['two_class_name']}</p>
+                                    <p><b>联系电话：</b>{$list['pageinfo']['mobile']}</p>
+                                </span>
+                        </div>
+                    </td>
+                    <td>
+                        <p>{$list['name']}</p>
+                    </td>
+                    <td>
+                        <p>{$list['mobile']}</p>
+                    </td>
+                    <td style="max-width: 300px;">
+                        <p>{$list['desc']}</p>
+                    </td>
+                    <td>
+                        <p>{php echo date('Y-m-d H:i',$list['createtime'])}</p>
+                    </td>
+                    <td>
+                        {if $list['paystatus'] == 1}
+                        <p><span class="label label-primary">已支付</span></p>
+                        {else if $list['paystatus'] == 2}
+                        <p><span class="label label-info">免费</span></p>
+                        {else if $list['paystatus'] == 3}
+                        <p><span class="label label-default">已退款</span></p>
+                        {else if $list['paystatus'] == 0}
+                        <p><span class="label label-danger">未支付</span></p>
+                        {/if}
+                    </td>
+                    <td style="position: relative;">
+                        <div class="btn-group" style="width: 68px;">
+                            <button class="btn btn-sm {$checkstatus[$list['status']]['class']} dropdown-toggle" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">{$checkstatus[$list['status']]['text']}</button>
+                            <ul class="dropdown-menu" style="width: 68px;min-width: 68px;">
+                                {if $list['status'] != 0}
+                                <li><a href="{php echo web_url('yellowpage/yellowpage/claim_check_status', array('id'=>$list['id'],'status'=>0))}" data-toggle="ajaxRemove" data-confirm="确认修改为待审核吗？" style="margin: 0;">待审核</a></li>
+                                {/if}
+                                {if $list['status'] != 1}
+                                <li><a href="{php echo web_url('yellowpage/yellowpage/claim_check_status', array('id'=>$list['id'],'status'=>1))}" data-toggle="ajaxRemove" data-confirm="确认通过审核吗？" style="margin: 0;">通过</a></li>
+                                {/if}
+                                {if $list['status'] != 2}
+                                <li><a href="javascript:;" appid = "{$list['id']}" class="rejectdis" style="margin: 0;">驳回</a></li>
+                                {/if}
+                            </ul>
+                        </div>
+                    </td>
+                    <td>
+                        <a class="btn btn-sm btn-default" data-toggle="ajaxRemove" href="{php echo web_url('yellowpage/yellowpage/claim_del', array('id' => $list['id']))}" data-confirm="确定删除当前认领记录?">删除</a>
+                    </td>
+                </tr>
+                {/loop}
+                </tbody>
+            </table>
+        </div>
+        <div class="app-table-foot clearfix">
+            <div class="pull-left">
+                <button class="btn btn-default" type="button" data-toggle='batch-remove' data-confirm="确定删除当前选择的认领记录？" data-href="{php echo web_url('yellowpage/yellowpage/claim_del')}">批量删除</button>
+                <button class="btn btn-default" type="button" data-toggle='batch' data-href="{php echo web_url('yellowpage/yellowpage/claim_check_status', array('status'=>1))}">批量通过</button>
+                <button class="btn btn-default allreject" type="button" data-toggle='batch' href="javascript:;">批量驳回</button>
+            </div>
+            <div class="pull-right">
+                {$pager}
+            </div>
+        </div>
+        {else}
+        <div class="no-result">
+            <p>还没有相关数据</p>
+        </div>
+        {/if}
+    </div>
+
+    <div id="modal-module-gift22" class="modal fade" tabindex="-1">
+        <div class="modal-dialog" style='width: 920px;'>
+            <div class="modal-content">
+                <div class="modal-header">
+                    <button aria-hidden="true" data-dismiss="modal" class="close" type="button">×</button>
+                    <h3>驳回理由</h3></div>
+                <div class="modal-body" style="padding: 0;">
+                    <div class="modal-body">
+                        <textarea id="remark" name="admin_remark" class="form-control" rows="5"></textarea>
+                    </div>
+                </div>
+                <div class="modal-footer" style="padding:15px;">
+                    <a class="btn btn-default js-cancel" aria-hidden="true" data-dismiss="modal">取消</a>
+                    <a class="btn btn-primary js-order-id-post" order-id="" data-dismiss="modal" aria-hidden="true">确定</a>
+                </div>
+            </div>
+        </div>
+    </div>
+
+</div>
+<script>
+    var div = $(".table-responsive");
+    //驳回申请理由
+    $('.rejectdis').click(function(){
+        var appid = $(this).attr('appid');
+        $('.js-order-id-post').attr("order-id",appid);
+        popwin = $('#modal-module-gift22').modal();
+    });
+
+    $('.allreject').click(function(){
+        var appid = get_selecteds();
+        console.log(appid);
+        $('.js-order-id-post').attr("order-id",appid);
+        popwin = $('#modal-module-gift22').modal();
+    });
+
+    $('.js-cancel').click(function(){
+        $('.allreject').removeAttr("disabled");
+        $('.allreject').html('批量驳回');
+    });
+
+
+    var get_selecteds = function () {
+        var selected_checkboxs = $('tbody tr td:first-child [type="checkbox"]:checked', div);
+        selecteds = selected_checkboxs.map(function () {
+            return $(this).val()
+        }).get();
+        return selecteds
+    };
+
+
+    $('.js-order-id-post').click(function() {
+        var order_id = $(this).attr('order-id');
+        var remark = $('#remark').val();
+        $.post("{php echo web_url('yellowpage/yellowpage/claim_check_status')}",{id:order_id,reason:remark,status:2},function(d){
+            if(!d.errno){
+                util.tips('驳回成功!');
+                location.reload();
+            }
+        },"json");
+        //$('#order-remark-container').hide();
+        $('.main').css("opacity","1");$('.nav').css("opacity","1");$('.big-menu').css("opacity","1");
+    });
+
+</script>
+
+{php include wl_template('common/footer');}

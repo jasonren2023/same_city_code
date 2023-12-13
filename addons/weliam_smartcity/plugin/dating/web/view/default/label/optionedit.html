@@ -1,0 +1,46 @@
+{php include wl_template('common/header');}
+<ul class="nav nav-tabs">
+    <li><a href="{php echo web_url('dating/member/optionList')}">选项列表</a></li>
+    <li class="active"><a href="javascript:;">{if $id}编辑{else}添加{/if}选项</a></li>
+</ul>
+<div class="app-content">
+    <div class="app-form">
+        <div class="panel panel-default">
+            <form class="form-horizontal form-validate" method="post">
+                <div class="form-group">
+                    <label class="col-sm-2 control-label">选项名称</label>
+                    <div class="col-sm-9">
+                        <input class="form-control" type="text" required name="data[title]" value="{$info['title']}" maxlength="20"/>
+                    </div>
+                </div>
+                <div class="form-group">
+                    <label class="col-sm-2 control-label">选项类型</label>
+                    <div class="col-sm-9">
+                        <select name="data[type]" class="form-control select2 col-sm-7 col-xs-6" style="width: 100%;">
+                            <option value="1" {if $info['type'] == 1} selected="selected" {/if}>{if $university}年纪{else}婚姻状况{/if}</option>
+                            <option value="2" {if $info['type'] == 2} selected="selected" {/if}>{if $university}专业{else}学历{/if}</option>
+                            <option value="3" {if $info['type'] == 3} selected="selected" {/if}>{if $university}社团协会{else}户籍类型{/if}</option>
+                            <option value="4" {if $info['type'] == 4} selected="selected" {/if}>{if $university}兴趣交友{else}居住情况{/if}</option>
+                            {if empty($university)} <option value="5" {if $info['type'] == 5} selected="selected" {/if}>出行情况</option> {/if}
+                        </select>
+                    </div>
+                </div>
+                <div class="form-group">
+                    <label class="col-sm-2 control-label">排序</label>
+                    <div class="col-sm-9">
+                        <input class="form-control" type="number" digits="true" name="data[sort]" value="{$info['sort']}" />
+                    </div>
+                </div>
+                <div class="form-group">
+                    <label class="col-sm-2 control-label"></label>
+                    <div class="col-sm-9">
+                        <input type="hidden" name="token" value="{$_W['token']}" />
+                        <input type="hidden" name="id" value="{$id}" />
+                        <input type="submit" name="submit" value="提交" class="btn btn-primary col-sm-1 min-width" />
+                    </div>
+                </div>
+            </form>
+        </div>
+    </div>
+</div>
+{php include wl_template('common/footer');}

@@ -1,0 +1,602 @@
+/*顶部菜单*/
+.nav.nav-tabs.diypage-nav-tabs {
+    height: 51px;
+    line-height: 51px;
+    color: #fff;
+    padding-right: 27px;
+    background-color: #273543;
+    border-bottom: none;
+    overflow: hidden;
+}
+.nav.nav-tabs.diypage-nav-tabs li {
+    margin-left: 15px;
+    margin-bottom: 0;
+    float: right;
+}
+.nav.nav-tabs.diypage-nav-tabs .li-flo-le {
+    float: left;
+}
+.nav.nav-tabs.diypage-nav-tabs a {
+    height: 21px;
+    line-height: 21px;
+    color: #fff;
+    font-size: 14px;
+    margin: 0;
+    padding: 15px;
+    border: none;
+    box-sizing: initial;
+    display: inline-block;
+}
+.nav.nav-tabs.diypage-nav-tabs .diypage-icon-txt {
+    padding: 15px 10px;
+}
+.nav.nav-tabs.diypage-nav-tabs .diypage-icon-txt i {
+    font-size: 16px;
+}
+.nav.nav-tabs.diypage-nav-tabs a i {
+    font-size: 20px;
+    padding-right: 4px;
+    margin-top: -2px;
+    float: left;
+}
+.nav.nav-tabs.diypage-nav-tabs a:hover, .nav.nav-tabs.diypage-nav-tabs a:active, .nav.nav-tabs.diypage-nav-tabs a:focus {
+    background-color: #272A3B;
+}
+.nav.nav-tabs.diypage-nav-tabs a:active {
+    background-color: transparent;
+}
+.nav.nav-tabs.diypage-nav-tabs .diypage-save-page {
+    min-width: 80px;
+    text-align: center;
+    margin-top: 8px;
+    margin-left: 15px;
+    padding: 6px 10px;
+    background-color: #1ab394;
+    border-radius: 3px;
+}.nav.nav-tabs.diypage-nav-tabs .diypage-save-page i {
+     height: 24px;
+     font-size: 17px;
+     float: none;
+     vertical-align: -1px;
+     display: inline-block;
+ }
+.nav.nav-tabs.diypage-nav-tabs .diypage-save-page:hover, .nav.nav-tabs.diypage-nav-tabs .diypage-save-page:active, .nav.nav-tabs.diypage-nav-tabs .diypage-save-page:focus {
+    background-color: #1ab394;
+}
+/*主要内容*/
+.page-content {
+    width: 100%;
+    background: #fff;
+    position: relative;
+    height: calc(100vh - 141px);
+    overflow: hidden;
+    min-height: 100px;
+}
+.page-content .pagediy {
+    height: 100%;
+    position: relative;
+    margin: 0;
+}
+/*菜单样式*/
+.diy-menu {
+    float: left;
+    overflow-y: auto;
+    height: 100%;
+    position: relative;
+}
+.diy-menu:before {
+    content: "";
+    width: 1px;
+    height: 100%;
+    background-color: #f3f3f3;
+    position: absolute;
+    top: 0;
+    left: 0;
+}
+.diy-menu:after {
+    content: "";
+    width: 1px;
+    height: 100%;
+    background-color: #f3f3f3;
+    position: absolute;
+    top: 0;
+    right: 0;
+}
+.diy-menu .navs {
+    float: left;
+    width: 300px;
+}
+.diy-menu .head_title {
+    height: 28px;
+    line-height: 28px;
+    padding: 11px 0;
+    display: -webkit-flex;
+    display: flex;
+    -webkit-justify-content: space-between;
+    justify-content: space-between;
+    box-sizing: initial;
+    border-bottom: 1px solid #F2F2F3;
+}
+.diy-menu .head_title .title {
+    color: #333;
+    font-size: 15px;
+    text-align: left;
+    padding-left: 20px;
+}
+.diy-menu .head_title .title:after {
+    content: '';
+    position: absolute;
+    width: 4px;
+    height: 16px;
+    background: #1AB394;
+    -webkit-border-radius: 30%;
+    -moz-border-radius: 30%;
+    border-radius: 30%;
+    top: 17px;
+    left: 10px;
+}
+.diy-menu .navs .nav{
+    float: left;
+    width: 100px;
+    height: 100px;
+    text-align: center;
+    border: 1px solid #F2F2F3;
+    border-top: none;
+    border-left: none;
+    border-radius: 0;
+    position: relative;
+    padding: 15px 5px;
+    font-size: 14px;
+    cursor: pointer;
+}
+.diy-menu .navs .nav:hover {
+    color: #333;
+    background: #fff;
+}
+.diy-menu .navs .nav:hover:after {
+    content: "";
+    width: 100%;
+    height: 100%;
+    border: 1px solid #1ab394;
+    position: absolute;
+    top: 0;
+    left: 0;
+}
+.diy-menu .navs .nav .img{
+    height: 45px;
+    width: 100%;
+    padding: 0 22px;
+}
+.diy-menu .navs .nav .img img{
+    width: 100%;
+    height: 100%;
+}
+.diy-menu .navs .nav .title{
+    height: 20px;
+    line-height: 20px;
+}
+/*模拟手机*/
+#phone-margin{
+    position: absolute;
+    top: 0;
+    left: 300px;
+    width: calc(100% - 302px - 427px);
+    overflow-y: scroll;
+    height: 100%;
+}
+#phone-margin .diy-phone {
+    width: 375px;
+    height: auto;
+    border: 1px solid #ddd;
+    border-radius: 0;
+    background: #f6f6f6;
+    padding: 0;
+    padding-bottom: 0;
+    overflow: hidden;
+    /*margin-bottom: 150px;*/
+    margin: 25px auto;
+    box-sizing: initial;
+}
+#phone-margin .diy-phone .phone-head {
+    height: 52px;
+    position: relative;
+    display: none;
+}
+#phone-margin .diy-phone .phone-head:before {
+    content: "";
+    position: absolute;
+    top: 17px;
+    left: 140px;
+    height: 10px;
+    width: 10px;
+    background: #ddd;
+    border-radius: 8px;
+}
+#phone-margin .diy-phone .phone-head:after {
+    content: "";
+    position: absolute;
+    top: 18px;
+    left: 158px;
+    height: 8px;
+    width: 50px;
+    background: #ddd;
+    border-radius: 8px;
+}
+#phone-margin .diy-phone .phone-body {
+    background-color: #fff;
+}
+#phone-margin .diy-phone .phone-title {
+    height: 42px;
+    line-height: 42px;
+    /*background: url("../images/wx-top.png") 0 0 no-repeat;*/
+    background-size: 100% auto;
+    background-color: #000;
+    padding: 0 50px;
+    font-size: 15px;
+    color: #fff;
+    text-align: center;
+
+    cursor: default;
+    overflow: hidden;
+    display:block;
+    white-space:nowrap;
+    text-overflow:ellipsis;
+}
+#phone-margin .diy-phone .phone-main {
+    min-height: 667px;
+    border: none;
+    border-top: 0;
+    -webkit-touch-callout: none;
+    -webkit-user-select: none;
+    -khtml-user-select: none;
+    -moz-user-select: none;
+    -ms-user-select: none;
+    user-select: none;
+}
+#phone-margin .diy-phone .phone-block {
+    float: left;
+    cursor: pointer;
+    position: relative;
+}
+#phone-margin .diy-phone .phone-block .phone-operation{
+    float: left;
+    width: 100%;
+    height: 100%;
+    position: absolute;
+    left: 0;
+    bottom: 0;
+}
+#phone-margin .diy-phone .phone-block .phone-operation-del{
+    display: none;
+}
+#phone-margin .diy-phone .phone-block-active .phone-operation{
+    border: 2px dashed #00a0e9;
+    display: inline-block!important;
+}
+#phone-margin .diy-phone .phone-block-active .phone-operation-del{
+    position: absolute;
+    right: 0;
+    bottom: 0;
+    display: inline-block;
+    text-align: center;
+    font-size: 12px;
+    color: #fff;
+    background: rgba(0,0,0,.4);
+    cursor: pointer;
+    width: 35px;
+    height: 15px;
+    line-height: 17px;
+}
+#phone-margin .diy-phone .phone-align-left{
+    text-align: left;
+}
+#phone-margin .diy-phone .phone-align-center{
+    text-align: center;
+}
+#phone-margin .diy-phone .phone-align-right{
+    text-align: right;
+}
+#phone-margin .diy-phone .phone-main p {
+    margin: 0;
+    padding: 0;
+}
+#phone-margin .diy-phone .phone-main a {
+    color: #337ab7;
+}
+#phone-margin .diy-phone .phone-foot {
+    height: 52px;
+    width: 52px;
+    margin: 8px auto;
+    background-color: #fff;
+    border: 1px solid #ddd;
+    box-shadow: inset 0 0 1px rgba(0,0,0,.1);
+    border-radius: 50%;
+    display: none;
+}
+#phone-margin .backTop{
+    position: fixed;
+    bottom: 20%;
+    z-index: 0;
+    left: calc((100% - 300px - 407px) / 2 + 500px);
+    cursor: pointer;
+    color: #fff;
+    background: #ddd;
+    -webkit-border-radius: 4px;
+    border-radius: 4px;
+    width: 50px;
+    height: 50px;
+    line-height: 50px;
+    text-align: center;
+    font-size: 16px;
+    font-weight: 600;
+}
+#phone-margin .backTop:hover {
+    color: #666;
+}
+/*拖动中虚拟组件的样式*/
+#phone-margin .diy-phone .fictitious_block .phone-operation{
+    border: 2px dashed #e53818;
+}
+/*配置信息*/
+.diy-editor {
+    float: right;
+    width: 407px;
+    height: calc(100vh - 51px);
+    background: #fff;
+    padding: 0 10px;
+    border: none;
+    border-radius: 5px;
+    right: 0;
+    overflow-y: scroll;
+    box-sizing: initial;
+    position: absolute;
+}
+.diy-editor .editor_title {
+    height: 28px;
+    line-height: 28px;
+    padding: 11px 0;
+    display: -webkit-flex;
+    display: flex;
+    -webkit-justify-content: space-between;
+    justify-content: space-between;
+    box-sizing: initial;
+}
+.diy-editor .edit_title {
+    color: #333;
+    font-size: 15px;
+    text-align: left;
+    padding-left: 15px;
+}
+.diy-editor .edit_title:after {
+    content: '';
+    position: absolute;
+    width: 4px;
+    height: 16px;
+    background: #1AB394;
+    -webkit-border-radius: 30%;
+    -moz-border-radius: 30%;
+    border-radius: 30%;
+    top: 17px;
+    left: 10px;
+}
+.diy-editor .inner_content{
+    width: 407px;
+    padding: 15px ;
+    background-color: #f8f8fa;
+    border: 1px solid #F2F2F3;
+    border-radius: 4px;
+}
+.diy-editor .form-group {
+    margin: 20px 0 0 0;
+}
+.diy-editor .form-group:first-child {
+    margin: 0;
+}
+.diy-editor .col-sm-10 .form-group {
+    margin: 0;
+    padding: 0;
+}
+.diy-editor .col-sm-10 .form-group .count span {
+    padding-left: 5px;
+}
+.diy-editor .form-group .control-label {
+    line-height: 16px;
+    padding: 9px 7px 9px 0;
+    text-align: left;
+    font-size: 14px;
+    min-width: 75px;
+}
+.diy-editor .input-group .input-group-addon {
+    color: #666;
+    background-color: #f3f3f3;
+}
+.diy-editor .item-form .input-group .input-group-addon {
+    border-radius: 0;
+}
+.diy-editor .pagediy .diy-editor .form-group .col-sm-10,.pagediy .diy-editor .form-group .col-sm-4 {
+    padding-left: 0;
+    padding-right: 0;
+    max-width: 300px;
+}
+.diy-editor .form-group .col-sm-10 .help-block {
+    color: #999;
+    font-size: 12px;
+    margin: 10px 0 0 0;
+}
+.diy-editor .form-group .form-control {
+    height: 34px;
+    padding: 0 5px;
+    border-color: #e0e0e0;
+}
+.diy-editor .form-group .noblr {
+    border-left: 0;
+    border-right: 0;
+}
+.diy-editor .color {
+    padding: 0;
+    cursor: pointer;
+}
+.diy-editor .form-group .ui-slider {
+    margin-top: 11px;
+    height: 10px;
+    border: 1px solid #aaa;
+    background: #FFF;
+    color: #222;
+    border-radius: 15px;
+    width: 150px;
+}
+.diy-editor .form-group .ui-slider a{
+    border: 1px solid #d3d3d3;
+    background: #DDD;
+    height: 20px;
+    width: 20px;
+    display: inline-block;
+    position: absolute;
+    left: 0;
+    top: -5px;
+    border-radius: 5px;
+}
+.diy-editor .form-group .count {
+    margin-top: 6px;
+    margin-left: 160px;
+}
+/*组件公共样式*/
+.phone-main .block{
+    float: left;
+    width: 100%;
+    padding: 5px 10px;
+    background: #FFF;
+}
+.phone-main .title{
+    float: left;
+    width: 100px;
+    height: 30px;
+    line-height: 30px;
+    font-size: 14px;
+    padding: 0 5px;
+    overflow: hidden;
+    display: block;
+    white-space: nowrap;
+    text-overflow: ellipsis;
+}
+.phone-main .title .form-must{
+    margin: 0!important;
+    padding: 0!important;
+}
+.phone-main .content{
+    float: left;
+    width: 255px;
+}
+/*单行文本*/
+.phone-text input{
+    width: 100%;
+    border: 1px solid #e8e9eb;
+    height: 30px;
+    line-height: 30px;
+    outline: none;
+}
+/*文本域*/
+.phone-textarea textarea{
+    width: 100%;
+    resize: none;
+    outline: none;
+    border: 1px solid #e8e9eb;
+}
+/*下拉框*/
+.phone-select .select-content{
+    height: 30px;
+    line-height: 30px;
+    width: 100%;
+    text-align: right;
+    color: #888;
+}
+.phone-select i{
+    float: right;
+    height: 30px;
+    line-height: 28px;
+    width: 15px;
+    color: #e8e9eb;
+}
+.config_select .select_block{
+    margin-bottom: 5px;
+}
+.config_select a{
+    width: 100%;
+}
+/*多选框*/
+.phone-checkbox .checkbox-item{
+    min-height: 30px;
+    line-height: 30px;
+    text-align: left;
+    border: 1px solid #e8e9eb;
+    margin: 0 3px 3px 0;
+    padding: 0px 10px;
+    font-size: 13px;
+    float: left;
+
+}
+.config_checkbox .select_block{
+    margin-bottom: 5px;
+}
+.config_checkbox a{
+    width: 100%;
+}
+/*图片*/
+.phone-img .img-upload{
+    width: 50px;
+    height: 50px;
+    line-height: 50px;
+    text-align: center;
+    border: 1px solid #CCC;
+}
+/*时间*/
+.phone-time .time-content{
+    height: 30px;
+    line-height: 30px;
+    width: 100%;
+    text-align: right;
+}
+.phone-time i{
+    float: right;
+    height: 30px;
+    line-height: 28px;
+    width: 15px;
+    color: #e8e9eb;
+}
+/*时间范围*/
+.phone-datetime .time-content{
+    height: 30px;
+    line-height: 30px;
+    width: 100%;
+    font-size: 12px;
+    text-align: right;
+}
+/*城市*/
+.phone-city .content{
+    text-align: right;
+}
+.phone-city span{
+    display: inline-block;
+    height: 30px;
+    line-height: 30px;
+    padding: 0 10px;
+    text-align: center;
+    font-size: 14px;
+}
+.phone-city i{
+    float: right;
+    height: 30px;
+    line-height: 28px;
+    width: 15px;
+    color: #e8e9eb;
+}
+.tipscss{
+    font-size: 10px;
+    color: darkgrey;
+}
+
+
+
+
+
+

@@ -1,0 +1,529 @@
+{php include wl_template('common/header');}
+<style>
+    .region-goods-details{background: #f6f6f6;margin: 10px;padding: 0 10px;}
+    .region-goods-left{text-align: center;font-weight: bold;color: #333;font-size: 14px;padding: 20px 0;}
+    .region-goods-right{border-left: 3px solid #fff;padding: 10px 10px;}
+    #ld_content .ld_demoButton{
+        cursor: pointer;
+        color: #ff5e00;
+    }
+    textarea{resize: none}
+</style>
+<ul class="nav nav-tabs" id="myTab">
+    <li class="active"><a href="#tab_basic">基本信息</a></li>
+    <li><a href="#tab_option">价格规格</a></li>
+    {if !is_store()}
+    <li><a href="#tab_sale">活动营销</a></li>
+    {/if}
+    <li><a href="#tab_share">分享设置</a></li>
+</ul>
+<div class="app-content">
+    <div class="app-form">
+        <form action="" method="post" class="form-horizontal form form-validate">
+            <div class="tab-content">
+                <div class="tab-pane active" id="tab_basic">
+                    <div class="region-goods-details row">
+                    <div class="region-goods-left col-sm-2">商品信息</div>
+                    <div class="region-goods-right col-sm-9">
+                        <div class="form-group">
+                            <label class="col-sm-2 control-label">商品排序</label>
+                            <div class="col-sm-9">
+                                <input type="text" name="goods[sort]" class="form-control" value="{$goods['sort']}" />
+                                <span class="help-block">数字越大，排序越靠前</span>
+                            </div>
+                        </div>
+                        <div class="form-group">
+                            <label class="col-sm-2 control-label">商品名称</label>
+                            <div class="col-sm-9">
+                                <input type="text" name="goods[name]" id="name" class="form-control" value="{$goods['name']}" />
+                            </div>
+                        </div>
+                        {if !is_store()}
+                        <div class="form-group">
+                            <label class="col-sm-2 control-label">关联商家</label>
+                            <div class="col-sm-9">
+                                <div class='input-group'>
+                                    <div class="input-group">
+                                        <input type="text" class="form-control col-sm-9" id="namemerchant" name="" value="{$merchant['storename']}" disabled style="width: 460px;">
+                                        <span class="input-group-btn"><button class="btn btn-default" type="button" onclick="popwin = $('#modal-module-merchant').modal();">选择商家</button></span>
+                                    </div>
+                                    <div class="input-group " style="margin-top:.5em;">
+                                        <input type="hidden" value="{$merchant['id']}" name="goods[sid]" id="sidmerchant">
+                                        <img src="{if empty($merchant['logo'])}../web/resource/images/nopic.jpg{else}{php echo tomedia($merchant['logo'])}{/if}" class="img-responsive img-thumbnail" width="150" id="imgmerchant" />
+                                        <em class="close" style="position:absolute; top: 0px; right: -14px;" title="删除" onclick="remove_merchant(this)">×</em>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                        {/if}
+                        <div class="form-group">
+                            <label class="col-sm-2 control-label">商品图片</label>
+                            <div class="col-sm-9">
+                                {php echo attachment_select('goods[thumb]', $goods['thumb']);}
+                                <span class="help-block">图片建议为640X640</span>
+                            </div>
+                        </div>
+                        <div class="form-group">
+                            <label class="col-sm-2 control-label">商品图集</label>
+                            <div class="col-sm-9">
+                                {php echo attachment_select_multi('goods[thumbs]',$goods['thumbs']);}
+                                <span class="help-block">商品图集为商品详情幻灯片，建议750X560</span>
+                            </div>
+                        </div>
+                        <div class="form-group">
+                            <label class="col-sm-2 control-label">商品分类</label>
+                            <div class="col-sm-9">
+                                <select name="goods[cateid]" class="form-control chosen-select" id="cateinfo">
+                                    <option value="" {if empty($goods['cateid'])}selected="selected"{/if}>请选择商品分类</option>
+                                    {loop $cate $row}
+                                    <option value="{$row['id']}" {if $goods['cateid'] == $row['id']}selected="selected"{/if}>{$row['name']}</option>
+                                    {/loop}
+                                </select>
+                            </div>
+                        </div>
+                        <div class="form-group">
+                            <label class="col-sm-2 control-label">商品详情</label>
+                            <div class="col-sm-9">
+                                <div class="input-group" id="editDetail" style="width: 494px;">
+                                    {php echo tpl_diy_editor_create('goods[detail]', $goods['detail']);}
+                                </div>
+                            </div>
+                        </div>
+                        <div class="form-group">
+                            <label class="col-sm-2 control-label">商品状态</label>
+                            <div class="col-sm-9">
+                                <label class="radio-inline">
+                                    <input type="radio" name="goods[status]" value="2" {if $goods['status']==2}checked{/if}> 销售中
+                                </label>
+                                <label class="radio-inline">
+                                    <input type="radio" name="goods[status]" value="4" {if $goods['status']==0}checked{/if}> 下架中
+                                </label>
+                                <label class="radio-inline">
+                                    <input type="radio" name="goods[status]" value="7" {if $goods['status']==7}checked{/if}> 已售罄
+                                </label>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <div class="tab-pane" id="tab_option">
+                <div class="region-goods-details row">
+                    <div class="region-goods-left col-sm-2">商品价格</div>
+                    <div class="region-goods-right col-sm-9">
+                        <div class="form-group">
+                            <label class="col-sm-2 control-label">商品价格</label>
+                            <div class="col-sm-9">
+                                <div class="input-group">
+                                    <span class="input-group-addon">活动价</span>
+                                    <input type="number" name="goods[price]" class="form-control" min="0" value="{$goods['price']}" />
+                                    <span class="input-group-addon">元，市场价</span>
+                                    <input type="number" name="goods[oldprice]" class="form-control" min="0" value="{$goods['oldprice']}" />
+                                    <span class="input-group-addon">元</span>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="form-group">
+                            <label class="col-sm-2 control-label">包装费</label>
+                            <div class="col-sm-9">
+                                <div class="input-group">
+                                    <input type="number" name="goods[deliveryprice]" class="form-control" min="0" value="{$goods['deliveryprice']}" />
+                                </div>
+                                <span class="help-block">填写后，每买一份此商品需要支付的包装费。</span>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                <div class="region-goods-details row">
+                    <div class="region-goods-left col-sm-2">规格设置</div>
+                    <div class="region-goods-right col-sm-9">
+                        <div class="form-group">
+                            <label class="col-sm-2 control-label">商品规格</label>
+                            <div class="col-sm-9">
+                                <label class="radio-inline optionstatusButton" onclick="$('#tboption').hide();$('#nooption').show();">
+                                    <input type="radio" value="0"  name="goods[optionstatus]" {if $goods['optionstatus']==0 || empty($goods['optionstatus'])} checked {/if}>单规格
+                                </label>
+                                <label class="radio-inline" onclick="$('#tboption').show();$('#nooption').hide();">
+                                    <input type="radio" value="1"  name="goods[optionstatus]" {if $goods['optionstatus']==1} checked {/if}>多规格
+                                </label>
+                                <span class="help-block">开启规格后，商品价格以规格项为准</span>
+                            </div>
+                        </div>
+                        <div id='nooption' {if $goods['optionstatus'] > 0} style="display:none;" {/if}>
+                            <div class="form-group">
+                                <label class="col-sm-2 control-label">商品库存</label>
+                                <div class="col-sm-9">
+                                    <div class="input-group">
+                                        <span class="input-group-addon">总库存</span>
+                                        <input type="number" name="goods[allstock]" class="form-control" min="0" value="{$goods['allstock']}" />
+                                        <span class="input-group-addon">每日库存</span>
+                                        <input type="number" name="goods[daystock]" class="form-control" min="0" value="{$goods['daystock']}" />
+                                    </div>
+                                    <span class="help-block">填0或者不填即为不限量商品。</span>
+                                </div>
+                            </div>
+                        </div>
+                        <div id='tboption' style="padding-left:15px;{if $goods['optionstatus']!=1}display:none;{/if}">
+                            <div class="alert alert-info">
+                                因同城配送商品特性，规格只支持单一规格项目，如有个别特殊商品需要组合规格可以将组合结果设置为某一规格。
+                            </div>
+                            <div class="col-sm-13">
+                                <div id="redEnvelopes">
+                                    {if empty($specs)}
+                                        {php include wl_template('delivery/specpage');}
+                                    {else}
+                                        {loop $specs $itmes}
+                                            {php include wl_template('delivery/specpage');}
+                                        {/loop}
+                                    {/if}
+                                </div>
+                                <span class="help-block">价格最多保留两位小数,库存不填或填0即为不限量。</span>
+                            </div>
+                            <div class="form-group">
+                                <div class="col-sm-9" style="padding: 0;">
+                                    <a class="btn btn-info btn-add-type" href="javascript:;" onclick="addSpecs();">
+                                        <i class="fa fa-plus" title=""></i>增加一种规格设置
+                                    </a>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <div class="tab-pane" id="tab_sale">
+                <div class="region-goods-details row">
+                    <div class="region-goods-left col-sm-2">营销活动</div>
+                    <div class="region-goods-right col-sm-9">
+                        <div class="form-group">
+                            <label class="col-sm-2 control-label">会员优惠</label>
+                            <div class="col-sm-9">
+                                <label class="radio-inline" onclick="$('#vipprice').hide();$('#viplevel').hide();" >
+                                    <input type="radio" value="0" name="goods[vipstatus]" {if $goods['vipstatus']==0} checked {/if}>无
+                                </label>
+                                <label class="radio-inline" onclick="$('#vipprice').show();$('#viplevel').hide();">
+                                    <input type="radio" value="1" name="goods[vipstatus]" {if $goods['vipstatus']==1} checked {/if}>会员减免
+                                </label>
+                                <label class="radio-inline" onclick="$('#vipprice').hide();$('#viplevel').show();">
+                                    <input type="radio" value="2" name="goods[vipstatus]" {if $goods['vipstatus']==2} checked {/if}>会员特供
+                                </label>
+                                <span class="help-block">会员特供即只有会员可以购买</span>
+                            </div>
+                        </div>
+                        <div class="form-group" id="vipprice" {if $goods['vipstatus'] != 1} style="display: none;"  {/if}>
+                            <label class="col-sm-2 control-label">减免金额</label>
+                            <div class="col-sm-9">
+                                <div class="input-group">
+                                    <span class="input-group-addon">￥</span>
+                                    <input type="number" min="0" name="goods[vipdiscount]" class="form-control" value="{$goods['vipdiscount']}" />
+                                </div>
+                            </div>
+                        </div>
+                        <div class="form-group">
+                            <label class="col-sm-2 control-label">积分抵扣</label>
+                            <div class="col-sm-9">
+                                <div class="input-group">
+                                    <span class="input-group-addon">每件商品可以使用积分抵扣</span>
+                                    <input type="number" min="0" name="goods[creditmoney]" class="form-control " value="{$goods['creditmoney']}" />
+                                    <span class="input-group-addon">元</span>
+                                </div>
+                                <div class="help-block">最多保留两位小数,不填或填0时,商品不能使用积分抵扣。</div>
+                            </div>
+                        </div>
+                        <div class="form-group">
+                            <label class="col-sm-2 control-label">虚拟销量</label>
+                            <div class="col-sm-9">
+                                <div class="input-group">
+                                    <input type="number" name="goods[fictitiousnum]" class="form-control" min="0" value="{$goods['fictitiousnum']}" />
+                                </div>
+                                <span class="help-block">商品虚拟销量。</span>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                {if $_W['wlsetting']['distribution']['switch'] > 0}
+                <div class="region-goods-details row">
+                        <div class="region-goods-left col-sm-2">分销设置</div>
+                        <div class="region-goods-right col-sm-9">
+                            <div class="form-group">
+                                <label class="col-sm-2 control-label">是否参与分销</label>
+                                <div class="col-sm-9">
+                                    <label class="radio-inline" onclick="distri(1)">
+                                        <input type="radio" value="1" name="goods[isdistri]" {if $goods['isdistri']==1 } checked {/if}>参与
+                                    </label>
+                                    <label class="radio-inline" onclick="distri(2)">
+                                        <input type="radio" value="0" name="goods[isdistri]" {if $goods['isdistri']==0 || is_null($goods['isdistri'])} checked {/if}>不参与
+                                    </label>
+                                </div>
+                            </div>
+                            <div id="distridiv" {if $goods['isdistri'] == 0 || is_null($goods['isdistri'])} style="display: none;" {/if} >
+                                <div class="form-group">
+                                    <label class="col-sm-2 control-label">佣金设置方式</label>
+                                    <div class="col-sm-9">
+                                        <label class="radio-inline" onclick="distritext(1)" >
+                                            <input type="radio"  name="goods[isdistristatus]" value="0" title="百分比" {if $goods['isdistristatus'] == 0 || empty($goods['isdistristatus'])}checked{/if}>百分比
+                                        </label>
+                                        <label class="radio-inline" onclick="distritext(2)" >
+                                            <input type="radio"  name="goods[isdistristatus]" value="1" title="固定金额" {if $goods['isdistristatus'] == 1}checked{/if}>固定金额
+                                        </label>
+                                        <span class="help-block">按百分比计算时，基础价按照商品售价减去会员减免计算，不受积分抵扣，满减活动，在线红包影响。</span>
+                                    </div>
+                                </div>
+                                <div class="form-group">
+                                    <label class="col-sm-2 control-label">分销佣金详情</label>
+                                    <div class="col-sm-9">
+                                        {loop $dislevel $dislpr}
+                                        <div class="bigdata" style="margin-top: 10px;">
+                                            <div class="input-group data-item">
+                                                <span class="input-group-addon">[{$dislpr['name']}]一级</span>
+                                                <input type="hidden" name="disleid[]" class="form-control" value="{$dislpr['id']}">
+                                                <input type="number" min="0" name="onedismoney[]" class="form-control" value="{$disarray[$dislpr['id']]['onedismoney']}">
+                                                <span class="input-group-addon"><span class="isdistritext">{if $goods['isdistristatus'] == 1}元{else}%{/if}</span>,二级</span>
+                                                <input type="number" min="0" name="twodismoney[]" class="form-control" value="{$disarray[$dislpr['id']]['twodismoney']}">
+                                                <span class="input-group-addon"><span class="isdistritext">{if $goods['isdistristatus'] == 1}元{else}%{/if}</span>(最多保留两位小数)</span>
+                                            </div>
+                                        </div>
+                                        {/loop}
+                                        <span class="help-block">一级填0或不填则按分销商等级默认比例计算,填写一级佣金后二级佣金填0或不填则此商品没有二级分佣,最多保留两位小数</span>
+                                    </div>
+                                </div>
+
+                                {if agent_p('disgroup')}
+                                <div class="form-group">
+                                    <label class="col-sm-2 control-label">团长分红</label>
+                                    <div class="col-sm-9">
+                                        <label class="radio-inline" onclick="$('#groupdiv').show();">
+                                            <input type="radio" value="1" name="goods[disgroup]" {if $goods['disgroup'] == 1} checked {/if}>开启
+                                        </label>
+                                        <label class="radio-inline" onclick="$('#groupdiv').hide();">
+                                            <input type="radio" value="0" name="goods[disgroup]" {if $goods['disgroup'] != 1} checked {/if}>关闭
+                                        </label>
+                                    </div>
+                                </div>
+                                <div id="groupdiv"  {if $goods['disgroup'] != 1} style="display: none;" {/if}>
+                                    <div class="form-group">
+                                        <label class="col-sm-2 control-label">分红设置方式</label>
+                                        <div class="col-sm-9">
+                                            <label class="radio-inline" onclick="grouptritext(1)" >
+                                                <input type="radio"  name="goods[disgroupstatus]" value="0" title="百分比"   {if $goods['disgroupstatus'] != 1 }checked{/if}>百分比
+                                            </label>
+                                            <label class="radio-inline" onclick="grouptritext(2)" >
+                                                <input type="radio"  name="goods[disgroupstatus]" value="1" title="固定金额" {if $goods['disgroupstatus'] == 1}checked{/if}>固定金额
+                                            </label>
+                                            <span class="help-block">按百分比计算时，基础价按照商品售价减去会员减免计算，不受积分抵扣，满减活动，在线红包影响。</span>
+                                        </div>
+                                    </div>
+                                    <div class="form-group">
+                                        <label class="col-sm-2 control-label">团长分红详情</label>
+                                        <div class="col-sm-9">
+                                            {loop $grouplevel $grouplpr}
+                                            <div class="bigdata" style="margin-top: 10px;">
+                                                <div class="input-group data-item">
+                                                    <span class="input-group-addon">[{$grouplpr['name']}]直属</span>
+                                                    <input type="hidden" name="groupleid[]" class="form-control" value="{$grouplpr['id']}">
+                                                    <input type="number" min="0" name="onegroupmoney[]" class="form-control" value="{$grouparray[$grouplpr['id']]['onegroupmoney']}">
+                                                    <span class="input-group-addon"><span class="disgrouptext">{if $goods['disgroupstatus'] == 1}元{else}%{/if}</span>,子团队</span>
+                                                    <input type="number" min="0" name="twogroupmoney[]" class="form-control" value="{$grouparray[$grouplpr['id']]['twogroupmoney']}">
+                                                    <span class="input-group-addon"><span class="disgrouptext">{if $goods['disgroupstatus'] == 1}元{else}%{/if}</span>(最多保留两位小数)</span>
+                                                </div>
+                                            </div>
+                                            {/loop}
+                                            <span class="help-block">一级填0或不填则按分销商等级默认比例计算,填写一级佣金后二级佣金填0或不填则此商品没有二级分佣,最多保留两位小数</span>
+                                        </div>
+                                    </div>
+                                    <div class="form-group">
+                                        <label class="col-sm-2 control-label">股东分红</label>
+                                        <div class="col-sm-9">
+                                            <div class="input-group">
+                                                <input type="number" min="0" name="goods[shareholdermoney]" class="form-control" value="{$goods['shareholdermoney']}" />
+                                                <span class="input-group-addon"><span class="disgrouptext">{if $goods['disgroupstatus'] == 1}元{else}%{/if}</span>(最多保留两位小数)</span>
+                                            </div>
+                                            <span class="help-block">商品股东分红，不填或填0即为没有股东分红。</span>
+                                        </div>
+                                    </div>
+                                </div>
+                            {/if}
+
+                            </div>
+                        </div>
+                    </div>
+                {/if}
+            </div>
+            <div class="tab-pane" id="tab_share">
+                <div class="region-goods-details row">
+                    <div class="region-goods-left col-sm-2">分享信息</div>
+                    <div class="region-goods-right col-sm-9">
+                        <div class="alert alert-info">
+                            <b>适用模板变量：[商品名] [活动价] [市场价] [特权类型] [特权折扣] [昵称] [时间] [系统名称]</b>
+                        </div>
+                        <div class="form-group">
+                            <label class="col-sm-2 control-label">分享标题</label>
+                            <div class="col-sm-9">
+                                <input type="text" name="goods[share_title]" class="form-control" value="{$goods['share_title']}" />
+                            </div>
+                        </div>
+                        <div class="form-group">
+                            <label class="col-sm-2 control-label">分享图片</label>
+                            <div class="col-sm-9">
+                                {php echo attachment_select('goods[share_image]', $goods['share_image']);}
+                                <span class="help-block">推荐图片尺寸500X500</span>
+                            </div>
+                        </div>
+                        <div class="form-group">
+                            <label class="col-sm-2 control-label">分享描述</label>
+                            <div class="col-sm-9">
+                                <input type="text" name="goods[share_desc]" class="form-control" value="{$goods['share_desc']}" />
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <div id="modal-module-merchant" class="modal fade" tabindex="-1">
+                <div class="modal-dialog" style='width: 920px;'>
+                    <div class="modal-content">
+                        <div class="modal-header">
+                            <button aria-hidden="true" data-dismiss="modal" class="close" type="button">×</button>
+                            <h3>选取</h3></div>
+                        <div class="modal-body">
+                            <div class="row">
+                                <div class="input-group">
+                                    <input type="text" class="form-control" name="keyword" value="" id="search-kwd-merchant" placeholder="请输入商家名称，不输入任何内容搜索结果为所有商家。" />
+                                    <span class='input-group-btn'><button type="button" class="btn btn-default" onclick="search_merchant();">搜索</button></span>
+                                </div>
+                            </div>
+                            <div id="module-merchant" style="padding-top:5px;"></div>
+                        </div>
+                        <div class="modal-footer"><a href="#" class="btn btn-default" data-dismiss="modal" aria-hidden="true">关闭</a></div>
+                    </div>
+                </div>
+            </div>
+            <div class="form-group">
+                <label class="col-sm-2 control-label"></label>
+                <div class="col-sm-9">
+                    <input type="hidden" name="page" value="{$_GPC['page']}" />
+                    <input type="hidden" name="id" value="{$id}" id="id"/>
+                    <input type="submit" name="submit" value="提交" class="btn btn-primary min-width" />
+                    <input type="hidden" name="token" value="{$_W['token']}" />
+                </div>
+            </div>
+        </form>
+    </div>
+</div>
+
+
+
+
+<script>
+    window.onload=function (){
+        $('.spec_item_item .layui-unselect').remove();  //挽救规格页面的错误css
+    }
+
+    $(function () {
+        window.optionchanged = false;
+        $('#myTab a').click(function (e) {
+            e.preventDefault();//阻止a链接的跳转行为
+            $('.spec_item_item .layui-unselect').remove();  //挽救规格页面的错误css
+            $(this).tab('show');//显示当前选中的链接及关联的content
+        });
+
+        $("#chkoption").click(function(){
+            var obj =$(this);
+            if(obj.get(0).checked){
+                $("#tboption").show();
+                $(".trp").hide();
+            }
+            else{
+                $("#tboption").hide();
+                $(".trp").show();
+            }
+        });
+
+        require(['jquery.ui'],function(){
+            $("#specs").sortable({
+                handle:'.fa-arrows',
+                stop: function(){
+                    refreshOptions();
+                }
+            });
+        });
+
+    });
+    //添加规格项
+    var nums = 1;
+    function addSpecs() {
+        $(".btn-add-type").html("loading.....");
+        $.ajax({
+            url: "{php echo web_url('citydelivery/active/specpage')}&kw="+nums,
+            cache: false
+        }).done(function (html) {
+            var rest = '<i class="fa fa-plus" title=""></i>增加一种规格设置';
+            $(".btn-add-type").html(rest);
+            $("#redEnvelopes").append(html);
+        });
+        nums++;
+    }
+    function removes(asd){
+        $(asd).closest('.data-item').remove();
+    }
+
+    function search_merchant() {
+        $("#module-merchant").html("正在搜索....")
+        $.get("{php echo web_url('goodshouse/goodshouse/selectMerchant')}", {
+            keyword: $.trim($('#search-kwd-merchant').val())
+        }, function(dat){
+            $('#module-merchant').html(dat);
+        });
+    }
+    function remove_merchant(obj){
+        $('#goodsidmerchant').val('');
+        $('#namemerchant').val('');
+        $('#imgmerchant').attr("src",'');
+    }
+    function select_merchant(o) {
+        if($('#sidmerchant').val() != o.id){
+            $.post("{php echo web_url('citydelivery/active/cateinfo')}",{sid:o.id},function(d){
+                $('#cateinfo').html('');
+                var html = '<option value="">请选择商品分类</option>';
+                for(var i=0;i<d.twotype.length;i++){
+                    html += '<option value='+d.twotype[i].id+'>'+d.twotype[i].name+'</option>';
+                }
+                $('#cateinfo').append(html);
+            },"json");
+        }
+        $('#sidmerchant').val(o.id);
+        $('#namemerchant').val(o.storename);
+        $('#imgmerchant').attr("src",o.logo);
+        $('#modal-module-merchant').modal('hide');
+        util.tips("操作成功");
+
+
+    }
+
+
+    function distri(flag){
+        if (flag == 1) {
+            $('#distridiv').show();
+        } else{
+            $('#distridiv').hide();
+        }
+    }
+
+    function distritext(flag){
+        if (flag == 1) {
+            $('.isdistritext').html('%');
+        } else{
+            $('.isdistritext').html('元');
+        }
+    }
+
+    function grouptritext(flag){
+        if (flag == 1) {
+            $('.disgrouptext').html('%');
+        } else{
+            $('.disgrouptext').html('元');
+        }
+    }
+
+
+</script>
+
+
+{php include wl_template('common/footer');}

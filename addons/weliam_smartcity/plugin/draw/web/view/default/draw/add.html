@@ -1,0 +1,809 @@
+{php include wl_template('common/header');}
+<style>
+    .app-content{
+        float: left;
+    }
+    #drawContent .pull-left{
+        width: 450px;
+        padding-right: 20px;
+    }
+    #drawContent .pull-left .effect{
+        float: left;
+    }
+    #drawContent .pull-left .effect9{
+        width: 300px;
+        margin: 0 calc((100% - 300px) / 2);
+    }
+    #drawContent .pull-left .effect16{
+        margin: 0 15px;
+    }
+    #drawContent .pull-left .grid{
+        width: 100px;
+        height: 100px;
+        border: 1px solid #CCC;
+        padding: 5px;
+        float: left;
+        margin: 0 0 -1px -1px;
+        position: relative;
+        text-align: center;
+    }
+    #drawContent .pull-left .grid img{
+        height: 100%;
+        width: 100%;
+        cursor: pointer;
+    }
+    #drawContent .pull-left .grid .draw_goods_name{
+        height: 20px;
+        line-height: 20px;
+        font-size: 13px;
+        width: calc(100% - 10px);
+        overflow: hidden;
+        position: absolute;
+        bottom: 5px;
+        background: rgba(0,0,0,.5);
+        color: #fff;
+    }
+    #drawContent .pull-left .grid .serial-number{
+        position: absolute;
+        top: 5px;
+        right: 5px;
+        background: #f8ac59;
+        width: 15px;
+        height: 15px;
+        line-height: 15px;
+        font-size: 13px;
+        text-align: center;
+        border-radius: 50%;
+        color: #FFFFFF;
+    }
+    #drawContent .pull-left .grid .grid-block{
+        width: 100%;
+        height: 100%;
+    }
+    #drawContent .pull-right{
+        width: calc(100% - 450px);
+    }
+    .prize_list{
+        float: left;
+        margin-top: 30px;
+    }
+    .prize_list .item{
+        width: 100%;
+        height: 100px;
+        background: #fff;
+        padding: 10px;
+        margin-bottom: 10px;
+        border: 1px solid #e7eaec;
+        border-radius: 3px;
+    }
+    .prize_list .item .btn-del{
+        height: 0;
+        width: 100%;
+        display: block;
+        position: relative;
+    }
+    .prize_list .item .btn-del:before {
+        content: "×";
+        position: absolute;
+        height: 16px;
+        width: 16px;
+        text-align: center;
+        line-height: 14px;
+        color: #fff;
+        cursor: pointer;
+        background: rgba(0,0,0,0.3);
+        border-radius: 16px;
+        top: -6px;
+        right: -6px;
+        z-index: 10;
+    }
+    .prize_list .item .item-image{
+        height: 70px;
+        width: 70px;
+        min-width: 40px;
+        max-width: 220px;
+        background: #eee;
+        float: left;
+        margin-right: 10px;
+        border: 1px solid #e7eaec;
+        position: relative;
+    }
+    .prize_list .item .item-image img{
+        width: 100%;
+        height: 100%;
+    }
+    .prize_list .item .item-image span{
+        position: absolute;
+        left: 0;
+        bottom: 0;
+        width: 100%;
+        text-align: center;
+        cursor: pointer;
+        height: 25px;
+        line-height: 25px;
+        background: rgba(0,0,0,.5);
+        color: #FFF;
+    }
+    #drawContent .form-group-title{
+        float: left;
+        width: 100%;
+    }
+    .probabilityDiv{
+        position: fixed;
+        top: 49px;
+        width: 450px;
+        padding: 10px;
+        background: #f8ac59;
+        z-index: 9999;
+    }
+    /*轮盘效果*/
+    .wheel{
+        position: relative;
+        overflow: hidden;
+        width: 400px;
+        height: 400px;
+        margin: 0px auto;
+        background-color: #ddd;
+        border-radius: 200px;
+    }
+    .wheel .leaf {
+        list-style: none;
+        position: absolute;
+        width: 450px;
+        height: 200px;
+        right: 50%;
+        top: 0;
+        -webkit-transform-origin: 100% 100%;
+        -moz-transform-origin: 100% 100%;
+        -ms-transform-origin: 100% 100%;
+        transform-origin: 100% 100%;
+    }
+    .wheel .leaf .leaf-block{
+        position: absolute;
+        right: 0px;
+        bottom: 0px;
+        padding: 0px 30px 0px 0px;
+        text-align: center;
+        color: #FFF;
+        font-size: 13px;
+    }
+    .wheel .leaf:nth-child(1){background-color: #FFB6C1;}
+    .wheel .leaf:nth-child(2){background-color: #DC143C;}
+    .wheel .leaf:nth-child(3){background-color: #DA70D6;}
+    .wheel .leaf:nth-child(4){background-color: #8B008B;}
+    .wheel .leaf:nth-child(5){background-color: #9400D3;}
+    .wheel .leaf:nth-child(6){background-color: #7B68EE;}
+    .wheel .leaf:nth-child(7){background-color: #87CEFA;}
+    .wheel .leaf:nth-child(8){background-color: #FFA500;}
+    .wheel .leaf:nth-child(9){background-color: #00FF7F;}
+    .wheel .leaf:nth-child(10){background-color: #BDB76B;}
+    .wheel .leaf:nth-child(11){background-color: #FFD700;}
+    .wheel .leaf:nth-child(12){background-color: #FF8C00;}
+    .deleteGoodsButton{
+        position: relative;
+        top: -9px;
+        z-index: 100;
+        height: 0;
+        width: 100%;
+        display: block;
+    }
+    .deleteGoodsButton:before {
+        content: "删除";
+        position: absolute;
+        height: 16px;
+        width: 30px;
+        font-size: 12px;
+        text-align: center;
+        line-height: 16px;
+        color: #fff;
+        cursor: pointer;
+        background: #ec4758;
+        top: 3px;
+        right: 15px;
+        z-index: 10;
+    }
+</style>
+<ul class="nav nav-tabs" id="myTab">
+    <li class="active"><a href="#tab_basic">基本信息</a></li>
+    <li><a href="#tab_images">其他设置</a></li>
+    <li><a href="#tab_share">分享设置</a></li>
+</ul>
+<div class="app-content">
+    <div class="app-form" id="drawContent">
+        <!-- 顶部内容 -->
+        <div class="app-filter">
+            <div class="filter-action"></div>
+            <div class="filter-list">
+                <div class="alert alert-warning">
+                    注意：<br />
+                    所有奖品抽中的概率之和必须等于100%<br />
+                    请点击上方其他设置进行样式信息配置<br />
+                    轮盘数量为4-12个，且轮盘扇叶数量必须为偶数<br />
+                    中奖信息中必须有一个谢谢参与内容
+                </div>
+            </div>
+        </div>
+        <!-- 表单内容 -->
+        <div class="panel panel-default">
+            <form class="form-horizontal form-validate" method="post">
+                <!-- 左边的效果栏 -->
+                <div class="pull-left" id="effectBlock">
+                    <div class="form-group-title">奖品添加</div>
+                    <div class="form-group">
+                        <label class="col-sm-2 control-label">活动类型</label>
+                        <div class="col-sm-9">
+                            <label class="radio-inline">
+                                <input type="radio" v-model="type" name="data[type]" value="1" checked="checked"> 9宫格
+                            </label>
+                            <label class="radio-inline">
+                                <input type="radio" v-model="type" name="data[type]" value="2"> 16宫格
+                            </label>
+                            <label class="radio-inline">
+                                <input type="radio" v-model="type" name="data[type]" value="3"> 轮盘
+                            </label>
+                            <span class="help-block" v-if="type == 3">由于背景色计算方式，轮盘数量必须为偶数</span>
+                        </div>
+                    </div>
+                    <div class="form-group" v-if="type == 3">
+                        <label class="col-sm-2 control-label">轮盘背景</label>
+                        <div class="col-sm-9">
+                            <div class="input-group">
+                                <span class="input-group-addon">颜色一</span>
+                                <input type="color" class="form-control" v-model="wheel[0]" name="data[wheel_bg][]">
+                                <span class="input-group-addon">颜色二</span>
+                                <input type="color" class="form-control" v-model="wheel[1]" name="data[wheel_bg][]">
+                            </div>
+                            <span class="help-block">设置轮盘扇叶的背景颜色</span>
+                        </div>
+                    </div>
+                    <div id="probabilityDivPosition"></div>
+                    <div class="form-group" id="probabilityDiv">
+                        <label class="col-sm-2 control-label">当前总概率</label>
+                        <div class="col-sm-9">
+                            <div class="input-group">
+                                <input class="form-control" disabled="disabled" :value="getTotalProbability()">
+                                <span class="input-group-addon">%</span>
+                            </div>
+                            <span class="help-block">所有奖品抽中的概率之和必须等于100%</span>
+                        </div>
+                    </div>
+                    <!-- 抽奖效果区 -->
+                    <div :class="{effect9:(type == 1),effect16:(type == 2),wheel:(type == 3),'effect':true}">
+                        <div :class="{grid:(type == 1 || type == 2),leaf:(type == 3)}" v-for="index in number" :data-index="index">
+                            <div :class="{'grid-block':(type == 1 || type == 2),'leaf-block':(type == 3)}" >
+                                <img v-if="type != 3" :src="prize[index].draw_goods_image" title="点击选择奖品"
+                                     data-toggle="selectDrawPrize"
+                                     :data-id="'#id-id_'+index"
+                                     :data-name="'#id-name_'+index"
+                                     :data-image="'#id-image_'+index"
+                                     :data-image-input="'#id-image-input_'+index"
+                                     :data-probability="'#id-probability_'+index"
+                                />
+                                <span class="serial-number">{{index}}</span>
+                                <div class="draw_goods_name">{{ prize[index].draw_goods_name }}</div>
+                            </div>
+                        </div>
+                    </div>
+                    <!-- 奖品选择区域 -->
+                    <div class="prize_list">
+                        <!-- 奖品列表 -->
+                        <div class="item" v-for="index in number">
+                            <span class="btn-del" title="点击清除奖品" @click="cancel(index)"></span>
+                            <span v-if="Object.keys(prize).length > 4 && type == 3" class="deleteGoodsButton" title="点击删除奖品" @click="deleteGoods(index)"></span>
+                            <div class="item-image">
+                                <img :src="prize[index].draw_goods_image" onerror="this.src='../addons/{MODULE_NAME}/web/resource/images/default.png';">
+                                <span data-toggle="selectDrawPrize"
+                                      :data-id="'#id-id_'+index"
+                                      :data-name="'#id-name_'+index"
+                                      :data-image="'#id-image_'+index"
+                                      :data-image-input="'#id-image-input_'+index"
+                                      :data-probability="'#id-probability_'+index"
+                                >选择奖品</span>
+                            </div>
+                            <div class="item-form">
+                                <div class="input-group" style="margin-bottom:0;">
+                                    <input class="hide draw_goods_info" v-model="prize[index].draw_goods_id" :index="index" fields="draw_goods_id" :name="'prize['+index+'][draw_goods_id]'" :id="'id-id_'+index">
+                                    <input class="hide draw_goods_info" v-model="prize[index].draw_goods_name" :index="index" fields="draw_goods_name" :name="'prize['+index+'][draw_goods_name]'" :id="'id-name_'+index">
+                                    <input class="hide draw_goods_info" v-model="prize[index].probability" :index="index" fields="probability" :name="'prize['+index+'][probability]'" :id="'id-probability_'+index" >
+                                    <input class="hide draw_goods_info" v-model="prize[index].draw_goods_image" :index="index" fields="draw_goods_image" :id="'id-image-input_'+index">
+                                    <input class="hide" :name="'prize['+index+'][serial_number]'" :value="index">
+                                    <span class="input-group-addon btn btn-default" @click="demo()">奖品</span>
+                                    <input type="text" v-model="prize[index].draw_goods_name" class="form-control" disabled="disabled">
+                                </div>
+                                <div class="input-group" style="margin-top:10px;margin-bottom:0; ">
+                                    <span class="input-group-addon btn btn-default">序号</span>
+                                    <input type="text" class="form-control diy-bind" :value="index" disabled="disabled">
+                                    <span class="input-group-addon btn btn-default">概率</span>
+                                    <input type="text" class="form-control diy-bind" v-model="prize[index].probability">
+                                    <span class="input-group-addon btn btn-default">%</span>
+                                </div>
+                            </div>
+                        </div>
+                        <!-- 奖品数量添加按钮 -->
+                        <div class="form-group" v-if="Object.keys(prize).length < 12 && type == 3">
+                            <div class="col-sm-9">
+                                <a href="javascript:;" class="btn btn-sm btn-info" @click="addGoods()">添加奖品({{ Object.keys(prize).length }}/12)</a>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                <!-- 右边的设置栏 -->
+                <div class="pull-right">
+                    <div class="tab-content">
+                        <!-- 基本设置 -->
+                        <div class="tab-pane active" id="tab_basic">
+                            <div class="form-group-title">基本设置</div>
+                            <div class="form-group">
+                                <label class="col-sm-2 control-label">主题</label>
+                                <div class="col-sm-9">
+                                    <input class="form-control" type="text" required name="data[title]" maxlength="25"/>
+                                </div>
+                            </div>
+                            <div class="form-group">
+                                <label class="col-sm-2 control-label">活动状态</label>
+                                <div class="col-sm-9">
+                                    <label class="radio-inline">
+                                        <input type="radio" name="data[status]" value="1"> 关闭
+                                    </label>
+                                    <label class="radio-inline">
+                                        <input type="radio" name="data[status]" value="2" checked="checked"> 开启
+                                    </label>
+                                </div>
+                            </div>
+                            <div class="form-group">
+                                <label class="col-sm-2 control-label">消耗积分</label>
+                                <div class="col-sm-9">
+                                    <input class="form-control" type="number" digits="true" required name="data[integral_consume]" value="0"/>
+                                    <div class="help-block">用户抽奖次数使用完后继续抽奖需要消耗的积分；0则不消耗积分。</div>
+                                </div>
+                            </div>
+                            <div class="form-group">
+                                <label class="col-sm-2 control-label">赠送积分</label>
+                                <div class="col-sm-9">
+                                    <input class="form-control" type="number" digits="true" required name="data[integral_give]" value="0"/>
+                                    <div class="help-block">用户分享后其他用户点击时获取的积分；0则不赠送积分。</div>
+                                </div>
+                            </div>
+                            {if p('diypage')}
+                                <div class="form-group">
+                                    <div class="col-sm-2 control-label">底部菜单</div>
+                                    <div class="col-sm-9">
+                                        <select name="data[menu_id]" class="form-control select2">
+                                            <option value="0">系统默认</option>
+                                            {loop $menus $vo}
+                                            <option value="{$vo['id']}">{$vo['name']}</option>
+                                            {/loop}
+                                        </select>
+                                        <div class="help-block">默认菜单使用平台首页的底部菜单！</div>
+                                    </div>
+                                </div>
+                            {/if}
+                            <div class="form-group">
+                                <label class="col-sm-2 control-label">活动时间</label>
+                                <div class="col-sm-9">
+                                    <div class="input-group">
+                                        {php echo tpl_select_time_info('activity_time',[ 'starttime' => date('Y-m-d H:i',time()), 'endtime' => date('Y-m-d H:i', strtotime('+1 month'))]);}
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="form-group">
+                                <label class="col-sm-2 control-label">总次数</label>
+                                <div class="col-sm-9">
+                                    <div class="input-group">
+                                        <span class="input-group-addon">参加次数</span>
+                                        <input type="number" name="data[total_join_times]" digits="true" class="form-control" value="0">
+                                        <span class="input-group-addon">中奖次数</span>
+                                        <input type="number" name="data[total_draw_times]" digits="true" class="form-control" value="0">
+                                    </div>
+                                    <span class="help-block">每一个用户总共可以免费参加的次数和中奖的次数，为0则没有免费抽奖次数|不限制中奖次数</span>
+                                </div>
+                            </div>
+                            <div class="form-group">
+                                <label class="col-sm-2 control-label">天次数</label>
+                                <div class="col-sm-9">
+                                    <div class="input-group">
+                                        <span class="input-group-addon">参加次数</span>
+                                        <input type="number" name="data[day_join_times]" digits="true" class="form-control" value="0">
+                                        <span class="input-group-addon">中奖次数</span>
+                                        <input type="number" name="data[day_draw_times]" digits="true" class="form-control" value="0">
+                                    </div>
+                                    <span class="help-block">每一个用户每天可以免费参加的次数和中奖的次数，为0则没有免费抽奖次数|不限制中奖次数</span>
+                                </div>
+                            </div>
+                            <div class="form-group">
+                                <label class="col-sm-2 control-label">虚拟信息</label>
+                                <div class="col-sm-9">
+                                    <div class="input-group">
+                                        <span class="input-group-addon">参加人数</span>
+                                        <input type="number" name="data[fictitious_visit]" digits="true" class="form-control" value="0">
+                                        <span class="input-group-addon">中奖人数</span>
+                                        <input type="number" name="data[fictitious_prize]" digits="true" class="form-control" value="0">
+                                        <span class="input-group-addon">浏览人数</span>
+                                        <input type="number" name="data[fictitious_pv]" digits="true" class="form-control" value="0">
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="form-group">
+                                <label class="col-sm-2 control-label">规则说明</label>
+                                <div class="col-sm-9">
+                                    {php echo tpl_diy_editor_create('data[introduce]','');}
+                                    <span class="help-block">不填则使用设置中的默认规则</span>
+                                </div>
+                            </div>
+                        </div>
+                        <!-- 其他设置 -->
+                        <div class="tab-pane" id="tab_images">
+                            <div class="form-group-title">其他设置</div>
+                            <div class="form-group">
+                                <label class="col-sm-2 control-label">顶部图片轮播</label>
+                                <div class="col-sm-9">
+                                    {php echo attachment_select_multi('data[share_image]','');}
+                                </div>
+                            </div>
+                            <div class="form-group">
+                                <label class="col-sm-2 control-label">背景颜色</label>
+                                <div class="col-sm-9">
+                                    <div class="input-group">
+                                        <span class="input-group-addon">背景颜色</span>
+                                        <input type="color" class="form-control" name="data[bg_color]" value="#ff4444" >
+                                        <span class="input-group-addon">小按钮颜色</span>
+                                        <input type="color" class="form-control" name="data[button_color]" value="#FD7058" >
+                                        <span class="input-group-addon">小按钮阴影</span>
+                                        <input type="color" class="form-control" name="data[button_shadow]" value="#AF1010" >
+                                    </div>
+                                    <span class="help-block">规则说明,奖品,积分按钮背景色。</span>
+                                </div>
+                            </div>
+                            <div class="form-group">
+                                <label class="col-sm-2 control-label">背景图</label>
+                                <div class="col-sm-9">
+                                    {php echo attachment_select('data[background_image]', '');}
+                                    <span class="help-block">推荐图片比例：345 * 600</span>
+                                </div>
+                            </div>
+                            <div class="form-group">
+                                <label class="col-sm-2 control-label">获取更多抽奖次数按钮</label>
+                                <div class="col-sm-9">
+                                    {php echo attachment_select('data[button_more]', '');}
+                                    <span class="help-block">推荐图片比例：190 * 45</span>
+                                </div>
+                            </div>
+                            <div class="form-group">
+                                <label class="col-sm-2 control-label">抽奖按钮</label>
+                                <div class="col-sm-9">
+                                    {php echo attachment_select('data[button_draw]', '');}
+                                    <span class="help-block">推荐图片比例：124 * 60</span>
+                                </div>
+                            </div>
+                            <div class="form-group">
+                                <label class="col-sm-2 control-label">生成海报按钮</label>
+                                <div class="col-sm-9">
+                                    {php echo attachment_select('data[button_prize]', '');}
+                                    <span class="help-block">110 * 45</span>
+                                </div>
+                            </div>
+                            <div class="form-group">
+                                <label class="col-sm-2 control-label">海报背景图</label>
+                                <div class="col-sm-9">
+                                    {php echo attachment_select('data[poster_bg]', '');}
+                                    <span class="help-block">推荐图片比例：300 * 520</span>
+                                </div>
+                            </div>
+                            <div class="form-group">
+                                <label class="col-sm-2 control-label">背景音乐</label>
+                                <div class="col-sm-6 col-xs-6">
+                                    {php echo attachment_select_audio('data[background_music]','');}
+                                </div>
+                            </div>
+                            <div class="form-group">
+                                <label class="col-sm-2 control-label">开始抽奖图</label>
+                                <div class="col-sm-9">
+                                    {php echo attachment_select('data[start_image]', '');}
+                                    <span class="help-block">推荐图片比例：300 * 300</span>
+                                </div>
+                            </div>
+                            <div class="form-group">
+                                <label class="col-sm-2 control-label">中奖效果图</label>
+                                <div class="col-sm-9">
+                                    {php echo attachment_select('data[prize_image]', '');}
+                                    <span class="help-block">推荐图片比例：320 * 435</span>
+                                </div>
+                            </div>
+                            <div class="form-group">
+                                <label class="col-sm-2 control-label">抽奖音效</label>
+                                <div class="col-sm-6 col-xs-6">
+                                    {php echo attachment_select_audio('data[use_music]','');}
+                                </div>
+                            </div>
+                        </div>
+                        <!-- 分享设置 -->
+                        <div class="tab-pane" id="tab_share">
+                            <div class="form-group-title">分享设置</div>
+                            <div class="form-group">
+                                <label class="col-sm-2 control-label">分享标题</label>
+                                <div class="col-sm-9">
+                                    <input class="form-control" type="text" required name="data[share_title]" maxlength="25"/>
+                                </div>
+                            </div>
+                            <div class="form-group">
+                                <label class="col-sm-2 control-label">分享描述</label>
+                                <div class="col-sm-9">
+                                    <textarea class="form-control" name="data[share_desc]" rows="5" maxlength="200" style="resize: none;"></textarea>
+                                </div>
+                            </div>
+                            <div class="form-group">
+                                <label class="col-sm-2 control-label">分享图片</label>
+                                <div class="col-sm-9">
+                                    {php echo attachment_select('data[share_img]', '');}
+                                    <span class="help-block">推荐图片比例：300 * 300</span>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                <!-- 提交按钮 -->
+                <div class="form-group">
+                    <label class="col-sm-2 control-label"></label>
+                    <div class="col-sm-9">
+                        <input type="hidden" name="token" value="{$_W['token']}" />
+                        <input type="submit" name="submit" value="提交" class="btn btn-primary col-sm-1 min-width" />
+                    </div>
+                </div>
+            </form>
+        </div>
+    </div>
+</div>
+<script>
+    let prizeList = new Vue({
+        el: "#effectBlock",
+        data: {
+            type: 1,//活动类型：1=9宫格，2=16宫格，3=转盘
+            number: 9,//宫格数量
+            prize: {
+                1: {
+                    'draw_goods_id': 0,
+                    'draw_goods_name': '谢谢参与',
+                    'draw_goods_image': '../addons/{MODULE_NAME}/web/resource/images/not-prize.png',
+                    'probability': 10,
+                },
+                2: {
+                    'draw_goods_id': 0,
+                    'draw_goods_name': '谢谢参与',
+                    'draw_goods_image': '../addons/{MODULE_NAME}/web/resource/images/not-prize.png',
+                    'probability': 10,
+                },
+                3: {
+                    'draw_goods_id': 0,
+                    'draw_goods_name': '谢谢参与',
+                    'draw_goods_image': '../addons/{MODULE_NAME}/web/resource/images/not-prize.png',
+                    'probability': 10,
+                },
+                4: {
+                    'draw_goods_id': 0,
+                    'draw_goods_name': '谢谢参与',
+                    'draw_goods_image': '../addons/{MODULE_NAME}/web/resource/images/not-prize.png',
+                    'probability': 10,
+                },
+                5: {
+                    'draw_goods_id': 0,
+                    'draw_goods_name': '谢谢参与',
+                    'draw_goods_image': '../addons/{MODULE_NAME}/web/resource/images/not-prize.png',
+                    'probability': 10,
+                },
+                6: {
+                    'draw_goods_id': 0,
+                    'draw_goods_name': '谢谢参与',
+                    'draw_goods_image': '../addons/{MODULE_NAME}/web/resource/images/not-prize.png',
+                    'probability': 10,
+                },
+                7: {
+                    'draw_goods_id': 0,
+                    'draw_goods_name': '谢谢参与',
+                    'draw_goods_image': '../addons/{MODULE_NAME}/web/resource/images/not-prize.png',
+                    'probability': 10,
+                },
+                8: {
+                    'draw_goods_id': 0,
+                    'draw_goods_name': '谢谢参与',
+                    'draw_goods_image': '../addons/{MODULE_NAME}/web/resource/images/not-prize.png',
+                    'probability': 10,
+                },
+                9: {
+                    'draw_goods_id': 0,
+                    'draw_goods_name': '谢谢参与',
+                    'draw_goods_image': '../addons/{MODULE_NAME}/web/resource/images/not-prize.png',
+                    'probability': 10,
+                },
+            },
+            wheel:['#E6A53F','#E6DB74']
+        },
+        watch: {
+            'type'() {
+                //修改类型信息
+                if (this.type == 1) this.number = 9;
+                else if (this.type == 2 ) this.number = 16;
+                else if (this.type == 3 && this.number > 12) this.number = 12;
+                //生成新的内容信息
+                this.createList();
+            },
+            prize:{
+                handler(newVal, oldVal){
+                    //内容改变
+                    let _this = this;
+                    this.$nextTick(function(){
+                        _this.eachLeaf();
+                    });
+                },
+                deep:true
+            },
+            wheel:{
+                handler(newVal, oldVal){
+                    //内容改变
+                    let _this = this;
+                    this.$nextTick(function(){
+                        _this.eachLeaf();
+                    });
+                },
+                deep:true
+            }
+        },
+        methods: {
+            //生成信息列表
+            createList(){
+                let _this = this,
+                    oldPrize = _this.prize,
+                    prize = {};
+                for(let i=1;i<=_this.number;i++){
+                    prize[i] = {
+                        'draw_goods_id': oldPrize[i] ? oldPrize[i]['draw_goods_id'] : 0,
+                        'draw_goods_name': oldPrize[i] ? oldPrize[i]['draw_goods_name'] : '谢谢参与',
+                        'draw_goods_image': oldPrize[i] ? oldPrize[i]['draw_goods_image'] : '../addons/{MODULE_NAME}/web/resource/images/not-prize.png',
+                        'probability': oldPrize[i] ? oldPrize[i]['probability'] : 10,
+                    };
+                }
+                _this.prize = prize;
+            },
+            //点击清除奖品信息
+            cancel(index){
+                this.prize[index] = {
+                    'draw_goods_id': 0,
+                    'draw_goods_name': '谢谢参与',
+                    'draw_goods_image': '../addons/{MODULE_NAME}/web/resource/images/not-prize.png',
+                    'probability': 10,
+                };
+            },
+            //获取总的中奖概率
+            getTotalProbability(){
+                let totalProbability = 0;
+                $.each(this.prize,function (k,v) {
+                    totalProbability = parseFloat(totalProbability) + parseFloat(v['probability']);
+                    totalProbability = totalProbability.toFixed(2);
+                });
+                return totalProbability;
+            },
+            //轮盘信息处理
+            eachLeaf(){
+                let _this = this;
+                //清除所有样式信息
+                $(".grid").attr('style','');
+                $(".effect").attr('style','');
+                $(".leaf-block").attr('style','');
+                $(".grid-block").attr('style','');
+                //样式为轮盘 进行样式处理
+                if(_this.type == 3){
+                    //let totalSize = _this.getTotalProbability();//当前总概率
+                    //循环处理每一个扇叶
+                    let _position = 0;
+                    $(".leaf").each(function (index) {
+                        if(index > 1) index = index % 2;
+                        $(this).css("background-color", _this.wheel[index]);
+                        //START 根据概率获取当前扇叶的宽度和位置
+                        // let _index = $(this).data("index");
+                        // let probability = _this.prize[_index].probability;
+                        // let proportion = parseFloat(probability) / parseFloat(totalSize);
+                        // proportion = proportion.toFixed(2);
+                        // let width = parseFloat(360) * parseFloat(proportion);
+                        // width = width.toFixed(2);
+                        //let deg = parseFloat(180) + (parseFloat(90) - parseFloat(width));
+                        //if(probability >= 50) deg = 90;//当前扇页的概率大于等于一般则固定为90
+                        //END 根据概率获取当前扇叶的宽度和位置
+                        //START 等比例获取当前扇叶的宽度和位置
+                        let length = Object.keys(_this.prize).length;
+                        let width =parseFloat(360) / parseInt(length);
+                        let deg = parseFloat(180) + (parseFloat(90) - parseFloat(width));
+                        //END 等比例获取当前扇叶的宽度和位置
+                        $(this).css({
+                            '-webkit-transform':'rotate('+_position+'deg) skew('+deg+'deg)',
+                            '-moz-transform':'rotate('+_position+'deg) skew('+deg+'deg)',
+                            '-ms-transform':'rotate('+_position+'deg) skew('+deg+'deg)',
+                            'transform':'rotate('+_position+'deg) skew('+deg+'deg)',
+                        });
+                        //处理子类信息
+                        let serialNumberDeg = parseFloat(360) - parseFloat(deg);
+                        serialNumberDeg = serialNumberDeg.toFixed(2);
+                        $(this).children(".leaf-block").css({
+                            '-webkit-transform':'rotate(0deg) skew('+serialNumberDeg+'deg)',
+                            '-moz-transform':'rotate(0deg) skew('+serialNumberDeg+'deg)',
+                            '-ms-transform':'rotate(0deg) skew('+serialNumberDeg+'deg)',
+                            'transform':'rotate(0deg) skew('+serialNumberDeg+'deg)',
+                        });;
+                        //_position增长
+                        _position = parseFloat(_position) + parseFloat(width);
+                    });
+                }
+            },
+            //点击添加商品  最少4个，最多12个
+            addGoods(){
+                //判断数量是否到达限制
+                let length = Object.keys(this.prize).length;
+                if(length >= 12){
+                    tip.alert("数量已达限制");
+                    return false;
+                }
+                //获取新的prize列表
+                let prize = this.prize;
+                //添加一个内容
+                let prizeType = typeof prize;
+                if(prizeType != 'array') prize = Object.values(prize);
+                prize.push({
+                    'draw_goods_id': 0,
+                    'draw_goods_name': '谢谢参与',
+                    'draw_goods_image': '../addons/{MODULE_NAME}/web/resource/images/not-prize.png',
+                    'probability': 10,
+                });
+                prize = this.arrayKeyUpdate(Object.values(prize));
+                prize = JSON.stringify(prize);
+                this.prize = JSON.parse(prize);
+                this.number++;
+                this.$forceUpdate();
+            },
+            //点击删除商品  最少4个，最多12个
+            deleteGoods(index){
+                let prize = this.prize;
+                //删除内容
+                delete prize[index];
+                //信息重组
+                prize = this.arrayKeyUpdate(Object.values(prize));
+                this.prize = prize;
+                this.number--;
+                this.$forceUpdate();
+            },
+            //由于数组初始化后键值从0开始 这里要修改为从1开始
+            arrayKeyUpdate(prize){
+                let newArray = {};
+                $.each(prize,function (k,v) {
+                    newArray[k+1] = v;
+                });
+                return newArray;
+            }
+        },
+        mounted() {
+            this.createList();
+        }
+    });
+    /**
+     * 信息改变  同步改变信息
+     */
+    $("#effectBlock").on("change",'.draw_goods_info',function () {
+        //基本信息获取
+        let fields = $(this).attr("fields"),
+            index = $(this).attr("index"),
+            val = $(this).val();
+        //替换信息
+        prizeList.prize[index][fields] = val;
+    });
+    /**
+     * 监听滚动操作
+     */
+    $(window).scroll(function(event){
+        let top = $("#probabilityDivPosition").offset().top-$(window).scrollTop();
+        if(top > 50){
+            //正常  因为顶部有50距离  所以偏离50px
+            $("#probabilityDiv").removeClass('probabilityDiv');
+        }else{
+            //超出  固定在顶部
+            $("#probabilityDiv").addClass('probabilityDiv');
+        }
+    });
+</script>
+{php include wl_template('common/footer');}

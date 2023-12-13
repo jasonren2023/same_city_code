@@ -1,0 +1,24 @@
+<?xml version="1.0" encoding="utf-8"?>
+<manifest>
+	<application>
+		<name><![CDATA[排行榜]]></name>
+		<identifie><![CDATA[ranklist]]></identifie>
+		<version><![CDATA[1.0.0]]></version>
+		<type><![CDATA[interact]]></type>
+		<description><![CDATA[排行榜]]></description>
+		<author><![CDATA[微连科技]]></author>
+		<url><![CDATA[http://www.weliam.cn/]]></url>
+	</application>
+	<setting>
+		<agent embed="false" />
+		<system embed="true" />
+		<task embed="false" />
+	</setting>
+	<agentmenu>
+	</agentmenu>
+	<systemmenu>
+		<menu title="排行榜" font="fa-inbox">
+			<entry title="排行榜" ac="rank" do="rank_list" actions='["do",["rank_list","rank_edit"]]' iscover="true" />
+		</menu>
+	</systemmenu>
+</manifest>

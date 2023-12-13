@@ -1,0 +1,744 @@
+{php include wl_template('common/header-base');}
+<link rel="stylesheet" href="{URL_MODULE}web/resource/diyForm/edit.css">
+<div id="diyForm">
+    <div class="app-content">
+        <!-- 顶部菜单栏 -->
+        <ul class="nav nav-tabs diypage-nav-tabs" >
+            <!-- 左 -->
+            <li class="li-flo-le"><a href="{php echo web_url('agentset/diyForm/index')}" class="diypage-back"><i class="icon iconfont icon-back_android"></i>返回</a></li>
+            <!-- 右 -->
+            <li><a href="javascript:;" class="diypage-save-page" @click="saveForm()"><i class="icon iconfont icon-upload"></i>保存表单</a></li>
+            <li><a href="javascript:;" class="diypage-icon-txt" @click="pageSet()"><i class="icon iconfont icon-shezhi1"></i>设置</a></li>
+            <li>
+                <a href="javascript:;" v-if="!fullscreen" @click="fullScreen()"><i class="icon iconfont icon-full"></i></a>
+                <a href="javascript:;" v-if="fullscreen" @click="fullScreen()"><i class="icon iconfont icon-suoxiao"></i></a>
+            </li>
+        </ul>
+        <!-- 主要内容 -->
+        <div class="main panel panel-default">
+            <div class="page-content">
+                <div class="row relative pagediy">
+                    <!--菜单内容-->
+                    <div class="diy-menu">
+                        <div class="navs" id="navs">
+                            <!-- 顶部标题 -->
+                            <div class="head_title">
+                                <div class="title">请选择表单组件</div>
+                            </div>
+                            <!-- 组件列表 -->
+                            <div v-for="(item,index) in list" class="nav" @click="addNav(item.id)">
+                                <div class="img">
+                                    <img :src="'{URL_MODULE}web/resource/diyForm/img/'+item.id+'.png'" />
+                                </div>
+                                <div class="title">{{ item.title }}</div>
+                            </div>
+                        </div>
+                    </div>
+                    <!--页面主要内容-->
+                    <div id="phone-margin"  ref="Box" @scroll="phoneScroll">
+                        <div class="diy-phone">
+                            <div class="phone-head"></div>
+                            <div class="phone-body">
+                                <div class="phone-title">{{ data.base.title }}</div>
+                                <div class="phone-main">
+                                    <!-- 组件列表 -->
+                                   <span v-for="(item,index) in data.list" @click="selectedBlock(item.id,index)"
+                                         :key="index"
+                                         draggable="true"
+                                         @dragstart="dragStart(index)"
+                                         @dragenter="dragEnter(index)"
+                                         @dragend="dragEnd()"
+                                         :id="'id_'+index"
+                                         :class="[{'phone-block-active':(index == the_index)},'phone-block',`phone-align-${data.base.align}`]">
+                                       <!---------------------- 操作项 ---------------------->
+                                       <span class="phone-operation">
+                                           <span class="phone-operation-del" @click="delNav(index)">删除</span>
+                                       </span>
+                                       <!---------------------- 组件 ---------------------->
+                                       <component :is="`temp_${item.id}`" :key="item.key" :params="item.data"></component>
+                                   </span>
+                                </div>
+                            </div>
+                            <div class="phone-foot"></div>
+                        </div>
+                        <!--返回顶部按钮-->
+                        <div class="backTop" v-if="topScrollButton" @click="backTop()">
+                            <i class="icon iconfont icon-fold"></i>
+                        </div>
+                    </div>
+                    <!--组件配置信息-->
+                    <div class="diy-editor form-horizontal">
+                        <!-- 标题 -->
+                        <div class="editor_title">
+                            <div class="edit_title">
+                                <span v-if="list[the_id]">{{ list[the_id].title }}信息配置</span>
+                                <span v-else>表单信息配置</span>
+                            </div>
+                        </div>
+                        <!-- 配置项 -->
+                        <div class="inner inner_content">
+                            <component :is="`config_${the_id}`" :key="the_index" :params="the_id == 'base' ? data.base : data.list[the_index].data" :attflag="attflag" @changeParams="changeParams"></component>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+<!-- 模板文件 —— 必须在前面 -->
+{php include wl_template('agentset/diy_form/template');}<!--组件模板-->
+{php include wl_template('agentset/diy_form/template_config');}<!--配置模板-->
+<!-- js效果文件 必须在后面 -->
+<script>
+    new Vue({
+        el: '#diyForm',
+        components:{
+            //模板组件
+            'temp_text':{
+                template: "#temp_text",
+                props: ['params']
+            },
+            'temp_textarea':{
+                template: "#temp_textarea",
+                props: ['params'],
+            },
+            'temp_select':{
+                template: "#temp_select",
+                props: ['params'],
+            },
+            'temp_checkbox':{
+                template: "#temp_checkbox",
+                props: ['params'],
+            },
+            'temp_img':{
+                template: "#temp_img",
+                props: ['params'],
+            },
+            'temp_time':{
+                template: "#temp_time",
+                props: ['params'],
+            },
+            'temp_datetime':{
+                template: "#temp_datetime",
+                props: ['params'],
+            },
+            'temp_city':{
+                template: "#temp_city",
+                props: ['params'],
+            },
+            //配置信息组件
+            'config_base':{
+                template: "#config_base",
+                props: ['params'],
+                data() {
+                    return {
+                        info: this.params,
+                    }
+                },
+                watch: {
+                    info:{
+                        deep:true,
+                        handler(newVal, oldVal){
+                            this.$emit('changeparams', this.info);
+                        },
+                    },
+                }
+            },
+            'config_text':{
+                template: "#config_text",
+                props: ['params','attflag'],
+                data() {
+                    return {
+                        info: this.params,
+                    }
+                },
+                watch: {
+                    info:{
+                        deep:true,
+                        handler(newVal, oldVal){
+                            console.log("|asdf")
+                            this.$emit('changeparams', this.info);
+                        },
+                    },
+                },
+            },
+            'config_textarea':{
+                template: "#config_textarea",
+                props: ['params','attflag'],
+                data() {
+                    return {
+                        info: this.params,
+                    }
+                },
+                watch: {
+                    info:{
+                        deep:true,
+                        handler(newVal, oldVal){
+                            this.$emit('changeparams', this.info);
+                        },
+                    },
+                },
+            },
+            'config_select':{
+                template: "#config_select",
+                props: ['params','attflag'],
+                data() {
+                    return {
+                        info: this.params,
+                    }
+                },
+                watch: {
+                    info:{
+                        deep:true,
+                        handler(newVal, oldVal){
+                            this.$emit('changeparams', this.info);
+                        },
+                    },
+                },
+                methods:{
+                    //添加一个选项
+                    addOption(){
+                        let params = this.info;
+                        let time = new Date().getTime();
+                        if(!params['options']) params['options'] = {};
+                        params['options'][time] = '';
+                        params['options'] = Object.values(params['options']);
+
+                        this.$emit('changeparams', params);
+                        this.$forceUpdate();
+                    },
+                    //修改选项内容
+                    changeInfo(e,index){
+                        let params = this.info;
+                        params['options'][index] = e.target.value;
+
+                        this.$emit('changeparams', params);
+                    },
+                    //删除一个选项
+                    delOption(index){
+                        let params = this.info;
+                        delete params['options'][index];
+                        params['options'] = Object.values(params['options']);
+                        this.$emit('changeparams', params);
+                    }
+                },
+            },
+            'config_checkbox':{
+                template: "#config_checkbox",
+                props: ['params','attflag'],
+                data() {
+                    return {
+                        info: this.params,
+                    }
+                },
+                watch: {
+                    info:{
+                        deep:true,
+                        handler(newVal, oldVal){
+                            this.$emit('changeparams', this.info);
+                        },
+                    },
+                },
+                methods:{
+                    //添加一个选项
+                    addOption(){
+                        params = this.info;
+                        let time = new Date().getTime();
+                        if(!params['options']) params['options'] = {};
+                        params['options'][time] = '';
+                        params['options'] = Object.values(params['options']);
+
+                        this.$emit('changeparams', params);
+                        this.$forceUpdate();
+                    },
+                    //修改选项内容
+                    changeInfo(e,index){
+                        let params = this.info;
+                        params['options'][index] = e.target.value;
+
+                        this.$emit('changeparams', params);
+                    },
+                    //删除一个选项
+                    delOption(index){
+                        let params = this.info;
+                        delete params['options'][index];
+                        params['options'] = Object.values(params['options']);
+                        this.$emit('changeparams', params);
+                    }
+                },
+            },
+            'config_img':{
+                template: "#config_img",
+                props: ['params','attflag'],
+                data() {
+                    return {
+                        info: this.params,
+                    }
+                },
+                watch: {
+                    info:{
+                        deep:true,
+                        handler(newVal, oldVal){
+                            this.$emit('changeparams', this.info);
+                        },
+                    },
+                },
+            },
+            'config_time':{
+                template: "#config_time",
+                props: ['params','attflag'],
+                data() {
+                    return {
+                        info: this.params,
+                    }
+                },
+                watch: {
+                    info:{
+                        deep:true,
+                        handler(newVal, oldVal){
+                            this.info.time_stamp = (new Date(this.info.datetime_local)).getTime() / 1000;
+                            this.$emit('changeparams', this.info);
+                        },
+                    },
+                    'info.type'(){
+                        this.info.datetime_local = this.getTime();
+                        this.info.time_stamp = (new Date(this.info.datetime_local)).getTime() / 1000;
+                    },
+                },
+                methods:{
+                    getTime(){
+                        let timeDate = new Date(),
+                            Y = timeDate.getFullYear(),
+                            M = parseInt(timeDate.getMonth()) + parseInt(1),
+                            D = timeDate.getDate(),
+                            H = timeDate.getHours(),
+                            I = timeDate.getMinutes(),
+                            S = timeDate.getSeconds();
+                        //补位
+                        M  = M < 10 ? '0'+ M : M;
+                        D  = D < 10 ? '0'+ D : D;
+                        H  = H < 10 ? '0'+ H : H;
+                        I  = I < 10 ? '0'+ I : I;
+                        S  = S < 10 ? '0'+ S : S;
+                        //拼接
+                        return Y+'-'+M+'-'+D+'T'+H+':'+I+':'+S;
+                    }
+                },
+                mounted() {
+                    if(!this.params.datetime_local){
+                        this.params.datetime_local = this.getTime();
+                        this.params.time_stamp = (new Date(this.params.datetime_local)).getTime() / 1000;
+                    }
+                }
+            },
+            'config_datetime':{
+                template: "#config_datetime",
+                props: ['params','attflag'],
+                data() {
+                    return {
+                        info: this.params,
+                    }
+                },
+                watch: {
+                    info:{
+                        deep:true,
+                        handler(newVal, oldVal){
+                            this.info.start_time_stamp = (new Date(this.info.start_time)).getTime() / 1000;
+                            this.info.end_time_stamp = (new Date(this.info.end_time)).getTime() / 1000;
+                            this.$emit('changeparams', this.info);
+                        },
+                    },
+                    'info.time_day'(){
+                        let day = this.info.time_day;
+                        day = day > 0 ? day : 0;
+                        this.info.start_time = this.getTime();
+                        this.info.end_time = this.getTime(day);
+                        this.info.start_time_stamp = (new Date(this.info.start_time)).getTime() / 1000;
+                        this.info.end_time_stamp = (new Date(this.info.end_time)).getTime() / 1000;
+                    },
+                    'info.type'(){
+                        let day = this.info.time_day;
+                        day = day > 0 ? day : 0;
+                        this.info.start_time = this.getTime();
+                        this.info.end_time = this.getTime(day);
+                        this.info.start_time_stamp = (new Date(this.info.start_time)).getTime() / 1000;
+                        this.info.end_time_stamp = (new Date(this.info.end_time)).getTime() / 1000;
+                    },
+                },
+                methods:{
+                    //获取时间信息
+                    getTime(addDay = 0){
+                        let timeStamp = (new Date()).valueOf(),
+                            timeDate = addDay < 0 ? new Date(timeStamp) : new Date(parseInt(timeStamp) + parseInt(addDay * 86400000)),
+                            Y = timeDate.getFullYear(),
+                            M = parseInt(timeDate.getMonth()) + parseInt(1),
+                            D = timeDate.getDate(),
+                            H = timeDate.getHours(),
+                            I = timeDate.getMinutes(),
+                            S = timeDate.getSeconds();
+                        //补位
+                        M  = M < 10 ? '0'+ M : M;
+                        D  = D < 10 ? '0'+ D : D;
+                        H  = H < 10 ? '0'+ H : H;
+                        I  = I < 10 ? '0'+ I : I;
+                        S  = S < 10 ? '0'+ S : S;
+                        //拼接
+                        return Y+'-'+M+'-'+D+'T'+H+':'+I+':'+S;
+                    },
+                },
+                mounted() {
+                    if(!this.params.datetime_local){
+                        this.params.start_time = this.getTime();
+                        this.params.start_time_stamp = (new Date(this.params.start_time)).getTime() / 1000;
+                    }
+                    if(!this.params.datetime_local){
+                        this.params.end_time = this.getTime(this.params.time_day);
+                        this.params.end_time_stamp = (new Date(this.params.end_time)).getTime() / 1000;
+                    }
+                }
+            },
+            'config_city':{
+                template: "#config_city",
+                props: ['params','attflag'],
+                data() {
+                    return {
+                        info: this.params,
+                    }
+                },
+                watch: {
+                    info:{
+                        deep:true,
+                        handler(newVal, oldVal){
+                            this.$emit('changeparams', this.info);
+                        },
+                    },
+                    'info.province'(){
+                        //判断 不能选省和区 不选市   区域层级必须连贯
+                        if(this.info.province == true && this.info.city == false && this.info.area == true){
+                            let _this = this;
+                            tip.alert("区域层级必须连贯!",function () {
+                                _this.info.city = true;
+                            });
+                        }
+                        //判断是否未选择任何内容
+                        if(this.info.province == false && this.info.city == false && this.info.area == false){
+                            let _this = this;
+                            tip.alert("请至少选择一个!",function () {
+                                _this.info.area = true;
+                            });
+                        }
+                    },
+                    'info.city'(){
+                        //判断 不能选省和区 不选市   区域层级必须连贯
+                        if(this.info.province == true && this.info.city == false && this.info.area == true){
+                            let _this = this;
+                            tip.alert("区域层级必须连贯!",function () {
+                                _this.info.city = true;
+                            });
+                        }
+                        //判断是否未选择任何内容
+                        if(this.info.province == false && this.info.city == false && this.info.area == false){
+                            let _this = this;
+                            tip.alert("请至少选择一个!",function () {
+                                _this.info.area = true;
+                            });
+                        }
+                    },
+                    'params.area'(){
+                        //判断 不能选省和区 不选市   区域层级必须连贯
+                        if(this.info.province == true && this.info.city == false && this.info.area == true){
+                            let _this = this;
+                            tip.alert("区域层级必须连贯!",function () {
+                                _this.info.city = true;
+                            });
+                        }
+                        //判断是否未选择任何内容
+                        if(this.info.province == false && this.info.city == false && this.info.area == false){
+                            let _this = this;
+                            tip.alert("请至少选择一个!",function () {
+                                _this.info.area = true;
+                            });
+                        }
+                    },
+                },
+            },
+        },
+        data: {
+            id: "{$id}",//当前表单id
+            fullscreen: false,//判断是否全屏
+            topScrollButton: false,//是否显示回到顶部按钮
+            the_id: 'base',//当前操作的组件的id
+            the_index: '',//当前操作的组件的下标
+            attflag: parseInt("{$attflag}"),
+            //表单配置信息
+            data: JSON.parse('{php echo json_encode($info)}') ? JSON.parse('{php echo json_encode($info)}') :{
+                base:{
+                    title: '自定义表单',//表单名称
+                    align: 'left',
+                },
+                list:{},
+            },
+            //组件列表
+            list: {
+                'text': {'title': '单行文本', 'id': 'text'},
+                'textarea': {'title': '文本域', 'id': 'textarea'},
+                'select': {'title': '下拉框', 'id': 'select'},
+                'checkbox': {'title': '多选框', 'id': 'checkbox'},
+                'img': {'title': '图片', 'id': 'img'},
+                'time': {'title': '时间', 'id': 'time'},
+                'datetime': {'title': '时间范围', 'id': 'datetime'},
+                'city': {'title': '城市', 'id': 'city'},
+            },
+            //默认信息
+            default_info:{
+                'text': {
+                    title: '单行文本',
+                    placeholder: '请输入单行文本',
+                    length: '',
+                    is_required: 0,//1=必填，0=非必填
+                    att_show:0, // 0=显示在商户资质中 1=隐藏
+                },
+                'textarea': {
+                    title: '文本域',
+                    placeholder: '请输入文本内容',
+                    length: '',
+                    height: '100',
+                    is_required: 0,//1=必填，0=非必填
+                    att_show:0, // 0=显示在商户资质中 1=隐藏
+                },
+                'select': {
+                    title: '下拉框',
+                    options: [],
+                    att_show:0, // 0=显示在商户资质中 1=隐藏
+                },
+                'checkbox': {
+                    title: '多选框',
+                    options: [],
+                    att_show:0, // 0=显示在商户资质中 1=隐藏
+                },
+                'img': {
+                    title: '图片',
+                    number: 1,
+                    att_show:0, // 0=显示在商户资质中 1=隐藏
+                    is_required: 0,// 是否必传，0=非必传，1=毕传
+                },
+                'time': {
+                    title: '时间',
+                    type: 0,//0=实时时间，1=指定时间
+                    datetime_local: '',
+                    time_stamp: '',
+                    att_show:0, // 0=显示在商户资质中 1=隐藏
+                },
+                'datetime': {
+                    title: '时间范围',
+                    type: 0,//0=实时时间，1=指定时间
+                    time_day: 0,
+                    start_time: '',
+                    end_time: '',
+                    start_time_stamp: '',
+                    end_time_stamp: '',
+                    att_show:0, // 0=显示在商户资质中 1=隐藏
+                },
+                'city': {
+                    title: '城市',
+                    province: true,
+                    city: true,
+                    area: true,
+                    att_show:0, // 0=显示在商户资质中 1=隐藏
+                },
+            },
+            //拖动参数信息
+            drag_key:'',//当前组件的key
+            drag_replace_key:'',//需要替换的组件的key
+        },
+        methods:{
+            //全屏控制
+            fullScreen() {
+                let element = document.documentElement;
+                if (this.fullscreen) {
+                    if (document.exitFullscreen) {
+                        document.exitFullscreen();
+                    } else if (document.webkitCancelFullScreen) {
+                        document.webkitCancelFullScreen();
+                    } else if (document.mozCancelFullScreen) {
+                        document.mozCancelFullScreen();
+                    } else if (document.msExitFullscreen) {
+                        document.msExitFullscreen();
+                    }
+                } else {
+                    if (element.requestFullscreen) {
+                        element.requestFullscreen();
+                    } else if (element.webkitRequestFullScreen) {
+                        element.webkitRequestFullScreen();
+                    } else if (element.mozRequestFullScreen) {
+                        element.mozRequestFullScreen();
+                    } else if (element.msRequestFullscreen) {
+                        // IE11
+                        element.msRequestFullscreen();
+                    }
+                }
+                this.fullscreen = !this.fullscreen;
+            },
+            //监听模拟手机滚动  显示|隐藏回到顶部按钮
+            phoneScroll() {
+                let box = this.$refs.Box,
+                    scrollTop = box.scrollTop;
+                if (scrollTop > 300) this.topScrollButton = true;
+                else this.topScrollButton = false;
+            },
+            //点击回到顶部
+            backTop(){
+                this.$refs.Box.scrollTop = 0;
+            },
+            //点击配置页面基本信息
+            pageSet() {
+                this.the_id = 'base';//当前操作的组件的id
+            },
+            //点击添加组件
+            addNav(id){
+                //获取新的data列表
+                let time = this.getNewTime();
+                this.the_id = id;
+                this.the_index = time;
+                this.data.list[time] = {
+                    id:id,//当前组件id
+                    key:time,
+                    data: JSON.parse(JSON.stringify(this.default_info[id])),//当前组件配置信息
+                };
+                //定位到最底部
+                this.$refs.Box.scrollBottom = 0;
+                this.$forceUpdate();
+                //重新渲染后让滚动条到最底部
+                this.$nextTick(() => {
+                    let container = this.$el.querySelector("#phone-margin");
+                    container.scrollTop = container.scrollHeight;
+                })
+            },
+            //同步子组件修改的信息
+            changeParams(params){
+                if(this.the_id == 'base'){
+                    this.data.base = params;
+                } else {
+                    this.data.list[this.the_index].key = new Date().getTime();
+                    this.data.list[this.the_index].data = params;
+                }
+
+                this.$forceUpdate();
+            },
+            //点击选中组件
+            selectedBlock(id,index){
+                this.the_id = id;//当前操作的组件的id
+                this.the_index = index;//当前操作的组件的下标
+            },
+            //删除组件
+            delNav(index){
+                let _this = this;
+                tip.confirm('是否确定删除当前组件！',function () {
+                    delete _this.data.list[index];
+                    _this.the_id = 'base';
+                    _this.the_index = '';
+
+                    _this.$forceUpdate();
+                });
+            },
+            //提交表单信息
+            saveForm(){
+                $("#page-loading").show();
+                let url = "{php echo web_url('agentset/diyForm/edit');}";
+                let link = "{php echo web_url('agentset/diyForm/index');}";
+                $.post(url, {id: this.id, data:this.data}, function(res) {
+                    if(res.errno == 1){
+                        tip.alert(res.message,function () {
+                            window.location.href = link;
+                        });
+                    }else{
+                        $("#page-loading").hide();
+                        tip.alert(res.message);
+                    }
+                }, 'json');
+            },
+            //组件拖动 —— 开始
+            dragStart(index) {
+                //选择将要拖动的组件
+                let data = this.data.list[index];
+                this.selectedBlock(data.id,index);
+                //记录key信息
+                this.drag_key = index;
+            },
+            //组件拖动 —— 拖动中
+            dragEnter(index) {
+                let id = '#id_'+index;
+                let dragId  = '#id_'+this.drag_key;
+                let classId =  'fictitious_block';
+                this.drag_replace_key = index;
+                //删除已存在的
+                $('.'+classId).remove();
+                //拖动中效果
+                $(dragId).addClass(classId);//添加虚拟组件class
+                let html  = $(dragId).prop("outerHTML");//获取内容
+                $(dragId).removeClass(classId);//删除虚拟组件class
+                $(id).after(html);//删除虚拟组件
+                $('.'+classId).children(".phone-operation").html('');
+            },
+            //组件拖动 —— 结束
+            dragEnd() {
+                //删除已存在的
+                $('.fictitious_block').remove();
+                //信息获取
+                if(this.drag_key != this.drag_replace_key) {
+                    let _this = this,
+                        _list = JSON.parse(JSON.stringify(this.data.list)),
+                        new_list = {},
+                        update = false,
+                        selected = _this.drag_key,
+                        dragData = _this.data.list[this.drag_key];
+                    //内容替换
+                    $.each(_list, function (k, v) {
+                        let time = _this.getNewTime(new_list);
+                        //删除旧的组件信息
+                        if (k == _this.drag_key){
+                            delete new_list[k];
+                        }else if (k == _this.drag_replace_key) {
+                            //判断是否到达指定组件 到达指定组件修改状态改变为true
+                            update = true;
+                            //添加当前组件信息
+                            new_list[k] = v;
+                            new_list[time] = dragData;
+                            selected = time;
+                        }else if(update){
+                            //重新生成当前信息
+                            new_list[time] = v;
+                        }else{
+                            new_list[k] = v;
+                        }
+                    });
+                    this.data.list = new_list;
+                    this.the_index = selected;
+                    this.$forceUpdate();
+                }
+            },
+            //获取时间信息
+            getNewTime(_list = this.data.list){
+                let time = new Date().getTime();
+                if(_list[time]){
+                    return this.getNewTime(_list);
+                }else{
+                    return time;
+                }
+            }
+
+        },
+        mounted() {
+            // 监听滚动事件，然后用handleScroll这个方法进行相应的处理
+            document.addEventListener('scroll',this.phoneScroll)
+            //字符串  替换为布尔值
+            let jsonData = JSON.stringify(this.data);
+            let trueReg = new RegExp('"true"',"g")
+            jsonData = jsonData.replace(trueReg,true);
+            let falseReg = new RegExp('"false"',"g")
+            jsonData = jsonData.replace(falseReg,false);
+            this.data = JSON.parse(jsonData);
+        }
+    });
+</script>
+{php include wl_template('common/footer');}

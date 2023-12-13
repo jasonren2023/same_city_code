@@ -1,0 +1,292 @@
+{php include wl_template('common/header');}
+<style>
+    red{color: #ed5565;}
+</style>
+<ul class="nav nav-tabs" id="myTab">
+    <li class="active"><a href="#tab_basic">活动信息</a></li>
+    <li><a href="#tab_prize">奖品设置</a></li>
+    <li><a href="#tab_share">分享设置</a></li>
+</ul>
+<div class="app-content">
+    <div class="app-form">
+        <div class="panel panel-default">
+            <form class="form-horizontal form-validate" method="post">
+                <div class="tab-content">
+                    <div class="tab-pane active" id="tab_basic">
+                        <div class="form-group-title">活动信息</div>
+                        <div class="form-group">
+                            <label class="col-sm-2 control-label"><span class="form-must">*</span>活动名称</label>
+                            <div class="col-sm-9">
+                                <input type="text" name="draw[title]" maxlength="16" class="form-control" value="{$draw['title']}" placeholder="请输入抽奖活动名称" required>
+                            </div>
+                        </div>
+                        <div class="form-group">
+                            <label class="col-sm-2 control-label">开奖类型</label>
+                            <div class="col-sm-9">
+                                <label class="radio-inline" onclick="$('#drawstatusdiv').hide();$('#drawstatus0div').show();" >
+                                    <input type="radio" name="draw[drawstatus]" value="0" {if empty($draw['drawstatus']) || $draw['drawstatus'] == 0}checked{/if}> 定时开奖
+                                </label>
+                                <label class="radio-inline" onclick="$('#drawstatusdiv').show();;$('#drawstatus0div').hide();" >
+                                    <input type="radio" name="draw[drawstatus]" value="1" {if $draw['drawstatus'] == 1} checked{/if}> 组团开奖
+                                </label>
+                                <span class="help-block">定时开奖：在活动时间结束时开奖；组团开奖：当抽奖码达到一定数量时就会开奖。</span>
+                            </div>
+                        </div>
+                        <div id="drawstatus0div" {if  $draw['drawstatus'] == 1} style="display: none" {/if}  >
+                            <div class="form-group">
+                                <label class="col-sm-2 control-label">活动时间</label>
+                                <div class="col-sm-9">
+                                    {php echo tpl_select_time_info('time', array('starttime'=>date('Y-m-d H:i:s', $draw['starttime']),'endtime'=>date('Y-m-d H:i:s', $draw['endtime'])));}
+                                </div>
+                            </div>
+                        </div>
+                        <div id="drawstatusdiv" {if empty($draw['drawstatus']) || $draw['drawstatus'] == 0} style="display: none" {/if}  >
+                            <div class="form-group">
+                                <label class="col-sm-2 control-label"><span class="form-must">*</span>组团抽奖码个数</label>
+                                <div class="col-sm-9">
+                                    <input type="number" name="draw[drawcodenum]" maxlength="16" class="form-control" value="{$draw['drawcodenum']}" placeholder="请输入抽奖团抽奖码个数" required>
+                                    <span class="help-block">组团抽奖码个数不能小于中奖名额数量，请填入正整数。</span>
+                                </div>
+                            </div>
+                            <div class="form-group">
+                                <label class="col-sm-2 control-label">开奖次数</label>
+                                <div class="col-sm-9">
+                                    <input type="number" name="draw[drawsucnum]" maxlength="16" class="form-control" value="{$draw['drawsucnum']}" placeholder="请输入开奖次数" required>
+                                    <span class="help-block">抽奖活动的开奖次数，请填入正整数,填0即在活动时间内每次组团成功都进行开奖。</span>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="form-group">
+                            <label class="col-sm-2 control-label">开奖方式</label>
+                            <div class="col-sm-9">
+                                <label class="radio-inline" >
+                                    <input type="radio" name="draw[drawtype]" value="0" {if empty($draw['drawtype']) || $draw['drawtype'] == 0}checked{/if}> 自动开奖
+                                </label>
+                                <label class="radio-inline" >
+                                    <input type="radio" name="draw[drawtype]" value="1" {if $draw['drawtype'] == 1} checked{/if}> 手动开奖
+                                </label>
+                                <span class="help-block">自动开奖：在达成开奖条件时系统自动开奖；手动开奖：需要管理员在后台手动开奖。</span>
+                            </div>
+                        </div>
+                        <div class="form-group">
+                            <label class="col-sm-2 control-label">视频广告赠码</label>
+                            <div class="col-sm-9">
+                                <label class="radio-inline" onclick="$('#drawvideodiv').show();" >
+                                    <input type="radio" name="draw[drawvideostatus]" value="1" {if $draw['drawvideostatus'] == 1} checked{/if}> 开启
+                                </label>
+                                <label class="radio-inline" onclick="$('#drawvideodiv').hide();" >
+                                    <input type="radio" name="draw[drawvideostatus]" value="0" {if empty($draw['drawvideostatus']) || $draw['drawvideostatus'] == 0}checked{/if}> 关闭
+                                </label>
+                                <span class="help-block">开启后，用户可以通过观看视频广告获取抽奖码，每观看一次获取一个抽奖码。</span>
+                            </div>
+                        </div>
+                        <div id="drawvideodiv" {if empty($draw['drawvideostatus']) || $draw['drawvideostatus'] == 0} style="display: none"  {/if}>
+                            <div class="form-group">
+                            <label class="col-sm-2 control-label">视频广告设置</label>
+                                <div class="col-sm-9">
+                                    <div class="input-group">
+                                        <span class="input-group-addon">广告ID</span>
+                                        <input type="text" name="draw[videoid]" class="form-control" value="{$draw['videoid']}" />
+                                        <span class="input-group-addon">可获得抽奖码总数</span>
+                                        <input type="number"  name="draw[videonum]" class="form-control"  min="0" value="{$draw['videonum']}" />
+                                        <span class="input-group-addon">个，每日数量</span>
+                                        <input type="number"  name="draw[dayvideonum]" class="form-control"  min="0" value="{$draw['dayvideonum']}" />
+                                        <span class="input-group-addon">个</span>
+                                    </div>
+                                    <span class="help-block">仅小程序可用，可获得抽奖码数量不填或填0则不限制获取数量。</span>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="form-group">
+                            <label class="col-sm-2 control-label">分享活动赠码</label>
+                            <div class="col-sm-9">
+                                <label class="radio-inline" onclick="$('#drawsharediv').show();" >
+                                    <input type="radio" name="draw[drawsharestatus]" value="1" {if $draw['drawsharestatus'] == 1} checked{/if}> 开启
+                                </label>
+                                <label class="radio-inline" onclick="$('#drawsharediv').hide();" >
+                                    <input type="radio" name="draw[drawsharestatus]" value="0" {if empty($draw['drawsharestatus']) || $draw['drawsharestatus'] == 0}checked{/if}> 关闭
+                                </label>
+                                <span class="help-block">开启后，用户可以通过分享抽奖活动获取抽奖码，每分享一次获取一个抽奖码。</span>
+                            </div>
+                        </div>
+                        <div id="drawsharediv" {if empty($draw['drawsharestatus']) || $draw['drawsharestatus'] == 0} style="display: none"  {/if}>
+                            <div class="form-group">
+                                <label class="col-sm-2 control-label">分享可获得抽奖码数量</label>
+                                <div class="col-sm-9">
+                                    <div class="input-group">
+                                        <input type="number" name="draw[sharenum]" class="form-control" min="0" value="{$draw['sharenum']}" />
+                                        <span class="input-group-addon">个，每日数量</span>
+                                        <input type="number"  name="draw[daysharenum]" class="form-control"  min="0" value="{$draw['daysharenum']}" />
+                                        <span class="input-group-addon">个</span>
+                                    </div>
+                                    <span class="help-block">可获得抽奖码数量不填或填0则不限制获取数量。</span>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="form-group">
+                            <label class="col-sm-2 control-label">活动幻灯片</label>
+                            <div class="col-sm-9">
+                                <div id="datas">
+                                    {loop $draw['adv'] $kw $adv}
+                                    {php include wl_template('luckydraw/advinfo');}
+                                    {/loop}
+                                </div>
+                            </div>
+                        </div>
+                        <div class="form-group">
+                            <label class="col-sm-2 control-label"></label>
+                            <div class="col-sm-9">
+                                <a class="btn btn-info btn-add-type" href="javascript:;" onclick="addType();">
+                                    <i class="fa fa-plus" title=""></i>增加一张幻灯片
+                                </a>
+                            </div>
+                        </div>
+                        <div class="form-group">
+                            <label class="col-sm-2 control-label">抽奖说明</label>
+                            <div class="col-sm-9">
+                                {php echo tpl_diy_editor_create('draw[detail]',$draw['detail']);}
+                            </div>
+                        </div>
+                        <div class="form-group">
+                            <label class="col-sm-2 control-label">活动状态</label>
+                            <div class="col-sm-9">
+                                <label class="radio-inline" >
+                                    <input type="radio" name="draw[status]" value="1" {if $draw['status'] == 1} checked{/if}> 开启
+                                </label>
+                                <label class="radio-inline" >
+                                    <input type="radio" name="draw[status]" value="0" {if empty($draw['status']) || $draw['status'] == 0}checked{/if}> 关闭
+                                </label>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="tab-pane" id="tab_prize">
+                        <div class="form-group-title">奖品设置</div>
+                        <div class="form-group">
+                            <label class="col-sm-2 control-label">一等奖</label>
+                            <div class="col-sm-9">
+                                <select name="draw[oneprizeid]" class="form-control">
+                                    <option value="0">- 无 -</option>
+                                    {loop $prizelist $one}
+                                    <option value="{$one['id']}" {if $draw['oneprizeid'] == $one['id']}selected="selected"{/if}>{$one['title']}</option>
+                                    {/loop}
+                                </select>
+                                <span class="help-block">一等奖必须设置。</span>
+                            </div>
+                        </div>
+                        <div class="form-group">
+                            <label class="col-sm-2 control-label">二等奖</label>
+                            <div class="col-sm-9">
+                                <select name="draw[twoprizeid]" class="form-control">
+                                    <option value="0">- 无 -</option>
+                                    {loop $prizelist $two}
+                                    <option value="{$two['id']}" {if $draw['twoprizeid'] == $two['id']}selected="selected"{/if}>{$two['title']}</option>
+                                    {/loop}
+                                </select>
+                                <span class="help-block">二等奖可以不进行设置。</span>
+                            </div>
+                        </div>
+                        <div class="form-group">
+                            <label class="col-sm-2 control-label">三等奖</label>
+                            <div class="col-sm-9">
+                                <select name="draw[threeprizeid]" class="form-control">
+                                    <option value="0">- 无 -</option>
+                                    {loop $prizelist $three}
+                                    <option value="{$three['id']}" {if $draw['threeprizeid'] == $three['id']}selected="selected"{/if}>{$three['title']}</option>
+                                    {/loop}
+                                </select>
+                                <span class="help-block">三等奖可以不进行设置。</span>
+                            </div>
+                        </div>
+                        <div class="form-group">
+                            <label class="col-sm-2 control-label">中奖人数设置</label>
+                            <div class="col-sm-9">
+                                <div class="input-group">
+                                    <span class="input-group-addon">一等奖</span>
+                                    <input type="number" name="draw[oneprizenum]" class="form-control" value="{$draw['oneprizenum']}" />
+                                    <span class="input-group-addon">二等奖</span>
+                                    <input type="number" name="draw[twoprizenum]" class="form-control" value="{$draw['twoprizenum']}" />
+                                    <span class="input-group-addon">三等奖</span>
+                                    <input type="number" name="draw[threeprizenum]" class="form-control" value="{$draw['threeprizenum']}" />
+                                </div>
+                                <span class="help-block">已设置奖品的奖项必须设置中奖人数。</span>
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="tab-pane" id="tab_share">
+                        <div class="alert alert-info">
+                            <b>适用模板变量：[昵称] [时间] [活动名称] [系统名称] </b>
+                        </div>
+                        <div class="form-group">
+                            <label class="col-sm-2 control-label">公众号分享图片</label>
+                            <div class="col-sm-9">
+                                {php echo attachment_select('draw[share_image]', $draw['share_image']);}
+                                <span class="help-block">大小2M以下，建议尺寸500*500，如果不选择，默认为系统图片</span>
+                            </div>
+                        </div>
+                        {if p('wxapp')}
+                        <div class="form-group">
+                            <label class="col-sm-2 control-label">小程序分享图片</label>
+                            <div class="col-sm-9">
+                                {php echo attachment_select('draw[share_wxapp_image]', $draw['share_wxapp_image']);}
+                                <span class="help-block">大小2M以下，建议尺寸500*400，如果不选择，默认为系统图片</span>
+                            </div>
+                        </div>
+                        {/if}
+                        <div class="form-group">
+                            <label class="col-sm-2 control-label">分享标题</label>
+                            <div class="col-sm-9">
+                                <input type="text" name="draw[share_title]" class="form-control" value="{$draw['share_title']}" />
+                                <span class="help-block">如果不填写，默认为活动名称</span>
+                            </div>
+                        </div>
+                        <div class="form-group">
+                            <label class="col-sm-2 control-label">分享描述</label>
+                            <div class="col-sm-9">
+                                <input type="text" name="draw[share_desc]" class="form-control" value="{$draw['share_desc']}" />
+                                <span class="help-block">如果不填写，默认为系统描述</span>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                <!-- 提交按钮 -->
+                <div class="form-group">
+                    <label class="col-sm-2 control-label"></label>
+                    <div class="col-sm-9">
+                        <input type="hidden" name="token" value="{$_W['token']}" />
+                        <input type="hidden" name="id" value="{$draw['id']}" />
+                        <input type="submit" name="submit" value="提交" class="btn btn-primary col-sm-1 min-width" />
+                    </div>
+                </div>
+            </form>
+        </div>
+    </div>
+</div>
+<script>
+    $(function () {
+        window.optionchanged = false;
+        $('#myTab a').click(function (e) {
+            e.preventDefault();//阻止a链接的跳转行为
+            $(this).tab('show');//显示当前选中的链接及关联的content
+        });
+    });
+
+    var kw = 100;
+    function addType() {
+        $(".btn-add-type").button("loading");
+        $.ajax({
+            url: "{php echo web_url('luckydraw/luckydraw/advinfo')}&kw="+kw,
+            cache: false
+        }).done(function (html) {
+            $(".btn-add-type").button("reset");
+            $("#datas").append(html);
+        });
+        kw++;
+    }
+
+    function removes(asd){
+        $(asd).closest('.removedav').remove();
+    }
+
+</script>
+{php include wl_template('common/footer');}

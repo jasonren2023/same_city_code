@@ -1,0 +1,46 @@
+{php include wl_template('common/header');}
+<ul class="nav nav-tabs">
+    <li><a href="{php echo web_url('recruit/recruitment/labelList')}">标签列表</a></li>
+    <li class="active"><a href="javascript:;">{if $id}编辑{else}添加{/if}标签</a></li>
+</ul>
+<div class="app-content">
+    <div class="app-form">
+        <div class="panel panel-default">
+            <form class="form-horizontal form-validate" method="post">
+                <div class="form-group">
+                    <label class="col-sm-2 control-label">标签类型</label>
+                    <div class="col-sm-9">
+                        <select name="data[type]" class="form-control ">
+                            <option value="1" {if $info['type'] == 1}selected="selected"{/if}>学历要求</option>
+                            <option value="2" {if $info['type'] == 2}selected="selected"{/if}>职位福利</option>
+                            <option value="3" {if $info['type'] == 3}selected="selected"{/if}>经验标签</option>
+                            <option value="4" {if $info['type'] == 4}selected="selected"{/if}>企业规模</option>
+                            <option value="5" {if $info['type'] == 5}selected="selected"{/if}>企业性质</option>
+                        </select>
+                    </div>
+                </div>
+                <div class="form-group">
+                    <label class="col-sm-2 control-label">标签名称</label>
+                    <div class="col-sm-9">
+                        <input class="form-control" type="text" required name="data[title]" value="{$info['title']}" maxlength="45"/>
+                    </div>
+                </div>
+                <div class="form-group">
+                    <label class="col-sm-2 control-label">排序</label>
+                    <div class="col-sm-9">
+                        <input class="form-control" type="number" digits="true" name="data[sort]" value="{$info['sort']}" />
+                    </div>
+                </div>
+                <div class="form-group">
+                    <label class="col-sm-2 control-label"></label>
+                    <div class="col-sm-9">
+                        <input type="hidden" name="token" value="{$_W['token']}" />
+                        <input type="hidden" name="id" value="{$id}" />
+                        <input type="submit" name="submit" value="提交" class="btn btn-primary col-sm-1 min-width" />
+                    </div>
+                </div>
+            </form>
+        </div>
+    </div>
+</div>
+{php include wl_template('common/footer');}

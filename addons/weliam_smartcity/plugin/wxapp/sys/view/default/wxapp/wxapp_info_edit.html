@@ -1,0 +1,129 @@
+{php include wl_template('common/header');}
+<ul class="nav nav-tabs">
+	<li class="active"><a href="javascript:;">小程序配置</a></li>
+</ul>
+<div class="app-content">
+	<div class="app-form">
+		<div class="panel panel-default">
+			<form action="{php echo web_url('wxapp/wxappset/wxapp_info_edit')}" class="form-horizontal form form-validate" method="post">
+				<div class="panel-heading">编辑微信小程序配置信息</div>
+				<div class="panel-body" id="formList">
+					<div class="form-group">
+						<div class="col-sm-2 control-label">小程序名称</div>
+						<div class="col-sm-9">
+							<input class="form-control" type="text" maxlength="20" name="data[name]" value="{$info['name']}" placeholder="请输入小程序名称" />
+						</div>
+					</div>
+					<div class="form-group">
+						<div class="col-sm-2 control-label">AppId</div>
+						<div class="col-sm-9">
+							<input class="form-control" type="text" name="data[appid]" value="{$info['appid']}" placeholder="请输入AppId" />
+						</div>
+					</div>
+					<div class="form-group">
+						<div class="col-sm-2 control-label">AppSecret</div>
+						<div class="col-sm-9">
+							<input class="form-control" type="text" name="data[secret]" value="{$info['secret']}" placeholder="请输入AppSecret" />
+						</div>
+					</div>
+					<div class="form-group">
+						<div class="col-sm-2 control-label">原始ID</div>
+						<div class="col-sm-9">
+							<input class="form-control" type="text" name="data[original_id]" value="{$info['original_id']}" placeholder="请输入原始ID" />
+							<div class="help-block">设置公众号跳转小程序必须。小程序后台 - 设置 - 基本设置</div>
+						</div>
+					</div>
+					<div class="form-group">
+						<div class="col-sm-2 control-label">小程序LOGO</div>
+						<div class="col-sm-9">
+							{php echo attachment_select('data[logo]',$info['logo']);}
+						</div>
+					</div>
+					<div class="form-group">
+						<div class="col-sm-2 control-label">二维码</div>
+						<div class="col-sm-9">
+							{php echo attachment_select('data[qrcode]',$info['qrcode']);}
+						</div>
+					</div>
+					<div class="form-group">
+						<div class="col-sm-2 control-label">小程序上传密钥</div>
+						<div class="col-sm-9">
+							<textarea class="form-control" name="data[rsa_private_key]" rows="30" style="resize: none;font-size:13px;"
+							placeholder="示例：
+-----BEGIN RSA PRIVATE KEY-----
+895y+TbFtNxFrvN9A2fz/8y0E00++IB2uuqZAif7Jn4JpOu8uwHojXTdf4TJG6ty
+895y+TbFtNxFrvN9A2fz/8y0E00++IB2uuqZAif7Jn4JpOu8uwHojXTdf4TJG6ty
+895y+TbFtNxFrvN9A2fz/8y0E00++IB2uuqZAif7Jn4JpOu8uwHojXTdf4TJG6ty
+895y+TbFtNxFrvN9A2fz/8y0E00++IB2uuqZAif7Jn4JpOu8uwHojXTdf4TJG6ty
+895y+TbFtNxFrvN9A2fz/8y0E00++IB2uuqZAif7Jn4JpOu8uwHojXTdf4TJG6ty
+895y+TbFtNxFrvN9A2fz/8y0E00++IB2uuqZAif7Jn4JpOu8uwHojXTdf4TJG6ty
+895y+TbFtNxFrvN9A2fz/8y0E00++IB2uuqZAif7Jn4JpOu8uwHojXTdf4TJG6ty
+895y+TbFtNxFrvN9A2fz/8y0E00++IB2uuqZAif7Jn4JpOu8uwHojXTdf4TJG6ty
+895y+TbFtNxFrvN9A2fz/8y0E00++IB2uuqZAif7Jn4JpOu8uwHojXTdf4TJG6ty
+895y+TbFtNxFrvN9A2fz/8y0E00++IB2uuqZAif7Jn4JpOu8uwHojXTdf4TJG6ty
+895y+TbFtNxFrvN9A2fz/8y0E00++IB2uuqZAif7Jn4JpOu8uwHojXTdf4TJG6ty
+895y+TbFtNxFrvN9A2fz/8y0E00++IB2uuqZAif7Jn4JpOu8uwHojXTdf4TJG6ty
+895y+TbFtNxFrvN9A2fz/8y0E00++IB2uuqZAif7Jn4JpOu8uwHojXTdf4TJG6ty
+895y+TbFtNxFrvN9A2fz/8y0E00++IB2uuqZAif7Jn4JpOu8uwHojXTdf4TJG6ty
+895y+TbFtNxFrvN9A2fz/8y0E00++IB2uuqZAif7Jn4JpOu8uwHojXTdf4TJG6ty
+895y+TbFtNxFrvN9A2fz/8y0E00++IB2uuqZAif7Jn4JpOu8uwHojXTdf4TJG6ty
+895y+TbFtNxFrvN9A2fz/8y0E00++IB2uuqZAif7Jn4JpOu8uwHojXTdf4TJG6ty
+895y+TbFtNxFrvN9A2fz/8y0E00++IB2uuqZAif7Jn4JpOu8uwHojXTdf4TJG6ty
+895y+TbFtNxFrvN9A2fz/8y0E00++IB2uuqZAif7Jn4JpOu8uwHojXTdf4TJG6ty
+895y+TbFtNxFrvN9A2fz/8y0E00++IB2uuqZAif7Jn4JpOu8uwHojXTdf4TJG6ty
+895y+TbFtNxFrvN9A2fz/8y0E00++IB2uuqZAif7Jn4JpOu8uwHojXTdf4TJG6ty
+895y+TbFtNxFrvN9A2fz/8y0E00++IB2uuqZAif7Jn4JpOu8uwHojXTdf4TJG6ty
+895y+TbFtNxFrvN9A2fz/8y0E00++IB2uuqZAif7Jn4JpOu8uwHojXTdf4TJG6ty
+895y+TbFtNxFrvN9A2fz/8y0E00++IB2uuqZAif7Jn4JpOu8uwHojXTdf4TJG6ty
+895y+TbFtNxFrvN9A2fz/8y0E00++IB2uuqZAif7Jn4JpOu8uwHojXTdf4TJG6ty
+-----END RSA PRIVATE KEY-----">{$info['rsa_private_key']}</textarea>
+						</div>
+					</div>
+					<div class="form-group-title">配置消息推送</div>
+					<div class="form-group">
+						<label class="col-sm-2 control-label">Token(令牌)</label>
+						<div class="col-sm-9">
+							<div class="input-group">
+								<input type="text"  name="data[token]" value="{$info['token']}" class="form-control valid">
+								<a class="btn btn-sm input-group-addon random-string" str_length="32"  href="javascript:;" >随机生成</a>
+							</div>
+						</div>
+					</div>
+					<div class="form-group">
+						<label class="col-sm-2 control-label">EncodingAESKey(消息加密密钥)</label>
+						<div class="col-sm-9">
+							<div class="input-group">
+								<input type="text"  name="data[aes_key]" value="{$info['aes_key']}" class="form-control valid">
+								<a class="btn btn-sm input-group-addon random-string" str_length="43" href="javascript:;" >随机生成</a>
+							</div>
+						</div>
+					</div>
+				</div>
+				<div class="form-group">
+					<div class="col-sm-2 control-label"></div>
+					<div class="col-sm-9">
+						<input type="submit" name="submit" value="提交" class="btn btn-primary min-width" />
+						<input type="hidden" name="token" value="{$_W['token']}" />
+					</div>
+				</div>
+			</form>
+		</div>
+	</div>
+</div>
+<script>
+	$(".random-string").on('click',function () {
+		//获取随机的32位字符串
+		let length = $(this).attr('str_length'),
+				chars = '123456789qwertyuiopasdfghjklzxcvbnmQWERTYUIOPASDFGHJKLZXCVBNM',
+				maxPos = chars.length,
+				str = '';
+		for (let i = 0; i < length; i++) {
+			str += chars.charAt(Math.floor(Math.random() * maxPos));
+		}
+		//将获取的字符串值 赋值给对应的内容
+		$(this).prev('input').val(str);
+	});
+</script>
+
+
+{php include wl_template('common/footer');}

@@ -1,0 +1,61 @@
+{php include wl_template('common/header');}
+{if empty($_GPC['lct'])}
+<ul class="nav nav-tabs">
+    <li class="active"><a href="{php echo web_url('cloud/auth/upgrade');}">更新日志</a></li>
+</ul>
+{/if}
+<div class="app-content">
+    <div class="update-log" id="mainContent">
+        {if empty($_GPC['lct'])}
+        <div class="update-title">更新日志</div>
+        {/if}
+        <div class="updata-content flex-row" v-for="(item,index) in logs" :key="index">
+            <div class="left flex-col main-height">
+                <p class="orders-blue f-20">{{item.day}}</p>
+                <p>{{item.year}}</p>
+            </div>
+            <div class="right flex-col">
+                <div class="dian"></div>
+                <div class="flex-row flex-justify-b">
+                    <div class="f-20 title main-height big">版本号：{{item.version}}</div>
+                    <p class="orders-gray">{{item.hour}}</p>
+                </div>
+                <div class="item" v-html="item.content"></div>
+            </div>
+        </div>
+        <div class="loadmore" v-if="state">
+            <button class="btn btn-primary btn-sm" @click="getLogs()">查看更多更新日志</button>
+        </div>
+    </div>
+</div>
+<script>
+    let obj = new Vue({
+        el:"#mainContent",
+        data:{
+            page: 0,
+            logs: [],
+            state:1//1=显示；0=隐藏
+        },
+        methods:{
+            //更新日志
+            getLogs(){
+                let _this = this;
+                _this.page++;
+                $.post("{php echo web_url('cloud/auth/upgrade_log');}",{page:_this.page}, function (file) {
+                    if (file.errno == 0) {
+                        _this.logs = [..._this.logs,...file.data.logs];
+                        if(file.data.logs.length < 10){
+                            _this.state = 0;
+                        }
+                    } else {
+                        tip.alert(file.message);
+                    }
+                },'json');
+            },
+        },
+        mounted() {
+            this.getLogs();
+        }
+    });
+</script>
+{php include wl_template('common/footer');}

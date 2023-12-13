@@ -1,0 +1,164 @@
+<style>
+    #selectRedPackInfo{
+        width: 80vw!important;
+        max-width: 1200px!important;
+        margin: auto;
+    }
+    #selectRedPackInfo .panel.panel-default{
+        min-height: 500px!important;
+        max-height: 80vh!important;
+    }
+    #selectRedPackInfo .modal-content{
+        max-height: 1000px!important;
+        max-width: 90vw!important;
+    }
+</style>
+<div class="modal-dialog" id="selectRedPackInfo">
+    <div class="modal-content">
+        <div class="modal-header">
+            <button data-dismiss="modal" class="close" type="button">×</button>
+            <h4 class="modal-title">请选择奖品</h4>
+        </div>
+        <div class="modal-body form-horizontal">
+            <!-- 搜索 -->
+            <div class="form-group">
+                <div class="col-sm-10">
+                    <input class="form-control" placeholder="奖品名称..." id="searchDrawPrizeInput" value=""/>
+                </div>
+                <div class="btn btn-primary" @click="searchContent()">搜索</div>
+            </div>
+            <!-- 表格 -->
+            <div class="app-table-list">
+                <div class="panel panel-default">
+                    <table class="table table-hover table-responsive table-bordered">
+                        <thead>
+                            <tr>
+                                <th class="text-center">奖品名称</th>
+                                <th class="text-center">奖品图片</th>
+                                <th class="text-center">中奖概率(%)</th>
+                                <th class="text-center">奖品类型</th>
+                                <th class="text-center">提供数量(每天/总共)</th>
+                                <th class="text-center">添加时间</th>
+                                <th class="text-center">状态</th>
+                                <th class="text-center">操作</th>
+                            </tr>
+                        </thead>
+                        <tbody class="text-center" id="selectUserList">
+                            <tr v-for="(item,index) in list" :key="index">
+                                <td>{{ item.title }}</td>
+                                <td>
+                                    <img :src="item.image" width="50px" height="50px">
+                                </td>
+                                <td>{{ item.probability }}%</th>
+                                <td>
+                                    <label class="label label-primary" v-if="item.type == 1">现金红包</label>
+                                    <label class="label label-info" v-else-if="item.type == 2">线上红包</label>
+                                    <label class="label label-default" v-else-if="item.type == 3">积分</label>
+                                    <label class="label label-danger" v-else-if="item.type == 4">激活码</label>
+                                    <label class="label label-warning" v-else>商品</label>
+                                </td>
+                                <td>{{ item.day_number }} / {{ item.total_number }}</td>
+                                <td>{{ item.create_time }}</td>
+                                <td>
+                                    <label class="label label-primary" v-if="item.status == 1">上架</label>
+                                    <label class="label label-danger" v-else>下架</label>
+                                </td>
+                                <td>
+                                    <a href="javascript:;" class="btn btn-sm btn-warning selectedDrawPrize"
+                                       :data-id="item.id"
+                                       :data-name="item.title"
+                                       :data-image="item.image"
+                                       :data-probability="item.probability"
+                                    >选择</a>
+                                </td>
+                            </tr>
+                        </tbody>
+                    </table>
+                </div>
+            </div>
+            <!-- 分页信息 -->
+            <div class="app-table-foot clearfix">
+                <div class="pull-left"></div>
+                <div class="pull-right">
+                    <!-- 分页 -->
+                    <div class="pager-content">
+                        <ul class="pagination pagination-centered" v-if="total_page > 1">
+                            <!--分页前导-->
+                            <li v-if="page > 1">
+                                <a href="javascript:;" @click="paging(1)">首页</a>
+                            </li>
+                            <li v-if="page > 1">
+                                <a href="javascript:;" @click="paging(parseInt(page) - 1)">&laquo;上一页</a>
+                            </li>
+                            <!--分页中间内容-->
+                            <li v-for="index in total_page"
+                                v-if="(index >= (parseInt(page) - 2) && index <= (parseInt(page) + 2)) || (index <= 5 && total_page < 3)"
+                                :class="{active: (page == index)}">
+                                <a href="javascript:;" @click="paging(index)">{{index}}</a>
+                            </li>
+                            <!--分页后导-->
+                            <li v-if="page < total_page">
+                                <a href="javascript:;" @click="paging(parseInt(page)+1)">下一页&raquo;</a>
+                            </li>
+                            <li v-if="page < total_page">
+                                <a href="javascript:;" @click="paging(total_page)">尾页</a>
+                            </li>
+                        </ul>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+<script>
+    new Vue({
+        el: "#selectRedPackInfo",
+        data: {
+            //当前页
+            page: 1,
+            //总页数
+            total_page: 1,
+            //红包列表
+            list: {},
+            //搜索
+            search:'',
+        },
+        methods: {
+            //获取列表信息
+            getList() {
+                let _this = this,
+                    link = biz.url('utility/select/selectDrawPrize');
+                $.post(link, {page:_this.page,name:_this.search}, function (res) {
+                    if(res.errno === 0){
+                        let data = res.data;
+                        _this.list = data.list;
+                        _this.total_page = data.total;
+                        _this.$forceUpdate();
+                    }else{
+                        tip.alert(res.message);
+                    }
+                }, 'json');
+            },
+            //分页操作
+            paging(page){
+                this.page = page;
+                this.getList();
+            },
+            //搜索操作
+            searchContent(){
+                //获取内容
+                this.search = $("#searchDrawPrizeInput").val();
+                if(!this.search) {
+                    tip.alert("请输入搜索内容！");
+                    return false;
+                }
+                this.page = 1;
+                //开始请求
+                this.getList();
+            },
+        },
+        mounted() {
+            this.getList();
+        }
+    });
+</script>

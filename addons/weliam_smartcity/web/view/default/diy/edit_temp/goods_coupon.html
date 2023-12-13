@@ -1,0 +1,355 @@
+<!--------------------------  优惠券配置群  ----------------------------------->
+<!-- 优惠券商品组 风格一 -->
+<script type="text/html" id="tpl_edit_coupon_goods">
+    <div class="form-group">
+        <div class="col-sm-2 control-label">背景颜色</div>
+        <div class="col-sm-9">
+            <div class="input-group input-group-sm">
+                <input class="form-control diy-bind color" data-bind-child="style" data-bind="bgColor" value="<%style.bgColor||'#f6f6f6'%>" type="color" />
+                <span class="input-group-addon btn btn-default" onclick="$(this).prev().val('#ffffff').trigger('propertychange')">清除</span>
+            </div>
+        </div>
+    </div>
+    <div class="form-group">
+        <div class="col-sm-2 control-label">外边距</div>
+        <div class="col-sm-9">
+            <div class="form-group">
+                <div class="slider col-sm-8" data-value="<%style.margin||'10'%>" data-min="0" data-max="30"></div>
+                <div class="col-sm-9 control-labe count"><span><%style.margin||'10'%></span>px(像素)</div>
+                <input class="diy-bind input" data-bind-child="style" data-bind="margin" value="<%style.margin%>" type="hidden" />
+            </div>
+        </div>
+    </div>
+    <div class="form-group">
+        <div class="col-sm-2 control-label">内边距</div>
+        <div class="col-sm-9">
+            <div class="form-group">
+                <div class="slider col-sm-8" data-value="<%style.padding||'10'%>" data-min="0" data-max="30"></div>
+                <div class="col-sm-9 control-labe count"><span><%style.padding||'10'%></span>px(像素)</div>
+                <input class="diy-bind input" data-bind-child="style" data-bind="padding" value="<%style.padding%>" type="hidden" />
+            </div>
+        </div>
+    </div>
+    <div class="form-group">
+        <div class="col-sm-2 control-label">下边距</div>
+        <div class="col-sm-9">
+            <div class="form-group">
+                <div class="slider col-sm-8" data-value="<%style.marginBottom%>" data-min="0" data-max="30"></div>
+                <div class="col-sm-9 control-labe count"><span><%style.marginBottom%></span>px(像素)</div>
+                <input class="diy-bind input" data-bind-child="style" data-bind="marginBottom" value="<%style.marginBottom%>" type="hidden" />
+            </div>
+        </div>
+    </div>
+    <div class="form-group">
+        <div class="col-sm-2 control-label">选择商品</div>
+        <div class="col-sm-10">
+            <label class="radio-inline"><input type="radio" name="type" value="1" class="diy-bind" data-bind-child="params" data-bind="type" <%if params.type == 1%>checked<%/if%>>手动选择</label>
+            <label class="radio-inline"><input type="radio" name="type" value="2" class="diy-bind" data-bind-child="params" data-bind="type" <%if params.type == 2%>checked<%/if%>>自动加载</label>
+        </div>
+    </div>
+    <%if params.type == 1%>
+    <div class="form-items indent" data-min="1">
+        <div class="inner">
+            <%each data as item itemid%>
+            <div class="item" data-id="<%itemid%>">
+                <span class="btn-del" title="删除"></span>
+                <div class="item-image">
+                    <img src="<%item.logo%>" onerror="this.src='../addons/{MODULE_NAME}/web/resource/images/nopic.jpg';"/>
+                    <span class="select_goods selectButton" data-plugin="<%plugin%>" data-id="<%itemid%>">选择商品</span>
+                </div>
+                <div class="item-form">
+                    <div class="input-group" style="margin-bottom:0px; ">
+                        <span class="input-group-addon btn btn-default">商品名称</span>
+                        <input type="text" class="form-control" disabled value="<%item.goods_name%>" />
+                    </div>
+                    <div class="input-group" style="margin-top:10px;margin-bottom:0px; ">
+                        <span class="input-group-addon btn btn-default">店铺名称</span>
+                        <input type="text" class="form-control diy-bind" disabled value="<%item.storename%>" />
+                    </div>
+                </div>
+            </div>
+            <%/each%>
+        </div>
+        <div class="btn btn-w-m btn-block btn-default btn-outline" id="addChild"><i class="fa fa-plus"></i> 添加一个</div>
+    </div>
+    <%/if%>
+    <%if params.type == 2%>
+<!--    <div class="form-group">-->
+<!--        <div class="col-sm-2 control-label">选择分类</div>-->
+<!--        <div class="col-sm-9">-->
+<!--            <select name="classs" class="form-control select2 diy-bind" data-bind="classs" data-bind-child="params" >-->
+<!--                <option value="-1">全部商品</option>-->
+<!--                <%each goodCate.list as item%>-->
+<!--                <option value="<%item.id%>" <%if params.classs == item.id%>selected<%/if%>><%item.name%></option>-->
+<!--                <%/each%>-->
+<!--            </select>-->
+<!--        </div>-->
+<!--    </div>-->
+    <%/if%>
+    <%if params.type == 2 || params.type == 3%>
+    <div class="form-group">
+        <div class="col-sm-2 control-label">排序方式</div>
+        <div class="col-sm-9">
+            <label class="radio-inline"><input type="radio" name="orders" value="1" class="diy-bind" data-bind-child="params" data-bind="orders" <%if params.orders == 1%>checked<%/if%>>综合</label>
+            <label class="radio-inline"><input type="radio" name="orders" value="2" class="diy-bind" data-bind-child="params" data-bind="orders" <%if params.orders == 2%>checked<%/if%>>按销量</label>
+            <label class="radio-inline"><input type="radio" name="orders" value="3" class="diy-bind" data-bind-child="params" data-bind="orders" <%if params.orders == 3%>checked<%/if%>>价格降序</label>
+            <label class="radio-inline"><input type="radio" name="orders" value="4" class="diy-bind" data-bind-child="params" data-bind="orders" <%if params.orders == 4%>checked<%/if%>>价格升序</label>
+            <label class="radio-inline"><input type="radio" name="orders" value="5" class="diy-bind" data-bind-child="params" data-bind="orders" <%if params.orders == 5%>checked<%/if%>>创建时间</label>
+        </div>
+    </div>
+    <div class="form-group">
+        <div class="col-sm-2 control-label">显示数量</div>
+        <div class="col-sm-9">
+            <div class="form-group">
+                <div class="slider col-sm-8" data-value="<%params.show_num%>" data-min="1" data-max="100"></div>
+                <div class="col-sm-9 control-labe count"><span><%params.show_num%></span></div>
+                <input class="diy-bind input" data-bind-child="params" data-bind="show_num" value="<%params.show_num%>" type="hidden" />
+            </div>
+        </div>
+    </div>
+    <%/if%>
+</script>
+<!-- 优惠券商品组 风格二 -->
+<script type="text/html" id="tpl_edit_coupon_goods2">
+    <div class="form-group">
+        <div class="col-sm-2 control-label">内容下边距</div>
+        <div class="col-sm-9">
+            <div class="form-group">
+                <div class="slider col-sm-8" data-value="<%style.marginBottom%>" data-min="0" data-max="30"></div>
+                <div class="col-sm-9 control-labe count"><span><%style.marginBottom%></span>px(像素)</div>
+                <input class="diy-bind input" data-bind-child="style" data-bind="marginBottom" value="<%style.marginBottom%>" type="hidden" />
+            </div>
+        </div>
+    </div>
+    <div class="form-group">
+        <div class="col-sm-2 control-label">选择商品</div>
+        <div class="col-sm-9">
+            <label class="radio-inline"><input type="radio" name="type" value="1" class="diy-bind" data-bind-child="params" data-bind="type" <%if params.type == 1%>checked<%/if%>>手动选择</label>
+            <label class="radio-inline"><input type="radio" name="type" value="2" class="diy-bind" data-bind-child="params" data-bind="type" <%if params.type == 2%>checked<%/if%>>自动加载</label>
+        </div>
+    </div>
+    <%if params.type == 1%>
+    <div class="form-items indent" data-min="2">
+        <div class="inner">
+            <%each data as val key%>
+            <div class="item"  data-id="<%key%>">
+                <span class="btn-del" title="删除"></span>
+                <div class="item-image">
+                    <img src="<%val.logo%>" onerror="this.src='../addons/{MODULE_NAME}/web/resource/images/nopic.jpg';"/>
+                    <span class="select_goods selectButton" data-plugin="<%plugin%>" data-id="<%key%>">选择商品</span>
+                </div>
+                <div class="item-form">
+                    <div class="input-group" style="margin-bottom:0px; ">
+                        <span class="input-group-addon btn btn-default">商品名称</span>
+                        <input type="text" class="form-control" disabled value="<%val.goods_name%>" />
+                    </div>
+                    <div class="input-group" style="margin-top:10px;margin-bottom:0px; ">
+                        <span class="input-group-addon btn btn-default">店铺名称</span>
+                        <input type="text" class="form-control diy-bind" disabled value="<%val.storename%>" />
+                    </div>
+                </div>
+            </div>
+            <%/each%>
+        </div>
+        <div class="btn btn-w-m btn-block btn-default btn-outline" id="addChild"><i class="fa fa-plus"></i> 添加一个</div>
+    </div>
+    <%/if%>
+    <%if params.type == 2%>
+    <div class="form-group">
+        <div class="col-sm-2 control-label">选择分类</div>
+        <div class="col-sm-9">
+            <select name="classs" class="form-control select2 diy-bind" data-bind="classs" data-bind-child="params" >
+                <option value="-1">全部商品</option>
+                <%each goodCate.list as item%>
+                <option value="<%item.id%>" <%if params.classs == item.id%>selected<%/if%>><%item.name%></option>
+                <%/each%>
+            </select>
+        </div>
+    </div>
+    <%/if%>
+    <%if params.type == 2 || params.type == 3%>
+    <div class="form-group">
+        <div class="col-sm-2 control-label">排序方式</div>
+        <div class="col-sm-9">
+            <label class="radio-inline"><input type="radio" name="orders" value="1" class="diy-bind" data-bind-child="params" data-bind="orders" <%if params.orders == 1%>checked<%/if%>>综合</label>
+            <label class="radio-inline"><input type="radio" name="orders" value="2" class="diy-bind" data-bind-child="params" data-bind="orders" <%if params.orders == 2%>checked<%/if%>>按销量</label>
+            <label class="radio-inline"><input type="radio" name="orders" value="3" class="diy-bind" data-bind-child="params" data-bind="orders" <%if params.orders == 3%>checked<%/if%>>价格降序</label>
+            <label class="radio-inline"><input type="radio" name="orders" value="4" class="diy-bind" data-bind-child="params" data-bind="orders" <%if params.orders == 4%>checked<%/if%>>价格升序</label>
+            <label class="radio-inline"><input type="radio" name="orders" value="5" class="diy-bind" data-bind-child="params" data-bind="orders" <%if params.orders == 5%>checked<%/if%>>创建时间</label>
+        </div>
+    </div>
+    <div class="form-group">
+        <div class="col-sm-2 control-label">显示数量</div>
+        <div class="col-sm-9">
+            <div class="form-group">
+                <div class="slider col-sm-8" data-value="<%params.show_num%>" data-min="1" data-max="100"></div>
+                <div class="col-sm-9 control-labe count"><span><%params.show_num%></span></div>
+                <input class="diy-bind input" data-bind-child="params" data-bind="show_num" value="<%params.show_num%>" type="hidden" />
+            </div>
+        </div>
+    </div>
+    <%/if%>
+</script>
+<!-- 优惠券商品组 风格三 -->
+<script type="text/html" id="tpl_edit_coupon_goods3">
+    <div class="form-group">
+        <div class="col-sm-2 control-label">内容下边距</div>
+        <div class="col-sm-9">
+            <div class="form-group">
+                <div class="slider col-sm-8" data-value="<%style.marginBottom%>" data-min="0" data-max="30"></div>
+                <div class="col-sm-9 control-labe count"><span><%style.marginBottom%></span>px(像素)</div>
+                <input class="diy-bind input" data-bind-child="style" data-bind="marginBottom" value="<%style.marginBottom%>" type="hidden" />
+            </div>
+        </div>
+    </div>
+    <div class="form-group">
+        <div class="col-sm-2 control-label">选择商品</div>
+        <div class="col-sm-9">
+            <label class="radio-inline"><input type="radio" name="type" value="1" class="diy-bind" data-bind-child="params" data-bind="type" <%if params.type == 1%>checked<%/if%>>手动选择</label>
+            <label class="radio-inline"><input type="radio" name="type" value="2" class="diy-bind" data-bind-child="params" data-bind="type" <%if params.type == 2%>checked<%/if%>>自动加载</label>
+        </div>
+    </div>
+    <%if params.type == 1%>
+    <div class="form-items indent" data-min="1">
+        <div class="inner">
+            <%each data as item itemid%>
+            <div class="item"  data-id="<%itemid%>">
+                <span class="btn-del" title="删除"></span>
+                <div class="item-image">
+                    <img src="<%item.logo%>" onerror="this.src='../addons/{MODULE_NAME}/web/resource/images/nopic.jpg';"/>
+                    <span class="select_goods selectButton" data-plugin="<%plugin%>" data-id="<%itemid%>">选择商品</span>
+                </div>
+                <div class="item-form">
+                    <div class="input-group" style="margin-bottom:0px; ">
+                        <span class="input-group-addon btn btn-default">商品名称</span>
+                        <input type="text" class="form-control" disabled value="<%item.goods_name%>" />
+                    </div>
+                    <div class="input-group" style="margin-top:10px;margin-bottom:0px; ">
+                        <span class="input-group-addon btn btn-default">店铺名称</span>
+                        <input type="text" class="form-control diy-bind" disabled value="<%item.storename%>" />
+                    </div>
+                </div>
+            </div>
+            <%/each%>
+        </div>
+        <div class="btn btn-w-m btn-block btn-default btn-outline" id="addChild"><i class="fa fa-plus"></i> 添加一个</div>
+    </div>
+    <%/if%>
+    <%if params.type == 2%>
+    <div class="form-group">
+        <div class="col-sm-2 control-label">选择分类</div>
+        <div class="col-sm-9">
+            <select name="classs" class="form-control select2 diy-bind" data-bind="classs" data-bind-child="params" >
+                <option value="-1">全部商品</option>
+                <%each goodCate.list as item%>
+                <option value="<%item.id%>" <%if params.classs == item.id%>selected<%/if%>><%item.name%></option>
+                <%/each%>
+            </select>
+        </div>
+    </div>
+    <%/if%>
+
+    <%if params.type == 2 || params.type == 3%>
+    <div class="form-group">
+        <div class="col-sm-2 control-label">排序方式</div>
+        <div class="col-sm-9">
+            <label class="radio-inline"><input type="radio" name="orders" value="1" class="diy-bind" data-bind-child="params" data-bind="orders" <%if params.orders == 1%>checked<%/if%>>综合</label>
+            <label class="radio-inline"><input type="radio" name="orders" value="2" class="diy-bind" data-bind-child="params" data-bind="orders" <%if params.orders == 2%>checked<%/if%>>按销量</label>
+            <label class="radio-inline"><input type="radio" name="orders" value="3" class="diy-bind" data-bind-child="params" data-bind="orders" <%if params.orders == 3%>checked<%/if%>>价格降序</label>
+            <label class="radio-inline"><input type="radio" name="orders" value="4" class="diy-bind" data-bind-child="params" data-bind="orders" <%if params.orders == 4%>checked<%/if%>>价格升序</label>
+            <label class="radio-inline"><input type="radio" name="orders" value="5" class="diy-bind" data-bind-child="params" data-bind="orders" <%if params.orders == 5%>checked<%/if%>>创建时间</label>
+        </div>
+    </div>
+    <div class="form-group">
+        <div class="col-sm-2 control-label">显示数量</div>
+        <div class="col-sm-9">
+            <div class="form-group">
+                <div class="slider col-sm-8" data-value="<%params.show_num%>" data-min="1" data-max="100"></div>
+                <div class="col-sm-9 control-labe count"><span><%params.show_num%></span></div>
+                <input class="diy-bind input" data-bind-child="params" data-bind="show_num" value="<%params.show_num%>" type="hidden" />
+            </div>
+        </div>
+    </div>
+    <%/if%>
+</script>
+<!-- 优惠券商品组 风格四 -->
+<script type="text/html" id="tpl_edit_coupon_goods4">
+    <div class="form-group">
+        <div class="col-sm-2 control-label">内容下边距</div>
+        <div class="col-sm-9">
+            <div class="form-group">
+                <div class="slider col-sm-8" data-value="<%style.marginBottom%>" data-min="0" data-max="30"></div>
+                <div class="col-sm-9 control-labe count"><span><%style.marginBottom%></span>px(像素)</div>
+                <input class="diy-bind input" data-bind-child="style" data-bind="marginBottom" value="<%style.marginBottom%>" type="hidden" />
+            </div>
+        </div>
+    </div>
+    <div class="form-group">
+        <div class="col-sm-2 control-label">选择商品</div>
+        <div class="col-sm-9">
+            <label class="radio-inline"><input type="radio" name="type" value="1" class="diy-bind" data-bind-child="params" data-bind="type" <%if params.type == 1%>checked<%/if%>>手动选择</label>
+            <label class="radio-inline"><input type="radio" name="type" value="2" class="diy-bind" data-bind-child="params" data-bind="type" <%if params.type == 2%>checked<%/if%>>自动加载</label>
+        </div>
+    </div>
+    <%if params.type == 1%>
+    <div class="form-items indent" data-min="3" data-max="20">
+        <div class="inner">
+            <%each data as item itemid%>
+            <div class="item" data-id="<%itemid%>">
+                <span class="btn-del" title="删除"></span>
+                <div class="item-image">
+                    <img src="<%item.logo%>" onerror="this.src='../addons/{MODULE_NAME}/web/resource/images/nopic.jpg';"/>
+                    <span class="select_goods selectButton" data-plugin="<%plugin%>" data-id="<%itemid%>">选择商品</span>
+                </div>
+                <div class="item-form">
+                    <div class="input-group" style="margin-bottom:0px; ">
+                        <span class="input-group-addon btn btn-default">商品名称</span>
+                        <input type="text" class="form-control" disabled value="<%item.goods_name%>" />
+                    </div>
+                    <div class="input-group" style="margin-top:10px;margin-bottom:0px; ">
+                        <span class="input-group-addon btn btn-default">店铺名称</span>
+                        <input type="text" class="form-control diy-bind" disabled value="<%item.storename%>" />
+                    </div>
+                </div>
+            </div>
+            <%/each%>
+        </div>
+        <div class="btn btn-w-m btn-block btn-default btn-outline" id="addChild"><i class="fa fa-plus"></i> 添加一个</div>
+    </div>
+    <%/if%>
+    <%if params.type == 2%>
+    <div class="form-group">
+        <div class="col-sm-2 control-label">选择分类</div>
+        <div class="col-sm-9">
+            <select name="classs" class="form-control select2 diy-bind" data-bind="classs" data-bind-child="params" >
+                <option value="-1">全部商品</option>
+                <%each goodCate.list as item%>
+                <option value="<%item.id%>" <%if params.classs == item.id%>selected<%/if%>><%item.name%></option>
+                <%/each%>
+            </select>
+        </div>
+    </div>
+    <%/if%>
+    <%if params.type == 2 || params.type == 3%>
+    <div class="form-group">
+        <div class="col-sm-2 control-label">排序方式</div>
+        <div class="col-sm-9">
+            <label class="radio-inline"><input type="radio" name="orders" value="1" class="diy-bind" data-bind-child="params" data-bind="orders" <%if params.orders == 1%>checked<%/if%>>综合</label>
+            <label class="radio-inline"><input type="radio" name="orders" value="2" class="diy-bind" data-bind-child="params" data-bind="orders" <%if params.orders == 2%>checked<%/if%>>按销量</label>
+            <label class="radio-inline"><input type="radio" name="orders" value="3" class="diy-bind" data-bind-child="params" data-bind="orders" <%if params.orders == 3%>checked<%/if%>>价格降序</label>
+            <label class="radio-inline"><input type="radio" name="orders" value="4" class="diy-bind" data-bind-child="params" data-bind="orders" <%if params.orders == 4%>checked<%/if%>>价格升序</label>
+            <label class="radio-inline"><input type="radio" name="orders" value="5" class="diy-bind" data-bind-child="params" data-bind="orders" <%if params.orders == 5%>checked<%/if%>>创建时间</label>
+        </div>
+    </div>
+    <div class="form-group">
+        <div class="col-sm-2 control-label">显示数量</div>
+        <div class="col-sm-9">
+            <div class="form-group">
+                <div class="slider col-sm-8" data-value="<%params.show_num%>" data-min="1" data-max="100"></div>
+                <div class="col-sm-9 control-labe count"><span><%params.show_num%></span></div>
+                <input class="diy-bind input" data-bind-child="params" data-bind="show_num" value="<%params.show_num%>" type="hidden" />
+            </div>
+        </div>
+    </div>
+    <%/if%>
+</script>
